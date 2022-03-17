@@ -1,0 +1,34 @@
+PRODUCTION:
+  mongo:
+    ce:
+      host: "180.76.243.77"
+      port: 27017
+      db_name: "paddle_quality"
+      case_detail: "case_detail_{task_id}_{build_id}"
+      user: "root"
+      password: "paddle%work123"
+  mysql:
+    ce:
+      host: "180.76.178.190"
+      port: 3306
+      db_name: "paddle_quality"
+      user: "paddle_test"
+      password: "paddle@test"
+
+
+DEV:
+  mongo:
+    ce: 
+      host: "127.0.0.1"
+      port: 27017
+      db_name: "paddle"
+      case_detail: "case_detail_{task_id}_{build_id}"
+      user: "root"
+      password: "Paddle@root"
+  mysql:
+    ce:
+      host: "127.0.0.1"
+      port: 3306
+      db_name: "paddle"
+      user: "root"
+      password: "Paddle@root"
