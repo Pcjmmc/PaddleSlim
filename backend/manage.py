@@ -27,7 +27,6 @@ def get_urlpatterns(urlpatterns):
             _urlpatterns.append(pattern.url)
         elif isinstance(pattern, RegexURLResolver):
             _urlpatterns.extend(pattern.url)
-    print('组装好的路由', _urlpatterns)
     return _urlpatterns
 
 

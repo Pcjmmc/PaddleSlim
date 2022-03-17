@@ -77,14 +77,12 @@ class TaskBuildInfo(object):
         job_list = []
         for tid in tids:
             query_params["tid"] = tid
-            print("query params", query_params)
             job_list.append(
                 CeTaskBuilds().aio_get_object(
                     **query_params, order_by="-created"
                 )
             )
         result = await asyncio.gather(*job_list)
-        print("符合要求的", result)
         for res in result:
             if res:
                 tid = res.tid
@@ -150,7 +148,7 @@ class ExemptInfo(object):
             for r in res:
                 tid = r["tid"]
                 # 这辆需要res转换成json
-                final_result[tid].update(res[0])
+                final_result[tid].update(r)
         return final_result
 
     @classmethod
