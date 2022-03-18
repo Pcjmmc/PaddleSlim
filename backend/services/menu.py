@@ -20,7 +20,7 @@ from models.release_version import CeReleaseVersion
 async def update_menu():
     # CeReleaseVersion 表重新组装menu的release
     table_name = "ce_menu"
-    menu_db = Mongo("ce", table_name)
+    menu_db = Mongo("paddle_quality", table_name)
     result = await menu_db.find_all()
     menuDesc = result[0] if result else {}
     menuDescContent = json.loads(menuDesc['content'])

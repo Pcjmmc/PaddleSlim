@@ -7,7 +7,7 @@
         </div>
         <div style="text-align:center">
           <Icon type="md-git-branch" />
-          <a href="https://github.com/PaddlePaddle/Paddle/tree/develop">
+          <a href="javascript:void(0)" @click="jumperPaddle(repoInfo.branch)">
             {{repoInfo.branch}}
           </a>
         </div>
@@ -19,7 +19,7 @@
         </div>
         <div style="text-align:center">
           <Icon type="md-git-commit" />
-          <a href="javascript:void(0)" @click="jumper(repoInfo.branch)">
+          <a href="javascript:void(0)" @click="jumper(repoInfo.name)">
             {{repoInfo.commit}}
           </a> 
         </div>
@@ -56,12 +56,16 @@ export default {
           return 'red';
       }
     },
-    jumper(branch, commit) {
+    jumper(name) {
       let _params = {
-        branch: branch
+        version: name
       }
       // 根据branch获取commit列表
       const { href } = this.$router.resolve({name: 'CommitDetails', query: _params})
+      window.open(href, '_blank');
+    },
+    jumperPaddle(branch) {
+      let href = "https://github.com/PaddlePaddle/Paddle/tree/" + branch;
       window.open(href, '_blank');
     }
   },

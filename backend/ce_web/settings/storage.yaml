@@ -1,6 +1,6 @@
 PRODUCTION:
   mongo:
-    ce:
+    paddle_quality:
       host: "180.76.243.77"
       port: 27017
       db_name: "paddle_quality"
@@ -8,7 +8,7 @@ PRODUCTION:
       user: "root"
       password: "paddle%work123"
   mysql:
-    ce:
+    paddle_quality:
       host: "180.76.178.190"
       port: 3306
       db_name: "paddle_quality"
@@ -18,7 +18,7 @@ PRODUCTION:
 
 DEV:
   mongo:
-    ce: 
+    paddle_quality: 
       host: "127.0.0.1"
       port: 27017
       db_name: "paddle"
@@ -26,7 +26,7 @@ DEV:
       user: "root"
       password: "Paddle@root"
   mysql:
-    ce:
+    paddle_quality:
       host: "127.0.0.1"
       port: 3306
       db_name: "paddle"

@@ -33,4 +33,4 @@ class CeSteps(BaseModel, BaseModelMixin):
         """
         定义model属于那个库
         """
-        app_label = 'ce'
+        app_label = 'paddle_quality'

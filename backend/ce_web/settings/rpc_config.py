@@ -10,7 +10,7 @@ RPC_SETTINGS = {
     },
     'github_paddle': {
         'gateway': 'https://api.github.com/repos/PaddlePaddle/Paddle',
-        'username': '',
-        'token': ''
+        'username': 'Pcjmmc',
+        'token': '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'
     }
 }

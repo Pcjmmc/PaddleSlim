@@ -10,3 +10,5 @@ export const ReleaseVersionUrl = '/ce/release';
 export const ScenesUrl = '/ce/config/scenes';
 export const JobUrl = '/ce/job';
 export const ExemptUrl = '/ce/release/exempt';
+export const CommitsUrl = '/ce/commits';
+export const CommitDetailUrl = '/ce/commit/detail';

@@ -12,4 +12,4 @@ class ModelRouter(object):
         """
         if hasattr(model, 'Meta'):
             return getattr(model.Meta, 'app_label', 'default')
-        return 'ce'
+        return 'paddle_quality'

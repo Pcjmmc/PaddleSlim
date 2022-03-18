@@ -64,7 +64,6 @@ class TaskBuildInfo(object):
         """
         # 为了查询快写，这里分批查询一次查询10个左右
         # in查询如果太多的话会很慢的
-        print("begin search", tids, branch, begin_time, end_time)
         tids = tids if type(tids) == list else [tids]
         final_result = {tid: {} for tid in tids}
         # branch这里需要入库的时候处理下
@@ -89,17 +88,47 @@ class TaskBuildInfo(object):
                 final_result[tid].update(res)
         return final_result
 
+    @classmethod
+    async def get_task_status_by_tids_and_commit(cls, tids, commit):
+        """
+        根据筛选条件获取相同条件下的多个tid的执行信息
+        """
+        # 为了查询快写，这里分批查询一次查询10个左右
+        # in查询如果太多的话会很慢的
+        tids = tids if type(tids) == list else [tids]
+        final_result = {}
+        # branch这里需要入库的时候处理下
+        query_params = {
+            "commit_id": commit
+        }
+        job_list = []
+        for tid in tids:
+            query_params["tid"] = tid
+            job_list.append(
+                CeTaskBuilds().aio_get_object(
+                    **query_params, order_by="-created"
+                )
+            )
+        result = await asyncio.gather(*job_list)
+        for res in result:
+            if res:
+                tid = res.tid
+                if tid not in final_result:
+                    final_result[tid] = {}
+                final_result[tid].update(res)
+        return final_result
+
 class CaseDetails(object):
     @classmethod
     async def get_task_detail_by_filter(cls, tid, build_id, job_id):
         """
         根据任务详情以及编译详情获取case的详情
         """
-        table_prefix = STORAGE["ce"]["case_detail"]
+        table_prefix = STORAGE["paddle_quality"]["case_detail"]
         table_name = table_prefix.format(
             task_id=tid, build_id=build_id, job_id=job_id
         )     
-        case_obj = Mongo("ce", table_name)
+        case_obj = Mongo("paddle_quality", table_name)
         result = await case_obj.find_all()
         # 这里需要根据类型汇总信息
         #  比如模型的需要按照模型和阶段将数据汇总起来；框架的需要根据api的名字汇总起来 TODO

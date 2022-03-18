@@ -2,6 +2,7 @@
 """
 URL 配置
 """
+from app.ce.commit.views import CommitDetailManage, CommitsManage
 from app.ce.config.views import ScenesManage
 from app.ce.job.views import JobManage
 from app.ce.menu.views import MenuManage
@@ -16,4 +17,6 @@ urlpatterns = [
     url(r'release/?$', ReleaseVersionManage),
     url(r'job/?$', JobManage),
     url(r'config/scenes', ScenesManage),
+    url(r'commits', CommitsManage),
+    url(r'commit/detail/?$', CommitDetailManage),
 ]

@@ -15,12 +15,12 @@ const router = new VueRouter({
       component: Content
     },
     { // API 配置
-      path: '/paddle/release/frame-api-detail',
+      path: '/paddle/frame-api-detail',
       name: 'ApiDetails',
       component: ApiDetails
     },
     { // API 配置
-      path: '/paddle/release/commit-detail',
+      path: '/paddle/commit-detail',
       name: 'CommitDetails',
       component: CommitDetails
     },

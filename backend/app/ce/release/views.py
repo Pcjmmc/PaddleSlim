@@ -113,7 +113,6 @@ class ReleaseVersionManage(MABaseView):
                     data = [{"platform": k, "data": v} for k, v in val.items()]
                     final_data["data"] = data
                 release_info["integration_data"]["data"].append(final_data)
-        # print("release_info", release_info)
         return 0, release_info
 
 

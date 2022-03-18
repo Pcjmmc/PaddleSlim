@@ -33,3 +33,9 @@ class CeTaskBuilds(BaseModel, BaseModelMixin):
     exit_code = Column(VARCHAR(10), comment="任务退出码") # 任务的退出码, 约定任务的详细失败原因
     created = Column(Integer, comment="任务本次构建的开始时间，单位秒") # 开始构建的时间
     updated = Column(Integer, comment="本条记录的修改时间，单位秒") # 本记录的更新时间
+
+    class Meta:
+        """
+        定义model属于那个库
+        """
+        app_label = 'paddle_quality'

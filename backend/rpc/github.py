@@ -102,6 +102,36 @@ class GetCommit(BaseRpc):
             return self.response_json
         return {}
 
+class GetCommits(BaseRpc):
+    """
+    根据分支或者tag来获取 rd 提交的commits列表
+    """
+    method = 'get'
+    gateway = PADDLE_GIT_GATEWAY
+    api = 'commits'
+    auth = aiohttp.BasicAuth(
+        login=PADDLE_GIT_USER,
+        password=PADDLE_GIT_PASSD, 
+        encoding='utf-8'
+    )
+    headers = {"Accept": "application/vnd.github.v3+json"}
+    params_keys = (
+        {"key": "page", "type": int, "required": True},
+        {"key": "per_page", "type": int,  "required": True},
+        {"key": "sha", "type": str,  "required": True},
+    )
+
+    async def get_commit_list(self, **kwargs):
+        res = await self.get_data()
+        commits = [item.get('sha') for item in res]
+        return commits
+
+    async def get_data(self, **kwargs):
+        result = await self.is_valid()
+        if result and str(self._status == '200'):
+            return self.response_json
+        return {}
+
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     # latest_tag = loop.run_until_complete(GetTags().get_latest_tag_info())
@@ -111,6 +141,7 @@ if __name__ == "__main__":
     # print("tag  latest commit is", commit)
     # commit_info = loop.run_until_complete(GetCommit().get_commit_info(**{"commit": commit}))
     # print("tag  latest commit info  is", commit_info)
-    git_branches = loop.run_until_complete(GetBranches().get_commit_info_by_branch(**{"branch": "release/2.2"}))
-    print("branches  latest commit info is", git_branches)
+    # git_branches = loop.run_until_complete(GetBranches().get_commit_info_by_branch(**{"branch": "release/2.2"}))
+    commits = loop.run_until_complete(GetCommits({'page': 1, "per_page": 3, "sha": "release/2.2"}).get_commit_list())
+    print("branches  latest commit info is", commits)
        

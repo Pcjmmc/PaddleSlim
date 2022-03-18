@@ -24,7 +24,7 @@ class MenuManage(MABaseView):
         响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
         """
         table_name = "ce_menu"
-        menu_db = Mongo("ce", table_name)
+        menu_db = Mongo("paddle_quality", table_name)
         result = await menu_db.find_all()
         menuDesc = result[0] if result else {}
         content = menuDesc.get('content', "")

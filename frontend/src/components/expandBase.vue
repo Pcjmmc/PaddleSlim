@@ -49,6 +49,7 @@
         </span>
         <span v-else>
         <Tooltip placement="top" content="未执行">
+          <Icon type="ios-alert-outline"  size="18" />
           {{ item.description }}
         </Tooltip>
         </span>
