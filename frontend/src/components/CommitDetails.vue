@@ -4,7 +4,7 @@
       <Split v-model="split1">
         <div slot="left" class="center-card-s">
           <div style="margin-bottom: 10px;">
-            <p>{{queryParams.version}} 覆盖的commit列表</p>
+            <p>{{ queryParams.version }} 覆盖的commit列表</p>
           </div>
           <div>
             <Timeline>
@@ -14,8 +14,12 @@
             </Timeline>
           </div>
         </div>
-        <div slot="right" class="center-card-s" v-if="commitData.length !== 0">
-          <div v-for="(item, index) in commitData" :key="index">
+        <div
+          v-if="commitData.length !== 0"
+          slot="right"
+          class="center-card-s"
+        >
+          <div :key="index" v-for="(item, index) in commitData">
             <Divider orientation="left" style="font-size: 0.6em;font-style: italic;">{{item.scenes}}</Divider>
             <Table border
               :columns="columns"
@@ -24,7 +28,11 @@
             </Table>
           </div>
         </div>
-        <div slot="right" class="center-card-s" v-else>
+        <div
+          v-else
+          slot="right"
+          class="center-card-s"
+        >
           <p align="center" style="font-size: 16px">暂未有任务覆盖</p>
         </div>
       </Split>
@@ -104,7 +112,7 @@ export default {
         pagesize: this.search.pagesize
       }
       const {code, data, msg} = await api.get(CommitsUrl, params);
-      if (parseInt(code) == 200) {
+      if (parseInt(code) === 200) {
         this.commitList = data;
         this.selectCommit = this.commitList[0];
         this.getCommitDetail();
@@ -114,7 +122,7 @@ export default {
           content: '请求出错: ' + msg,
           duration: 30,
           closable: true
-        })
+        });
       }
     },
     setCommit(commit) {
@@ -127,7 +135,7 @@ export default {
         commit: this.selectCommit
       }
       const {code, data, msg} = await api.get(CommitDetailUrl, params);
-      if (parseInt(code) == 200) {
+      if (parseInt(code) === 200) {
         this.commitData = data;
       } else {
         this.commitData = [];
@@ -135,7 +143,7 @@ export default {
           content: '请求commit详情出错: ' + msg,
           duration: 30,
           closable: true
-        })
+        });
       }
     },
     jumper(item) {

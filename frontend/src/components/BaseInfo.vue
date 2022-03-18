@@ -65,7 +65,7 @@ export default {
       window.open(href, '_blank');
     },
     jumperPaddle(branch) {
-      let href = "https://github.com/PaddlePaddle/Paddle/tree/" + branch;
+      let href = 'https://github.com/PaddlePaddle/Paddle/tree/' + branch;
       window.open(href, '_blank');
     }
   },
