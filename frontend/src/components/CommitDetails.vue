@@ -15,9 +15,9 @@
           </div>
         </div>
         <div
-          v-if="commitData.length !== 0"
           slot="right"
           class="center-card-s"
+          v-if="commitData.length !== 0"
         >
           <div :key="index" v-for="(item, index) in commitData">
             <Divider orientation="left" style="font-size: 0.6em;font-style: italic;">{{item.scenes}}</Divider>
@@ -29,9 +29,9 @@
           </div>
         </div>
         <div
-          v-else
           slot="right"
           class="center-card-s"
+          v-else  
         >
           <p align="center" style="font-size: 16px">暂未有任务覆盖</p>
         </div>
@@ -112,7 +112,7 @@ export default {
         pagesize: this.search.pagesize
       }
       const {code, data, msg} = await api.get(CommitsUrl, params);
-      if (parseInt(code) === 200) {
+      if (parseInt(code, 10) === 200) {
         this.commitList = data;
         this.selectCommit = this.commitList[0];
         this.getCommitDetail();
@@ -135,7 +135,7 @@ export default {
         commit: this.selectCommit
       }
       const {code, data, msg} = await api.get(CommitDetailUrl, params);
-      if (parseInt(code) === 200) {
+      if (parseInt(code, 10) === 200) {
         this.commitData = data;
       } else {
         this.commitData = [];
