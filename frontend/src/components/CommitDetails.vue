@@ -31,7 +31,7 @@
         <div
           slot="right"
           class="center-card-s"
-          v-else  
+          v-else
         >
           <p align="center" style="font-size: 16px">暂未有任务覆盖</p>
         </div>
