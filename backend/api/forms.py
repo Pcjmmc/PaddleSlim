@@ -2,26 +2,24 @@
 """
 自定义api的参数检验逻辑，比较简单
 """
-class AddModelForm(object):
+class AddCaseForm(object):
     """
     实现参数名和类型的检测
     """
     post_data_params = {
-        "task_name": [str],
-        "owner": [str],
-        "build_type": [str],
+        "build_type_id": [str],
         "build_id": [int, str],
-        "build_number": [int, str],
         "repo": [str],
         "branch": [str],
         "commit_id": [int, str],
+        "commit_time": [int, str],
+        "job_id" : [int, str],
         "status": [str],
-        "create_time": [int, str],
+        "build_time": [int, str],
+        "left_time": [int, str],
         "duration": [int, str],
         "case_detail": [str],
         "exit_code": [int, str],
-        "platform": [str],
-        "step": [str]
     }
     @classmethod
     def check_request_data(cls, **kwargs):

@@ -38,6 +38,7 @@ class MABaseView(BaseView):
     post: 创建数据
     """
     model_class = None
+    post_form_class = None
 
     async def get_data(self, **kwargs):
         """
@@ -119,6 +120,10 @@ class MABaseView(BaseView):
         父类post调用子类的post_data, 实现真正的逻辑
         """
         kwargs = self.get_perfect_request_data()
+        if self.post_form_class:
+            status, msg = self.post_form_class.check_request_data(**kwargs)
+        if self.post_form_class and not status:
+            return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, msg)
         try:
             data = await self.post_data(**kwargs)
         except HTTP400Error as e:
