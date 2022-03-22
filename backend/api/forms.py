@@ -2,6 +2,8 @@
 """
 自定义api的参数检验逻辑，比较简单
 """
+
+
 class AddCaseForm(object):
     """
     实现参数名和类型的检测
@@ -13,7 +15,7 @@ class AddCaseForm(object):
         "branch": [str],
         "commit_id": [int, str],
         "commit_time": [int, str],
-        "job_id" : [int, str],
+        "job_id": [int, str],
         "status": [str],
         "build_time": [int, str],
         "left_time": [int, str],
@@ -21,6 +23,7 @@ class AddCaseForm(object):
         "case_detail": [str],
         "exit_code": [int, str],
     }
+
     @classmethod
     def check_request_data(cls, **kwargs):
         """
@@ -33,7 +36,7 @@ class AddCaseForm(object):
                 invalid_params.append(key)
             elif type(val) not in cls.post_data_params[key]:
                 type_error.append(key)
-        
+
         if invalid_params or type_error:
             msg = ''
             if invalid_params:
@@ -44,6 +47,3 @@ class AddCaseForm(object):
                 msg += "类型错误{}".format(type_msg)
             return False, msg
         return True, None
-        
-        
-
