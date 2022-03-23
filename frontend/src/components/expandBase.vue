@@ -17,7 +17,7 @@
     </p>
     <div v-for="(item, index) in data" :key="index">
       <p>
-        <span v-if="item.status && item.status.toLowerCase()=='passed'" >
+        <span v-if="item.status && item.status.toLowerCase()=='passed'">
           <i-circle :percent="100" stroke-color="#5cb85c" :size="15">
             <Icon type="ios-checkmark" size="10" style="color:#5cb85c"></Icon>
           </i-circle>
@@ -209,7 +209,7 @@ export default {
       let count = 0;
       for (var idx = 0; idx < this.data.length; idx++) {
         let item = this.data[idx];
-        if (item.status && item.status.toLowerCase() == 'passed') {
+        if (item.status && item.status.toLowerCase() === 'passed') {
           count += 1;
         }
       }
