@@ -17,19 +17,19 @@
     </p>
     <div v-for="(item, index) in data" :key="index">
       <p>
-        <span v-if="item.status=='passed'" >
+        <span v-if="item.status && item.status.toLowerCase()=='passed'" >
           <i-circle :percent="100" stroke-color="#5cb85c" :size="15">
             <Icon type="ios-checkmark" size="10" style="color:#5cb85c"></Icon>
           </i-circle>
           <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.description }} </a>
         </span>
-        <span v-else-if="item.status=='failed'">
+        <span v-else-if="item.status && item.status.toLowerCase()=='failed'">
           <i-circle :percent="100" stroke-color="#ff5500" :size="15">
             <Icon type="ios-close" size="10" style="color:#ff5500"></Icon>
           </i-circle>
           <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.description }} </a>
         </span>
-        <span v-else-if="item.status=='running'">
+        <span v-else-if="item.status && item.status.toLowerCase()=='running'">
           <Icon type="ios-loading" size="20" class="demo-spin-icon-load"></Icon>
           <Tooltip placement="right" width="400" >
             <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.description }} </a>
@@ -209,7 +209,7 @@ export default {
       let count = 0;
       for (var idx = 0; idx < this.data.length; idx++) {
         let item = this.data[idx];
-        if (item.status == 'passed') {
+        if (item.status && item.status.toLowerCase() == 'passed') {
           count += 1;
         }
       }
