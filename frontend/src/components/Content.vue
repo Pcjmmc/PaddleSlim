@@ -25,7 +25,7 @@
       </Intergration>
     </div>
     <div v-else-if="allSteps.regression !== undefined && allSteps.regression.flag">
-      <Regression :data="bugData.data"></Regression>
+      <Regression :data="bugData"></Regression>
     </div>
     <div v-else-if="allSteps.createtag !== undefined && allSteps.createtag.flag">
       <Intergration
@@ -36,7 +36,7 @@
     </div>
     <div v-else-if="allSteps.release !== undefined && allSteps.release.flag">
      <!--这里呈现编包验证的结果即可-->
-      <Regression :data="bugData.data"></Regression>
+      <Regression :data="bugData"></Regression>
     </div>
     <div v-else>
       <Intergration
@@ -70,7 +70,7 @@
 
 <script>
 import api from '../api/index';
-import { ReleaseVersionUrl } from '../api/url.js';
+import { ReleaseVersionUrl, BugUrl } from '../api/url.js';
 import BaseInfo from './BaseInfo.vue';
 import { dateFmt } from '../util/help.js';
 import Intergration from './Intergration.vue';
@@ -91,10 +91,7 @@ export default {
       integrationData: {
         data: []
       },
-      bugData: {
-        status: 'pass',
-        data: []
-      }
+      bugData: []
     }
   },
   mounted: function () {
@@ -138,7 +135,6 @@ export default {
         this.allSteps = data.all_steps;
         this.tagForm.branch = this.repoInfo.branch;
         this.integrationData = data.integration_data;
-        this.bugData = data.bug_data;
       } else {
         this.repoInfo = {}
         this.allSteps = {}
@@ -148,6 +144,12 @@ export default {
           closable: true
         })
       }
+      await this.getBugData();
+    },
+    async getBugData() {
+      let _params = {'tag': this.repoInfo.tag}
+      const {code, data, msg} = await api.get(BugUrl, _params);
+      this.bugData = data;
     },
     async selectDate() {
       this.getData();

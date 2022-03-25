@@ -21,18 +21,18 @@
           <i-circle :percent="100" stroke-color="#5cb85c" :size="15">
             <Icon type="ios-checkmark" size="10" style="color:#5cb85c"></Icon>
           </i-circle>
-          <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.description }} </a>
+          <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.tname }} </a>
         </span>
         <span v-else-if="item.status && item.status.toLowerCase()=='failed'">
           <i-circle :percent="100" stroke-color="#ff5500" :size="15">
             <Icon type="ios-close" size="10" style="color:#ff5500"></Icon>
           </i-circle>
-          <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.description }} </a>
+          <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.tname }} </a>
         </span>
         <span v-else-if="item.status && item.status.toLowerCase()=='running'">
           <Icon type="ios-loading" size="20" class="demo-spin-icon-load"></Icon>
           <Tooltip placement="right" width="400" >
-            <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.description }} </a>
+            <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.tname }} </a>
             <span data-test="ring-dropdown" class="dropdown_40a"  slot="content">
               <div class="BuildDurationAnchor__buildDuration--tx global__font-smaller--2q global__font-lower--3X global__font--1w">
                 <div class="BuildDurationAnchor__wrapper--1R global__font-smaller--2q global__font-lower--3X global__font--1w">
@@ -50,7 +50,7 @@
         <span v-else>
         <Tooltip placement="top" content="未执行">
           <Icon type="ios-alert-outline" size="18"/>
-          {{ item.description }}
+          {{ item.tname }}
         </Tooltip>
         </span>
         <Button icon="ios-create" type="text" @click="createIcafe(item)">bug</Button>
@@ -75,6 +75,12 @@
             <Select v-model="addForm.level" >
               <Option v-for="(item, index) in levelList" :value="item" :key="index">{{ item }}</Option>
             </Select>
+          </FormItem>
+          <FormItem label="rd负责人" prop="rd_owner">
+            <Input v-model="addForm.rd_owner"/>
+          </FormItem>
+          <FormItem label="qa负责人" prop="qa_owner">
+            <Input v-model="addForm.qa_owner"/>
           </FormItem>
           <FormItem label="详情描述: " prop="description">
             <Input v-model="addForm.description" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
@@ -125,7 +131,7 @@
 
 <script>
 import Modal from "./ModalSimple";
-import { ExemptUrl } from '../api/url.js';
+import { ExemptUrl, BugUrl } from '../api/url.js';
 import api from '../api/index';
 export default {
   name: 'expandBase',
@@ -184,7 +190,9 @@ export default {
       addForm: {
         title: '',
         description: '',
-        level: 'P0'
+        level: 'P0',
+        qa_owner: '',
+        rd_owner: ''
       },
       addRules: {
         title: [
@@ -195,6 +203,12 @@ export default {
         ],
         level: [
           { required: true, message: '请选择等级', trigger: 'blur' }
+        ],
+        qa_owner: [
+          { required: true, message: '请输入rd负责人', trigger: 'blur' }
+        ],
+        rd_owner: [
+          { required: true, message: '请输入qa负责人', trigger: 'blur' }
         ]
       }
     };
@@ -244,7 +258,7 @@ export default {
     async allowExempt(item, index) {
       Modal.confirm({
         title: '确认豁免任务',
-        content: `${item.description}</br>`,
+        content: `${item.tname}</br>`,
         onOk: async () => {
           let params = {
             tid: item.tid,
@@ -270,7 +284,7 @@ export default {
     async cancelExempt(item, index) {
       Modal.confirm({
         title: '确认取消豁免？',
-        content: `${item.description}</br>`,
+        content: `${item.tname}</br>`,
         onOk: async () => {
           let params = {
             tid: item.tid,
@@ -299,6 +313,10 @@ export default {
       this.uploadList.forEach((file) => {
         formD.append('file', file);
       });
+      // 上传内容和图片 addForm 以及 formD
+      formD.append('data', JSON.stringify(this.addForm));
+      // 发送请求
+      const {code, msg} = await api.postFile(BugUrl, formD);
       this.initData(auto);
     },
     handleView (item) {

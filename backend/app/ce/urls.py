@@ -2,6 +2,7 @@
 """
 URL 配置
 """
+from app.ce.bug.views import BugManage
 from app.ce.commit.views import CommitDetailManage, CommitsManage
 from app.ce.config.views import ScenesManage
 from app.ce.job.views import JobManage
@@ -19,4 +20,5 @@ urlpatterns = [
     url(r'config/scenes', ScenesManage),
     url(r'commits', CommitsManage),
     url(r'commit/detail/?$', CommitDetailManage),
+    url(r'bugs', BugManage),
 ]

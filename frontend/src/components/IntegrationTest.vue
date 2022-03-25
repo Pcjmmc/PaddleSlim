@@ -41,7 +41,6 @@ export default {
     expandBase
   },
   mounted: function () {
-    console.log("data", this.data)
   }
 };
 </script>

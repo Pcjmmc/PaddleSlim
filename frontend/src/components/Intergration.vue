@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Tabs value="name1">
-      <TabPane label="进度" name="name1" icon="ios-list-box">
+    <Tabs @on-click="clickTab" :value="tabName">
+      <TabPane label="进度" name="10001" icon="ios-list-box">
         <div>
           <div style="margin-bottom: 1.5%">
             <row type="flex" justify="center" align="middle">
@@ -22,10 +22,8 @@
           </div>
         </div>
       </TabPane>
-      <TabPane label="风险" name="name2" icon="ios-bug">
-        <div>
-          <bug-fix :data="bugData.data"></bug-fix>
-        </div>
+      <TabPane label="风险" name="10002" icon="ios-bug">
+        <bug-fix :datas="bugData" ref="mychild"></bug-fix>
       </TabPane>
     </Tabs>
   </div>
@@ -41,13 +39,10 @@ export default {
   props: ["repoInfo", "integrationData", "bugData"],
   data: function () {
     return {
+      tabName: '10001'
     }
   },
   mounted: function () {
-
-  },
-  watch: {
-
   },
   components: {
     BaseInfo,
@@ -58,6 +53,12 @@ export default {
   computed: {
   },
   methods: {
+    clickTab(name) {
+      this.tabName = name;
+      this.$nextTick(function () {
+        this.$refs.mychild.getStatusFilters();
+      });
+    }
   }
 };
 </script>

@@ -7,10 +7,9 @@
   import echarts from 'echarts'
   export default {
     name: '',
+    props: ["xData", "count"],
     data () {
       return {
-        xData: ['新建', '开发中', '测试中', '测试完成', '已关闭'],
-        Count: [5, 20, 10, 8, 6, 3]
       }
     },
     methods: {
@@ -33,7 +32,7 @@
               name: 'bug数',
               type: 'bar',
               barWidth: '30%',
-              data: this.Count,
+              data: this.count,
               itemStyle: {
                 normal: {
                   color: function(params) {

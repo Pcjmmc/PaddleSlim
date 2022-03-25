@@ -55,7 +55,7 @@ export default {
       columns: [
         {
           title: '任务',
-          key: 'description',
+          key: 'tname',
           align: 'center',
           render: (h, params) => {
             return h('div', [h('a', {
@@ -67,7 +67,7 @@ export default {
                   this.jumper(params.row);
                 }
               }
-            }, params.row.description)
+            }, params.row.tname)
             ]);
           }
         },

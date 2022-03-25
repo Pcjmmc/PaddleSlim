@@ -111,5 +111,17 @@ export default {
         'X-Requested-With': 'XMLHttpRequest'
       }
     }).then(checkStatus).then(checkDataStatus);
+  },
+  postFile(url, formData) {
+    return axios({
+      method: 'POST',
+      url: BASEURL + url,
+      data: formData,
+      timeout: 30000,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'multipart/form-data;'
+      }
+    }).then(checkStatus).then(checkDataStatus);
   }
 };

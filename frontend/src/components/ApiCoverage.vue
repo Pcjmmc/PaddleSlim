@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 500px;height: 350px;" align="middle">
+  <div style="width: 500px;height: 280px;" align="middle">
     <i-circle
       dashboard
       :size="280"

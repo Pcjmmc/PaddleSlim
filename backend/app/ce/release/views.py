@@ -37,8 +37,7 @@ class ReleaseVersionManage(MABaseView):
         release_info = {
             "repo_info": {},
             "all_steps": {},
-            "integration_data": {"data": []},
-            "bug_data": {}
+            "integration_data": {"data": []}
         }
         if not version:
             return 0, release_info

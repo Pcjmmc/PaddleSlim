@@ -1,7 +1,7 @@
 <template>
 <div>
     <row type="flex" justify="center" align="middle">
-      <histogram-base> </histogram-base>
+      <histogram-base :xData="newfilterst" :count="count" ref="child"> </histogram-base>
     </Row>
     <div>
       <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">bug列表</Divider>
@@ -9,7 +9,7 @@
     <div style="margin-bottom: 10px;">
       <Table
         :columns="columns"
-        :data="bugList"
+        :data="datas"
         style="width: 100%;"
       >
       </Table>
@@ -20,9 +20,12 @@
 import HistogramBase from './HistogramBase.vue';
 import { isEmpty } from "../util/help.js";
 export default {
-  props: ["data", "scenes"],
+  name: "BugFix",
+  props: ["datas", "scenes"],
   data: function () {
     return {
+      count: [],
+      newfilterst: [],
       columns: [
         {
           title: '标题',
@@ -36,18 +39,18 @@ export default {
           align: 'center'
         },
         {
-          title: '负责人',
+          title: 'rd负责人',
           key: 'rd_owner',
           align: 'center'
         },
         {
-          title: 'QA',
+          title: 'qa负责人',
           key: 'qa_owner',
           align: 'center'
         },
         {
           title: '创建日期',
-          key: 'create_time',
+          key: 'createdTime',
           align: 'center',
           width: '150'
         },
@@ -56,22 +59,6 @@ export default {
           key: 'status',
           align: 'center',
           filters: [
-            {
-              label: '开发中',
-              value: '开发中'
-            },
-            {
-              label: '新建',
-              value: '新建'
-            },
-            {
-              label: '测试中',
-              value: '测试中'
-            },
-            {
-              label: '测试完成',
-              value: '测试完成'
-            }
           ],
           filterMultiple: false,
           filterMethod (value, row) {
@@ -99,15 +86,19 @@ export default {
             }, isEmpty(params.row.url) == false ? '详情' : '-')])
           }
         }
-      ],
-      bugList: []
+      ]
     }
   },
   components: {
     HistogramBase
   },
+  watch: {
+    datas: function() {
+      this.getStatusFilters();
+    }
+  },
   mounted: function () {
-    this.getData();
+    this.getStatusFilters();
   },
   methods: {
     setColor(status) {
@@ -122,37 +113,30 @@ export default {
           return 'red';
       }
     },
-    async getData(commit, branch) {
-      // 参数主要是从icafe卡片筛选出相应的卡片，具体还是需要再定
-      this.bugList = [
-        {
-          'title': '【Paddle Inference】win cuda11.0下单测失败', // 标题
-          'level': 'P1',
-          'rd_owner': '宝阿春',
-          'qa_owner': '王也',
-          'create_time': '2022-02-22 10:05',
-          'url': 'https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-45162/show',
-          'status': '新建'
-        },
-        {
-          'title': '【Paddle Inference】win cuda11.0下单测失败', // 标题
-          'level': 'P3',
-          'rd_owner': '张留杰',
-          'qa_owner': '罗泽宇',
-          'create_time': '2022-02-14 18:46',
-          'url': 'https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-43997/show',
-          'status': '开发中'
-        },
-        {
-          'title': 'pr:39573 导致PaddleNLP faster_ernie 模型python 预测报错', // 标题
-          'level': 'P1',
-          'rd_owner': '张云飞',
-          'qa_owner': '刘换岭',
-          'create_time': '2022-02-21 17:10',
-          'url': 'https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-44863/show',
-          'status': '已关闭'
+    getStatusFilters() {
+      let filterst = [];
+      let filters = [];
+      let res = {};
+      for (var i = 0; i < this.datas.length; i++) {
+        let status = this.datas[i]["status"]
+        filterst.push(status);
+        if (!res[status]) {
+          res[status] = 0;
         }
-      ]
+        res[status] += 1;
+      }
+      this.newfilterst = Array.from(new Set(filterst));
+      for (var j = 0; j < this.newfilterst.length; j++) {
+        this.count.push(res[this.newfilterst[j]]);
+        filters[j] = {
+          label: this.newfilterst[j],
+          value: this.newfilterst[j]
+        };
+      }
+      this.columns[5].filters = filters;
+      this.$nextTick(function () {
+        this.$refs.child.drawPie('main1');
+      });
     }
   }
 };

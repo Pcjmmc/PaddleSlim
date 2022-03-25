@@ -53,14 +53,13 @@ class MABaseView(BaseView):
         return True, None
     @property
     def _body_data(self):
-        body_data = self.request.body.decode('utf8')
+        body_data = self.request.body
         if not body_data:
             return {}
         try:
             body_data = json.loads(body_data)
         except:
             body_data = {}
-        print('body data', body_data)
         return body_data
     
     @property

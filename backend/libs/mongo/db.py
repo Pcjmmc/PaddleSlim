@@ -118,17 +118,11 @@ if __name__ == "__main__":
             }
         },
         "config": {
-            "desc": 'case管理',
+            "desc": '测试能力管理',
             "icon": 'ios-paper',
             "sub": {
-                "trigger": {
-                    "desc": '集成测试'
-                },
                 "jobs": {
-                    "desc": '任务管理'
-                },
-                "tags": {
-                    "desc": '标签管理'
+                    "desc": '任务注册'
                 }
             }
         },
