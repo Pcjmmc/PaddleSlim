@@ -36,7 +36,7 @@
     </div>
     <div v-else-if="allSteps.release !== undefined && allSteps.release.flag">
      <!--这里呈现编包验证的结果即可-->
-      <Regression :data="bugData"></Regression>
+      <regression :data="bugData"></regression>
     </div>
     <div v-else>
       <Intergration
@@ -149,7 +149,7 @@ export default {
     async getBugData() {
       let _params = {'tag': this.repoInfo.tag};
       const {code, data, msg} = await api.get(BugUrl, _params);
-      if (parseInt(code) == 200) {
+      if (parseInt(code, 10) === 200) {
         this.bugData = data;
       } else {
         this.bugData = [];
@@ -157,7 +157,7 @@ export default {
           content: '请求出错: ' + msg,
           duration: 30,
           closable: true
-        })
+        });
       }
     },
     async selectDate() {

@@ -1,7 +1,7 @@
 <template>
 <div>
     <row type="flex" justify="center" align="middle">
-      <histogram-base 
+      <histogram-base
       ref="child"
       :xdata="newfilterst"
       :count="count"
@@ -28,8 +28,8 @@ export default {
   props: {
     datas: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     }
   },
@@ -104,7 +104,7 @@ export default {
     HistogramBase
   },
   watch: {
-    datas: function() {
+    datas: function () {
       this.getStatusFilters();
     }
   },

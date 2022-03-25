@@ -10,14 +10,14 @@
     props: {
       count: {
         type: Array,
-        default () {
-          return []
+        default() {
+          return [];
         }
       },
       xdata: {
         type: Array,
-        default () {
-          return []
+        default() {
+          return [];
         }
       }
     },
