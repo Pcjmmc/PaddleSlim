@@ -7,7 +7,20 @@
   import echarts from 'echarts'
   export default {
     name: '',
-    props: ["xData", "count"],
+    props: {
+      count: {
+        type: Array,
+        default () {
+          return []
+        }
+      },
+      xdata: {
+        type: Array,
+        default () {
+          return []
+        }
+      }
+    },
     data () {
       return {
       }
@@ -25,7 +38,7 @@
               data: ['卡片数']
             },
             xAxis: {
-              data: this.xData
+              data: this.xdata
             },
             yAxis: {},
             series: [{

@@ -1,7 +1,11 @@
 <template>
 <div>
     <row type="flex" justify="center" align="middle">
-      <histogram-base :xData="newfilterst" :count="count" ref="child"> </histogram-base>
+      <histogram-base 
+      ref="child"
+      :xdata="newfilterst"
+      :count="count"
+    > </histogram-base>
     </Row>
     <div>
       <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">bug列表</Divider>
@@ -20,8 +24,15 @@
 import HistogramBase from './HistogramBase.vue';
 import { isEmpty } from "../util/help.js";
 export default {
-  name: "BugFix",
-  props: ["datas", "scenes"],
+  name: 'BugFix',
+  props: {
+    datas: {
+      type: Array,
+      default () {
+        return []
+      }
+    }
+  },
   data: function () {
     return {
       count: [],
@@ -118,7 +129,7 @@ export default {
       let filters = [];
       let res = {};
       for (var i = 0; i < this.datas.length; i++) {
-        let status = this.datas[i]["status"]
+        let status = this.datas[i].status;
         filterst.push(status);
         if (!res[status]) {
           res[status] = 0;

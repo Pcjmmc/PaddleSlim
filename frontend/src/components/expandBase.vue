@@ -21,18 +21,26 @@
           <i-circle :percent="100" stroke-color="#5cb85c" :size="15">
             <Icon type="ios-checkmark" size="10" style="color:#5cb85c"></Icon>
           </i-circle>
-          <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.tname }} </a>
+          <a href="javascript:void(0)" style="font-size:10px;" @click="jumper(item)"> {{ item.tname }} </a>
         </span>
         <span v-else-if="item.status && item.status.toLowerCase()=='failed'">
           <i-circle :percent="100" stroke-color="#ff5500" :size="15">
             <Icon type="ios-close" size="10" style="color:#ff5500"></Icon>
           </i-circle>
-          <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.tname }} </a>
+          <a
+          href="javascript:void(0)"
+          @click="jumper(item)" 
+          style="font-size:10px;"
+        > {{ item.tname }} </a>
         </span>
         <span v-else-if="item.status && item.status.toLowerCase()=='running'">
           <Icon type="ios-loading" size="20" class="demo-spin-icon-load"></Icon>
           <Tooltip placement="right" width="400" >
-            <a href="javascript:void(0)" @click="jumper(item)" style="font-size:10px;"> {{ item.tname }} </a>
+            <a
+              href="javascript:void(0)"
+              @click="jumper(item)" 
+              style="font-size:10px;"
+            > {{ item.tname }} </a>
             <span data-test="ring-dropdown" class="dropdown_40a"  slot="content">
               <div class="BuildDurationAnchor__buildDuration--tx global__font-smaller--2q global__font-lower--3X global__font--1w">
                 <div class="BuildDurationAnchor__wrapper--1R global__font-smaller--2q global__font-lower--3X global__font--1w">
@@ -316,7 +324,7 @@ export default {
       // 上传内容和图片 addForm 以及 formD
       formD.append('data', JSON.stringify(this.addForm));
       // 发送请求
-      const {code, msg} = await api.postFile(BugUrl, formD);
+      const {code} = await api.postFile(BugUrl, formD);
       this.initData(auto);
     },
     handleView (item) {

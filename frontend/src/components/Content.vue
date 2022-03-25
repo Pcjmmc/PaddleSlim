@@ -25,7 +25,7 @@
       </Intergration>
     </div>
     <div v-else-if="allSteps.regression !== undefined && allSteps.regression.flag">
-      <Regression :data="bugData"></Regression>
+      <regression :data="bugData"></regression>
     </div>
     <div v-else-if="allSteps.createtag !== undefined && allSteps.createtag.flag">
       <Intergration
@@ -147,9 +147,18 @@ export default {
       await this.getBugData();
     },
     async getBugData() {
-      let _params = {'tag': this.repoInfo.tag}
+      let _params = {'tag': this.repoInfo.tag};
       const {code, data, msg} = await api.get(BugUrl, _params);
-      this.bugData = data;
+      if (parseInt(code) == 200) {
+        this.bugData = data;
+      } else {
+        this.bugData = [];
+        this.$Message.error({
+          content: '请求出错: ' + msg,
+          duration: 30,
+          closable: true
+        })
+      }
     },
     async selectDate() {
       this.getData();

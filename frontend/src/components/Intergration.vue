@@ -1,7 +1,11 @@
 <template>
   <div>
-    <Tabs @on-click="clickTab" :value="tabName">
-      <TabPane label="进度" name="10001" icon="ios-list-box">
+    <Tabs :value="tabName" @click="clickTab">
+      <TabPane
+        label="进度"
+        name="10001"
+        icon="ios-list-box"
+      >
         <div>
           <div style="margin-bottom: 1.5%">
             <row type="flex" justify="center" align="middle">
@@ -22,8 +26,12 @@
           </div>
         </div>
       </TabPane>
-      <TabPane label="风险" name="10002" icon="ios-bug">
-        <bug-fix :datas="bugData" ref="mychild"></bug-fix>
+      <TabPane
+        label="风险"
+        name="10002"
+        icon="ios-bug"
+      >
+        <bug-fix ref="mychild" :datas="bugData"></bug-fix>
       </TabPane>
     </Tabs>
   </div>
