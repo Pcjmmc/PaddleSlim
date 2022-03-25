@@ -20,6 +20,9 @@ class IcafeAPI():
     """
     @staticmethod
     def create_card(space, **args):
+         """
+         新建卡片
+         """
          url = "{}/api/v2/space/{}/issue/new".format(API_URL_ADRESS, space)
          issue = args["issue"]
          params = {
@@ -36,21 +39,23 @@ class IcafeAPI():
              print(resp.text)
              resp.raise_for_status()
          except Exception as e:
-             print("error")
              print(str(e))
              return False
          return True
    
     @staticmethod
     def get_card(space, iql):
+        """
+        根据iql删选指定空间的卡片
+        """
         resp_data = {}
-        url = "{}/api/spaces/{}/cards?u={}&pw={}&iql={}".format(API_URL_ADRESS, space, USERNAME, PASSWORD,iql)
+        url = "{}/api/spaces/{}/cards?u={}&pw={}&iql={}".format(API_URL_ADRESS, space, USERNAME, PASSWORD, iql)
         try: 
-            print('url [%s]' %url)
+            #print('url [%s]' %url)
             resp = requests.get(url=url, headers=HEADERS) 
             resp.raise_for_status()
             resp_data = resp.json()
-            print('resp_data[%s]' %resp_data)
+            #print('resp_data[%s]' %resp_data)
         except Exception as e:
             print(str(e))
         return resp_data
