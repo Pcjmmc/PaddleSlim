@@ -128,16 +128,17 @@ export default {
         'succeed': 0,
         'failed': 0
       };
-      Object.keys(this.detail).forEach(function (item) {
+      let tmp_detail = this.detail;
+      Object.keys(tmp_detail).forEach(function (item) {
         res.total += 1;
-        switch (this.detail[item].status.toLowerCase()) {
+        switch (tmp_detail[item].status.toLowerCase()) {
           case 'passed':
             res.succeed += 1;
-            succeedData.push(Object.assign({'model_name': item}, this.detail[item]));
+            succeedData.push(Object.assign({'model_name': item}, tmp_detail[item]));
             break;
           case 'failed':
             res.failed += 1;
-            failedData.push(Object.assign({'model_name': item}, this.detail[item]));
+            failedData.push(Object.assign({'model_name': item}, tmp_detail[item]));
             break;
           default:
             break;
