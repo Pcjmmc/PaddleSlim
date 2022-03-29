@@ -21,16 +21,20 @@ class CreateBug(BaseRpc):
     method = 'post'
     gateway = PADDLE_ICAFE_GATEWAY
     api = 'v2/space/DLTP/issue/new'
-    
-    params_keys = [
+    headers ={"Content-type": "application/json"}
+
+    json_keys = [
         {'key': 'username', 'type': str},
         {'key': 'password', 'type': str},
-        {'key': 'title', 'type': str},
-        {'key': 'detail', 'type': str},
-        {'key': 'type', 'type': str},
-        {'key': '所属计划', 'type': str},
-        {'key': 'fields', 'type': str}
+        {'key': 'issues', 'type': list}
     ]
+
+    async def get_data(self, **kwargs):
+        result = await self.is_valid()
+        if result and str(self._status == '200'):
+            # print(self._response_text)
+            return self.response_json
+        return {}
 
 
 class GetBug(BaseRpc):

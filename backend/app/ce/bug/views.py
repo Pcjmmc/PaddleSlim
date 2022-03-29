@@ -8,7 +8,7 @@ import time
 from ce_web.settings.common import RPC_SETTINGS
 from ce_web.settings.scenes import scenes_dict
 from libs.mongo.db import Mongo
-from rpc.icafe import GetBug
+from rpc.icafe import CreateBug, GetBug
 
 from views.base_view import MABaseView
 
@@ -79,8 +79,42 @@ class BugManage(MABaseView):
         """
         响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
         """
-        # 图片列表
-        file_list = self.request.files
-        # 其他字段
-        print("kwargs", kwargs)
-        pass
+        try:
+            fields = json.loads(kwargs.get("data"))
+        except:
+            fields = {}
+        try:
+            file_list = json.loads(kwargs.get("images"))
+        except:
+            file_list = []
+        icafe_info = {
+            "title": fields.get("title"),
+            "type": "Bug",
+            "detail": fields.get("description"),
+            "所属计划": fields.get("tag"),
+            "fields": {},
+            "creator": "liuhuanling"
+        }
+        content = ""
+        if file_list:
+            for item in file_list:
+                img_content = item["content"]
+                content +=  "<img src=\"{body}>".format(body=img_content)
+                icafe_info["detail"] += "\n" + content
+
+        icafe_info["fields"] = {
+            "QA负责人" : fields.get("qa_owner"),
+            "RD负责人" : fields.get("rd_owner"),
+            "流程状态" : "新建",
+            "auto_tag" : fields.get("tag"),
+            "优先级": fields.get("level")
+        }
+        data = {
+            "username": PADDLE_ICAFE_USER,
+            "password": PADDLE_ICAFE_PASSD,
+            "issues": [icafe_info]
+        }
+        await CreateBug(data).get_data()
+        
+
+        

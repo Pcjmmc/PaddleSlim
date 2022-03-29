@@ -322,7 +322,7 @@ class BaseModelMixin(object):
         return row_count, last_rowid
 
     @classmethod
-    async def aio_get_object(cls, **kwargs):
+    async def aio_get_object(cls, order_by=None, group_by=None, **kwargs):
         """
         条件查询
         条件规则写法：in: param__in  (param为要过滤的column) 等同于：in list
@@ -341,6 +341,7 @@ class BaseModelMixin(object):
 
         queryset = sa.select([model_class])
         queryset = cls.get_query_filter(queryset, **_kwargs)
+        queryset = cls.get_query_regroup(queryset, order_by, group_by)
 
         async with engine.acquire() as conn:
             await conn._connection.ping()
@@ -427,7 +428,7 @@ class BaseModelMixin(object):
         return details
 
     @classmethod
-    async def aio_filter_count(cls, **kwargs):
+    async def aio_filter_count(cls, order_by=None, group_by=None, **kwargs):
         """
         条件查询 - 查询总数
         :param kwargs:
@@ -437,6 +438,7 @@ class BaseModelMixin(object):
 
         queryset = sa.select([func.count(model_class.id)])
         queryset = cls.get_query_filter(queryset, **_kwargs)
+        queryset = cls.get_query_regroup(queryset, order_by, group_by)
 
         async with engine.acquire() as conn:
             await conn._connection.ping()

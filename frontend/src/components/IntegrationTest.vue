@@ -7,8 +7,9 @@
           :data="item.data"
           :index="index"
           :tag="tag"
-          :versionId="versionId"
-          :versionName="versionName">
+          :versionid="versionid"
+          :versionname="versionname"
+        >
         </expandBase>
       </Col>
     </Row>
@@ -19,7 +20,28 @@
 import expandBase from './expandBase.vue';
 
 export default {
-  props: ["data", "tag", "versionId", "versionName"],
+  props: {
+    data: {
+      type: [Array],
+      default: function () {
+        return [];
+      }
+    },
+    tag: {
+      type: [String],
+      default: ''
+    },
+    versionid: {
+      type: [Number],
+      default: function () {
+        return null;
+      }
+    },
+    versionname: {
+      type: [String],
+      default: ''
+    }
+  },
   data: function () {
     return {
     }

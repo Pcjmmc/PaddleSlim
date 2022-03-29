@@ -1,5 +1,5 @@
 <template>
-  <Card style="padding-top: 0px;background:#f0f8ff;margin-bottom:2%;">
+  <Card class="center-card-s">
     <p slot="title">
       <span v-if="platform=='Mac'" >
         <Icon type="logo-apple" />
@@ -15,64 +15,108 @@
         {{succeedNum}}/{{totalNum}}
       </span>
     </p>
-    <div v-for="(item, index) in data" :key="index">
-      <p>
-        <span v-if="item.status && item.status.toLowerCase()=='passed'">
-          <i-circle :percent="100" stroke-color="#5cb85c" :size="15">
-            <Icon type="ios-checkmark" size="10" style="color:#5cb85c"></Icon>
-          </i-circle>
-          <a
+    <div v-for="(item, index) in data" style="width:580px;float:left;">
+      <span v-if="item.status && item.status.toLowerCase()=='passed'">
+        <i-circle
+          :percent="100"
+          stroke-color="#5cb85c"
+          :size="15"
+        >
+          <Icon
+            type="ios-checkmark"
+            size="10"
+            style="color:#5cb85c"
+          ></Icon>
+        </i-circle>
+        <a
           href="javascript:void(0)"
           style="font-size:10px;"
           @click="jumper(item)"
         > {{ item.tname }} </a>
-        </span>
-        <span v-else-if="item.status && item.status.toLowerCase()=='failed'">
-          <i-circle :percent="100" stroke-color="#ff5500" :size="15">
-            <Icon type="ios-close" size="10" style="color:#ff5500"></Icon>
-          </i-circle>
-          <a
+      </span>
+      <span v-else-if="item.status && item.status.toLowerCase()=='failed'">
+        <i-circle
+          :percent="100"
+          stroke-color="#ff5500"
+          :size="15"
+        >
+          <Icon
+            type="ios-close"
+            size="10"
+            style="color:#ff5500"
+          ></Icon>
+        </i-circle>
+        <a
           href="javascript:void(0)"
           style="font-size:10px;"
           @click="jumper(item)"
         > {{ item.tname }} </a>
-        </span>
-        <span v-else-if="item.status && item.status.toLowerCase()=='running'">
-          <Icon type="ios-loading" size="20" class="demo-spin-icon-load"></Icon>
-          <Tooltip placement="right" width="400" >
-            <a
-              href="javascript:void(0)"
-              style="font-size:10px;"
-              @click="jumper(item)"
-            > {{ item.tname }} </a>
-            <span data-test="ring-dropdown" class="dropdown_40a"  slot="content">
-              <div class="BuildDurationAnchor__buildDuration--tx global__font-smaller--2q global__font-lower--3X global__font--1w">
-                <div class="BuildDurationAnchor__wrapper--1R global__font-smaller--2q global__font-lower--3X global__font--1w">
-                  <span class="BuildDurationAnchor__text--2P">{{item.left_time}}</span>
-                  <div class="BuildDurationAnchor__progress--2J" style="width: 19%;">
-                    <div style="width: 526.316%;">
-                      <span class="BuildDurationAnchor__text--2P">{{item.left_time}}</span>
-                    </div>
+      </span>
+      <span v-else-if="item.status && item.status.toLowerCase()=='running'">
+        <Icon
+          type="ios-loading"
+          size="20"
+          class="demo-spin-icon-load"
+        ></Icon>
+        <Tooltip placement="right" width="400">
+          <a
+            href="javascript:void(0)"
+            style="font-size:10px;"
+            @click="jumper(item)"
+          > {{ item.tname }} </a>
+          <span
+            slot="content"
+            data-test="ring-dropdown"
+            class="dropdown_40a"
+          >
+            <div
+              class="BuildDurationAnchor__buildDuration--tx
+              global__font-smaller--2q
+              global__font-lower--3X global__font--1w"
+            >
+              <div
+                class="BuildDurationAnchor__wrapper--1R
+                global__font-smaller--2q
+                global__font-lower--3X global__font--1w"
+              >
+                <span class="BuildDurationAnchor__text--2P">{{ item.left_time }}</span>
+                <div class="BuildDurationAnchor__progress--2J" style="width: 19%;">
+                  <div style="width: 526.316%;">
+                    <span class="BuildDurationAnchor__text--2P">{{ item.left_time }}</span>
                   </div>
                 </div>
               </div>
-            </span>
-          </Tooltip>
-        </span>
-        <span v-else>
-        <Tooltip placement="top" content="未执行">
-          <Icon type="ios-alert-outline" size="18"/>
-          {{ item.tname }}
+            </div>
+          </span>
         </Tooltip>
-        </span>
-        <Button icon="ios-create" type="text" @click="createIcafe(item)">bug</Button>
-        <span v-if="item.exempt_status">
-          <Button icon="ios-checkbox-outline" type="text" @click="cancelExempt(item, index)">取消豁免</Button>
-        </span>
-        <span v-else>
-          <Button icon="ios-checkbox-outline" type="text" @click="allowExempt(item, index)">豁免</Button>
-        </span>
-      </p>
+      </span>
+      <span v-else>
+        <Tooltip placement="top" content="未执行">
+          <Icon type="ios-alert-outline" size="17"/>
+          <span style="font-size:10px;">
+            {{ item.tname }}
+          </span>
+        </Tooltip>
+      </span>
+      <span style="float:right;">
+        <Button
+          icon="ios-create"
+          type="text"
+          @click="createIcafe(item)"
+        >bug</Button>
+        <Button
+          v-if="item.exempt_status"
+          icon="ios-checkbox-outline"
+          type="text"
+          @click="cancelExempt(item, index)"
+        >取消豁免</Button>
+        <Button
+          v-else
+          icon="ios-checkbox-outline"
+          type="text"
+          @click="allowExempt(item, index)"
+        >豁免</Button>
+      </span>
     </div>
     <div>
       <Modal v-model="setBugTagModal" title="快速创建bug卡片" @on-cancel="handleReset" width="600px">
@@ -166,13 +210,13 @@ export default {
         return '';
       }
     },
-    'versionId': {
+    'versionid': {
       type: [Number],
       default: function () {
         return '';
       }
     },
-    'versionName': {
+    'versionname': {
       type: [String],
       default: function () {
         return '';
@@ -226,7 +270,7 @@ export default {
     };
   },
   mounted: function () {
-    console.log('data', this.data)
+    // console.log('data', this.data)
   },
   components: {
   },
@@ -250,7 +294,14 @@ export default {
       // 还是根据任务的type来确定跳转到function还是model，目前暂时都用ApiDetails
       let _params = {};
       _params = Object.assign(_params, item);
-      const { href } = this.$router.resolve({name: 'ApiDetails', query: _params});
+      // console.log('item', item)
+      let detail_name = 'ApiDetails';
+      if (item.task_type === 'model') {
+        detail_name = 'model';
+      } else if (item.task_type === 'lite') {
+        detail_name = 'lite';
+      }
+      const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');
     },
     async createIcafe(item) {
@@ -274,7 +325,7 @@ export default {
         onOk: async () => {
           let params = {
             tid: item.tid,
-            version_id: this.versionId,
+            version_id: this.versionid,
             status: 1
           }
           const {code, msg} = await api.post(ExemptUrl, params);
@@ -300,7 +351,7 @@ export default {
         onOk: async () => {
           let params = {
             tid: item.tid,
-            version_id: this.versionId,
+            version_id: this.versionid,
             status: 0
           }
           const {code, msg} = await api.put(ExemptUrl, params);
@@ -322,11 +373,13 @@ export default {
     },
     async handleSubmit(auto) {
       let formD = new FormData();
-      this.uploadList.forEach((file) => {
-        formD.append('file', file);
-      });
+      // this.uploadList.forEach((file) => {
+      //   formD.append('file', file);
+      // });
       // 上传内容和图片 addForm 以及 formD
       formD.append('data', JSON.stringify(this.addForm));
+      // 直接上传base64内容
+      formD.append('images', JSON.stringify(this.tmpList));
       // 发送请求
       await api.postFile(BugUrl, formD);
       this.initData(auto);
@@ -365,7 +418,7 @@ export default {
       });
     },
     handleBeforeUpload (file) {
-      const check = this.uploadList.length < 5;
+      const check = this.uploadList.length < 3;
       if (!check) {
         this.$Notice.warning({
           title: 'Up to five pictures can be uploaded.'
@@ -487,5 +540,13 @@ export default {
 }
 .BuildDurationAnchor__text--2P {
   padding-right: 8px;
+}
+.center-card-s {
+  min-width: 590px;
+  max-height: 600px;
+  overflow:auto;
+  margin-bottom: 2%;
+  padding-top: 0px;
+  background:#f0f8ff;
 }
 </style>

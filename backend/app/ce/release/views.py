@@ -37,8 +37,11 @@ class ReleaseVersionManage(MABaseView):
         release_info = {
             "repo_info": {},
             "all_steps": {},
-            "integration_data": {"data": []}
+            "integration_data": {"data": []},
+            "process_data": {}
         }
+        percent = 0
+        total = 0
         if not version:
             return 0, release_info
         integration_data = {}
@@ -66,6 +69,7 @@ class ReleaseVersionManage(MABaseView):
             all_release_task = await TasksInfo.get_all_task_info_by_step(
                 step="release"
             )
+            total = len(all_release_task)
             # 查询到来全量任务
             tids = [item.get("id") for item in all_release_task]
             # 获取任务的最新状态
@@ -87,10 +91,17 @@ class ReleaseVersionManage(MABaseView):
                 if tid in build_info:
                     item["status"] = build_info[tid].get("status")
                     item["left_time"] = build_info[tid].get("left_time")
+                    item["build_id"] = build_info[tid].get("build_id")
+                    item["commit_id"] = build_info[tid].get("commit_id")
+                    item["branch"] = build_info[tid].get("branch")
+                    item["repo"] = build_info[tid].get("repo")
                 else:
                     item["status"] = "undone"
                 exempt_status = exempt_info.get(tid, {}).get("status", False)    
                 item["exempt_status"] = True if exempt_status else False
+                if item["exempt_status"] or item["status"] == "Passed":
+                    # 如果成功或者豁免就记录进入进度
+                    percent += 1
             # 先获取到所有的seneces
             scenes = set()
             for item in all_release_task:
@@ -112,6 +123,11 @@ class ReleaseVersionManage(MABaseView):
                     data = [{"platform": k, "data": v} for k, v in val.items()]
                     final_data["data"] = data
                 release_info["integration_data"]["data"].append(final_data)
+            # 封装process_data
+            percent = '%.2f' % ((percent/total)*100)
+            release_info["process_data"].update(
+                {"total": total, "percent": float(percent)}
+            )
         return 0, release_info
 
 

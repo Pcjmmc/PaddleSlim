@@ -5,6 +5,7 @@ URL 配置
 from app.ce.bug.views import BugManage
 from app.ce.commit.views import CommitDetailManage, CommitsManage
 from app.ce.config.views import ScenesManage
+from app.ce.detail.views import DetailManage
 from app.ce.job.views import JobManage
 from app.ce.menu.views import MenuManage
 from app.ce.release.exempt_views import ExemptManege
@@ -21,4 +22,5 @@ urlpatterns = [
     url(r'commits', CommitsManage),
     url(r'commit/detail/?$', CommitDetailManage),
     url(r'bugs', BugManage),
+    url(r'detail', DetailManage),
 ]

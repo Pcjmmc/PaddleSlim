@@ -7,8 +7,8 @@
         </div>
         <div style="text-align:center">
           <Icon type="md-git-branch" />
-          <a href="javascript:void(0)" @click="jumperPaddle(repoInfo.branch)">
-            {{repoInfo.branch}}
+          <a href="javascript:void(0)" @click="jumperPaddle(repoinfo.branch)">
+            {{ repoinfo.branch }}
           </a>
         </div>
       </Card>
@@ -19,8 +19,8 @@
         </div>
         <div style="text-align:center">
           <Icon type="md-git-commit" />
-          <a href="javascript:void(0)" @click="jumper(repoInfo.name)">
-            {{repoInfo.commit}}
+          <a href="javascript:void(0)" @click="jumper(repoinfo.name)">
+            {{ repoinfo.commit }}
           </a> 
         </div>
       </Card>
@@ -33,8 +33,8 @@
         <div style="text-align:center">
           <Icon type="md-person" />
           <label>
-            {{repoInfo.auth}}
-            {{repoInfo.descrition}}
+            {{repoinfo.auth}}
+            {{repoinfo.descrition}}
           </label>
         </div>
       </Card>
@@ -44,7 +44,12 @@
 </template>
 <script>
 export default {
-  props: ["repoInfo"],
+  props: {
+    repoinfo: {
+      type: Object,
+      default: null
+    }
+  },
   methods: {
     setColor(status) {
       switch (status) {

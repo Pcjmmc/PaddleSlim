@@ -10,7 +10,12 @@
           <div style="margin-bottom: 1.5%">
             <row type="flex" justify="center" align="middle">
               <col>
-                <ApiCoverage :percent="54" :total="13" description="成功任务数" content="集中测试整体进度"> </ApiCoverage>
+                <api-coverage
+                :percent="processdata.percent"
+                :total="processdata.total"
+                description="成功任务数"
+                content="集中测试整体进度"
+              > </api-coverage>
               </col>
             </row>
           </div>
@@ -18,11 +23,17 @@
             <Divider orientation="left" style="font-size: 0.5em;font-style: italic;"> PaddlePaddle测试信息 </Divider>
           </div>
           <div style="margin-bottom: 1.5%">
-            <BaseInfo :repoInfo="repoInfo"> </BaseInfo>
+            <base-info :repoinfo="repoinfo"> </base-info>
           </div>
-          <div v-for="(item, key, index) in integrationData.data" :key="key">
+          <div v-for="(item, key, index) in integrationdata.data">
             <Divider orientation="left" style="font-size: 0.6em;font-style: italic;">{{item.scenes}}</Divider>
-            <integration-test :data="item.data" :tag="repoInfo.tag" :versionId="repoInfo.version_id" :versionName="repoInfo.name"></integration-test>
+            <integration-test
+              :data="item.data"
+              :tag="repoinfo.tag"
+              :versionid="repoinfo.version_id"
+              :versionname="repoinfo.name"
+            >
+            </integration-test>
           </div>
         </div>
       </TabPane>
@@ -31,7 +42,7 @@
         name="10002"
         icon="ios-bug"
       >
-        <bug-fix ref="mychild" :datas="bugData"></bug-fix>
+        <bug-fix ref="mychild" :datas="bugdata"></bug-fix>
       </TabPane>
     </Tabs>
   </div>
@@ -44,7 +55,26 @@ import ApiCoverage from './ApiCoverage.vue';
 import BaseInfo from './BaseInfo.vue';
 
 export default {
-  props: ["repoInfo", "integrationData", "bugData"],
+  props: {
+    bugdata: {
+      type: [Array],
+      default: function () {
+        return [];
+      }
+    },
+    repoinfo: {
+      type: Object,
+      default: null
+    },
+    integrationdata: {
+      type: Object,
+      default: null
+    },
+    processdata: {
+      type: Object,
+      default: null
+    }
+  },
   data: function () {
     return {
       tabName: '10001'

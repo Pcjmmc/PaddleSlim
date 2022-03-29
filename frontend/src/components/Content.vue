@@ -18,32 +18,38 @@
   </div>
   <div style="margin-bottom: 1.5%">
     <div v-if="allSteps.integration !== undefined && allSteps.integration.flag">
-      <Intergration
-        :repoInfo="repoInfo"
-        :integrationData="integrationData"
-        :bugData="bugData">
-      </Intergration>
+      <intergration
+        :repoinfo="repoinfo"
+        :integrationdata="integrationdata"
+        :bugdata="bugdata"
+        :processdata="processdata"
+      >
+      </intergration>
     </div>
     <div v-else-if="allSteps.regression !== undefined && allSteps.regression.flag">
-      <regression :data="bugData"></regression>
+      <regression :data="bugdata"></regression>
     </div>
     <div v-else-if="allSteps.createtag !== undefined && allSteps.createtag.flag">
-      <Intergration
-        :repoInfo="repoInfo"
-        :integrationData="integrationData"
-        :bugData="bugData">
-      </Intergration>
+      <intergration
+        :repoinfo="repoinfo"
+        :integrationdata="integrationdata"
+        :bugdata="bugdata"
+        :processdata="processdata"
+      >
+      </intergration>
     </div>
     <div v-else-if="allSteps.release !== undefined && allSteps.release.flag">
      <!--这里呈现编包验证的结果即可-->
-      <regression :data="bugData"></regression>
+      <regression :data="bugdata"></regression>
     </div>
     <div v-else>
-      <Intergration
-        :repoInfo="repoInfo"
-        :integrationData="integrationData"
-        :bugData="bugData">
-      </Intergration>
+      <intergration
+        :repoinfo="repoinfo"
+        :integrationdata="integrationdata"
+        :bugdata="bugdata"
+        :processdata="processdata"
+      >
+      </intergration>
     </div>
   </div>
   <div>
@@ -86,12 +92,13 @@ export default {
       },
       versionName: '',
       routeParams: this.$route.params,
-      repoInfo: {},
+      repoinfo: {},
+      processdata: {},
       allSteps: {},
-      integrationData: {
+      integrationdata: {
         data: []
       },
-      bugData: []
+      bugdata: []
     }
   },
   mounted: function () {
@@ -131,28 +138,29 @@ export default {
       // 获取bug数据
       console.log("code", code)
       if (parseInt(code) == 200) {
-        this.repoInfo = data.repo_info;
+        this.repoinfo = data.repo_info;
         this.allSteps = data.all_steps;
-        this.tagForm.branch = this.repoInfo.branch;
-        this.integrationData = data.integration_data;
+        this.tagForm.branch = this.repoinfo.branch;
+        this.integrationdata = data.integration_data;
+        this.processdata = data.process_data;
       } else {
-        this.repoInfo = {}
-        this.allSteps = {}
+        this.repoinfo = {};
+        this.allSteps = {};
         this.$Message.error({
           content: '请求出错: ' + msg,
           duration: 30,
           closable: true
         })
       }
-      await this.getBugData();
+      await this.getbugdata();
     },
-    async getBugData() {
-      let _params = {'tag': this.repoInfo.tag};
+    async getbugdata() {
+      let _params = {'tag': this.repoinfo.tag};
       const {code, data, msg} = await api.get(BugUrl, _params);
       if (parseInt(code, 10) === 200) {
-        this.bugData = data;
+        this.bugdata = data;
       } else {
-        this.bugData = [];
+        this.bugdata = [];
         this.$Message.error({
           content: '请求出错: ' + msg,
           duration: 30,
