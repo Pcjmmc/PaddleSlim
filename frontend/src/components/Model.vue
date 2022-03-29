@@ -128,7 +128,7 @@ export default {
         'succeed': 0,
         'failed': 0
       };
-      Object.keys(this.detail).forEach(function(item) {
+      Object.keys(this.detail).forEach(function (item) {
         res.total += 1;
         switch (this.detail[item].status.toLowerCase()) {
           case 'passed':
