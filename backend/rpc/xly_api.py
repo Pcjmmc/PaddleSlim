@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+xly api 集合
+"""
+
 import requests
 import json
 import sys
