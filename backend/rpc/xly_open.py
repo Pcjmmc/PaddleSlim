@@ -11,7 +11,7 @@ import sys
 import imp
 imp.reload(sys)
 
-class xlyAuthorization(object):
+class XlyAuthorization(object):
     """
     xly open 全鉴生成
     """
@@ -33,12 +33,14 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDEfHbv2jtSj5/+tpBmNdBU7x01WQg2h0R7ys1OVQUT
         return crypt_text  # 加密后的密文
 
     def query_2_md5(self, param):
+        """生成md5"""
         m = hashlib.md5()
         m.update(bytes(param.encode('utf-8')))
         dig = m.hexdigest()
         return dig
 
     def set_sign(self, param):
+        """生成签名"""
         dig = self.query_2_md5(param)
         auth_string = self.encrypt(self.serect, dig)
         cipher_text = base64.b64encode(auth_string)
@@ -47,7 +49,7 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDEfHbv2jtSj5/+tpBmNdBU7x01WQg2h0R7ys1OVQUT
         return sign
 
 
-class xlyOpenApiRequest(xlyAuthorization):
+class XlyOpenApiRequest(XlyAuthorization):
     """请求xly的openAPI"""
 
     def get_method(self,
