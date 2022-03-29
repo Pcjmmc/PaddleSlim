@@ -4,9 +4,9 @@
 import requests
 import json
 import sys
-from xly_open import xlyOpenApiRequest
+from xly_open import XlyOpenApiRequest
 
-class Xly_Api():
+class XlyApi():
     """
     xly api 
     """
@@ -26,7 +26,7 @@ class Xly_Api():
         data['ciType'] = ciType
         data['params'] = json.dumps(diy_params)
         json_data = json.dumps(data)
-        res = xlyOpenApiRequest().post_method(url, json_data, param, headers=headers)
+        res = XlyOpenApiRequest().post_method(url, json_data, param, headers=headers)
         return res
      
     @staticmethod
@@ -39,7 +39,7 @@ class Xly_Api():
         headers = { "Content-Type": "application/json",
                      "IPIPE-UID": "Paddle-bot"
          }
-        res = xlyOpenApiRequest().get_method(url, headers=headers)
+        res = XlyOpenApiRequest().get_method(url, headers=headers)
         #print(res.json())
         print(res)
         return res
@@ -52,5 +52,5 @@ if __name__ == '__main__':
      ciType = "MERGE"
      commit ="93a2f5652fa632e4eff8febf49304d64ec72b569"
      diy_params = {"IPIPE_WHL_PATH":"hello"}
-     #Xly_Api().run_job(pipelineid, branch, ciType, commit, diy_params)
-     Xly_Api().get_job(5248008)
+     #XlyApi().run_job(pipelineid, branch, ciType, commit, diy_params)
+     XlyApi().get_job(5248008)
