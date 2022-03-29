@@ -1,5 +1,9 @@
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+xly open api鉴权生成
+"""
+
 import requests
 import base64
 import rsa
@@ -9,11 +13,10 @@ import os
 
 import sys
 import imp
-imp.reload(sys)
 
 class XlyAuthorization(object):
     """
-    xly open 全鉴生成
+    xly open 鉴权生成
     """
 
     def __init__(self):
@@ -50,7 +53,9 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDEfHbv2jtSj5/+tpBmNdBU7x01WQg2h0R7ys1OVQUT
 
 
 class XlyOpenApiRequest(XlyAuthorization):
-    """请求xly的openAPI"""
+    """
+    请求xly的openAPI
+    """
 
     def get_method(self,
                    url,

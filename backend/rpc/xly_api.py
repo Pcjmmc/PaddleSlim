@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import requests
@@ -9,6 +9,7 @@ from xly_open import XlyOpenApiRequest
 class XlyApi():
     """
     xly api 
+    触发，查询，取消任务
     """
     @staticmethod
     def run_job(pipelineid, branch, ciType, commit, diy_params=None):
