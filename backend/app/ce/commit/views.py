@@ -92,6 +92,10 @@ class CommitDetailManage(MABaseView):
             for item in temp_data:
                 tid = item["tid"]
                 item["status"] = build_info[tid].get("status")
+                item["build_id"] = build_info[tid].get("build_id")
+                item["commit_id"] = build_info[tid].get("commit_id")
+                item["branch"] = build_info[tid].get("branch")
+                item["repo"] = build_info[tid].get("repo")
             # 先获取到所有的seneces
             scenes = set()
             for item in all_release_task:
