@@ -30,7 +30,7 @@
     <Card v-if="failedData.length > 0" class="center-card-s">
       <p slot="title" style="text-align: center;font-size: 1.4em;">
         <Icon
-          type="ios-close"
+          type="ios-close-circle"
           color="red"
           size="20"
         >

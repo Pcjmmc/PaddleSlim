@@ -150,7 +150,13 @@ export default {
       // 还是根据任务的type来确定跳转到function还是model，目前暂时都用ApiDetails
       let _params = {};
       _params = Object.assign(_params, item);
-      const { href } = this.$router.resolve({name: 'ApiDetails', query: _params});
+      let detail_name = 'ApiDetails';
+      if (item.task_type === 'model') {
+        detail_name = 'model';
+      } else if (item.task_type === 'lite') {
+        detail_name = 'lite';
+      }
+      const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');
     }
   }
