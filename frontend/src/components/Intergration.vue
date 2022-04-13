@@ -1,40 +1,42 @@
 <template>
   <div>
-    <Tabs :value="tabName" @click="clickTab">
+    <Tabs :value="tabName" v-on:on-click="clickTab">
       <TabPane
         label="进度"
         name="10001"
         icon="ios-list-box"
       >
         <div>
-          <div style="margin-bottom: 1.5%">
-            <row type="flex" justify="center" align="middle">
-              <col>
-                <api-coverage
-                :percent="processdata.percent"
-                :total="processdata.total"
-                description="成功任务数"
-                content="集中测试整体进度"
-              > </api-coverage>
-              </col>
-            </row>
-          </div>
           <div>
-            <Divider orientation="left" style="font-size: 0.5em;font-style: italic;"> PaddlePaddle测试信息 </Divider>
+            <Divider
+            orientation="left"
+            style="font-size: 0.5em;font-style: italic;margin-top: 0.1px"
+          >
+          测试进度及信息 </Divider>
           </div>
-          <div style="margin-bottom: 1.5%">
-            <base-info :repoinfo="repoinfo"> </base-info>
+          <div style="margin-bottom: 2%">
+            <base-info :repoinfo="repoinfo" :processdata="processdata"> </base-info>
           </div>
-          <div v-for="(item, key, index) in integrationdata.data">
-            <Divider orientation="left" style="font-size: 0.6em;font-style: italic;">{{item.scenes}}</Divider>
-            <integration-test
-              :data="item.data"
-              :tag="repoinfo.tag"
-              :versionid="repoinfo.version_id"
-              :versionname="repoinfo.name"
+          <Tabs
+            type="card"
+            :value="childname"
+            v-on:on-click="clickChildTab"
+          >
+            <TabPane
+            :label="item.desc"
+            :name="item.key"
+            v-for="(item, index) in taskTypeList"
             >
-            </integration-test>
-          </div>
+              <integration-test
+                :data="integrationdata"
+                :tag="repoinfo.tag"
+                :versionid="repoinfo.version_id"
+                :versionname="repoinfo.name"
+                :secondtype="sendTypeList[item.key]"
+              >
+              </integration-test>
+            </TabPane>
+          </Tabs>
         </div>
       </TabPane>
       <TabPane
@@ -49,6 +51,8 @@
 </template>
 
 <script>
+import api from '../api/index';
+import { ScenesUrl, ReleaseJobUrl } from '../api/url.js';
 import IntegrationTest from './IntegrationTest.vue';
 import BugFix from './BugFix.vue';
 import ApiCoverage from './ApiCoverage.vue';
@@ -66,10 +70,6 @@ export default {
       type: Object,
       default: null
     },
-    integrationdata: {
-      type: Object,
-      default: null
-    },
     processdata: {
       type: Object,
       default: null
@@ -77,10 +77,25 @@ export default {
   },
   data: function () {
     return {
-      tabName: '10001'
+      tabName: '10001',
+      childname: 'compile',
+      taskTypeList: [],
+      sendTypeList: {},
+      integrationdata: [],
+      routeParams: this.$route.params,
+      version: ''
+    };
+  },
+  watch: {
+    $route() {
+      this.routeParams = this.$route.params;
+      this.initData();
+      this.getData();
     }
   },
   mounted: function () {
+    this.getScenesList();
+    this.getData();
   },
   components: {
     BaseInfo,
@@ -93,9 +108,63 @@ export default {
   methods: {
     clickTab(name) {
       this.tabName = name;
+      // console.log(this.tabName);
       this.$nextTick(function () {
         this.$refs.mychild.getStatusFilters();
       });
+    },
+    clickChildTab(name) {
+      this.childname = name;
+      // console.log('this child name', this.childname);
+      this.getData();
+    },
+    initData() {
+      if ('tag' in this.routeParams) {
+        this.version = this.routeParams.version;
+      } else {
+        // 如果version是空
+        this.version = 'release/' + this.routeParams.version;
+      }
+    },
+    async getScenesList() {
+      const {code, data, msg} = await api.get(ScenesUrl);
+      if (parseInt(code, 10) === 200) {
+        this.taskTypeList = data.taskTypeList;
+        this.sendTypeList = data.sendTypeList;
+      } else {
+        this.taskTypeList = [];
+        this.$Message.error({
+          content: '请求出错: ' + msg,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
+    async getData() {
+      // 根据需求实时获取
+      if ('tag' in this.routeParams) {
+        this.version = this.routeParams.version;
+      } else {
+        // 如果version是空
+        this.version = 'release/' + this.routeParams.version;
+      }
+      let params = {
+        'version': this.version,
+        'task_type': this.childname
+      };
+      // console.log('根据要求获取数据', params);
+      const {code, data, msg} = await api.get(ReleaseJobUrl, params);
+      if (parseInt(code, 10) === 200) {
+        // console.log('data is', data);
+        this.integrationdata = data;
+      } else {
+        this.integrationdata = [];
+        this.$Message.error({
+          content: '请求出错: ' + msg,
+          duration: 30,
+          closable: true
+        });
+      }
     }
   }
 };

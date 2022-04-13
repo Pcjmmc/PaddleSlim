@@ -4,7 +4,7 @@
       <Split v-model="split1">
         <div slot="left" class="center-card-s">
           <div style="margin-bottom: 10px;">
-            <p>{{ queryParams.version }} 覆盖的commit列表</p>
+            <p>{{ queryParams.version }} commit列表 </p>
           </div>
           <div>
             <Timeline>

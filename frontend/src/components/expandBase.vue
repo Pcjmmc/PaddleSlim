@@ -1,15 +1,6 @@
 <template>
   <Card class="center-card-s">
     <p slot="title">
-      <span v-if="platform=='Mac'" >
-        <Icon type="logo-apple" />
-      </span>
-      <span v-else-if="platform=='Windows'">
-        <Icon type="logo-windows"  />
-      </span>
-      <span v-else>
-        <Icon type="logo-tux" />
-      </span>
       {{ platform }}
       <span>
         {{succeedNum}}/{{totalNum}}

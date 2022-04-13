@@ -20,7 +20,6 @@
     <div v-if="allSteps.integration !== undefined && allSteps.integration.flag">
       <intergration
         :repoinfo="repoinfo"
-        :integrationdata="integrationdata"
         :bugdata="bugdata"
         :processdata="processdata"
       >
@@ -32,7 +31,6 @@
     <div v-else-if="allSteps.createtag !== undefined && allSteps.createtag.flag">
       <intergration
         :repoinfo="repoinfo"
-        :integrationdata="integrationdata"
         :bugdata="bugdata"
         :processdata="processdata"
       >
@@ -45,7 +43,6 @@
     <div v-else>
       <intergration
         :repoinfo="repoinfo"
-        :integrationdata="integrationdata"
         :bugdata="bugdata"
         :processdata="processdata"
       >
@@ -95,9 +92,9 @@ export default {
       repoinfo: {},
       processdata: {},
       allSteps: {},
-      integrationdata: {
-        data: []
-      },
+      // integrationdata: {
+      //   data: []
+      // },
       bugdata: []
     }
   },
@@ -122,17 +119,7 @@ export default {
   methods: {
     async getData() {
       // 判断参数如果参数中有tag，则name=version；如果没有，则name=release+version
-      if ('tag' in this.routeParams) {
-        this.versionName = this.routeParams.version;
-      } else {
-        // 如果version是空
-        this.versionName = 'release/' + this.routeParams.version;
-        // 如果前端是主页；则需要后端来做数据的呈现逻辑
-        // 如果前端传递的versionName=release/undefined; 则默认返回当前处于激活状态的数据即可
-        // release/2.3.0 或者v2.2.2等 如果给定了确定版本，则严格按照name==release去筛选
-      }
       let _params = {'version': this.versionName}
-      console.log("queury params", _params)
       const {code, data, msg} = await api.get(ReleaseVersionUrl, _params);
       // 获取任务进展数据
       // 获取bug数据
@@ -141,7 +128,7 @@ export default {
         this.repoinfo = data.repo_info;
         this.allSteps = data.all_steps;
         this.tagForm.branch = this.repoinfo.branch;
-        this.integrationdata = data.integration_data;
+        // this.integrationdata = data.integration_data;
         this.processdata = data.process_data;
       } else {
         this.repoinfo = {};
@@ -179,6 +166,15 @@ export default {
     initData() {
       this.tagForm.tagName = '';
       this.tagForm.commit = '';
+      if ('tag' in this.routeParams) {
+        this.versionName = this.routeParams.version;
+      } else {
+        // 如果version是空
+        this.versionName = 'release/' + this.routeParams.version;
+        // 如果前端是主页；则需要后端来做数据的呈现逻辑
+        // 如果前端传递的versionName=release/undefined; 则默认返回当前处于激活状态的数据即可
+        // release/2.3.0 或者v2.2.2等 如果给定了确定版本，则严格按照name==release去筛选
+      }
     },
     handleReset(auto) {
       this.allSteps.createtag.flag = false;

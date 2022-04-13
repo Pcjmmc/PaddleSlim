@@ -1,3 +1,4 @@
+# !/usr/bin/env python3
 """
 主要负责全量任务的业务逻辑处理
 """
@@ -16,7 +17,7 @@ from models.tasks import CeTasks
 
 class TasksInfo(object):
     @classmethod
-    async def get_all_task_info_by_step(cls, step=None):
+    async def get_all_task_info_by_filter(cls, step=None, task_type=None, secondary_type=None):
         """
         根据条件筛选出任务的全集
         """
@@ -24,8 +25,13 @@ class TasksInfo(object):
             step = [step] if type(step) != list else step
             step.append("shared")
             # 将符合要求的全量任务筛选出
+            query_params = {"step__in": step}
+            if task_type:
+                query_params["task_type"] = task_type
+            if secondary_type:
+                query_params["secondary_type"] = secondary_type
             task_records = await CeTasks().aio_filter_details(
-                need_all=True, **{"step__in": step}
+                need_all=True, **query_params
             )
         else:
             task_records = await CeTasks().aio_filter_details(need_all=True)

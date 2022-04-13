@@ -71,7 +71,7 @@ class CommitDetailManage(MABaseView):
             else:
                 step = "release"
             # 根据release 的细腻来查询,改接口是负责release的，故step=release
-            all_release_task = await TasksInfo.get_all_task_info_by_step(
+            all_release_task = await TasksInfo.get_all_task_info_by_filter(
                 step=step
             )
             # 查询到来全量任务

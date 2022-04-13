@@ -1,7 +1,22 @@
 <template>
-  <div style="font-size:10px">
-    <Row>
-      <Card :bordered="false" style="width:400px">
+  <div style="font-size:8px">
+    <Row type="flex" justify="start">
+      <div style="width:600px;height:40px;">
+        <div style="text-align:center">
+         <Progress
+          :percent="processdata.percent"
+          :stroke-width="15"
+          status="active"
+          text-inside
+        >
+        </Progress>
+        </div>
+        <div style="text-align:center;margin-top: 1%">
+          <h5>任务成功占比</h5>
+        </div>
+      </div>
+      <Divider type="vertical" style="height:35px"/>
+      <div style="width:200px;height:40px;">
         <div style="text-align:center">
           <h3>branch / tag</h3>
         </div>
@@ -11,9 +26,9 @@
             {{ repoinfo.branch }}
           </a>
         </div>
-      </Card>
-      <Divider type="vertical" style="height:80px" />
-      <Card  :bordered="false" style="width:400px">
+      </div>
+      <Divider type="vertical" style="height:35px"/>
+      <div style="width:300px;height:40px;">
         <div style="text-align:center">
           <h3>commit</h3>
         </div>
@@ -23,22 +38,7 @@
             {{ repoinfo.commit }}
           </a> 
         </div>
-      </Card>
-      <!--
-      <Divider type="vertical" style="height:80px" />
-      <Card :bordered="false">
-        <div style="text-align:center">
-          <h3>Auther & Message</h3>
-        </div>
-        <div style="text-align:center">
-          <Icon type="md-person" />
-          <label>
-            {{repoinfo.auth}}
-            {{repoinfo.descrition}}
-          </label>
-        </div>
-      </Card>
-      -->
+      </div>
     </Row>
   </div>
 </template>
@@ -46,6 +46,10 @@
 export default {
   props: {
     repoinfo: {
+      type: Object,
+      default: null
+    },
+    processdata: {
       type: Object,
       default: null
     }

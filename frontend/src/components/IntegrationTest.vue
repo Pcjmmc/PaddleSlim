@@ -40,6 +40,12 @@ export default {
     versionname: {
       type: [String],
       default: ''
+    },
+    secondtype: {
+      type: [Array],
+      default: function () {
+        return [];
+      }
     }
   },
   data: function () {

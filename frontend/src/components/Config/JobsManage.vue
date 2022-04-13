@@ -32,8 +32,18 @@
           </Select>
         </FormItem>
        <FormItem label="任务类型: " prop="task_type">
-          <Select v-model="addForm.task_type" >
+          <Select v-model="addForm.task_type" v-on:on-change="resetSendType1()">
             <Option v-for="(item, index) in taskTypeList" :value="item.key" :key="index">{{ item.desc }}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="二级分类: " prop="secondary_type">
+          <Select v-model="addForm.secondary_type">
+            <Option
+            :key="index"
+            :value="item"
+            v-for="(item, index) in sendType1"
+          >
+          {{ item }}</Option>
           </Select>
         </FormItem>
         <FormItem label="任务名: " prop="tname">
@@ -75,8 +85,18 @@
           </Select>
         </FormItem>
        <FormItem label="任务类型: " prop="task_type">
-          <Select v-model="selectedRow.task_type" >
+          <Select v-model="selectedRow.task_type" v-on:on-change="resetSendType2()">
             <Option v-for="(item, index) in taskTypeList" :value="item.key" :key="index">{{ item.desc }}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="二级分类: " prop="secondary_type">
+          <Select v-model="selectedRow.secondary_type">
+            <Option
+            :key="index"
+            :value="item"
+            v-for="(item, index) in sendType2"
+          >
+          {{ item }}</Option>
           </Select>
         </FormItem>
         <FormItem label="任务名: " prop="tname">
@@ -136,6 +156,9 @@ export default {
       ],
       taskTypeList: [
       ],
+      sendTypeList: {},
+      sendType2: [],
+      sendType1: [],
       systemList: [
         {
           'key': 'Linux_Gpu',
@@ -163,10 +186,10 @@ export default {
         }
       ],
       stepList: [
-        {
-          'key': 'compile',
-          'desc': '编译'
-        },
+        // {
+        //   'key': 'compile',
+        //   'desc': '编译'
+        // },
         {
           'key': 'develop',
           'desc': 'dev回归'
@@ -187,6 +210,7 @@ export default {
         'platform': '',
         'system': '',
         'task_type': '',
+        'secondary_type': '',
         'dependencies': '',
         'description': '',
         'step': ''
@@ -212,6 +236,9 @@ export default {
         ],
         task_type: [
           { required: true, message: '请选择任务类型', trigger: 'blur' }
+        ],
+        secondary_type: [
+          { required: true, message: '请标注任务的二级分类', trigger: 'blur' }
         ],
         description: [
           { required: true, message: '请填写任务描述', trigger: 'blur' }
@@ -241,7 +268,15 @@ export default {
         },
         {
           title: '任务类型',
-          key: 'task_type'
+          key: 'task_type',
+          render: (h, params) => {
+            return h('span', {
+            }, this.getDescBykey(params.row.task_type));
+          }
+        },
+        {
+          title: '二级分类',
+          key: 'secondary_type'
         },
         {
           title: '负责人',
@@ -319,6 +354,8 @@ export default {
       ]
     };
   },
+  watch: {
+  },
   mounted: function () {
     this.getJobData();
   },
@@ -372,9 +409,9 @@ export default {
     handelUpdate(row) {
       this.selectedRow = row;
       this.updateModelFlag = true;
+      this.sendType2 = this.sendTypeList[row.task_type];
     },
     async handelUpdateSubmit() {
-      console.log(this.selectedRow)
       let params = {
         id: this.selectedRow.id,
         build_type_id: this.selectedRow.build_type_id,
@@ -384,6 +421,7 @@ export default {
         step: this.selectedRow.step,
         system: this.selectedRow.system,
         task_type: this.selectedRow.task_type,
+        secondary_type: this.selectedRow.secondary_type,
         tname: this.selectedRow.tname
       }
       const {code, msg} = await api.put(JobUrl, params);
@@ -410,11 +448,17 @@ export default {
       const {code, msg} = await api.post(JobUrl, params);
       this.initData();
     },
+    resetSendType1() {
+      this.sendType1 = this.sendTypeList[this.addForm.task_type];
+    },
+    resetSendType2() {
+      this.sendType2 = this.sendTypeList[this.selectedRow.task_type];
+    },
     async getScenesList() {
       const {code, data, msg} = await api.get(ScenesUrl);
       if (parseInt(code) == 200) {
-        this.taskTypeList = data;
-        console.log('code', this.taskTypeList);
+        this.taskTypeList = data.taskTypeList;
+        this.sendTypeList = data.sendTypeList;
       } else {
         this.taskTypeList = []
         this.$Message.error({
@@ -423,6 +467,15 @@ export default {
           closable: true
         })
       }
+    },
+    getDescBykey(key) {
+      console.log('get key is', key);
+      for (let idx in this.taskTypeList) {
+        if (this.taskTypeList[idx].key === key) {
+          return this.taskTypeList[idx].desc;
+        }
+      }
+      return '未知';
     },
     pageChange(pageNum) {
       this.search.page = pageNum;

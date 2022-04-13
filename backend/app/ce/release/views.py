@@ -37,14 +37,12 @@ class ReleaseVersionManage(MABaseView):
         release_info = {
             "repo_info": {},
             "all_steps": {},
-            "integration_data": {"data": []},
             "process_data": {}
         }
         percent = 0
         total = 0
         if not version:
             return 0, release_info
-        integration_data = {}
         res = await CeReleaseVersion().aio_get_object(**{"name": version})
         if res:
             release_info["repo_info"] = {
@@ -66,7 +64,7 @@ class ReleaseVersionManage(MABaseView):
                 } for item in new_steps
             }
             # 根据release 的细腻来查询,改接口是负责release的，故step=release
-            all_release_task = await TasksInfo.get_all_task_info_by_step(
+            all_release_task = await TasksInfo.get_all_task_info_by_filter(
                 step="release"
             )
             total = len(all_release_task)
@@ -90,11 +88,6 @@ class ReleaseVersionManage(MABaseView):
                 tid = item["tid"]
                 if tid in build_info:
                     item["status"] = build_info[tid].get("status")
-                    item["left_time"] = build_info[tid].get("left_time")
-                    item["build_id"] = build_info[tid].get("build_id")
-                    item["commit_id"] = build_info[tid].get("commit_id")
-                    item["branch"] = build_info[tid].get("branch")
-                    item["repo"] = build_info[tid].get("repo")
                 else:
                     item["status"] = "undone"
                 exempt_status = exempt_info.get(tid, {}).get("status", False)    
@@ -102,27 +95,6 @@ class ReleaseVersionManage(MABaseView):
                 if item["exempt_status"] or item["status"] == "Passed":
                     # 如果成功或者豁免就记录进入进度
                     percent += 1
-            # 先获取到所有的seneces
-            scenes = set()
-            for item in all_release_task:
-                scenes.add(item.get("task_type"))
-            scenes = list(scenes)
-            integration_data = {sen: dict() for sen in scenes if sen != "lite"}
-            for item in temp_data:
-                sen = item["task_type"]
-                system = item["system"]
-                if system not in integration_data[sen]:
-                    integration_data[sen][system] = list()
-                integration_data[sen][system].append(item)
-            final_data = {}
-            for key, val in integration_data.items():
-                final_data = {
-                    "scenes": scenes_dict[key]
-                }
-                if type(val) == dict:
-                    data = [{"platform": k, "data": v} for k, v in val.items()]
-                    final_data["data"] = data
-                release_info["integration_data"]["data"].append(final_data)
             # 封装process_data
             percent = '%.2f' % ((percent/total)*100)
             release_info["process_data"].update(
@@ -260,3 +232,70 @@ class ReleaseVersionManage(MABaseView):
             else:
                 return False
         return True
+
+class TaskManage(MABaseView):
+
+    async def get(self, **kwargs):
+        """
+        调用基类的get方法
+        """
+        return await super().get(**kwargs)
+
+    async def get_data(self, **kwargs):
+        # 根据查询需求将版本的相关信息以及steps信息返回到前端
+        version = kwargs.get("version")
+        task_type = kwargs.get("task_type")
+        if version == "release/undefined":
+            obj = await CeReleaseVersion().aio_get_object(
+                **{"activated": True}
+            )
+            version = obj.name if obj else None
+        integration_data = {}
+        data = []
+        if not version or not task_type:
+            return 0, integration_data
+        res = await CeReleaseVersion().aio_get_object(**{"name": version})
+        if res:
+            version_id = res.get("id")
+            # 根据release 的细腻来查询,改接口是负责release的，故step=release
+            all_release_task = await TasksInfo.get_all_task_info_by_filter(
+                step="release", task_type=task_type
+            )
+            # 查询到来全量任务
+            tids = [item.get("id") for item in all_release_task]
+            # 获取任务的最新状态
+            build_info = await TaskBuildInfo.get_task_latest_status_by_tids(
+                tids, res.get("branch"), res.get("begin_time"), end_time=res.get("end_time", None)
+            )
+            # 获取豁免状态
+            exempt_info = await ExemptInfo.get_task_exempt_status_by_tids(
+                tids, version_id
+            )
+            temp_data = [{
+                "tid": item["id"], 
+                "tname": item["tname"], 
+                "description": item["description"],
+                "system": item["system"],
+                "task_type": item["task_type"],
+                "secondary_type": item["secondary_type"]} for item in all_release_task]
+            for item in temp_data:
+                tid = item["tid"]
+                if tid in build_info:
+                    item["status"] = build_info[tid].get("status")
+                    item["left_time"] = build_info[tid].get("left_time")
+                    item["build_id"] = build_info[tid].get("build_id")
+                    item["commit_id"] = build_info[tid].get("commit_id")
+                    item["branch"] = build_info[tid].get("branch")
+                    item["repo"] = build_info[tid].get("repo")
+                else:
+                    item["status"] = "undone"
+                exempt_status = exempt_info.get(tid, {}).get("status", False)    
+                item["exempt_status"] = True if exempt_status else False
+            for item in temp_data:
+                secondary_type = item["secondary_type"]
+                if secondary_type not in integration_data:
+                    integration_data[secondary_type] = list()
+                integration_data[secondary_type].append(item)
+            data = [{"platform": k, "data": v} for k, v in integration_data.items()]
+        #print("integration_data", integration_data)    
+        return len(data), data 

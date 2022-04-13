@@ -4,7 +4,7 @@ import datetime
 import json
 import time
 
-from ce_web.settings.scenes import scenes_dict
+from ce_web.settings.scenes import scenes_dict, secondary_type
 from libs.mongo.db import Mongo
 
 from views.base_view import MABaseView
@@ -23,6 +23,11 @@ class ScenesManage(MABaseView):
         """
         响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
         """
+        data = {
+            "taskTypeList": [],
+            "sendTypeList": secondary_type
+        }
         result = [{'key': key, 'desc': val} for key, val in scenes_dict.items()]
-        return len(result), result
+        data["taskTypeList"] = result
+        return len(data), data
 
