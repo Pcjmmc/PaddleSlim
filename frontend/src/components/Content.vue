@@ -1,5 +1,6 @@
 <template>
 <div>
+ <!--
   <div>
     <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">Release测试阶段</Divider>
   </div>
@@ -13,9 +14,11 @@
       </Step>
     </Steps>
   </div>
+  
   <div>
     <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">进度详情</Divider>
   </div>
+  -->
   <div style="margin-bottom: 1.5%">
     <div v-if="allSteps.integration !== undefined && allSteps.integration.flag">
       <intergration
