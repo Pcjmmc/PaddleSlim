@@ -14,7 +14,6 @@
       </Step>
     </Steps>
   </div>
-  
   <div>
     <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">进度详情</Divider>
   </div>
