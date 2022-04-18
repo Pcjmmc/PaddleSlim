@@ -1,3 +1,4 @@
+# !/usr/bin/env python3
 """
 负责menu的操作逻辑，为其他view提供封装的逻辑
 """
