@@ -28,6 +28,7 @@ class ReleaseVersionManage(MABaseView):
     async def get_data(self, **kwargs):
         # 根据查询需求将版本的相关信息以及steps信息返回到前端
         version = kwargs.get("version")
+        appid = kwargs.get("appid", 1)
         if version == "release/undefined":
             obj = await CeReleaseVersion().aio_get_object(
                 **{"activated": True}
@@ -65,7 +66,7 @@ class ReleaseVersionManage(MABaseView):
             }
             # 根据release 的细腻来查询,改接口是负责release的，故step=release
             all_release_task = await TasksInfo.get_all_task_info_by_filter(
-                step="release"
+                step="release", appid=appid
             )
             total = len(all_release_task)
             # 查询到来全量任务
@@ -244,6 +245,7 @@ class TaskManage(MABaseView):
     async def get_data(self, **kwargs):
         # 根据查询需求将版本的相关信息以及steps信息返回到前端
         version = kwargs.get("version")
+        appid = kwargs.get("appid", 1)
         task_type = kwargs.get("task_type")
         if version == "release/undefined":
             obj = await CeReleaseVersion().aio_get_object(
@@ -259,7 +261,7 @@ class TaskManage(MABaseView):
             version_id = res.get("id")
             # 根据release 的细腻来查询,改接口是负责release的，故step=release
             all_release_task = await TasksInfo.get_all_task_info_by_filter(
-                step="release", task_type=task_type
+                step="release", task_type=task_type, appid=appid
             )
             # 查询到来全量任务
             tids = [item.get("id") for item in all_release_task]

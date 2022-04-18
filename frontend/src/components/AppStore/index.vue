@@ -1,6 +1,6 @@
 <template>
   <div class="center-welcome">
-    <h1>请选选择产品列表</h1>
+    <h1>请选择产品列表</h1>
     <Row :gutter="16">
       <Col span="8" v-for="(item, index) in appData" :key="index" class="one-fifth-video-col">
         <Card :bordered="false"  :style="{backgroundColor: randomColor()}">

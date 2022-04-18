@@ -31,6 +31,7 @@ class CeTasks(BaseModel, BaseModelMixin):
     secondary_type = Column(VARCHAR(50), comment="任务的二级类型") #二级分类
     dependencies = Column(VARCHAR(100), comment="依赖的上游编译任务") # xly： "pipelineConfId;得确定下这个值唯一吗"； teamcity："%system.teamcity.buildType.id%"
     step = Column(VARCHAR(20), comment="任务所属的阶段") # compile: 编译任务； 下游任务有分成： develop； release；shared;
+    appid = Column(Integer, comment="任务所属的app")
     created = Column(Integer, comment="本记录创建的时间")
     updated = Column(Integer, comment="本记录更新的时间")
 

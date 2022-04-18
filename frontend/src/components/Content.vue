@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import api from '../api/index';
 import { ReleaseVersionUrl, BugUrl } from '../api/url.js';
 import BaseInfo from './BaseInfo.vue';
@@ -122,11 +123,15 @@ export default {
   methods: {
     async getData() {
       // 判断参数如果参数中有tag，则name=version；如果没有，则name=release+version
-      let _params = {'version': this.versionName}
+      let _params = {
+        'version':
+        this.versionName,
+        'appid': Cookies.get('appid')
+      }
       const {code, data, version} = await api.get(ReleaseVersionUrl, _params);
       // 获取任务进展数据
       // 获取bug数据
-      console.log("code", code)
+      // console.log("code", code)
       if (parseInt(code) == 200) {
         this.repoinfo = data.repo_info;
         this.allSteps = data.all_steps;

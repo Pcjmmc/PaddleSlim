@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import api from '../api/index';
 import { ScenesUrl, ReleaseJobUrl } from '../api/url.js';
 import IntegrationTest from './IntegrationTest.vue';
@@ -170,7 +171,8 @@ export default {
       // 根据需求实时获取
       let params = {
         'version': this.version,
-        'task_type': this.childname
+        'task_type': this.childname,
+        'appid': Cookies.get('appid')
       };
       const {code, data, msg} = await api.get(ReleaseJobUrl, params);
       if (parseInt(code, 10) === 200) {

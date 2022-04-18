@@ -128,6 +128,7 @@
   </div>
 </template>
 <script>
+import Cookies from 'js-cookie';
 import api from '../../api/index';
 import { ScenesUrl, JobUrl } from '../../api/url.js';
 export default {
@@ -365,7 +366,11 @@ export default {
     async getJobData() {
       this.initData();
       await this.getScenesList();
-      let params = this.search;
+      let params = {
+        page: this.search.page,
+        pagesize: this.search.pagesize,
+        appid: Cookies.get("appid")
+      };
       const {code, all_count, data, msg} = await api.get(JobUrl, params);
       if (parseInt(code) == 200) {
         this.total = all_count;
@@ -422,7 +427,8 @@ export default {
         system: this.selectedRow.system,
         task_type: this.selectedRow.task_type,
         secondary_type: this.selectedRow.secondary_type,
-        tname: this.selectedRow.tname
+        tname: this.selectedRow.tname,
+        appid: Cookies.get('appid')
       }
       const {code, msg} = await api.put(JobUrl, params);
       if (parseInt(code) != 200) {
@@ -444,7 +450,10 @@ export default {
       })
     },
     async createJob() {
-      let params = this.addForm;
+      let params = {
+        appid: Cookies.get('appid')
+      }
+      params = Object.assign(params, this.addForm);
       const {code, msg} = await api.post(JobUrl, params);
       this.initData();
     },

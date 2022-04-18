@@ -21,8 +21,9 @@ class JobManage(MABaseView):
     async def get_data(self, **kwargs):
         page = kwargs.get("page", 1)
         pagesize = kwargs.get("pagesize", 30)
+        appid = kwargs.get("appid", 1)
         count, data = await CeTasks().aio_filter_details_with_total_count(
-            page_index=page, limit=pagesize
+            page_index=page, limit=pagesize, **{"appid": appid}
         )
         return count, data
 

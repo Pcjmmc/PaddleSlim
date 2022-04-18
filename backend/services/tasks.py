@@ -17,7 +17,7 @@ from models.tasks import CeTasks
 
 class TasksInfo(object):
     @classmethod
-    async def get_all_task_info_by_filter(cls, step=None, task_type=None, secondary_type=None):
+    async def get_all_task_info_by_filter(cls, step=None, task_type=None, secondary_type=None, appid=1):
         """
         根据条件筛选出任务的全集
         """
@@ -25,7 +25,7 @@ class TasksInfo(object):
             step = [step] if type(step) != list else step
             step.append("shared")
             # 将符合要求的全量任务筛选出
-            query_params = {"step__in": step}
+            query_params = {"step__in": step, "appid": appid}
             if task_type:
                 query_params["task_type"] = task_type
             if secondary_type:
