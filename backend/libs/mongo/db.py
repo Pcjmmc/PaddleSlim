@@ -103,19 +103,27 @@ class Mongo:
 if __name__ == "__main__":
     # 调用示例，初始化menu数据
     loop = asyncio.get_event_loop()
-    menu_obj = Mongo('ce', 'ce_menu')
+    appid=1
+    table_name = 'ce_menu_{appid}'.format(appid=appid)
+    menu_obj = Mongo('paddle_quality', table_name)
     menuDesc = {
+        "version": [
+        ],
+        "requirement": {
+            "desc": "需求",
+            "icon": "ios-star-outline"
+        },
+        "test": {
+            "desc": "测试",
+            "icon": "ios-bulb-outline"
+        },
         "release": {
-            "desc": "发版",
-            "icon": "ios-analytics",
-            "sub": {
-                "tag": {
-                    "desc": "历史记录",
-                    "icon": "ios-folder",
-                    "sub": {
-                    }
-                }
-            }
+            "desc": "集测",
+            "icon": "ios-analytics"
+        },
+        "publish": {
+            "desc": "发布",
+            "icon": "ios-cloud-upload-outline"
         },
         "config": {
             "desc": '测试能力管理',

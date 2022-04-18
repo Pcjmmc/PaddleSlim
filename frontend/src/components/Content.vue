@@ -89,8 +89,6 @@ export default {
         tagName: '',
         commit: ''
       },
-      versionName: '',
-      routeParams: this.$route.params,
       repoinfo: {},
       processdata: {},
       allSteps: {},
@@ -105,9 +103,7 @@ export default {
     this.getData();
   },
   watch: {
-    $route() {
-      this.routeParams = this.$route.params;
-      this.initData();
+    versionName: function () {
       this.getData();
     }
   },
@@ -117,12 +113,17 @@ export default {
     Regression
   },
   computed: {
+    versionName: {
+      get () {
+        return this.$store.state.version;
+      }
+    }
   },
   methods: {
     async getData() {
       // 判断参数如果参数中有tag，则name=version；如果没有，则name=release+version
       let _params = {'version': this.versionName}
-      const {code, data, msg} = await api.get(ReleaseVersionUrl, _params);
+      const {code, data, version} = await api.get(ReleaseVersionUrl, _params);
       // 获取任务进展数据
       // 获取bug数据
       console.log("code", code)
@@ -136,7 +137,7 @@ export default {
         this.repoinfo = {};
         this.allSteps = {};
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + version,
           duration: 30,
           closable: true
         })
@@ -145,13 +146,13 @@ export default {
     },
     async getbugdata() {
       let _params = {'tag': this.repoinfo.tag};
-      const {code, data, msg} = await api.get(BugUrl, _params);
+      const {code, data, version} = await api.get(BugUrl, _params);
       if (parseInt(code, 10) === 200) {
         this.bugdata = data;
       } else {
         this.bugdata = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + version,
           duration: 30,
           closable: true
         });
@@ -168,15 +169,6 @@ export default {
     initData() {
       this.tagForm.tagName = '';
       this.tagForm.commit = '';
-      if ('tag' in this.routeParams) {
-        this.versionName = this.routeParams.version;
-      } else {
-        // 如果version是空
-        this.versionName = 'release/' + this.routeParams.version;
-        // 如果前端是主页；则需要后端来做数据的呈现逻辑
-        // 如果前端传递的versionName=release/undefined; 则默认返回当前处于激活状态的数据即可
-        // release/2.3.0 或者v2.2.2等 如果给定了确定版本，则严格按照name==release去筛选
-      }
     },
     handleReset(auto) {
       this.allSteps.createtag.flag = false;

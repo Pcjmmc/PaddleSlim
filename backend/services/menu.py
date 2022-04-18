@@ -17,39 +17,25 @@ from libs.mongo.db import Mongo
 from models.release_version import CeReleaseVersion
 
 
-async def update_menu():
+async def update_menu(appid=1):
     # CeReleaseVersion 表重新组装menu的release
-    table_name = "ce_menu"
+    # 这里的逻辑全部都是基础框架的，所以appid默认为1即可，
+    # 其他的等开发的时候能公用就公用，不能就重写
+    table_name = "ce_menu_{appid}".format(appid=appid)
     menu_db = Mongo("paddle_quality", table_name)
     result = await menu_db.find_all()
     menuDesc = result[0] if result else {}
     menuDescContent = json.loads(menuDesc['content'])
-    menu_info = await CeReleaseVersion().aio_filter_details(need_all=True)
+    menu_info = await CeReleaseVersion().aio_filter_details(need_all=True, order_by="-created")
     if menu_info:
         # 如果有则需要需要将原来的menu内容重置掉，重新写入最新信息
-        menuDescContent["release"].pop("sub")
+        menuDescContent.pop("version")
         # 初始化成空的状态
-        menuDescContent["release"]["sub"] = {
-            "tag": {
-                "desc": "历史记录",
-                "icon": "ios-folder",
-                "sub": {}
-            }
-        }
+        menuDescContent["version"] = []
     for item in menu_info:
-        activated = item.get("activated")
         name = item.get("name")
-        if activated:
-            key = name.split("release/")[-1] if "release/" in name else name
-            menuDescContent["release"]["sub"][key] = {"desc": name}
-        else:
-            menuDescContent["release"]["sub"]["tag"]["sub"][name] = {"desc": name}
-    copyMenu = copy.deepcopy(menuDescContent)
-    if len(menuDescContent["release"]["sub"]) == 2:
-        # 为了调整下menu的顺序; 将正在发版的放在历史数据的前面；即现将tag弹出，再插入
-        copyMenu["release"]["sub"].pop("tag")
-        copyMenu["release"]["sub"]["tag"] = menuDescContent["release"]["sub"]["tag"]
-    menuDesc['content'] = json.dumps(copyMenu)
+        menuDescContent["version"].append({"name": name, "desc": name})
+    menuDesc['content'] = json.dumps(menuDescContent)
     await menu_db.update(menuDesc)
 
 

@@ -214,9 +214,9 @@ export default {
       }
     },
     'index': {
-      type: [String],
+      type: [Number],
       default: function () {
-        return '';
+        return 0;
       }
     }
   },
@@ -229,10 +229,10 @@ export default {
       tmpList: [],
       defaultList: [],
       levelList: [
-        "P0",
-        "P1",
-        "P2",
-        "P3"
+        'P0',
+        'P1',
+        'P2',
+        'P3'
       ],
       addForm: {
         title: '',
@@ -538,6 +538,5 @@ export default {
   overflow:auto;
   margin-bottom: 2%;
   padding-top: 0px;
-  background:#f0f8ff;
 }
 </style>

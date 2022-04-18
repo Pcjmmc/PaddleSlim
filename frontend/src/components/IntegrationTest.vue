@@ -1,7 +1,7 @@
 <template>
   <div class="one-fifth-video-col">
     <Row type="flex" justify="space-between">
-      <Col span="11" v-for="(item, key, index) in data" :key="key">
+      <Col span="11" v-for="(item, index) in data">
         <expandBase v-if="item"
           :platform="item.platform"
           :data="item.data"

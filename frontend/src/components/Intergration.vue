@@ -17,14 +17,28 @@
           <div style="margin-bottom: 2%">
             <base-info :repoinfo="repoinfo" :processdata="processdata"> </base-info>
           </div>
-          <Tabs
+          <div style="margin-bottom: 2%;">
+            <h5 style="margin-left: 2%;"> 集测整体进展 </h5>
+            <Table
+              size="small"
+              align=center
+              border
+              :columns="columns"
+              :data="taskTypeList"
+              style="margin-left: 2%;margin-right: 2%;"
+            >
+            </Table>
+          </div>
+          <el-tabs
             type="card"
-            :value="childname"
-            v-on:on-click="clickChildTab"
+            v-model="childname"
+            @tab-click="clickChildTab"
+            style="margin-left: 1%;"
           >
-            <TabPane
+            <el-tab-pane
             :label="item.desc"
             :name="item.key"
+            :key="index"
             v-for="(item, index) in taskTypeList"
             >
               <integration-test
@@ -35,8 +49,8 @@
                 :secondtype="sendTypeList[item.key]"
               >
               </integration-test>
-            </TabPane>
-          </Tabs>
+            </el-tab-pane>
+          </el-tabs>
         </div>
       </TabPane>
       <TabPane
@@ -82,14 +96,27 @@ export default {
       taskTypeList: [],
       sendTypeList: {},
       integrationdata: [],
-      routeParams: this.$route.params,
-      version: ''
+      columns: [
+      {
+        title: '分类',
+        key: 'desc',
+        align: 'center'
+      },
+      {
+        title: '状态',
+        key: 'status',
+        align: 'center'
+      },
+      {
+        title: '运行用例数',
+        key: 'case',
+        align: 'center'
+      }
+    ]
     };
   },
   watch: {
-    $route() {
-      this.routeParams = this.$route.params;
-      this.initData();
+    version: function () {
       this.getData();
     }
   },
@@ -104,6 +131,11 @@ export default {
     IntegrationTest
   },
   computed: {
+    version: {
+      get () {
+        return this.$store.state.version;
+      }
+    }
   },
   methods: {
     clickTab(name) {
@@ -113,23 +145,17 @@ export default {
         this.$refs.mychild.getStatusFilters();
       });
     },
-    clickChildTab(name) {
-      this.childname = name;
-      // console.log('this child name', this.childname);
+    clickChildTab(item) {
+      this.childname = item.name;
+      // 将选中的tab标记成蓝色
+      console.log('this child name', this.childname);
       this.getData();
-    },
-    initData() {
-      if ('tag' in this.routeParams) {
-        this.version = this.routeParams.version;
-      } else {
-        // 如果version是空
-        this.version = 'release/' + this.routeParams.version;
-      }
     },
     async getScenesList() {
       const {code, data, msg} = await api.get(ScenesUrl);
       if (parseInt(code, 10) === 200) {
         this.taskTypeList = data.taskTypeList;
+        console.log("this.taskTypeList", this.taskTypeList);
         this.sendTypeList = data.sendTypeList;
       } else {
         this.taskTypeList = [];
@@ -142,21 +168,17 @@ export default {
     },
     async getData() {
       // 根据需求实时获取
-      if ('tag' in this.routeParams) {
-        this.version = this.routeParams.version;
-      } else {
-        // 如果version是空
-        this.version = 'release/' + this.routeParams.version;
-      }
       let params = {
         'version': this.version,
         'task_type': this.childname
       };
-      // console.log('根据要求获取数据', params);
       const {code, data, msg} = await api.get(ReleaseJobUrl, params);
       if (parseInt(code, 10) === 200) {
-        // console.log('data is', data);
-        this.integrationdata = data;
+        if (JSON.stringify(data) === '{}') {
+          this.integrationdata = [];
+        } else {
+          this.integrationdata = data;
+        }
       } else {
         this.integrationdata = [];
         this.$Message.error({
