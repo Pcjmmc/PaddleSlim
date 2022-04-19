@@ -229,8 +229,12 @@ export default {
           'desc': 'Mac'
         },
         {
-          'key': 'Windows_GPU',
-          'desc': 'Windows_GPU'
+          'key': 'Windows_GPU_3080',
+          'desc': 'Windows_GPU_3080'
+        },
+        {
+          'key': 'Windows_GPU_2080',
+          'desc': 'Windows_GPU_2080'
         },
         {
           'key': 'Windows_Cpu',
