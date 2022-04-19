@@ -112,7 +112,7 @@ export default {
         'version':
         this.versionName,
         'appid': Cookies.get('appid')
-      }
+      };
       const {code, data, version} = await api.get(ReleaseVersionUrl, _params);
       // 获取任务进展数据
       // 获取bug数据

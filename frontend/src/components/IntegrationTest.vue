@@ -4,7 +4,8 @@
       v-for="(item, index) in data"
       class="one-fifth-video-col"
     >
-      <compileBase v-if="item && tabname==='compile'"
+      <compileBase
+        v-if="item && tabname==='compile'"
         :system="item.system"
         :data="item.data"
         :index="index"
@@ -13,7 +14,8 @@
         :versionname="versionname"
       >
       </compileBase>
-      <modelBase v-else-if="item && tabname==='model'"
+      <modelBase
+        v-else-if="item && tabname==='model'"
         :system="item.system"
         :data="item.data"
         :index="index"
@@ -22,7 +24,8 @@
         :versionname="versionname"
       >
       </modelBase>
-      <expandBase v-else
+      <expandBase
+        v-else
         :system="item.system"
         :data="item.data"
         :index="index"

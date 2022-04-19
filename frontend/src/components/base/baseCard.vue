@@ -82,16 +82,16 @@
         <Tooltip placement="top" content="未执行">
           <Icon type="ios-alert-outline" size="17"/>
           <span style="font-size:10px;">
-            {{ key}}
+            {{ key }}
           </span>
         </Tooltip>
       </span>
       <span style="margin-left: 30%;">
-        <span style="color:green;" > {{ 50 }} </span>
+        <span style="color:green;"> {{ 50 }} </span>
         <span> | </span>
         <span style="color:red;" v-if="true"> {{ 2 }} </span>
         <span style="color:green;" v-else=""> {{ 2 }} </span>
-      </span> 
+      </span>
       <span style="float:right;">
         <a
         href="javascript:void(0)"

@@ -3,7 +3,8 @@
     <Row
       type="flex"
       justify="end"
-      style="margin-bottom: 1%;margin-top: 2%">
+      style="margin-bottom: 1%;margin-top: 2%"
+    >
       <col>
         <Button type="primary" @click="activateCreateModal()">
           新增Job
@@ -428,7 +429,7 @@ export default {
       let params = {
         page: this.search.page,
         pagesize: this.search.pagesize,
-        appid: Cookies.get("appid")
+        appid: Cookies.get('appid')
       };
       const {code, all_count, data, msg} = await api.get(JobUrl, params);
       if (parseInt(code) == 200) {
@@ -514,9 +515,9 @@ export default {
     async createJob() {
       let params = {
         appid: Cookies.get('appid')
-      }
+      };
       params = Object.assign(params, this.addForm);
-      params['secondary_type'] = JSON.stringify(params['secondary_type']);
+      params.secondary_type = JSON.stringify(params.secondary_type);
       const {code, msg} = await api.post(JobUrl, params);
       this.initData();
     },
