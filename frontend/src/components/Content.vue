@@ -1,24 +1,7 @@
 <template>
 <div>
- <!--
-  <div>
-    <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">Release测试阶段</Divider>
-  </div>
-  <div>
-    <Steps>
-      <Step
-        :status="item.status"
-        :content="item.content" v-for="(item, key, index) in allSteps" 
-        :key="key"
-        @click.native="showModal(key, item)">
-      </Step>
-    </Steps>
-  </div>
-  <div>
-    <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">进度详情</Divider>
-  </div>
-  -->
   <div style="margin-bottom: 1.5%">
+    <!--
     <div v-if="allSteps.integration !== undefined && allSteps.integration.flag">
       <intergration
         :repoinfo="repoinfo"
@@ -39,10 +22,10 @@
       </intergration>
     </div>
     <div v-else-if="allSteps.release !== undefined && allSteps.release.flag">
-     <!--这里呈现编包验证的结果即可-->
       <regression :data="bugdata"></regression>
     </div>
-    <div v-else>
+    !-->
+    <div>
       <intergration
         :repoinfo="repoinfo"
         :bugdata="bugdata"
@@ -51,6 +34,7 @@
       </intergration>
     </div>
   </div>
+  <!--
   <div>
     <Modal v-model="allSteps.createtag !== undefined && allSteps.createtag.flag" title="快速打tag" @on-cancel="handleReset" width="600px">
         <Form ref="addForm" :model="tagForm" :label-width="80">
@@ -70,6 +54,7 @@
         </div>
       </Modal>
   </div>
+  -->
 </div>
 </template>
 
@@ -134,13 +119,13 @@ export default {
       // console.log("code", code)
       if (parseInt(code) == 200) {
         this.repoinfo = data.repo_info;
-        this.allSteps = data.all_steps;
+        // this.allSteps = data.all_steps;
         this.tagForm.branch = this.repoinfo.branch;
         // this.integrationdata = data.integration_data;
         this.processdata = data.process_data;
       } else {
         this.repoinfo = {};
-        this.allSteps = {};
+        // this.allSteps = {};
         this.$Message.error({
           content: '请求出错: ' + version,
           duration: 30,
@@ -176,7 +161,7 @@ export default {
       this.tagForm.commit = '';
     },
     handleReset(auto) {
-      this.allSteps.createtag.flag = false;
+      // this.allSteps.createtag.flag = false;
       this.initData(auto);
     },
     async handleSubmit(auto) {
@@ -185,27 +170,27 @@ export default {
       // 成功或失败，都需要关闭窗口
       this.initData(auto);
     },
-    showModal(key, item) {
-      let status = item.status;
-      if (status == 'wait') {
-        this.$Message.info({
-          content: "请先保证任务通过并修复卡片，请稍后再试。。。",
-          duration: 3,
-          closable: true
-        });
-      } else {
-        for (let ky in this.allSteps) {
-          this.allSteps[ky].flag = false;
-        }
-        if (key == 'createtag') {
-          if (status == 'process') {
-            this.allSteps[key].flag = true;
-          }
-        } else {
-          this.allSteps[key].flag = true;
-        }
-      }
-    },
+    // showModal(key, item) {
+    //   let status = item.status;
+    //   if (status == 'wait') {
+    //     this.$Message.info({
+    //       content: "请先保证任务通过并修复卡片，请稍后再试。。。",
+    //       duration: 3,
+    //       closable: true
+    //     });
+    //   } else {
+    //     for (let ky in this.allSteps) {
+    //       this.allSteps[ky].flag = false;
+    //     }
+    //     if (key == 'createtag') {
+    //       if (status == 'process') {
+    //         this.allSteps[key].flag = true;
+    //       }
+    //     } else {
+    //       this.allSteps[key].flag = true;
+    //     }
+    //   }
+    // },
     jumper(row) {
       let _params = {
         'tid': row.tid,

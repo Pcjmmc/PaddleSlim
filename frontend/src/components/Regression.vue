@@ -5,8 +5,6 @@
 </template>
 <script>
 
-import expandBase from './expandBase.vue';
-
 export default {
   props: ["data"],
   data: function () {
@@ -27,7 +25,6 @@ export default {
     }
   },
   components: {
-    expandBase
   }
 };
 </script>

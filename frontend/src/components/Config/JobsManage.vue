@@ -1,6 +1,9 @@
 <template>
   <div>
-    <Row type="flex" justify="end" style="margin-bottom: 2%">
+    <Row
+      type="flex"
+      justify="end"
+      style="margin-bottom: 1%;margin-top: 2%">
       <col>
         <Button type="primary" @click="activateCreateModal()">
           新增Job
@@ -37,11 +40,26 @@
           </Select>
         </FormItem>
         <FormItem label="二级分类: " prop="secondary_type">
-          <Select v-model="addForm.secondary_type">
+          <CheckboxGroup
+            v-model="addForm.secondary_type"
+          >
+            <Checkbox
+              :key="index"
+              :label="item"
+              v-for="(item, index) in sendType1"
+            >{{ item }}</Checkbox>
+          </CheckboxGroup>
+        </FormItem>
+        <FormItem
+          label="所属repo:"
+          prop="reponame"
+          v-if="addForm.task_type=='model'"
+        >
+          <Select v-model="addForm.reponame">
             <Option
             :key="index"
             :value="item"
-            v-for="(item, index) in sendType1"
+            v-for="(item, index) in repoeNames"
           >
           {{ item }}</Option>
           </Select>
@@ -90,11 +108,26 @@
           </Select>
         </FormItem>
         <FormItem label="二级分类: " prop="secondary_type">
-          <Select v-model="selectedRow.secondary_type">
+          <CheckboxGroup
+            v-model="selectedRow.secondary_type"
+          >
+            <Checkbox
+              :key="index"
+              :label="item"
+              v-for="(item, index) in sendType2"
+            >{{ item }}</Checkbox>
+          </CheckboxGroup>
+        </FormItem>
+        <FormItem
+          label="所属repo:"
+          prop="reponame"
+          v-if="selectedRow.task_type=='model'"
+        >
+          <Select v-model="selectedRow.reponame">
             <Option
             :key="index"
             :value="item"
-            v-for="(item, index) in sendType2"
+            v-for="(item, index) in repoeNames"
           >
           {{ item }}</Option>
           </Select>
@@ -160,10 +193,31 @@ export default {
       sendTypeList: {},
       sendType2: [],
       sendType1: [],
+      repoeNames: [
+        'other',
+        'PaddleClas',
+        'PaddleGan',
+        'PaddleOCR',
+        'PaddleNLP',
+        'PaddleSeg',
+        'PaddleDetection',
+        'PaddleSpeech',
+        'PaddleRec',
+        'PaddleSlim',
+        'PaddleHub'
+      ],
       systemList: [
         {
-          'key': 'Linux_Gpu',
-          'desc': 'Linux_Gpu'
+          'key': 'Linux_Gpu_Cuda10.2',
+          'desc': 'Linux_Gpu_Cuda10.2'
+        },
+        {
+          'key': 'Linux_Gpu_Cuda11.1',
+          'desc': 'Linux_Gpu_Cuda11.1'
+        },
+        {
+          'key': 'Linux_Gpu_Cuda11.2',
+          'desc': 'Linux_Gpu_Cuda11.2'
         },
         {
           'key': 'Linux_Cpu',
@@ -174,8 +228,12 @@ export default {
           'desc': 'Mac'
         },
         {
-          'key': 'Windows',
-          'desc': 'Windows'
+          'key': 'Windows_GPU',
+          'desc': 'Windows_GPU'
+        },
+        {
+          'key': 'Windows_Cpu',
+          'desc': 'Windows_Cpu'
         },
         {
           'key': 'Xpu',
@@ -211,10 +269,11 @@ export default {
         'platform': '',
         'system': '',
         'task_type': '',
-        'secondary_type': '',
+        'secondary_type': [],
         'dependencies': '',
         'description': '',
-        'step': ''
+        'step': '',
+        'reponame': ''
       },
       addRules: {
         step: [
@@ -239,7 +298,7 @@ export default {
           { required: true, message: '请选择任务类型', trigger: 'blur' }
         ],
         secondary_type: [
-          { required: true, message: '请标注任务的二级分类', trigger: 'blur' }
+          { required: true, type: 'array', min: 1, message: '请至少选择一个二级分类', trigger: 'change' }
         ],
         description: [
           { required: true, message: '请填写任务描述', trigger: 'blur' }
@@ -426,10 +485,13 @@ export default {
         step: this.selectedRow.step,
         system: this.selectedRow.system,
         task_type: this.selectedRow.task_type,
-        secondary_type: this.selectedRow.secondary_type,
+        secondary_type: JSON.stringify(this.selectedRow.secondary_type),
         tname: this.selectedRow.tname,
+        reponame: this.selectedRow.reponame,
         appid: Cookies.get('appid')
       }
+      // 将数组用都好分割拼接
+      console.log('up data job params is', this.selectedRow.secondary_type);
       const {code, msg} = await api.put(JobUrl, params);
       if (parseInt(code) != 200) {
         this.$Message.error({
@@ -454,11 +516,13 @@ export default {
         appid: Cookies.get('appid')
       }
       params = Object.assign(params, this.addForm);
+      params['secondary_type'] = JSON.stringify(params['secondary_type']);
       const {code, msg} = await api.post(JobUrl, params);
       this.initData();
     },
     resetSendType1() {
       this.sendType1 = this.sendTypeList[this.addForm.task_type];
+      // console.log('sendType1 is', this.sendType1);
     },
     resetSendType2() {
       this.sendType2 = this.sendTypeList[this.selectedRow.task_type];
@@ -478,7 +542,6 @@ export default {
       }
     },
     getDescBykey(key) {
-      console.log('get key is', key);
       for (let idx in this.taskTypeList) {
         if (this.taskTypeList[idx].key === key) {
           return this.taskTypeList[idx].desc;

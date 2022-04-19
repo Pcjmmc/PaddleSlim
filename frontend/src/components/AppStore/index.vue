@@ -85,6 +85,7 @@ export default {
     width: 100%;
     padding-top: 20px;
     text-align: center;
+    margin-left: 60px;
   }
   .one-fifth-video-col {
     margin-right: 20px;

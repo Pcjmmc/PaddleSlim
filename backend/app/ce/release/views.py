@@ -37,7 +37,6 @@ class ReleaseVersionManage(MABaseView):
         
         release_info = {
             "repo_info": {},
-            "all_steps": {},
             "process_data": {}
         }
         percent = 0
@@ -54,16 +53,16 @@ class ReleaseVersionManage(MABaseView):
                 "tag": res.tag
             }
             version_id = res.get("id")
-            steps = await CeSteps().aio_filter_details(**{"version_id": version_id})
+            # steps = await CeSteps().aio_filter_details(**{"version_id": version_id})
 
-            new_steps = sorted(steps, key=lambda e: e.__getitem__('order'))
-            release_info["all_steps"] = {
-                item["rtype"]: {
-                    "content": item["content"],
-                    "status": item.get("status", "wait"),
-                    "flag": True if item.get("flag", 0) else False
-                } for item in new_steps
-            }
+            # new_steps = sorted(steps, key=lambda e: e.__getitem__('order'))
+            # release_info["all_steps"] = {
+            #     item["rtype"]: {
+            #         "content": item["content"],
+            #         "status": item.get("status", "wait"),
+            #         "flag": True if item.get("flag", 0) else False
+            #     } for item in new_steps
+            # }
             # 根据release 的细腻来查询,改接口是负责release的，故step=release
             all_release_task = await TasksInfo.get_all_task_info_by_filter(
                 step="release", appid=appid
@@ -279,7 +278,8 @@ class TaskManage(MABaseView):
                 "description": item["description"],
                 "system": item["system"],
                 "task_type": item["task_type"],
-                "secondary_type": item["secondary_type"]} for item in all_release_task]
+                "secondary_type": item["secondary_type"],
+                "reponame": item["reponame"]} for item in all_release_task]
             for item in temp_data:
                 tid = item["tid"]
                 if tid in build_info:
@@ -293,11 +293,46 @@ class TaskManage(MABaseView):
                     item["status"] = "undone"
                 exempt_status = exempt_info.get(tid, {}).get("status", False)    
                 item["exempt_status"] = True if exempt_status else False
-            for item in temp_data:
-                secondary_type = item["secondary_type"]
-                if secondary_type not in integration_data:
-                    integration_data[secondary_type] = list()
-                integration_data[secondary_type].append(item)
-            data = [{"platform": k, "data": v} for k, v in integration_data.items()]
-        #print("integration_data", integration_data)    
+             # 根据task_type来组装数据 todo
+            if task_type == "compile":
+                for item in temp_data:
+                    system = item["system"]
+                    if system not in integration_data:
+                        integration_data[system] = list()
+                    integration_data[system].append(item)
+                data = [{"system": k, "data": v} for k, v in integration_data.items()]
+            elif task_type == "model":
+                for item in temp_data:
+                    system = item["system"]
+                    reponame = item["reponame"]
+                    secondary_type = item["secondary_type"]
+                    try:
+                        secondary_type = json.loads(secondary_type)
+                    except:
+                        secondary_type = [secondary_type]
+                    if system not in integration_data:
+                        integration_data[system] = dict()
+                    if reponame not in integration_data[system]:
+                        integration_data[system][reponame] = dict()
+                    for _type in secondary_type:
+                        if _type not in integration_data[system][reponame]:
+                            integration_data[system][reponame][_type] = list()
+                        integration_data[system][reponame][_type].append(item)
+                data = [{"system": k, "data": v} for k, v in integration_data.items()]
+            else:
+                for item in temp_data:
+                    system = item["system"]
+                    secondary_type = item["secondary_type"]
+                    try:
+                        secondary_type = json.loads(secondary_type)
+                    except:
+                        secondary_type = [secondary_type]
+                    if system not in integration_data:
+                        integration_data[system] = dict()
+                    for _type in secondary_type:
+                        if _type not in integration_data[system]:
+                            integration_data[system][_type] = list()
+                        integration_data[system][_type].append(item)
+                data = [{"system": k, "data": v} for k, v in integration_data.items()]
+        # print("integration_data", integration_data)    
         return len(data), data 

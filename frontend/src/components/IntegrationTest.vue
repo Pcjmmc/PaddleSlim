@@ -1,23 +1,44 @@
 <template>
-  <div class="one-fifth-video-col">
-    <Row type="flex" justify="space-between">
-      <Col span="11" v-for="(item, index) in data">
-        <expandBase v-if="item"
-          :platform="item.platform"
-          :data="item.data"
-          :index="index"
-          :tag="tag"
-          :versionid="versionid"
-          :versionname="versionname"
-        >
-        </expandBase>
-      </Col>
-    </Row>
+  <div>
+    <div
+      v-for="(item, index) in data"
+      class="one-fifth-video-col"
+    >
+      <compileBase v-if="item && tabname==='compile'"
+        :system="item.system"
+        :data="item.data"
+        :index="index"
+        :tag="tag"
+        :versionid="versionid"
+        :versionname="versionname"
+      >
+      </compileBase>
+      <modelBase v-else-if="item && tabname==='model'"
+        :system="item.system"
+        :data="item.data"
+        :index="index"
+        :tag="tag"
+        :versionid="versionid"
+        :versionname="versionname"
+      >
+      </modelBase>
+      <expandBase v-else
+        :system="item.system"
+        :data="item.data"
+        :index="index"
+        :tag="tag"
+        :versionid="versionid"
+        :versionname="versionname"
+      >
+      </expandBase>
+    </div>
   </div>
 </template>
 <script>
 
-import expandBase from './expandBase.vue';
+import expandBase from './base/expandBase.vue';
+import modelBase from './base/modelBase.vue';
+import compileBase from './base/compileBase.vue';
 
 export default {
   props: {
@@ -46,6 +67,10 @@ export default {
       default: function () {
         return [];
       }
+    },
+    tabname: {
+      type: [String],
+      default: ''
     }
   },
   data: function () {
@@ -66,9 +91,13 @@ export default {
     }
   },
   components: {
-    expandBase
+    expandBase,
+    compileBase,
+    modelBase
   },
   mounted: function () {
+    // console.log('secondtype', this.tabname);
+    // console.log('this data', this.data);
   }
 };
 </script>
@@ -77,6 +106,6 @@ export default {
   .one-fifth-video-col {
     margin-right: 2%;
     margin-left: 2%;
-    margin-bottom: 2%;
+    margin-bottom: 0.5%;
   }
 </style>

@@ -47,6 +47,7 @@
                 :versionid="repoinfo.version_id"
                 :versionname="repoinfo.name"
                 :secondtype="sendTypeList[item.key]"
+                :tabname="childname"
               >
               </integration-test>
             </el-tab-pane>
@@ -148,8 +149,9 @@ export default {
     },
     clickChildTab(item) {
       this.childname = item.name;
+      this.integrationdata = [];
       // 将选中的tab标记成蓝色
-      console.log('this child name', this.childname);
+      // console.log('this child name', this.childname);
       this.getData();
     },
     async getScenesList() {
@@ -180,6 +182,8 @@ export default {
           this.integrationdata = [];
         } else {
           this.integrationdata = data;
+          // console.log('this.childname', this.childname);
+          // console.log('this.integrationdata', this.integrationdata);
         }
       } else {
         this.integrationdata = [];
