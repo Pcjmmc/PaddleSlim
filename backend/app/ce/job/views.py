@@ -25,11 +25,11 @@ class JobManage(MABaseView):
         count, data = await CeTasks().aio_filter_details_with_total_count(
             page_index=page, limit=pagesize, **{"appid": appid}
         )
-        for item in data:
-            try:
-                item['secondary_type'] = json.loads(item['secondary_type'])
-            except:
-                item['secondary_type'] = [item['secondary_type']]
+        # for item in data:
+        #     try:
+        #         item['secondary_type'] = json.loads(item['secondary_type'])
+        #     except:
+        #         item['secondary_type'] = [item['secondary_type']]
         return count, data
 
 

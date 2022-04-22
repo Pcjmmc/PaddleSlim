@@ -41,15 +41,15 @@
           </Select>
         </FormItem>
         <FormItem label="二级分类: " prop="secondary_type">
-          <CheckboxGroup
+          <RadioGroup
             v-model="addForm.secondary_type"
           >
-            <Checkbox
+            <Radio
               :key="index"
               :label="item"
               v-for="(item, index) in sendType1"
-            >{{ item }}</Checkbox>
-          </CheckboxGroup>
+            >{{ item }}</Radio>
+          </RadioGroup>
         </FormItem>
         <FormItem
           label="所属repo:"
@@ -109,15 +109,15 @@
           </Select>
         </FormItem>
         <FormItem label="二级分类: " prop="secondary_type">
-          <CheckboxGroup
+          <RadioGroup
             v-model="selectedRow.secondary_type"
           >
-            <Checkbox
+            <Radio
               :key="index"
               :label="item"
               v-for="(item, index) in sendType2"
-            >{{ item }}</Checkbox>
-          </CheckboxGroup>
+            >{{ item }}</Radio>
+          </RadioGroup>
         </FormItem>
         <FormItem
           label="所属repo:"
@@ -274,7 +274,7 @@ export default {
         'platform': '',
         'system': '',
         'task_type': '',
-        'secondary_type': [],
+        'secondary_type': '',
         'dependencies': '',
         'description': '',
         'step': '',
@@ -303,7 +303,8 @@ export default {
           { required: true, message: '请选择任务类型', trigger: 'blur' }
         ],
         secondary_type: [
-          { required: true, type: 'array', min: 1, message: '请至少选择一个二级分类', trigger: 'change' }
+          // { required: true, type: 'array', min: 1, message: '请至少选择一个二级分类', trigger: 'change' }
+          { required: true, message: '请选择任务类型', trigger: 'blur' }
         ],
         description: [
           { required: true, message: '请填写任务描述', trigger: 'blur' }
@@ -490,13 +491,14 @@ export default {
         step: this.selectedRow.step,
         system: this.selectedRow.system,
         task_type: this.selectedRow.task_type,
-        secondary_type: JSON.stringify(this.selectedRow.secondary_type),
+        // secondary_type: JSON.stringify(this.selectedRow.secondary_type),
+        secondary_type: this.selectedRow.secondary_type,
         tname: this.selectedRow.tname,
         reponame: this.selectedRow.reponame,
         appid: Cookies.get('appid')
       }
       // 将数组用都好分割拼接
-      console.log('up data job params is', this.selectedRow.secondary_type);
+      // console.log('up data job params is', this.selectedRow.secondary_type);
       const {code, msg} = await api.put(JobUrl, params);
       if (parseInt(code) != 200) {
         this.$Message.error({
@@ -521,7 +523,7 @@ export default {
         appid: Cookies.get('appid')
       };
       params = Object.assign(params, this.addForm);
-      params.secondary_type = JSON.stringify(params.secondary_type);
+      // params.secondary_type = JSON.stringify(params.secondary_type);
       const {code, msg} = await api.post(JobUrl, params);
       this.initData();
     },
