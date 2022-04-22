@@ -35,9 +35,9 @@ secondary_type = {
         "onnx"
     ],
     "infer": [
-        "Jetson 推理",
-        "Linux 推理",
-        "Mac 推理"
+        "CPU/GPU原生推理",
+        "TensorRT推理",
+        "MKLDNN/Openblas/OpenVINO推理"
     ],
     "dist": [
         "分布式api功能",
