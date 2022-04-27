@@ -129,7 +129,7 @@
             <Option v-for="(item, index) in taskTypeList" :value="item.key" :key="index">{{ item.desc }}</Option>
           </Select>
         </FormItem>
-        <FormItem 
+        <FormItem
           label="二级分类: "
           prop="secondary_type"
           :rules="{ required: true, type: 'array', min: 1, message: '请至少选择一个二级分类', trigger: 'change' }"
@@ -152,7 +152,7 @@
           v-else
         >
           <RadioGroup
-            v-model="selectedRow.secondary_type" 
+            v-model="selectedRow.secondary_type"
           >
             <Radio
               :key="index"
@@ -559,7 +559,7 @@ export default {
         appid: Cookies.get('appid')
       }
       if (params.secondary_type instanceof Array) {
-        params.secondary_type = params.secondary_type.join(",");
+        params.secondary_type = params.secondary_type.join(',');
       }
       // 将数组用都好分割拼接
       // console.log('up data job params is', this.selectedRow.secondary_type);
@@ -588,7 +588,7 @@ export default {
       };
       params = Object.assign(params, this.addForm);
       if (params.secondary_type instanceof Array) {
-        params.secondary_type = params.secondary_type.join(",");
+        params.secondary_type = params.secondary_type.join(',');
       }
       const {code, msg} = await api.post(JobUrl, params);
       this.initData();
