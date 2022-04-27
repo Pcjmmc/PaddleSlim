@@ -26,10 +26,11 @@ class JobManage(MABaseView):
             page_index=page, limit=pagesize, **{"appid": appid}
         )
         for item in data:
-            try:
-                item['secondary_type'] = json.loads(item['secondary_type'])
-            except:
-                item['secondary_type'] = [item['secondary_type']]
+            if item['secondary_type']:
+                secondarys = item['secondary_type'].split(",")
+                # 如果是多选，就返回数组
+                if len(secondarys) > 1:
+                    item['secondary_type'] = secondarys
         return count, data
 
 

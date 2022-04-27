@@ -28,7 +28,7 @@ class CeTasks(BaseModel, BaseModelMixin):
     system = Column(VARCHAR(50), comment="任务所属平台") # 测试的系统信息：Linux_gpu、T4、Xpu、 jetson、windows、mac等?
     description = Column(VARCHAR(100), comment="任务的概述") # 要求概述简单明了
     task_type = Column(VARCHAR(20), comment="任务的类型") #目前支持；model、frame、lite、infer、dist；表示一级别分类以及框架的按类处理
-    secondary_type = Column(VARCHAR(50), comment="任务的二级类型") #二级分类
+    secondary_type = Column(VARCHAR(100), comment="任务的二级类型") #二级分类
     dependencies = Column(VARCHAR(100), comment="依赖的上游编译任务") # xly： "pipelineConfId;得确定下这个值唯一吗"； teamcity："%system.teamcity.buildType.id%"
     step = Column(VARCHAR(20), comment="任务所属的阶段") # compile: 编译任务； 下游任务有分成： develop； release；shared;
     appid = Column(Integer, comment="任务所属的app")
