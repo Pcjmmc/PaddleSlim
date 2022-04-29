@@ -46,6 +46,7 @@ class CaseDetailView(MABaseView):
 
         build_type_id = kwargs.get("build_type_id")
         build_id = kwargs.get("build_id")
+        status = kwargs.get("status")
         # task 入库逻辑
         task_obj = await CeTasks.aio_get_object(
             **{"build_type_id": build_type_id}
@@ -76,7 +77,7 @@ class CaseDetailView(MABaseView):
                 if "kpi_status" in item.keys() and item["kpi_status"] == "Passed":
                     passed_num += 1
                 await model_result.insert(item)
-            failed_num = case - passed_num
+            failed_num = total - passed_num
             # 主动关闭mongodb的链接
             model_result.close()
             # case详细入库mysql 
