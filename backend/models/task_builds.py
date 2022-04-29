@@ -51,18 +51,17 @@ class CeTaskBuilds(BaseModel, BaseModelMixin):
             await cls.aio_delete(
                 params_data={"id": row_id}
             )
-        else: 
-            await cls.aio_insert(validated_data={
-                "tid": tid,
-                "repo": validated_data.get("repo"),
-                "branch": validated_data.get("branch"),
-                "commit_id": validated_data.get("commit_id"),
-                "commit_time": validated_data.get("commit_time"),
-                "build_time": validated_data.get("build_time"),
-                "build_id": build_id,
-                "job_id": validated_data.get("job_id"),
-                "created": validated_data.get("created"),
-                "duration": validated_data.get("duration"),
-                "status": validated_data.get("status"),
-                "exit_code": validated_data.get("exit_code")
+        await cls.aio_insert(validated_data={
+            "tid": tid,
+            "repo": validated_data.get("repo"),
+            "branch": validated_data.get("branch"),
+            "commit_id": validated_data.get("commit_id"),
+            "commit_time": validated_data.get("commit_time"),
+            "build_time": validated_data.get("build_time"),
+            "build_id": build_id,
+            "job_id": validated_data.get("job_id"),
+            "created": validated_data.get("created"),
+            "duration": validated_data.get("duration"),
+            "status": validated_data.get("status"),
+             "exit_code": validated_data.get("exit_code")
             })
