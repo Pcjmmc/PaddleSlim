@@ -48,48 +48,7 @@ class CeTaskBuilds(BaseModel, BaseModelMixin):
         )
         if record:
             row_id = record.id
-            new_status = validated_data.get("status")
-            new_exit_code = validated_data.get("exit_code")
-            new_job_id = validated_data.get("job_id")
-            origin_exit = record.exit_code
-            if new_status == "Failed" or (new_exit_code and str(new_exit_code) != '0'):
-                # 如果本次是失败才修改，成功就保留原来的状态
-                if not origin_exit or str(origin_exit) == '0':
-                    exit_code_list = list()
-                else:
-                    origin_exit = str(origin_exit)
-                    exit_code_list = origin_exit.split(",")
-                if new_exit_code:
-                    exit_code_list.append(str(new_exit_code))
-                # 去重复
-                exit_code_list = [item for item in exit_code_list if item]
-                exit_code_list = list(set(exit_code_list))
-                exit_code = ",".join(exit_code_list)
-                status = new_status
-            else:
-                # 保留原来的状态
-                status = record.status if record.status else new_status
-                # 如果原来的退出码空着，则完善下，不空就保留原来的
-                exit_code = origin_exit if record.status != new_status else new_exit_code
-
-            
-            update_params = {
-                "status": status,
-                "exit_code": exit_code,
-                "left_time": validated_data.get("left_time") or record.left_time,
-                "duration": validated_data.get("duration") or record.duration
-            }
-            # 追加job id
-            if new_job_id:
-                job_id_list = str(record.job_id).split(",") if record.job_id is not None else list()
-                job_id_list.append(str(new_job_id))
-                job_id_list = [item for item in job_id_list if item]
-                job_id_list = list(set(job_id_list))
-                update_params["job_id"] = ",".join(job_id_list)
-
-            # 可以更新的字段
-            await cls.aio_update(
-                validated_data=update_params,
+            await cls.aio_delete(
                 params_data={"id": row_id}
             )
         else: 
