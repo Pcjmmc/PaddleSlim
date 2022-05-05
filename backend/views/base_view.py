@@ -121,21 +121,12 @@ class MABaseView(BaseView):
         父类post调用子类的post_data, 实现真正的逻辑
         """
         kwargs = self.get_perfect_request_data()
-        print("######")
-        print("post")
         if self.post_form_class:
-            print("begin post form class")
             status, msg = self.post_form_class.check_request_data(**kwargs)
-            print("stauts=",status)
-            print("msg=",msg)
-            print("end post form class")
         if self.post_form_class and not status:
             return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, msg)
-            print("end error") 
         try:
-            print("begin post")
             data = await self.post_data(**kwargs)
-            print("end post")
         except HTTP400Error as e:
             return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, e.error_message)
         except HTTPDetailError as e:
