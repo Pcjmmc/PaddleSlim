@@ -43,7 +43,6 @@ class CaseDetailView(MABaseView):
         duration: 任务执行时长
         case_detail: case的执行详情
         """
-
         build_type_id = kwargs.get("build_type_id")
         build_id = kwargs.get("build_id")
         status = kwargs.get("status")
@@ -56,6 +55,7 @@ class CaseDetailView(MABaseView):
             raise HTTP400Error("找不到任务，请先录入任务！")
         else:
             tid = task_obj.id
+            secondary_type = task_obj.secondary_type
             # build 入库逻辑
             await CeTaskBuilds.create_or_update_build(
                 tid, build_id, validated_data=kwargs
@@ -67,6 +67,11 @@ class CaseDetailView(MABaseView):
             )
             #TOTO插入case之前需要先判断之前是否存在对应表名
             model_result = Mongo("paddle_quality", table_name)
+            print("del ok")
+            #测试是否删除成功
+            await model_result.delete_coll()
+            #tmp_mongo = await model_result.find_all()
+            #print("tmp_mongo=",tmp_mongo)
             try:
                 details = json.loads(kwargs.get("case_detail"))
             except:
@@ -79,6 +84,8 @@ class CaseDetailView(MABaseView):
                 await model_result.insert(item)
             failed_num = total - passed_num
             # 主动关闭mongodb的链接
+            #tmp_mongo = await model_result.find_all()
+            #print("tmp_mongo=",tmp_mongo)
             model_result.close()
             # case详细入库mysql 
-            await CeCases.create_or_update_build(build_type_id, build_id, status, total, passed_num, failed_num)
+            await CeCases.create_or_update_build(build_type_id, build_id, status, total, passed_num, failed_num, secondary_type)

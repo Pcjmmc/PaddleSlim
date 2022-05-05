@@ -38,7 +38,7 @@ class CeCases(BaseModel, BaseModelMixin):
         app_label = 'paddle_quality'
 
     @classmethod
-    async def create_or_update_build(cls, tid, build_id, status, total, passed_num, failed_num):
+    async def create_or_update_build(cls, tid, build_id, status, total, passed_num, failed_num, secondary_type):
         record = await cls.aio_get_object(
             **{"tid": tid, "build_id": build_id}
         )
@@ -53,6 +53,7 @@ class CeCases(BaseModel, BaseModelMixin):
             "build_id": build_id,
             "status": status,
             "total": total,
+            "label":secondary_type,
             "passed_num": passed_num,
             "failed_num": failed_num
             })
