@@ -60,18 +60,6 @@ class CaseDetailView(MABaseView):
             await CeTaskBuilds.create_or_update_build(
                 tid, build_id, validated_data=kwargs
             )
-            # case detail入库追加
-            mongo_cfg = STORAGE["mongo"]['paddle_quality']
-            table_name = mongo_cfg["case_detail"].format(
-                task_id=tid, build_id=build_id
-            )
-            #TOTO插入case之前需要先判断之前是否存在对应表名
-            model_result = Mongo("paddle_quality", table_name)
-            print("del ok")
-            #测试是否删除成功
-            await model_result.delete_coll()
-            #tmp_mongo = await model_result.find_all()
-            #print("tmp_mongo=",tmp_mongo)
             try:
                 details = json.loads(kwargs.get("case_detail"))
             except:
@@ -81,11 +69,25 @@ class CaseDetailView(MABaseView):
             for item in details:
                 if "kpi_status" in item.keys() and item["kpi_status"] == "Passed":
                     passed_num += 1
-                await model_result.insert(item)
+                #改为统一入库，一次插入
+                #await model_result.insert(item)
             failed_num = total - passed_num
-            # 主动关闭mongodb的链接
-            #tmp_mongo = await model_result.find_all()
-            #print("tmp_mongo=",tmp_mongo)
-            model_result.close()
             # case详细入库mysql 
             await CeCases.create_or_update_build(build_type_id, build_id, status, total, passed_num, failed_num, secondary_type)
+            case_obj = await CeCases.aio_get_object(
+                 **{"tid": build_type_id, "build_id" : build_id}
+            )
+            mongo_cfg = STORAGE["mongo"]['paddle_quality']
+            table_name = mongo_cfg["case_detail"].format(
+                task_id=tid, build_id=build_id, label_id=case_obj.id
+            )
+            print("table_name=", table_name)
+            #TOTO插入case之前需要先判断之前是否存在对应表名
+            model_result = Mongo("paddle_quality", table_name)
+            #测试是否删除成功
+            await model_result.delete_coll()
+            #print("del ok")
+            #tmp_mongo = await model_result.find_all()
+            #print("tmp_mongo=",tmp_mongo)
+            await model_result.insert_many(details)
+            model_result.close() 

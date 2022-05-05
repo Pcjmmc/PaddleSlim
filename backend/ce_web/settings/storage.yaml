@@ -4,7 +4,7 @@ PRODUCTION:
       host: "180.76.243.77"
       port: 27017
       db_name: "paddle_quality"
-      case_detail: "case_detail_{task_id}_{build_id}"
+      case_detail: "case_detail_{task_id}_{build_id}_{label_id}"
       user: "root"
       password: "paddle%work123"
   mysql:
@@ -22,7 +22,7 @@ DEV:
       host: "127.0.0.1"
       port: 27017
       db_name: "paddle"
-      case_detail: "case_detail_{task_id}_{build_id}"
+      case_detail: "case_detail_{task_id}_{build_id}_{label_id}"
       user: "root"
       password: "Paddle@root"
   mysql:

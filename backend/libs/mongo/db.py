@@ -47,6 +47,16 @@ class Mongo:
         ret = await self.coll.insert_one(data)
         return ret.inserted_id if ret else None
 
+    async def insert_many(self, data):
+        """
+        插入多行新记录
+        :param data: 待插入的数据
+        :return : 新增记录的 ObjectId
+        """
+        ret = await self.coll.insert_many(data)
+        return ret.inserted_ids if ret else None
+
+
     async def update(self, data):
         """更新一条已有记录，实际使用的是mongo的replace
         """
