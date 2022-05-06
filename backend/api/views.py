@@ -65,6 +65,10 @@ class CaseDetailView(MABaseView):
             except:
                 details = []
             total = len(details)
+            #detail为0，case_deatail为None，即代表任务异常
+            if 0 == total:
+                #直接返回,case详情表和mongo均不需要入库
+                return 
             passed_num = 0
             for item in details:
                 if "kpi_status" in item.keys() and item["kpi_status"] == "Passed":
