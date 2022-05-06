@@ -101,7 +101,6 @@ class BaseModelMixin(object):
         获取db engines
         """
         db_key = ModelRouter().db_for_operation(cls)
-        # engine = request.db_engines[db_key]
         try:
             engine = db_engines[db_key]
         except AttributeError:
@@ -469,7 +468,6 @@ class BaseModelMixin(object):
     async def aio_update(cls, validated_data=None, params_data=None):
         """
         更新数据
-        :param request:
         :param validated_data: 更改的数据
         :param params_data: 过滤条件
         :return: row count
@@ -484,10 +482,9 @@ class BaseModelMixin(object):
         return row_count
 
     @classmethod
-    async def aio_delete(cls, request=None, params_data=None):
+    async def aio_delete(cls, params_data=None):
         """
         删除数据
-        :param request:
         :param params_data: 参数
         :return:
         """
