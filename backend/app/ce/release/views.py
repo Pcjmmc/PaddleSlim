@@ -307,7 +307,7 @@ class TaskManage(MABaseView):
                     reponame = item["reponame"]
                     secondary_type = item["secondary_type"]
                     try:
-                        secondary_type = json.loads(secondary_type)
+                        secondary_type = secondary_type.split(",")
                     except:
                         secondary_type = [secondary_type]
                     if system not in integration_data:
@@ -324,7 +324,7 @@ class TaskManage(MABaseView):
                     system = item["system"]
                     secondary_type = item["secondary_type"]
                     try:
-                        secondary_type = json.loads(secondary_type)
+                        secondary_type = secondary_type.split(",")
                     except:
                         secondary_type = [secondary_type]
                     if system not in integration_data:

@@ -18,7 +18,7 @@
     <Page :total="total"
       :current="parseInt(search.page)"
       :page-size="parseInt(search.pagesize)"
-      @on-change="PageChange()"
+      @on-change="pageChange"
       size="small"
       style="text-align: center;"
       >
