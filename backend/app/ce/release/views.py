@@ -338,7 +338,7 @@ class TaskManage(MABaseView):
                         if _type not in integration_data[system]:
                             integration_data[system][_type] = list()
                         integration_data[system][_type].append(item)
-                data = [{"system": k, "data": v} for k, v in integration_data.items()]   
+                data = [{"system": k, "data": v} for k, v in integration_data.items()]
         return len(data), data 
 
 

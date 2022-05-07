@@ -21,12 +21,14 @@
                 style="color:#5cb85c"
               ></Icon>
             </i-circle>
-            <a v-if="item.length > 1"
+            <a
+              v-if="item.length > 1"
               href="javascript:void(0)"
               style="font-size:10px;"
               @click="jumper(child)"
             > {{ key+idx }} </a>
-            <a v-else
+            <a
+              v-else
               href="javascript:void(0)"
               style="font-size:10px;"
               @click="jumper(child)"
@@ -47,12 +49,14 @@
                 style="color:#ff5500"
               ></Icon>
             </i-circle>
-            <a v-if="item.length > 1"
+            <a
+              v-if="item.length > 1"
               href="javascript:void(0)"
               style="font-size:10px;"
               @click="jumper(child)"
             > {{ key+idx }} </a>
-            <a v-else
+            <a
+              v-else
               href="javascript:void(0)"
               style="font-size:10px;"
               @click="jumper(child)"

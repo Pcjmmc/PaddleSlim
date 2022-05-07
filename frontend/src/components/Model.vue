@@ -11,20 +11,22 @@
       <p
         slot="title"
         style="text-align: left;font-size: 1.0em;color: red"
-        v-if="$route.query.status=='Failed'">
+        v-if="$route.query.status=='Failed'"
+      >
         状态: {{ $route.query.status }}
       </p>
       <p
-        slot="title" 
+        slot="title"
         style="text-align: left;font-size: 1.0em;color: green"
         v-else
       >
         状态: {{ $route.query.status }}
       </p>
-      <p 
-        slot="title" 
+      <p
+        slot="title"
         style="text-align: left;font-size: 1.0em;color: red"
-        v-if="$route.query.status=='Failed'">
+        v-if="$route.query.status=='Failed'"
+      >
         原因: {{ getErrorReason($route.query.exit_code) }}
       </p>
       <p slot="title" style="text-align: left;font-size: 1.0em;">
@@ -212,8 +214,10 @@ export default {
       const { code, data, message } = await api.get(DetailUrl, _params);
       if (message === 'success') {
         for (let key in data) {
-          this.detail = data[key]['case_detail'];
-          this.summaryData = data[key]['summary_data'];
+          if (data.hasOwnProperty(key)) {
+            this.detail = data[key].case_detail;
+            this.summaryData = data[key].summary_data;
+          }
         }
       } else {
         console.log('code: ', code);
