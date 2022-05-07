@@ -20,12 +20,14 @@ secondary_type = {
         "XPU-X86"
     ],
     "frame": [
-        "基础api功能测试",
-        "动转静",
-        "动态图",
-        "静态图",
-        "混合精度",
-        "其它（自定义op）"
+        "device",
+        "optimizer",
+        "loss",
+        "incubate",
+        "linalg",
+        "nn",
+        "fft",
+        "paddlebase",
     ],
     "model": [
         "功能",

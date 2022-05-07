@@ -39,9 +39,9 @@
 </template>
 <script>
 
-import expandBase from './base/expandBase.vue';
-import modelBase from './base/modelBase.vue';
-import compileBase from './base/compileBase.vue';
+import expandBase from './Base/expandBase.vue';
+import modelBase from './Base/modelBase.vue';
+import compileBase from './Base/compileBase.vue';
 
 export default {
   props: {

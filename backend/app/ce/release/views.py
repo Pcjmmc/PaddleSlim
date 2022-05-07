@@ -1,5 +1,6 @@
 # encoding=utf-8
 import asyncio
+import copy
 import datetime
 import json
 import time
@@ -295,7 +296,7 @@ class TaskManage(MABaseView):
                     item["status"] = "undone"
                 exempt_status = exempt_info.get(tid, {}).get("status", False)    
                 item["exempt_status"] = True if exempt_status else False
-             # 根据task_type来组装数据 todo
+            # 根据task_type来组装数据 todo
             if task_type == "compile":
                 for item in temp_data:
                     system = item["system"]
@@ -321,8 +322,15 @@ class TaskManage(MABaseView):
                             integration_data[system][reponame][_type] = list()
                         # 根据二级分类更新下case成功失败数
                         case_detail = await self.get_case_detail(item["tid"], item["build_id"], _type)
+                        # 保留任务的status
+                        job_status = item.get("status")
+                        # 用case的状态覆盖任务的状态
                         item.update(case_detail)
-                        integration_data[system][reponame][_type].append(item)
+                        if not job_status or job_status == "undone": # 则保留任务原来的状态
+                            item["status"] = "undone"
+                        temp_item = copy.deepcopy(item)
+                        temp_item['secondary_type'] = _type
+                        integration_data[system][reponame][_type].append(temp_item)
                 data = [{"system": k, "data": v} for k, v in integration_data.items()]
             else:
                 for item in temp_data:
@@ -337,15 +345,25 @@ class TaskManage(MABaseView):
                     for _type in secondary_type:
                         if _type not in integration_data[system]:
                             integration_data[system][_type] = list()
-                        integration_data[system][_type].append(item)
+                        # 根据二级分类更新下case成功失败数
+                        case_detail = await self.get_case_detail(item["tid"], item["build_id"], _type)
+                        # 保留任务的status
+                        job_status = item.get("status")
+                        # 用case的状态覆盖任务的状态
+                        item.update(case_detail)
+                        if not job_status or job_status == "undone": # 则保留任务原来的状态
+                            item["status"] = "undone"
+                        temp_item = copy.deepcopy(item)
+                        temp_item['secondary_type'] = _type
+                        integration_data[system][_type].append(temp_item)
                 data = [{"system": k, "data": v} for k, v in integration_data.items()]
-        return len(data), data 
+        return len(data), data
 
 
     async def get_case_detail(self, tid, build_id, secondary_type):
         case_detail = {
             "total": 0,
-            "case_status": "Failed",
+            "status": "Failed",
             "passed_num": 0,
             "failed_num": 0
         }
@@ -357,7 +375,7 @@ class TaskManage(MABaseView):
                 "total": case_obj.total,
                 "passed_num": case_obj.passed_num,
                 "failed_num": case_obj.failed_num,
-                "case_status": case_obj.status
+                "status": case_obj.status
             }
 
         return case_detail

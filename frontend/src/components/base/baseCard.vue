@@ -26,7 +26,7 @@
               href="javascript:void(0)"
               style="font-size:10px;"
               @click="jumper(child)"
-            > {{ key+idx }} </a>
+            > {{ key + '_' + idx }} </a>
             <a
               v-else
               href="javascript:void(0)"
@@ -54,7 +54,7 @@
               href="javascript:void(0)"
               style="font-size:10px;"
               @click="jumper(child)"
-            > {{ key+idx }} </a>
+            > {{ key + '_' + idx }} </a>
             <a
               v-else
               href="javascript:void(0)"
@@ -77,7 +77,7 @@
                 href="javascript:void(0)"
                 style="font-size:10px;"
                 @click="jumper(child)"
-              > {{ key+idx }}</a>
+              > {{ key + '_' + idx }}</a>
               <span
                 slot="content"
                 data-test="ring-dropdown"
@@ -115,7 +115,7 @@
                 v-if="item.length > 1"
                 style="font-size:10px;"
               >
-                {{ key+idx }}
+                {{ key + '_' + idx }}
               </span>
               <span
                 v-else
@@ -126,7 +126,8 @@
             </Tooltip>
           </Col>
           <Col :xs="{ span: 6 }">
-            <span style="color:green;"> {{ child.total }} </span>
+            <span v-if="child.total > 0" style="color:green;"> {{ child.total }} </span>
+            <span v-else style="color:red;"> {{ child.total }} </span>
             <span> | </span>
             <span style="color:red;" v-if="child.failed_num > 0 || child.total == 0"> {{ child.failed_num }} </span>
             <span style="color:green;" v-else=""> {{ child.failed_num }} </span>

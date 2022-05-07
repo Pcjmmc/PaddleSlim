@@ -7,6 +7,7 @@ import CommitDetails from '../components/CommitDetails.vue';
 import JobsManage from '../components/Config/JobsManage.vue';
 import Model from '../components/Model.vue';
 import AppStore from '../components/AppStore/index.vue';
+import FuncDetail from '../components/FuncDetail.vue';
 
 // Vue.use(VueRouter);
 export const ROUTES = [
@@ -48,6 +49,11 @@ export const ROUTES = [
           path: '/paddle/detail/model',
           name: 'model',
           component: Model
+        },
+        { // API 配置
+          path: '/paddle/detail/frame',
+          name: 'FuncDetail',
+          component: FuncDetail
         }
       ]
     }

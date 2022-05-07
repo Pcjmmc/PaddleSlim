@@ -36,12 +36,12 @@ class DetailManage(MABaseView):
         secondary_type = secondary_type.split(",")
         for sed_type in secondary_type:
             if sed_type not in result:
-                result[sed_type] = {"summary_data": [], "case_detail": {}}
+                result[sed_type] = {"summary_data": [], "case_detail": None}
             summary_data, res = await self.get_single_data(
                 tid, build_id, task_type, sed_type
             )
             result[sed_type]["summary_data"] = [summary_data]
-            result[sed_type]["case_detail"].update(res)
+            result[sed_type]["case_detail"] = res
         return len(result), result
 
     async def get_single_data(self, tid, build_id, task_type, secondary_type,):
@@ -91,7 +91,10 @@ class DetailManage(MABaseView):
                 val["kpis"] = [value for item, value in val["kpis"].items()]
             details = result 
         else:
-            pass
+            details = await model_result.find_all()
+            for item in details:
+                item.pop("_id")
+
         # 主动关闭mongodb的链接
         model_result.close()
         return summary_data, details
