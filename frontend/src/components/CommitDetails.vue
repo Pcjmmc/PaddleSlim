@@ -96,7 +96,7 @@ export default {
   },
   mounted: function () {
     this.queryParams = this.$route.query;
-    console.log('this query params', this.queryParams);
+    // console.log('this query params', this.queryParams);
     this.getData();
   },
   computed: {
@@ -150,6 +150,7 @@ export default {
       // 还是根据任务的type来确定跳转到function还是model，目前暂时都用ApiDetails
       let _params = {};
       _params = Object.assign(_params, item);
+      // console.log(item);
       let detail_name = 'ApiDetails';
       if (item.task_type === 'model') {
         detail_name = 'model';

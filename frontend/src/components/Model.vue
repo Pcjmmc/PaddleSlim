@@ -8,6 +8,25 @@
       <p slot="title" style="text-align: left;font-size: 1.0em; margin-top: 5%">
         任务名: {{ $route.query.tname }}
       </p>
+      <p
+        slot="title"
+        style="text-align: left;font-size: 1.0em;color: red"
+        v-if="$route.query.status=='Failed'">
+        状态: {{ $route.query.status }}
+      </p>
+      <p
+        slot="title" 
+        style="text-align: left;font-size: 1.0em;color: green"
+        v-else
+      >
+        状态: {{ $route.query.status }}
+      </p>
+      <p 
+        slot="title" 
+        style="text-align: left;font-size: 1.0em;color: red"
+        v-if="$route.query.status=='Failed'">
+        原因: {{ getErrorReason($route.query.exit_code) }}
+      </p>
       <p slot="title" style="text-align: left;font-size: 1.0em;">
         repo信息: {{ $route.query.repo }}
       </p>
@@ -75,21 +94,22 @@ import ModelBase from './CommonUtil/ModelBase.vue';
 export default {
   data: function () {
     return {
+      summaryData: [],
       detail: {},
       detailColumns: [
         {
+          title: '总数',
+          key: 'total',
+          align: 'center'
+        },
+        {
           title: '失败case数',
-          key: 'failed',
+          key: 'failed_num',
           align: 'center'
         },
         {
           title: '成功case数',
-          key: 'succeed',
-          align: 'center'
-        },
-        {
-          title: '总数',
-          key: 'total',
+          key: 'passed_num',
           align: 'center'
         }
       ]
@@ -103,10 +123,6 @@ export default {
     ModelBase
   },
   computed: {
-    summaryData() {
-      const {summaryData} = this.separateData();
-      return summaryData;
-    },
     failedData() {
       const {failedData} = this.separateData();
       // console.log('failedData is', failedData);
@@ -120,33 +136,22 @@ export default {
   },
   methods: {
     separateData() {
-      let summaryData = [];
       let failedData = [];
       let succeedData = [];
-      let res = {
-        'total': 0,
-        'succeed': 0,
-        'failed': 0
-      };
       let tmp_detail = this.detail;
       Object.keys(tmp_detail).forEach(function (item) {
-        res.total += 1;
         switch (tmp_detail[item].status.toLowerCase()) {
           case 'passed':
-            res.succeed += 1;
             succeedData.push(Object.assign({'model_name': item}, tmp_detail[item]));
             break;
           case 'failed':
-            res.failed += 1;
             failedData.push(Object.assign({'model_name': item}, tmp_detail[item]));
             break;
           default:
             break;
         }
       });
-      summaryData.push(res);
-      return {'summaryData': summaryData,
-              'failedData': failedData,
+      return {'failedData': failedData,
               'succeedData': succeedData};
     },
     getTaskUrl() {
@@ -167,17 +172,49 @@ export default {
         return '';
       }
     },
+    getErrorReason(exit_code) {
+      switch (parseInt(exit_code, 10)) {
+        case 0:
+          return '成功';
+        case 2:
+          return 'CE框架失败';
+        case 3:
+          return '模型yaml书写错误';
+        case 4:
+          return 'Lite模型优化失败';
+        case 5:
+          return '未录入任务';
+        case 7:
+          return '编译失败';
+        case 8:
+          return 'case失败';
+        case 63:
+          return '克隆代码失败';
+        case 125:
+          return '启动容器失败';
+        case 127:
+          return 'tc没有执行权限';
+        case 137:
+          return 'tc任务取消';
+        default:
+          return '未知';
+      }
+    },
     async getData() {
       // console.log('params is', this.$route.query);
       let _params = {
         'tid': this.$route.query.tid,
         'build_id': this.$route.query.build_id,
-        'task_type': this.$route.query.task_type
+        'task_type': this.$route.query.task_type,
+        'secondary_type': this.$route.query.secondary_type
       };
+      // 自己知道自己值传递了一个secondary_type
       const { code, data, message } = await api.get(DetailUrl, _params);
       if (message === 'success') {
-        this.detail = data;
-        // console.log("this detail", this.detail);
+        for (let key in data) {
+          this.detail = data[key]['case_detail'];
+          this.summaryData = data[key]['summary_data'];
+        }
       } else {
         console.log('code: ', code);
         this.$Message.error({content: message || this.$trans('获取编译列表失败'), duration: 5, closable: true});

@@ -7,6 +7,7 @@ import time
 from ce_web.settings.common import STORAGE
 from ce_web.settings.scenes import scenes_dict
 from libs.mongo.db import Mongo
+from models.details import CeCases
 from models.release_version import CeReleaseVersion
 from models.steps import CeSteps
 from rpc.github import GetBranches, GetCommit, GetTags
@@ -284,6 +285,7 @@ class TaskManage(MABaseView):
                 tid = item["tid"]
                 if tid in build_info:
                     item["status"] = build_info[tid].get("status")
+                    item["exit_code"] = build_info[tid].get("exit_code")
                     item["left_time"] = build_info[tid].get("left_time")
                     item["build_id"] = build_info[tid].get("build_id")
                     item["commit_id"] = build_info[tid].get("commit_id")
@@ -317,6 +319,9 @@ class TaskManage(MABaseView):
                     for _type in secondary_type:
                         if _type not in integration_data[system][reponame]:
                             integration_data[system][reponame][_type] = list()
+                        # 根据二级分类更新下case成功失败数
+                        case_detail = await self.get_case_detail(item["tid"], item["build_id"], _type)
+                        item.update(case_detail)
                         integration_data[system][reponame][_type].append(item)
                 data = [{"system": k, "data": v} for k, v in integration_data.items()]
             else:
@@ -333,6 +338,26 @@ class TaskManage(MABaseView):
                         if _type not in integration_data[system]:
                             integration_data[system][_type] = list()
                         integration_data[system][_type].append(item)
-                data = [{"system": k, "data": v} for k, v in integration_data.items()]
-        # print("integration_data", integration_data)    
+                data = [{"system": k, "data": v} for k, v in integration_data.items()]   
         return len(data), data 
+
+
+    async def get_case_detail(self, tid, build_id, secondary_type):
+        case_detail = {
+            "total": 0,
+            "case_status": "Failed",
+            "passed_num": 0,
+            "failed_num": 0
+        }
+        case_obj = await CeCases.aio_get_object(
+            **{"tid": tid, "build_id" : build_id, "label": secondary_type}
+        )
+        if case_obj:
+            case_detail = {
+                "total": case_obj.total,
+                "passed_num": case_obj.passed_num,
+                "failed_num": case_obj.failed_num,
+                "case_status": case_obj.status
+            }
+
+        return case_detail

@@ -163,7 +163,7 @@ export default {
         appname: Cookies.get("appname")
       };
       const { code, data } = await api.get(MenuInfoUrl, params);
-      console.log("menu data is", data);
+      // console.log("menu data is", data);
       this.menuDesc = data;
       // 暂时定义menu
       this.verisonList = this.menuDesc["version"];

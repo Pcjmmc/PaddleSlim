@@ -8,6 +8,7 @@ import time
 from ce_web.settings.common import STORAGE
 from libs.mongo.db import Mongo
 from models.steps import CeSteps
+from models.details import CeCases
 
 from views.base_view import MABaseView
 
@@ -26,14 +27,48 @@ class DetailManage(MABaseView):
         return await super().get(**kwargs)
 
     async def get_data(self, **kwargs):
+        # 支持模型的多个任务，一个secondary_type； 以及框架的一个任务，多个secondary_type
+        result = {}
+        tid = kwargs.get("tid")
+        build_id = kwargs.get("build_id")
+        task_type = kwargs.get("task_type")
+        secondary_type = kwargs.get("secondary_type")
+        secondary_type = secondary_type.split(",")
+        for sed_type in secondary_type:
+            if sed_type not in result:
+                result[sed_type] = {"summary_data": [], "case_detail": {}}
+            summary_data, res = await self.get_single_data(
+                tid, build_id, task_type, sed_type
+            )
+            result[sed_type]["summary_data"] = [summary_data]
+            result[sed_type]["case_detail"].update(res)
+        return len(result), result
+
+    async def get_single_data(self, tid, build_id, task_type, secondary_type,):
         """
-        根据查询条件：任务类型（task_type）， 任务id（tid），编译id（build_id）得到此次编译的详情组装数据并返回
+        根据查询条件：
+        任务类型（task_type）， 
+        任务id（tid），
+        编译id（build_id）
+        得到此次编译的详情组装数据并返回
         """
         # 初始化mong实例
         mongo_cfg = STORAGE["mongo"]["paddle_quality"]
-        task_type = kwargs.get("task_type")
         table_prefix = mongo_cfg["case_detail"]
-        table_name = table_prefix.format(task_id=kwargs.get("tid"), build_id=kwargs.get("build_id"))
+        secondary_type = secondary_type.split(",")
+        details = { key: {} for key in secondary_type }
+        case_obj = await CeCases.aio_get_object(
+            **{"tid": tid, "build_id" : build_id, "label": secondary_type}
+        )
+        if not case_obj:
+            return 0, {}
+        summary_data = {
+            'total': case_obj.total,
+            'passed_num': case_obj.passed_num,
+            'failed_num': case_obj.failed_num
+        }
+        label_id = case_obj.id
+        table_name = table_prefix.format(task_id=tid, build_id=build_id, label_id=label_id)
         model_result = Mongo("paddle_quality", table_name)
         if task_type == "model":
             details = await model_result.find_all()
@@ -54,41 +89,12 @@ class DetailManage(MABaseView):
 
             for key, val in result.items():
                 val["kpis"] = [value for item, value in val["kpis"].items()]
-            details = result
+            details = result 
         else:
-            # 如果是功能测试，提前将数据准备好
-            total = uncertain = succeed = failed = 0
-            job_task = []
-            # 查询成功的数据和count
-            job_task.append(model_result.get_data_and_count_by_condition({"status": "passed"}))
-            # 查询失败的数据和count
-            job_task.append(model_result.get_data_and_count_by_condition({"status" : {"$in": ["broken", "failed"]}}))
-            # 查询不确定的数据和count
-            job_task.append(model_result.get_data_and_count_by_condition({"status" : "unknown"}))
-            # 查询总数
-            job_task.append(model_result.get_count_by_condition({"status" : {"$ne": "skipped"}}))
-            func_res = await asyncio.gather(*job_task)
-
-            succeed, succeed_data = func_res[0]
-            failed, failed_data = func_res[1]
-            uncertain, uncertained_data = func_res[2]
-            total = func_res[3]
-            details = {
-                "summary_data": [
-                    {
-                        'total': total,
-                        'uncertain': uncertain,
-                        'succeed': succeed,
-                        'failed': failed
-                    } 
-                ],
-                "succeed_data": self.pop_object_id(succeed_data),
-                "failed_data": self.pop_object_id(failed_data),
-                "uncertained_data": self.pop_object_id(uncertained_data)
-            }
+            pass
         # 主动关闭mongodb的链接
         model_result.close()
-        return len(details), details
+        return summary_data, details
 
 
     def pop_object_id(self, data: list):

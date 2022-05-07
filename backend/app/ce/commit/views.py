@@ -88,10 +88,12 @@ class CommitDetailManage(MABaseView):
                 "tname": item["tname"],
                 "description": item["description"],
                 "system": item["system"],
+                "secondary_type": item["secondary_type"],
                 "task_type": item["task_type"]} for item in all_release_task]
             for item in temp_data:
                 tid = item["tid"]
                 item["status"] = build_info[tid].get("status")
+                item["exit_code"] = build_info[tid].get("exit_code")
                 item["build_id"] = build_info[tid].get("build_id")
                 item["commit_id"] = build_info[tid].get("commit_id")
                 item["branch"] = build_info[tid].get("branch")

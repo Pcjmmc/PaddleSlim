@@ -64,7 +64,7 @@ export default {
     }
   },
   mounted: function () {
-    console.log('select app first');
+    // console.log('select app first');
   },
   methods: {
     enter (item) {

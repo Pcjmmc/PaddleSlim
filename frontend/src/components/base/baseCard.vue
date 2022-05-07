@@ -4,115 +4,138 @@
       {{ reponame }}
     </p>
     <div v-for="(item, key, index) in data">
-      <Row>
-        <Col
-          :xs="{ span: 11 }"
-          v-if="item.status && item.status.toLowerCase()=='passed'"
-        >
-          <i-circle
-            :percent="100"
-            stroke-color="#5cb85c"
-            :size="15"
+      <div v-for="child, idx in item">
+        <Row>
+          <Col
+            :xs="{ span: 11 }"
+            v-if="child.status && child.status.toLowerCase()=='passed'"
           >
-            <Icon
-              type="ios-checkmark"
-              size="10"
-              style="color:#5cb85c"
-            ></Icon>
-          </i-circle>
-          <a
-            href="javascript:void(0)"
-            style="font-size:10px;"
-            @click="jumper(item)"
-          > {{ key }} </a>
-        </Col>
-        <Col
-          :xs="{ span: 11 }"
-          v-else-if="item.status && item.status.toLowerCase()=='failed'"
-        >
-          <i-circle
-            :percent="100"
-            stroke-color="#ff5500"
-            :size="15"
-          >
-            <Icon
-              type="ios-close"
-              size="10"
-              style="color:#ff5500"
-            ></Icon>
-          </i-circle>
-          <a
-            href="javascript:void(0)"
-            style="font-size:10px;"
-            @click="jumper(item)"
-          > {{ key }} </a>
-        </Col>
-        <Col
-          :xs="{ span: 11 }"
-          v-else-if="item.status && item.status.toLowerCase()=='running'"
-        >
-          <Icon
-            type="ios-loading"
-            size="20"
-            class="demo-spin-icon-load"
-          ></Icon>
-          <Tooltip placement="right" width="400">
-            <a
+            <i-circle
+              :percent="100"
+              stroke-color="#5cb85c"
+              :size="15"
+            >
+              <Icon
+                type="ios-checkmark"
+                size="10"
+                style="color:#5cb85c"
+              ></Icon>
+            </i-circle>
+            <a v-if="item.length > 1"
               href="javascript:void(0)"
               style="font-size:10px;"
-              @click="jumper(item)"
+              @click="jumper(child)"
+            > {{ key+idx }} </a>
+            <a v-else
+              href="javascript:void(0)"
+              style="font-size:10px;"
+              @click="jumper(child)"
             > {{ key }} </a>
-            <span
-              slot="content"
-              data-test="ring-dropdown"
-              class="dropdown_40a"
+          </Col>
+          <Col
+            :xs="{ span: 11 }"
+            v-else-if="child.status && child.status.toLowerCase()=='failed'"
+          >
+            <i-circle
+              :percent="100"
+              stroke-color="#ff5500"
+              :size="15"
             >
-              <div
-                class="BuildDurationAnchor__buildDuration--tx
-                global__font-smaller--2q
-                global__font-lower--3X global__font--1w"
+              <Icon
+                type="ios-close"
+                size="10"
+                style="color:#ff5500"
+              ></Icon>
+            </i-circle>
+            <a v-if="item.length > 1"
+              href="javascript:void(0)"
+              style="font-size:10px;"
+              @click="jumper(child)"
+            > {{ key+idx }} </a>
+            <a v-else
+              href="javascript:void(0)"
+              style="font-size:10px;"
+              @click="jumper(child)"
+            > {{ key }} </a>
+          </Col>
+          <!--
+          <Col
+            :xs="{ span: 11 }"
+            v-else-if="child.status && child.status.toLowerCase()=='running'"
+          >
+            <Icon
+              type="ios-loading"
+              size="20"
+              class="demo-spin-icon-load"
+            ></Icon>
+            <Tooltip placement="right" width="400">
+              <a
+                href="javascript:void(0)"
+                style="font-size:10px;"
+                @click="jumper(child)"
+              > {{ key+idx }}</a>
+              <span
+                slot="content"
+                data-test="ring-dropdown"
+                class="dropdown_40a"
               >
                 <div
-                  class="BuildDurationAnchor__wrapper--1R
+                  class="BuildDurationAnchor__buildDuration--tx
                   global__font-smaller--2q
                   global__font-lower--3X global__font--1w"
                 >
-                  <span class="BuildDurationAnchor__text--2P">{{ item.left_time }}</span>
-                  <div class="BuildDurationAnchor__progress--2J" style="width: 19%;">
-                    <div style="width: 526.316%;">
-                      <span class="BuildDurationAnchor__text--2P">{{ item.left_time }}</span>
+                  <div
+                    class="BuildDurationAnchor__wrapper--1R
+                    global__font-smaller--2q
+                    global__font-lower--3X global__font--1w"
+                  >
+                    <span class="BuildDurationAnchor__text--2P">{{ item.left_time }}</span>
+                    <div class="BuildDurationAnchor__progress--2J" style="width: 19%;">
+                      <div style="width: 526.316%;">
+                        <span class="BuildDurationAnchor__text--2P">{{ item.left_time }}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </span>
-          </Tooltip>
-        </Col>
-        <Col
-          v-else
-          :xs="{ span: 11 }"
-        >
-          <Tooltip placement="top" content="未执行">
-            <Icon type="ios-alert-outline" size="17"/>
-            <span style="font-size:10px;">
-              {{ key }}
-            </span>
-          </Tooltip>
-        </Col>
-        <Col :xs="{ span: 6 }">
-          <span style="color:green;"> {{ 50 }} </span>
-          <span> | </span>
-          <span style="color:red;" v-if="true"> {{ 2 }} </span>
-          <span style="color:green;" v-else=""> {{ 2 }} </span>
-        </Col>
-        <Col :xs="{ span: 3 }">
-          <a
-          href="javascript:void(0)"
-          style="font-size:10px;"
-          @click="jumper(item)"
-          > 日志 </a>
-        </Col>
-      </Row>
+              </span>
+            </Tooltip>
+          </Col>
+          -->
+          <Col
+            v-else
+            :xs="{ span: 11 }"
+          >
+            <Tooltip placement="top" content="未执行">
+              <Icon type="ios-alert-outline" size="17"/>
+              <span
+                v-if="item.length > 1"
+                style="font-size:10px;"
+              >
+                {{ key+idx }}
+              </span>
+              <span
+                v-else
+                style="font-size:10px;"
+              >
+                {{ key }}
+              </span>
+            </Tooltip>
+          </Col>
+          <Col :xs="{ span: 6 }">
+            <span style="color:green;"> {{ child.total }} </span>
+            <span> | </span>
+            <span style="color:red;" v-if="child.failed_num > 0 || child.total == 0"> {{ child.failed_num }} </span>
+            <span style="color:green;" v-else=""> {{ child.failed_num }} </span>
+          </Col>
+          <Col :xs="{ span: 3 }">
+            <a
+            href="javascript:void(0)"
+            style="font-size:10px;"
+            @click="jumperLog(child)"
+            > 日志 </a>
+          </Col>
+        </Row>
+      </div>
     </div>
   </Card>
 </template>
@@ -142,6 +165,20 @@ export default {
   computed: {
   },
   methods: {
+    jumper(item) {
+      let _params = {};
+      _params = Object.assign(_params, item);
+      let detail_name = 'ApiDetails';
+      if (item.task_type === 'model') {
+        detail_name = 'model';
+      } else if (item.task_type === 'lite') {
+        detail_name = 'lite';
+      }
+      const { href } = this.$router.resolve({name: detail_name, query: _params});
+      window.open(href, '_blank');
+    },
+    jumperLog(item) {
+    }
   }
 };
 </script>
