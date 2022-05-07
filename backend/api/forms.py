@@ -23,6 +23,7 @@ class AddCaseForm(object):
         "case_detail": [str],
         "exit_code": [int, str],
     }
+    need_data_params = ["build_type_id", "build_id", "repo", "branch", "commit_id", "commit_time"] 
 
     @classmethod
     def check_request_data(cls, **kwargs):
@@ -46,4 +47,8 @@ class AddCaseForm(object):
                 type_msg = ",".join(type_error)
                 msg += "类型错误{}".format(type_msg)
             return False, msg
+        for need_key in need_data_params:
+            if need_key not in kwargs.keys():
+                msg ="缺少必要的参数{} ".format(need_key)
+                return False, msg
         return True, None
