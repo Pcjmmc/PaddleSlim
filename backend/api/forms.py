@@ -47,7 +47,7 @@ class AddCaseForm(object):
                 type_msg = ",".join(type_error)
                 msg += "类型错误{}".format(type_msg)
             return False, msg
-        for need_key in need_data_params:
+        for need_key in cls.need_data_params:
             if need_key not in kwargs.keys():
                 msg ="缺少必要的参数{} ".format(need_key)
                 return False, msg
