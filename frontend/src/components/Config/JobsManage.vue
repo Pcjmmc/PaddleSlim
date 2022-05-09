@@ -2,14 +2,32 @@
   <div>
     <Row
       type="flex"
-      justify="end"
-      style="margin-bottom: 1%;margin-top: 2%"
+      justify="start"
+      class="all-line-row"
     >
-      <col>
+      <Col span="3" offset="0.5">
+        <Select clearable v-model="search.task_type">
+          <Option v-for="(item, index) in taskTypeList" :value="item.key" :key="index">{{ item.desc }}</Option>
+        </Select>
+      </Col>
+      <Col span="3" offset="1">
+        <Input clearable v-model="search.owner" placeholder="负责人" />
+      </Col>
+      <Col span="3" offset="1">
+        <Input clearable v-model="search.build_type_id" placeholder="任务唯一id" />
+      </Col>
+      <Col span="1" offset="1">
+        <Button
+          icon="ios-search"
+          type="primary"
+          @click="searchData"
+        >search</Button>
+      </Col>
+      <Col span="2" offset="9">
         <Button type="primary" @click="activateCreateModal()">
           新增Job
         </Button>
-      </col>
+      </Col>
     </Row>
     <Table border
       :columns="jobsColumn"
@@ -218,8 +236,11 @@ export default {
       setCreateModal: false,
       updateModelFlag: false,
       search: {
+        owner: '',
+        build_type_id: '',
+        task_type: '',
         page: 1,
-        pagesize: 20
+        pagesize: 10
       },
       platformList: [
         {
@@ -273,6 +294,10 @@ export default {
         {
           'key': 'Linux_Gpu(T4)_Cuda10.2',
           'desc': 'Linux_Gpu(T4)_Cuda10.2'
+        },
+        {
+          'key': 'Linux_Gpu(T4)_Cuda11.1',
+          'desc': 'Linux_Gpu(T4)_Cuda11.1'
         },
         {
           'key': 'Linux_Gpu(T4)_Cuda11.2',
@@ -496,6 +521,9 @@ export default {
       let params = {
         page: this.search.page,
         pagesize: this.search.pagesize,
+        owner: this.search.owner,
+        task_type: this.search.task_type,
+        build_type_id: this.search.build_type_id,
         appid: Cookies.get('appid')
       };
       const {code, all_count, data, msg} = await api.get(JobUrl, params);
@@ -614,6 +642,9 @@ export default {
         })
       }
     },
+    searchData() {
+      this.getJobData();
+    },
     getDescBykey(key) {
       for (let idx in this.taskTypeList) {
         if (this.taskTypeList[idx].key === key) {
@@ -636,4 +667,8 @@ export default {
 };
 </script>
 <style scoped>
+.all-line-row {
+  margin-bottom: 1%;
+  margin-top: 1%;
+}
 </style>

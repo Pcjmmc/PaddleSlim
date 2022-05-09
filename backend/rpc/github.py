@@ -1,11 +1,15 @@
 # -*- coding:utf8 -*-
+import asyncio
 import os
 import sys
-import asyncio
+
 import aiohttp
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 from ce_web.settings.common import RPC_SETTINGS
+from utils.change_time import stmp_by_date
+
 from rpc.base import BaseRpc
 
 PADDLE_GIT_GATEWAY = RPC_SETTINGS['github_paddle']['gateway']
@@ -139,9 +143,12 @@ if __name__ == "__main__":
     # print("latest tag info is", latest_tag)
     # commit = latest_tag.get("commit", {}).get("sha")
     # print("tag  latest commit is", commit)
-    # commit_info = loop.run_until_complete(GetCommit().get_commit_info(**{"commit": commit}))
-    # print("tag  latest commit info  is", commit_info)
+    commit_info = loop.run_until_complete(GetCommit().get_commit_info(**{"commit": '58f40144c91f6dfe39f63a6fde89e8baa57f2423'}))
+    print("tag  latest commit info  is", commit_info)
+    begin_time = str(commit_info['date'])
+    begin_time = stmp_by_date(begin_time, fmt="%Y-%m-%dT%H:%M:%SZ")
+    print(begin_time)
     # git_branches = loop.run_until_complete(GetBranches().get_commit_info_by_branch(**{"branch": "release/2.2"}))
-    commits = loop.run_until_complete(GetCommits({'page': 1, "per_page": 3, "sha": "release/2.2"}).get_commit_list())
-    print("branches  latest commit info is", commits)
+    # commits = loop.run_until_complete(GetCommits({'page': 1, "per_page": 3, "sha": "release/2.2"}).get_commit_list())
+    # print("branches  latest commit info is", commits)
        

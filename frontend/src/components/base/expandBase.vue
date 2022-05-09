@@ -123,10 +123,11 @@
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <div v-for="(child, idx) in item">
             <span style="float:right;">
-              <span style="color:green;"> {{ child.total }} </span>
+              <span v-if="child.total > 0" style="color:green;"> {{ child.total }} </span>
+            <span v-else style="color:red;"> {{ child.total }} </span>
               <span> | </span>
-              <span style="color:red;" v-if="true"> {{ child.failed_num }} </span>
-              <span style="color:green;" v-else=""> {{ child.passed_num }} </span>
+              <span style="color:red;" v-if="child.failed_num > 0 || child.total == 0"> {{ child.failed_num }} </span>
+            <span style="color:green;" v-else=""> {{ child.failed_num }} </span>
             </span>
           </div>
         </div>

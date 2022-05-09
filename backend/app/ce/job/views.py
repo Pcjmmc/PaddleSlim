@@ -22,8 +22,18 @@ class JobManage(MABaseView):
         page = kwargs.get("page", 1)
         pagesize = kwargs.get("pagesize", 30)
         appid = kwargs.get("appid", 1)
+        query_params = {"appid": appid}
+        owner = kwargs.get("owner")
+        task_type = kwargs.get("task_type")
+        build_type_id = kwargs.get("build_type_id")
+        if owner:
+            query_params["owner"] = owner
+        if task_type:
+            query_params["task_type"] = task_type
+        if build_type_id:
+            query_params["build_type_id"] = build_type_id
         count, data = await CeTasks().aio_filter_details_with_total_count(
-            page_index=page, limit=pagesize, **{"appid": appid}
+            page_index=page, limit=pagesize, **query_params
         )
         for item in data:
             if item['secondary_type']:
