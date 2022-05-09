@@ -1,11 +1,11 @@
 <template>
   <div>
     <div v-for="(item, key, index) in detail" v-if="detail">
-      <Func
+      <func-base
         :detail="item.case_detail"
         :secondarytype="key"
         :summarydata="item.summary_data"
-      ></Func>
+      ></func-base>
     </div>
   </div>
 </template>
@@ -13,8 +13,7 @@
 <script>
 import api from '../api/index';
 import { DetailUrl } from '../api/url.js';
-import { dateFmt, timestampToTime } from '../util/help.js';
-import Func from './Detail/Func.vue';
+import FuncBase from './Detail/FuncBase.vue';
 export default {
   data: function () {
     return {
@@ -25,7 +24,7 @@ export default {
     this.getData();
   },
   components: {
-    Func
+    FuncBase
   },
   computed: {
   },
@@ -42,6 +41,7 @@ export default {
       if (message === 'success') {
         this.detail = data;
       } else {
+        console.log('error', code);
         this.$Message.error({content: message || this.$trans('获取编译列表失败'), duration: 5, closable: true});
       }
     }

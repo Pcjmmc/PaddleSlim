@@ -6,14 +6,14 @@
           style="text-align: left;font-size: 1.3em;color: red"
           v-if="$route.query.status=='Failed'"
         >
-          {{secondarytype}}: {{ $route.query.status }}
+          {{ secondarytype }}: {{ $route.query.status }}
         </p>
         <p
           slot="title"
           style="text-align: left;font-size: 1.3em;color: green"
           v-else
         >
-          {{secondarytype}}: {{ $route.query.status }}
+          {{ secondarytype }}: {{ $route.query.status }}
         </p>
         <p
           slot="title"
@@ -85,7 +85,7 @@
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 import { dateFmt, timestampToTime } from '../../util/help.js';
-import frameDetailBase from '../base/frameDetailBase.vue'
+import frameDetailBase from '../base/frameDetailBase.vue';
 export default {
   props: {
     'detail': {
@@ -223,8 +223,7 @@ export default {
     console.log('data', this.detail);
   },
   components: {
-    VueJsonPretty,
-    frameDetailBase
+    VueJsonPretty
   },
   computed: {
     failedData() {
@@ -301,12 +300,12 @@ export default {
         'faliedArray': []
       };
       if (succeedArray.length > 0) {
-        result['succeedArray'] = [
+        result.succeedArray = [
           {'step': 'succeed case', 'status': 'Passed', 'data': succeedArray}
         ];
       }
       if (faliedArray.length > 0) {
-        result['faliedArray'] = [
+        result.faliedArray = [
           {'step': 'failed case', 'status': 'Failed', 'data': faliedArray}
         ];
       }
