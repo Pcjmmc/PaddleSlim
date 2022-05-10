@@ -8,9 +8,9 @@
       <Col span="3" offset="0.5">
         <Select clearable v-model="search.task_type">
           <Option
-            v-for="(item, index) in taskTypeList"
             :key="index"
             :value="item.key"
+            v-for="(item, index) in taskTypeList"
           >{{ item.desc }}</Option>
         </Select>
       </Col>
@@ -18,13 +18,15 @@
         <Input
           clearable
           v-model="search.owner"
-          placeholder="负责人"/>
+          placeholder="负责人"
+        ></Input>
       </Col>
       <Col span="3" offset="1">
         <Input
           clearable
           v-model="search.build_type_id"
-          placeholder="任务唯一id"/>
+          placeholder="任务唯一id"
+        ></Input>
       </Col>
       <Col span="1" offset="1">
         <Button
