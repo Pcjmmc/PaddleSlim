@@ -20,6 +20,7 @@ secondary_type = {
         "XPU-X86"
     ],
     "frame": [
+        "e2e",
         "device",
         "optimizer",
         "loss",
