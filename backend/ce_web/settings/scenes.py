@@ -39,9 +39,9 @@ secondary_type = {
         "onnx"
     ],
     "infer": [
-        "CPU/GPU原生推理",
+        "原生推理",
         "TensorRT推理",
-        "MKLDNN/Openblas/OpenVINO推理"
+        "MKLDNN推理"
     ],
     "dist": [
         "分布式api功能",
