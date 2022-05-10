@@ -123,7 +123,11 @@
           <Input v-model="addForm.description" placeholder="请简短准确概述"/>
         </FormItem>
         <FormItem label="任务覆盖的系统: " prop="system">
-          <Select v-model="addForm.system" >
+          <Select
+            filterable
+            clearable
+          v-model="addForm.system"
+        >
             <Option v-for="(item, index) in systemList" :value="item.key" :key="index">{{ item.desc }}</Option>
           </Select>
         </FormItem>
@@ -212,7 +216,11 @@
           <Input v-model="selectedRow.description" placeholder="请简短准确概述"/>
         </FormItem>
         <FormItem label="任务覆盖的系统: " prop="system">
-          <Select v-model="selectedRow.system" >
+          <Select
+            filterable
+            clearable
+            v-model="selectedRow.system"
+          >
             <Option v-for="(item, index) in systemList" :value="item.key" :key="index">{{ item.desc }}</Option>
           </Select>
         </FormItem>
@@ -304,6 +312,10 @@ export default {
           'desc': 'Linux_Gpu_Cuda11.2'
         },
         {
+          'key': 'Linux_Gpu_Cuda11.3',
+          'desc': 'Linux_Gpu_Cuda11.3'
+        },
+        {
           'key': 'Linux_Gpu(T4)_Cuda10.2',
           'desc': 'Linux_Gpu(T4)_Cuda10.2'
         },
@@ -342,6 +354,10 @@ export default {
         {
           'key': 'Xpu',
           'desc': 'Xpu'
+        },
+        {
+          'key': 'Npu',
+          'desc': 'Npu'
         },
         {
           'key': 'Linux-Jetpack',

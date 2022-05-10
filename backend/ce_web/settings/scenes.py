@@ -21,6 +21,7 @@ secondary_type = {
     ],
     "frame": [
         "e2e",
+        "utils",
         "device",
         "optimizer",
         "loss",
