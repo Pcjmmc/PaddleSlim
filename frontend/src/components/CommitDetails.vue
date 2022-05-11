@@ -156,6 +156,8 @@ export default {
         detail_name = 'model';
       } else if (item.task_type === 'frame') {
         detail_name = 'FuncDetail';
+      } else if (item.task_type === 'infer') {
+        detail_name = 'FuncDetail';
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');
