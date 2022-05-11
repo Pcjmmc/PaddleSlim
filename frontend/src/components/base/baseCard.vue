@@ -129,8 +129,11 @@
             <span v-if="child.total > 0" style="color:green;font-size:13px;"> {{ child.total }} </span>
             <span v-else style="color:red;font-size:13px;"> {{ child.total }} </span>
             <span> | </span>
-            <span style="color:red;font-size:13px;" v-if="child.failed_num > 0 || child.total == 0"> {{ child.failed_num }} </span>
-            <span style="color:green;font-size:13px;" v-else=""> {{ child.failed_num }} </span>
+            <span
+              style="color:red;font-size:13px;"
+              v-if="child.failed_num > 0 || child.total == 0"
+            > {{ child.failed_num }} </span>
+            <span style="color:green;font-size:13px;" v-else> {{ child.failed_num }} </span>
           </Col>
           <Col :xs="{ span: 3 }">
             <a

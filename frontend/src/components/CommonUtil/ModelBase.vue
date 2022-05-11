@@ -10,7 +10,7 @@
         >模型状态: {{ status }} </Tag>
         <Tag
           style="font-size:15px"
-          color="error" 
+          color="error"
           v-else
         >模型状态: {{ status }} </Tag>
         <Table
