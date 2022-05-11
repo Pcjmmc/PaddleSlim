@@ -1,6 +1,6 @@
 <template>
   <Card class="center-card-s">
-    <Row>
+    <Row align="middle">
       <Col :xs="{ span: 11, offset: 0 }">
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <span v-if="item.status && item.status.toLowerCase()=='passed'">
@@ -17,7 +17,7 @@
             </i-circle>
             <a
               href="javascript:void(0)"
-              style="font-size:10px;"
+              style="font-size:13px;"
               @click="jumper(item)"
             > {{ item.tname }} </a>
           </span>
@@ -35,7 +35,7 @@
             </i-circle>
             <a
               href="javascript:void(0)"
-              style="font-size:10px;"
+              style="font-size:13px;"
               @click="jumper(item)"
             > {{ item.tname }} </a>
           </span>
@@ -48,7 +48,7 @@
             <Tooltip placement="right" width="400">
               <a
                 href="javascript:void(0)"
-                style="font-size:10px;"
+                style="font-size:13px;"
                 @click="jumper(item)"
               > {{ item.tname }} </a>
               <span
@@ -80,7 +80,7 @@
           <span v-else>
             <Tooltip placement="right" content="未执行">
               <Icon type="ios-alert-outline" size="17"/>
-              <span style="font-size:10px;">
+              <span style="font-size:13px;">
                 {{ item.tname }}
               </span>
             </Tooltip>
@@ -104,7 +104,7 @@
           <span style="float:right;">
            <a
             href="javascript:void(0)"
-            style="font-size:10px;"
+            style="font-size:13px;"
             @click="jumper(item)"
             > 日志 </a>
           </span> 

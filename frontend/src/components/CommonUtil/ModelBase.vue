@@ -2,9 +2,20 @@
     <div
         style="margin-bottom: 10px;"
     >
-        <Tag>模型名: {{ modelName }} </Tag>
-        <Tag>模型状态: {{ status }} </Tag>
+        <Tag style="font-size:15px">模型名: {{ modelName }} </Tag>
+        <Tag
+          v-if="status=='Passed'"
+          style="font-size:15px"
+          color="success"
+        >模型状态: {{ status }} </Tag>
+        <Tag
+          style="font-size:15px"
+          color="error" 
+          v-else
+        >模型状态: {{ status }} </Tag>
         <Table
+          border
+          size="small"
           :columns="Columns"
           :data="kpis"
           style="margin-right: 2%;"

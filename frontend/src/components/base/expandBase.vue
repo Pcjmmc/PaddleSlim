@@ -1,6 +1,6 @@
 <template>
   <Card class="center-card-s">
-    <Row>
+    <Row align="middle">
       <Col :xs="{ span: 6, offset: 0 }">
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <div v-for="(child, idx) in item">
@@ -19,13 +19,13 @@
               <a
                 v-if="item.length > 1"
                 href="javascript:void(0)"
-                style="font-size:10px;"
+                style="font-size:13px;"
                 @click="jumper(child)"
               > {{ key + '_' + idx }} </a>
               <a
                 v-else
                 href="javascript:void(0)"
-                style="font-size:10px;"
+                style="font-size:13px;"
                 @click="jumper(child)"
               > {{ key }} </a>
             </span>
@@ -44,13 +44,13 @@
               <a
                 v-if="item.length > 1"
                 href="javascript:void(0)"
-                style="font-size:10px;"
+                style="font-size:13px;"
                 @click="jumper(child)"
               > {{ key + '_' + idx }} </a>
               <a
                 v-else
                 href="javascript:void(0)"
-                style="font-size:10px;"
+                style="font-size:13px;"
                 @click="jumper(child)"
               > {{ key }} </a>
             </span>
@@ -64,13 +64,13 @@
                 <a
                   v-if="item.length > 1"
                   href="javascript:void(0)"
-                  style="font-size:10px;"
+                  style="font-size:13px;"
                   @click="jumper(child)"
                 > {{ key + '_' + idx }} </a>
                 <a
                   v-else
                   href="javascript:void(0)"
-                  style="font-size:10px;"
+                  style="font-size:13px;"
                   @click="jumper(child)"
                 > {{ key }} </a>
                 <span
@@ -104,13 +104,13 @@
                 <Icon type="ios-alert-outline" size="17"/>
                 <span
                   v-if="item.length > 1"
-                  style="font-size:10px;"
+                  style="font-size:13px;"
                 >
                   {{ key + '_' + idx }}
                 </span>
                 <span
                   v-else
-                  style="font-size:10px;"
+                  style="font-size:13px;"
                 >
                   {{ key }}
                 </span>
@@ -124,10 +124,10 @@
           <div v-for="(child, idx) in item">
             <span style="float:right;">
               <span v-if="child.total > 0" style="color:green;"> {{ child.total }} </span>
-            <span v-else style="color:red;"> {{ child.total }} </span>
+              <span v-else style="color:red;"> {{ child.total }} </span>
               <span> | </span>
               <span style="color:red;" v-if="child.failed_num > 0 || child.total == 0"> {{ child.failed_num }} </span>
-            <span style="color:green;" v-else=""> {{ child.failed_num }} </span>
+              <span style="color:green;" v-else> {{ child.failed_num }} </span>
             </span>
           </div>
         </div>
@@ -138,7 +138,7 @@
             <span style="float:right;">
             <a
               href="javascript:void(0)"
-              style="font-size:10px;"
+              style="font-size:13px;"
               @click="jumper(child)"
               > 日志 </a>
             </span>

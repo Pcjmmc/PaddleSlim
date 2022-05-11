@@ -42,6 +42,7 @@
         <a :href="getTaskUrl()"> 任务链接</a>
       </p>
       <Table
+        border
         :columns="detailColumns"
         :data="summaryData"
         style="margin-right: 2%"

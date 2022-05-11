@@ -5,7 +5,7 @@
     </p>
     <div v-for="(item, key, index) in data">
       <div v-for="child, idx in item">
-        <Row>
+        <Row align="middle">
           <Col
             :xs="{ span: 11 }"
             v-if="child.status && child.status.toLowerCase()=='passed'"
@@ -24,13 +24,13 @@
             <a
               v-if="item.length > 1"
               href="javascript:void(0)"
-              style="font-size:10px;"
+              style="font-size:13px;"
               @click="jumper(child)"
             > {{ key + '_' + idx }} </a>
             <a
               v-else
               href="javascript:void(0)"
-              style="font-size:10px;"
+              style="font-size:13px;"
               @click="jumper(child)"
             > {{ key }} </a>
           </Col>
@@ -52,13 +52,13 @@
             <a
               v-if="item.length > 1"
               href="javascript:void(0)"
-              style="font-size:10px;"
+              style="font-size:13px;"
               @click="jumper(child)"
             > {{ key + '_' + idx }} </a>
             <a
               v-else
               href="javascript:void(0)"
-              style="font-size:10px;"
+              style="font-size:13px;"
               @click="jumper(child)"
             > {{ key }} </a>
           </Col>
@@ -75,7 +75,7 @@
             <Tooltip placement="right" width="400">
               <a
                 href="javascript:void(0)"
-                style="font-size:10px;"
+                style="font-size:13px;"
                 @click="jumper(child)"
               > {{ key + '_' + idx }}</a>
               <span
@@ -113,29 +113,29 @@
               <Icon type="ios-alert-outline" size="17"/>
               <span
                 v-if="item.length > 1"
-                style="font-size:10px;"
+                style="font-size:13px;"
               >
                 {{ key + '_' + idx }}
               </span>
               <span
                 v-else
-                style="font-size:10px;"
+                style="font-size:13px;"
               >
                 {{ key }}
               </span>
             </Tooltip>
           </Col>
           <Col :xs="{ span: 6 }">
-            <span v-if="child.total > 0" style="color:green;"> {{ child.total }} </span>
-            <span v-else style="color:red;"> {{ child.total }} </span>
+            <span v-if="child.total > 0" style="color:green;font-size:13px;"> {{ child.total }} </span>
+            <span v-else style="color:red;font-size:13px;"> {{ child.total }} </span>
             <span> | </span>
-            <span style="color:red;" v-if="child.failed_num > 0 || child.total == 0"> {{ child.failed_num }} </span>
-            <span style="color:green;" v-else=""> {{ child.failed_num }} </span>
+            <span style="color:red;font-size:13px;" v-if="child.failed_num > 0 || child.total == 0"> {{ child.failed_num }} </span>
+            <span style="color:green;font-size:13px;" v-else=""> {{ child.failed_num }} </span>
           </Col>
           <Col :xs="{ span: 3 }">
             <a
             href="javascript:void(0)"
-            style="font-size:10px;"
+            style="font-size:13px;"
             @click="jumperLog(child)"
             > 日志 </a>
           </Col>

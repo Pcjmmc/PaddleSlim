@@ -3,6 +3,7 @@
     style="margin-bottom: 10px;"
   >
     <Table
+        size="small"
         :columns="Columns"
         :data="kpis"
         style="margin-right: 2%"
