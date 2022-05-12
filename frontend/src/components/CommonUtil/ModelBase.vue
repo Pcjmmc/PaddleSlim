@@ -4,7 +4,7 @@
     >
         <Tag style="font-size:15px">模型名: {{ modelName }} </Tag>
         <Tag
-          v-if="status=='Passed'"
+          v-if="status.toLowerCase()=='passed'"
           style="font-size:15px"
           color="success"
         >模型状态: {{ status }} </Tag>

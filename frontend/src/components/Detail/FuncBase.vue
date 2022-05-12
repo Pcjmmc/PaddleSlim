@@ -4,7 +4,7 @@
         <p
           slot="title"
           style="text-align: left;font-size: 1.3em;color: red"
-          v-if="$route.query.status=='Failed'"
+          v-if="$route.query.status.toLowerCase()=='failed'"
         >
           {{ secondarytype }}: {{ $route.query.status }}
         </p>
@@ -18,7 +18,7 @@
         <p
           slot="title"
           style="text-align: left;font-size: 1.3em;color: red"
-          v-if="$route.query.status=='Failed'"
+          v-if="$route.query.status.toLowerCase()=='failed'"
         >
           原因: {{ getErrorReason($route.query.exit_code) }}
         </p>
@@ -286,10 +286,10 @@ export default {
         if (!item.status) {
           continue;
         }
-        if (item.status === 'broken') {
+        if (item.status.toLowerCase() === 'broken') {
           item.status = 'failed';
         }
-        if (item.status === 'failed') {
+        if (item.status.toLowerCase() === 'failed') {
           faliedArray.push(item);
         } else {
           succeedArray.push(item);

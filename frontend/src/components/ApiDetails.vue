@@ -67,7 +67,7 @@ export default {
             return h('div', [
                 h('Tag', {
                 props: {
-                    color: ['pass', 'success'].indexOf(status.toLowerCase()) >= 0 ? 'green' : 'red'
+                    color: ['passed', 'pass', 'success'].indexOf(status.toLowerCase()) >= 0 ? 'success' : 'error'
                 }
                 }, status)
             ]);
@@ -114,7 +114,7 @@ export default {
       this.params = [
         {
          'name': 'test_api',
-         'status': 'pass',
+         'status': 'passed',
          'data': [
             {
               'name': '静态图',
@@ -138,7 +138,7 @@ export default {
         },
         {
          'name': 'add_elements',
-         'status': 'pass',
+         'status': 'passed',
          'tags': ['dy_to_static'],
          'oplist': ['_add', '_init'],
          'data': [

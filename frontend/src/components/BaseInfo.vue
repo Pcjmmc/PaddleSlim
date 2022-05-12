@@ -56,8 +56,8 @@ export default {
   },
   methods: {
     setColor(status) {
-      switch (status) {
-        case 'Pass':
+      switch (status.toLowerCase()) {
+        case 'passed':
           return 'green';
         case 'warning':
           return 'yellow';

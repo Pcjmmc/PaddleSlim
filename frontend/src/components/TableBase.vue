@@ -37,7 +37,7 @@ export default {
             return h('div', [
                 h('Tag', {
                 props: {
-                    color: ['pass', 'success'].indexOf(status.toLowerCase()) >= 0 ? 'green' : 'red'
+                    color: ['passed', 'pass', 'success'].indexOf(status.toLowerCase()) >= 0 ? 'success' : 'error'
                 }
                 }, status)
             ]);

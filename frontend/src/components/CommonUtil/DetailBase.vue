@@ -64,7 +64,7 @@ export default {
             return h('div', [
               h('Tag', {
                 props: {
-                  color: kpi_status.toLowerCase() === 'passed' ? 'green' : 'red'
+                  color: kpi_status.toLowerCase() === 'passed' ? 'success' : 'error'
                 }
               }, kpi_value)
             ]);
