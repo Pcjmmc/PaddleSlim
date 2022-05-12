@@ -105,7 +105,7 @@
            <a
             href="javascript:void(0)"
             style="font-size:13px;"
-            @click="jumper(item)"
+            :href="item.log_url"
             > 日志 </a>
           </span> 
         </div>

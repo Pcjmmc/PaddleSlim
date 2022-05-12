@@ -139,7 +139,7 @@
             <a
               href="javascript:void(0)"
               style="font-size:13px;"
-              @click="jumper(child)"
+              @href="child.log_url"
               > 日志 </a>
             </span>
           </div>

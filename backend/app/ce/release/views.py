@@ -5,7 +5,7 @@ import datetime
 import json
 import time
 
-from ce_web.settings.common import STORAGE
+from ce_web.settings.common import STORAGE, TC_BASE_URL, XLY_BASE_URL
 from ce_web.settings.scenes import scenes_dict
 from libs.mongo.db import Mongo
 from models.details import CeCases
@@ -281,17 +281,35 @@ class TaskManage(MABaseView):
                 "system": item["system"],
                 "task_type": item["task_type"],
                 "secondary_type": item["secondary_type"],
+                "build_type_id": item["build_type_id"],
+                "platform": item["platform"],
                 "reponame": item["reponame"]} for item in all_release_task]
             for item in temp_data:
                 tid = item["tid"]
+                platform = item["platform"]
                 if tid in build_info:
                     item["status"] = build_info[tid].get("status")
                     item["exit_code"] = build_info[tid].get("exit_code")
                     item["left_time"] = build_info[tid].get("left_time")
                     item["build_id"] = build_info[tid].get("build_id")
+                    item["job_id"] = build_info[tid].get("job_id")
                     item["commit_id"] = build_info[tid].get("commit_id")
                     item["branch"] = build_info[tid].get("branch")
                     item["repo"] = build_info[tid].get("repo")
+                    if platform == "xly":
+                        log_url = XLY_BASE_URL.format(
+                            workspace='paddle-release',
+                            build_id=item["build_id"],
+                            job_id=item['job_id']
+                        )
+                    elif platform == 'teamcity':
+                        log_url = TC_BASE_URL.format(
+                            build_id=item["build_id"],
+                            build_type_id=item["build_type_id"]
+                        )
+                    else:
+                        log_url = ""
+                    item["log_url"] = log_url
                 else:
                     item["status"] = "undone"
                 exempt_status = exempt_info.get(tid, {}).get("status", False)    

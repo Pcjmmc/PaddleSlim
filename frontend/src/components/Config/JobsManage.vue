@@ -280,7 +280,7 @@ export default {
       repoeNames: [
         'other',
         'PaddleClas',
-        'PaddleGan',
+        'PaddleGAN',
         'PaddleOCR',
         'PaddleNLP',
         'PaddleSeg',

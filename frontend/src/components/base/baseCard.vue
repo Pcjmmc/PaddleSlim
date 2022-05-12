@@ -139,7 +139,7 @@
             <a
             href="javascript:void(0)"
             style="font-size:13px;"
-            @click="jumperLog(child)"
+            :href="child.log_url"
             > 日志 </a>
           </Col>
         </Row>
@@ -184,8 +184,6 @@ export default {
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');
-    },
-    jumperLog(item) {
     }
   }
 };
