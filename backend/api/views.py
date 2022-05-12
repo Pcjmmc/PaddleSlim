@@ -55,6 +55,7 @@ class CaseDetailView(MABaseView):
             raise HTTP400Error("找不到任务，请先录入任务！")
         else:
             tid = task_obj.id
+            task_type = task_obj.task_type
             secondary_type = task_obj.secondary_type
             # build 入库逻辑
             await CeTaskBuilds.create_or_update_build(
@@ -64,17 +65,34 @@ class CaseDetailView(MABaseView):
                 details = json.loads(kwargs.get("case_detail"))
             except:
                 details = []
-            total = len(details)
             #detail为0，case_deatail为None，即代表任务异常
-            if 0 == total:
+            if 0 == len(deatails):
                 #直接返回,case详情表和mongo均不需要入库
                 return 
+            total = 0
             passed_num = 0
-            for item in details:
-                if "kpi_status" in item.keys() and item["kpi_status"] == "Passed":
-                    passed_num += 1
-                #改为统一入库，一次插入
-                #await model_result.insert(item)
+            if task_type in ['model', 'benchmark', 'dist']:
+                #TODO和模型相关的需要按照模型维度聚合入库
+                model_detail = dict()
+                for item in deatils:
+                    model_name = item["model_name"]
+                    if model_name not in model_detail.keys:
+                        model_detail[model_name] = item["kpi_status"]
+                    else:
+                        model_detail[model_name] = mode_detail[model_name] if item["kpi_stattus"] == "Passed" else "Failed"
+                #遍历model_detail,获取模型级别passed_num
+                total = len(model_detail.keys())
+                for key, val in model_detail.items():
+                    if val == "Passed":
+                        passed_num += 1
+                
+            else:
+                total = len(deatails)
+	        for item in details:
+                    if "status" in item.keys() and item["status"] == "Passed":
+                       passed_num += 1
+                       #改为统一入库，一次插入
+                       #await model_result.insert(item)
             failed_num = total - passed_num
             # case详细入库mysql 
             await CeCases.create_or_update_build(build_type_id, build_id, status, total, passed_num, failed_num, secondary_type)
