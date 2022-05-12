@@ -18,6 +18,10 @@ SETTING_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SETTING_DIR)
 BASE_DIR = os.path.dirname(PROJECT_ROOT)
 
+TC_BASE_URL = "http://paddle-ce.bcc-bdbl.baidu.com:8111/viewLog.html?buildId={build_id}&buildTypeId={build_type_id}&tab=buildLog"
+
+XLY_BASE_URL = "https://xly.bce.baidu.com/paddlepaddle/{workspace}/newipipe/detail/{build_id}/job/{job_id}"
+
 # Development type setting
 class DeploymentType(object):
     """
@@ -45,7 +49,6 @@ except Exception as e:
 finally:
     f.close()
 
-
 # 其他设置
 WEB_SETTINGS = {
     'cookie_secret': 'SgJbCDM9SVm4N6qXVzEDMeZv3XNNNkb/o+pJT0MDReR+zHDN2PdNA6WjWK+iO1bGuaTiS1a5TJSq1kTOnaA0eg==',
@@ -59,4 +62,4 @@ BLACK_KEYWORD = "Win_"
 
 if __name__ == '__main__':
     print(STORAGE)
-    print(BUILDTASK)
+    # print(BUILDTASK)
