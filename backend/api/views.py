@@ -81,7 +81,7 @@ class CaseDetailView(MABaseView):
                     if model_name not in model_detail.keys():
                         model_detail[model_name] = item["kpi_status"]
                     else:
-                        model_detail[model_name] = mode_detail[model_name] if item["kpi_status"] == "Passed" else "Failed"
+                        model_detail[model_name] = model_detail[model_name] if item["kpi_status"] == "Passed" else "Failed"
                 #遍历model_detail,获取模型级别passed_num
                 total = len(model_detail.keys())
                 for key, val in model_detail.items():
