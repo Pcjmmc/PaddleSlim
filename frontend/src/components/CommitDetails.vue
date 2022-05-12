@@ -80,7 +80,7 @@ export default {
             return h('div', [
                 h('Tag', {
                 props: {
-                  color: ['passed', 'success', 'pass'].indexOf(status.toLowerCase()) >= 0 ? 'green' : 'red'
+                  color: ['passed', 'success', 'pass'].indexOf(status.toLowerCase()) >= 0 ? 'success' : 'error'
                 }
                 }, status)
             ]);

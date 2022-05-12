@@ -115,13 +115,13 @@ export default {
     setColor(status) {
       switch (status) {
         case '已关闭':
-          return 'green';
+          return 'success';
         case '开发中':
-          return 'blue';
+          return 'primary';
         case '测试中':
-          return 'yellow';
+          return 'waring';
         default:
-          return 'red';
+          return 'error';
       }
     },
     getStatusFilters() {
