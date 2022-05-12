@@ -103,9 +103,8 @@
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <span style="float:right;">
            <a
-            href="javascript:void(0)"
-            style="font-size:13px;"
             :href="item.log_url"
+            style="font-size:13px;"
             > 日志 </a>
           </span> 
         </div>

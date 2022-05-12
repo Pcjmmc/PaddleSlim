@@ -137,9 +137,8 @@
           <div v-for="(child, idx) in item">
             <span style="float:right;">
             <a
-              href="javascript:void(0)"
-              style="font-size:13px;"
               @href="child.log_url"
+              style="font-size:13px;"
               > 日志 </a>
             </span>
           </div>
