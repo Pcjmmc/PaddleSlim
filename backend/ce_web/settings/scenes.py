@@ -39,9 +39,11 @@ secondary_type = {
         "onnx"
     ],
     "infer": [
-        "原生推理",
-        "TensorRT推理",
-        "MKLDNN推理"
+        "原生推理_C++_API",
+        "原生推理_Python_API",
+        "TensorRT推理_C++_API",
+        "TensorRT推理_Python_API",
+        "MKLDNN推理_Python_API"
     ],
     "dist": [
         "分布式api功能",
