@@ -89,7 +89,7 @@
         </div>
       </Col>
       -->
-      <Col :xs="{ span: 1, offset: 2 }">
+      <Col :xs="{ span: 1.5, offset: 2 }">
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <span style="float:right;">
            <a
