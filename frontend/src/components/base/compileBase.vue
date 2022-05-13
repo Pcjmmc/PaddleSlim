@@ -15,11 +15,7 @@
                 style="color:#5cb85c"
               ></Icon>
             </i-circle>
-            <a
-              href="javascript:void(0)"
-              style="font-size:13px;"
-              @click="jumper(item)"
-            > {{ item.tname }} </a>
+            <span style="font-size:13px;"> {{ item.tname }} </span>
           </span>
           <span v-else-if="item.status && item.status.toLowerCase()=='failed'">
             <i-circle
@@ -33,11 +29,9 @@
                 style="color:#ff5500"
               ></Icon>
             </i-circle>
-            <a
-              href="javascript:void(0)"
-              style="font-size:13px;"
-              @click="jumper(item)"
-            > {{ item.tname }} </a>
+            <Tooltip placement="right" :content="getErrorReason(item.exit_code)">
+              <span style="font-size:13px;"> {{ item.tname }} </span>
+            </Tooltip>
           </span>
           <span v-else-if="item.status && item.status.toLowerCase()=='running'">
             <Icon
@@ -46,11 +40,7 @@
               class="demo-spin-icon-load"
             ></Icon>
             <Tooltip placement="right" width="400">
-              <a
-                href="javascript:void(0)"
-                style="font-size:13px;"
-                @click="jumper(item)"
-              > {{ item.tname }} </a>
+              <span style="font-size:13px;"> {{ item.tname }} </span>
               <span
                 slot="content"
                 data-test="ring-dropdown"
@@ -103,7 +93,8 @@
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <span style="float:right;">
            <a
-            :href="item.log_url"
+            href="javascript:void(0)"
+            @click="jumperLog(item.log_url)"
             style="font-size:13px;"
             > 日志 </a>
           </span> 
@@ -310,8 +301,39 @@ export default {
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');
     },
+    jumperLog(url) {
+      window.open(url, '_blank');
+    },
     async createIcafe(item) {
       this.setBugTagModal = true;
+    },
+    getErrorReason(exit_code) {
+      switch (parseInt(exit_code, 10)) {
+        case 0:
+          return '成功';
+        case 2:
+          return 'CE框架失败';
+        case 3:
+          return '模型yaml书写错误';
+        case 4:
+          return 'Lite模型优化失败';
+        case 5:
+          return '未录入任务';
+        case 7:
+          return '编译失败';
+        case 8:
+          return 'case失败';
+        case 63:
+          return '克隆代码失败';
+        case 125:
+          return '启动容器失败';
+        case 127:
+          return 'tc没有执行权限';
+        case 137:
+          return 'tc任务取消';
+        default:
+          return '未知';
+      }
     },
     handleReset(auto) {
       this.initData(auto);

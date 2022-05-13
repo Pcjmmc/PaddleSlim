@@ -22,6 +22,7 @@ TC_BASE_URL = "http://paddle-ce.bcc-bdbl.baidu.com:8111/viewLog.html?buildId={bu
 
 XLY_BASE_URL = "https://xly.bce.baidu.com/paddlepaddle/{workspace}/newipipe/detail/{build_id}/job/{job_id}"
 
+XLY_BASE_URL2 = "https://xly.bce.baidu.com/paddlepaddle/{workspace}/newipipe/detail/{build_id}/job/"
 # Development type setting
 class DeploymentType(object):
     """

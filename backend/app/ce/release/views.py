@@ -5,7 +5,9 @@ import datetime
 import json
 import time
 
-from ce_web.settings.common import STORAGE, TC_BASE_URL, XLY_BASE_URL
+from ce_web.settings.common import (
+    STORAGE, TC_BASE_URL, XLY_BASE_URL, XLY_BASE_URL2
+)
 from ce_web.settings.scenes import scenes_dict
 from libs.mongo.db import Mongo
 from models.details import CeCases
@@ -286,7 +288,10 @@ class TaskManage(MABaseView):
                 "reponame": item["reponame"]} for item in all_release_task]
             for item in temp_data:
                 tid = item["tid"]
+                task_type = item["task_type"]
                 platform = item["platform"]
+                # 这里要从任务信息里获取；暂时先写成这样
+                workspace = 'paddlepaddle-whl' if task_type == 'compile' else 'paddle-release'
                 if tid in build_info:
                     item["status"] = build_info[tid].get("status")
                     item["exit_code"] = build_info[tid].get("exit_code")
@@ -298,10 +303,13 @@ class TaskManage(MABaseView):
                     item["repo"] = build_info[tid].get("repo")
                     if platform == "xly":
                         log_url = XLY_BASE_URL.format(
-                            workspace='paddle-release',
-                            build_id=item["build_id"],
-                            job_id=item['job_id']
-                        )
+                                workspace=workspace,
+                                build_id=item["build_id"],
+                                job_id=item['job_id']
+                            )  if item.get('job_id') else XLY_BASE_URL2.format(
+                                workspace=workspace,
+                                build_id=item["build_id"]
+                            )
                     elif platform == 'teamcity':
                         log_url = TC_BASE_URL.format(
                             build_id=item["build_id"],

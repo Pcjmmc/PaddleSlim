@@ -137,7 +137,8 @@
           <div v-for="(child, idx) in item">
             <span style="float:right;">
             <a
-              @href="child.log_url"
+              href="javascript:void(0)"
+              @click="jumperLog(child.log_url)"
               style="font-size:13px;"
               > 日志 </a>
             </span>
@@ -343,6 +344,9 @@ export default {
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');
+    },
+    jumperLog(url) {
+      window.open(url, '_blank');
     },
     async createIcafe(item) {
       this.setBugTagModal = true;
