@@ -191,8 +191,12 @@ export default {
       if (item.task_type === 'model') {
         detail_name = 'model';
       } else if (item.task_type === 'dist') {
-        // 有些跳转api详情页，有些跳转模型详情页；需要进一步区分
-        detail_name = 'model';
+        // 如果二级分类是api的则跳转api详情页；否则按模型汇聚
+        if (item.secondary_type.toLowerCase().includes('api')) {
+          detail_name = 'FuncDetail';
+        } else {
+          detail_name = 'model';
+        }
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');
