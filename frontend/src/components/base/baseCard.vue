@@ -180,14 +180,19 @@ export default {
         build_id: item.build_id,
         secondary_type: item.secondary_type,
         status: item.status,
-        exit_code: item.exit_code
+        exit_code: item.exit_code,
+        repo: item.repo,
+        branch: item.branch,
+        commit_id: item.commit_id,
+        tname: item.tname
       };
       // _params = Object.assign(_params, item);
       let detail_name = 'ApiDetails';
       if (item.task_type === 'model') {
         detail_name = 'model';
-      } else if (item.task_type === 'lite') {
-        detail_name = 'lite';
+      } else if (item.task_type === 'dist') {
+        // 有些跳转api详情页，有些跳转模型详情页；需要进一步区分
+        detail_name = 'model';
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');

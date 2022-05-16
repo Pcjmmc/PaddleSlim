@@ -158,7 +158,7 @@ export default {
       const {code, data, msg} = await api.get(ScenesUrl);
       if (parseInt(code, 10) === 200) {
         this.taskTypeList = data.taskTypeList;
-        console.log("this.taskTypeList", this.taskTypeList);
+        // console.log("this.taskTypeList", this.taskTypeList);
         this.sendTypeList = data.sendTypeList;
       } else {
         this.taskTypeList = [];

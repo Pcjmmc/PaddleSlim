@@ -197,7 +197,7 @@ export default {
           type: 'expand',
           width: 50,
           render: (h, params) => {
-            console.log('params', params.row.data);
+            // console.log('params', params.row.data);
             return h(frameDetailBase, {
                 props: {
                   data: params.row.data,
@@ -220,7 +220,7 @@ export default {
     };
   },
   mounted: function () {
-    console.log('data', this.detail);
+    // console.log('data', this.detail);
   },
   components: {
     VueJsonPretty
@@ -228,7 +228,7 @@ export default {
   computed: {
     failedData() {
       const {faliedArray} = this.separateData();
-      console.log('faliedArray', faliedArray);
+      // console.log('faliedArray', faliedArray);
       return faliedArray;
     },
     succeedData() {

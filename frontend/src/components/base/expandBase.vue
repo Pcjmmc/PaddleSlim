@@ -350,6 +350,9 @@ export default {
         detail_name = 'FuncDetail';
       } else if (item.task_type === 'infer') {
         detail_name = 'FuncDetail';
+      } else if (item.task_type === 'dist') {
+        // 有些跳转api详情页，有些跳转模型详情页；需要进一步区分
+        detail_name = 'FuncDetail';
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');

@@ -38,9 +38,11 @@
       <p slot="title" style="text-align: left;font-size: 1.0em;">
         分支信息: {{ $route.query.branch }}
       </p>
+      <!--
       <p slot="title" style="text-align: left;font-size: 1.0em;">
         <a :href="getTaskUrl()"> 任务链接</a>
       </p>
+      -->
       <Table
         border
         :columns="detailColumns"

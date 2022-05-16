@@ -148,8 +148,20 @@ export default {
     },
     jumper(item) {
       // 还是根据任务的type来确定跳转到function还是model，目前暂时都用ApiDetails
-      let _params = {};
-      _params = Object.assign(_params, item);
+      let _params = {
+        task_type: item.task_type,
+        tid: item.tid,
+        build_id: item.build_id,
+        secondary_type: item.secondary_type,
+        status: item.status,
+        exit_code: item.exit_code,
+        repo: item.repo,
+        branch: item.branch,
+        commit_id: item.commit_id,
+        tname: item.tname
+      };
+      // let _params = {};
+      // _params = Object.assign(_params, item);
       // console.log(item);
       let detail_name = 'ApiDetails';
       if (item.task_type === 'model') {
@@ -157,6 +169,9 @@ export default {
       } else if (item.task_type === 'frame') {
         detail_name = 'FuncDetail';
       } else if (item.task_type === 'infer') {
+        detail_name = 'FuncDetail';
+      } else if (item.task_type === 'dist') {
+        // 有些跳转api详情页，有些跳转模型详情页；需要进一步区分
         detail_name = 'FuncDetail';
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
