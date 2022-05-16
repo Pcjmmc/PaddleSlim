@@ -204,8 +204,15 @@ export default {
   methods: {
     jumper(item) {
       // 还是根据任务的type来确定跳转到function还是model，目前暂时都用ApiDetails
-      let _params = {};
-      _params = Object.assign(_params, item);
+      let _params = {
+        task_type: item.task_type,
+        tid: item.tid,
+        build_id: item.build_id,
+        secondary_type: item.secondary_type,
+        status: item.status,
+        exit_code: item.exit_code
+      };
+      // _params = Object.assign(_params, item);
       // console.log('item', item)
       let detail_name = 'ApiDetails';
       if (item.task_type === 'model') {

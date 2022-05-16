@@ -301,6 +301,7 @@ class TaskManage(MABaseView):
                     item["commit_id"] = build_info[tid].get("commit_id")
                     item["branch"] = build_info[tid].get("branch")
                     item["repo"] = build_info[tid].get("repo")
+                    item["artifact_url"] = build_info[tid].get("artifact_url")
                     if platform == "xly":
                         log_url = XLY_BASE_URL.format(
                                 workspace=workspace,
@@ -326,6 +327,13 @@ class TaskManage(MABaseView):
             if task_type == "compile":
                 for item in temp_data:
                     system = item["system"]
+                    if item.get("artifact_url"):
+                        try:
+                            artifact_url = json.loads(item.get("artifact_url", ""))
+                            artifact_url = [url for url in artifact_url if url.endswith(".whl")]
+                        except:
+                            artifact_url = []
+                        item["artifact_url"] = artifact_url[0] if artifact_url else ""
                     if system not in integration_data:
                         integration_data[system] = list()
                     integration_data[system].append(item)

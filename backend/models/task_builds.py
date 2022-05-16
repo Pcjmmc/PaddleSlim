@@ -31,6 +31,7 @@ class CeTaskBuilds(BaseModel, BaseModelMixin):
     status = Column(VARCHAR(20), comment="任务的直接结果") # 任务的状态： runnig、Passed、Failed
     left_time = Column(Integer, comment="任务本次执行的剩余时间，单位秒") # 当任务状态是running的时候，需要给出大概需要多久能执行完
     exit_code = Column(VARCHAR(200), comment="任务退出码") # 任务的退出码, 约定任务的详细失败原因；多个以英文逗号分割
+    artifact_url = Column(Text, comment="编译产物")
     duration = Column(Integer, comment="任务本次的执行时长，单位秒") # 执行时长，单位秒
     created = Column(Integer, comment="任务本次构建的开始时间，单位秒") # 开始构建的时间
     updated = Column(Integer, comment="本条记录的修改时间，单位秒") # 本记录的更新时间

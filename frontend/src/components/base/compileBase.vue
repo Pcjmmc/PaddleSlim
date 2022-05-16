@@ -15,7 +15,13 @@
                 style="color:#5cb85c"
               ></Icon>
             </i-circle>
+              <a
+                :href="item.artifact_url"
+                style="font-size:13px;"
+              > {{ item.tname }} </a>
+            <!--
             <span style="font-size:13px;"> {{ item.tname }} </span>
+            -->
           </span>
           <span v-else-if="item.status && item.status.toLowerCase()=='failed'">
             <i-circle
