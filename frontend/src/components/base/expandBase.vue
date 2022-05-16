@@ -338,7 +338,11 @@ export default {
         build_id: item.build_id,
         secondary_type: item.secondary_type,
         status: item.status,
-        exit_code: item.exit_code
+        exit_code: item.exit_code,
+        repo: item.repo,
+        branch: item.branch,
+        commit_id: item.commit_id,
+        tname: item.tname
       };
       // let _params = {};
       // _params = Object.assign(_params, item);

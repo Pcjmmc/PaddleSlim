@@ -44,7 +44,7 @@ class DetailManage(MABaseView):
             result[sed_type]["case_detail"] = res
         return len(result), result
 
-    async def get_single_data(self, tid, build_id, task_type, secondary_type,):
+    async def get_single_data(self, tid, build_id, task_type, secondary_type):
         """
         根据查询条件：
         任务类型（task_type）， 
@@ -55,7 +55,6 @@ class DetailManage(MABaseView):
         # 初始化mong实例
         mongo_cfg = STORAGE["mongo"]["paddle_quality"]
         table_prefix = mongo_cfg["case_detail"]
-        secondary_type = secondary_type.split(",")
         details = { key: {} for key in secondary_type }
         case_obj = await CeCases.aio_get_object(
             **{"tid": tid, "build_id" : build_id, "label": secondary_type}
@@ -70,7 +69,7 @@ class DetailManage(MABaseView):
         label_id = case_obj.id
         table_name = table_prefix.format(task_id=tid, build_id=build_id, label_id=label_id)
         model_result = Mongo("paddle_quality", table_name)
-        if task_type == "model":
+        if self.check_model_tag(task_type, secondary_type):
             details = await model_result.find_all()
             self.pop_object_id(details)
             result = dict()
@@ -99,6 +98,13 @@ class DetailManage(MABaseView):
         model_result.close()
         return summary_data, details
 
+    def check_model_tag(self, task_type, secondary_type):
+        if task_type == "model":
+            return True
+        elif task_type == "dist" and "api" not in secondary_type.lower():
+            return True
+        else:
+            return False
 
     def pop_object_id(self, data: list):
         """
