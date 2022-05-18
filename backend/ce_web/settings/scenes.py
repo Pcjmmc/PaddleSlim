@@ -34,6 +34,7 @@ secondary_type = {
     "model": [
         "功能",
         "小数据集精度",
+        "收敛性",
         "全链条",
         "plsc",
         "onnx"
