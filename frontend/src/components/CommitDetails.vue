@@ -19,6 +19,7 @@
           class="center-card-s"
           v-if="commitData.length !== 0"
         >
+          <p align="center" style="font-size: 16px"> {{ this.selectCommit }} </p>
           <div :key="index" v-for="(item, index) in commitData">
             <Divider orientation="left" style="font-size: 0.6em;font-style: italic;">{{item.scenes}}</Divider>
             <Table border
@@ -33,7 +34,7 @@
           class="center-card-s"
           v-else
         >
-          <p align="center" style="font-size: 16px">暂未有任务覆盖</p>
+          <p align="center" style="font-size: 16px">{{ this.selectCommit }} 暂无数据 </p>
         </div>
       </Split>
     </div>
@@ -160,10 +161,7 @@ export default {
         commit_id: item.commit_id,
         tname: item.tname
       };
-      // let _params = {};
-      // _params = Object.assign(_params, item);
-      // console.log(item);
-      let detail_name = 'ApiDetails';
+      let detail_name = '';
       if (item.task_type === 'model') {
         detail_name = 'model';
       } else if (item.task_type === 'frame') {
@@ -177,6 +175,9 @@ export default {
         } else {
           detail_name = 'model';
         }
+      } else if (item.task_type === 'compile') {
+        // 不跳转
+        return
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');

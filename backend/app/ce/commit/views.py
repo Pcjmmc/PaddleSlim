@@ -98,11 +98,13 @@ class CommitDetailManage(MABaseView):
                 item["commit_id"] = build_info[tid].get("commit_id")
                 item["branch"] = build_info[tid].get("branch")
                 item["repo"] = build_info[tid].get("repo")
-            # 先获取到所有的seneces
+            # 先获取到所有的seneces,origin_scenes主要用来维持顺序
+            origin_scenes = [item for item in scenes_dict]
             scenes = set()
             for item in all_release_task:
                 scenes.add(item.get("task_type"))
             scenes = list(scenes)
+            scenes = [item for item in origin_scenes if item in scenes]
             commit_data = {sen: list() for sen in scenes if sen != "lite"}
             for item in temp_data:
                 sen = item["task_type"]
