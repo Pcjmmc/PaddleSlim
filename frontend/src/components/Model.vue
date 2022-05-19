@@ -66,7 +66,6 @@
           :model-name="item.model_name"
           :kpis="item.kpis"
           :status="item.status"
-          :base-url="getCaseLogUrl()"
         ></model-base>
       </div>
     </Card>
@@ -84,7 +83,6 @@
           :model-name="item.model_name"
           :kpis="item.kpis"
           :status="item.status"
-          :base-url="getCaseLogUrl()"
         ></model-base>
       </div>
     </Card>
@@ -158,15 +156,6 @@ export default {
       });
       return {'failedData': failedData,
               'succeedData': succeedData};
-    },
-    getTaskUrl() {
-      let uri = 'http://paddle-ce.bcc-bdbl.baidu.com:8111/viewLog.html?buildId=' + this.$route.query.build_real_id + '&buildTypeId=' + this.$route.query.build_type_id + '&tab=buildLog';
-      return uri;
-    },
-    getCaseLogUrl() {
-      let url = 'http://paddle-ce.bcc-bdbl.baidu.com:8111/repository/download/' + this.$route.query.build_type_id +  '/' + this.$route.query.build_real_id + ':id' + '/log/';
-      // console.log("url is", url)
-      return url;
     },
     changeTimestamp(timestamp, offset = 8) {
       if (timestamp) {

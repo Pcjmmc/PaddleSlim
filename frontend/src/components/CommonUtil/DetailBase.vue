@@ -22,12 +22,6 @@ export default {
       default: function () {
         return [];
       }
-    },
-    'baseUrl': {
-      type: [String],
-      default: function () {
-        return '';
-      }
     }
   },
   data: function () {
@@ -94,23 +88,23 @@ export default {
           title: '变化趋势',
           key: 'trend',
           align: 'center'
-        },
-        {
-          title: 'case日志',
-          key: 'log',
-          align: 'center',
-          minWidth: 200,
-          render: (h, params) => {
-            // console.log('baseulr', this.baseulr);
-            return h('div', [
-              h('a', {
-                attrs: {
-                  href: this.getCaseLogUrl(params.row.log_path)
-                }
-              }, this.getCaseLogUrl(params.row.log_path))
-            ]);
-          }
         }
+        // {
+        //   title: 'case日志',
+        //   key: 'log',
+        //   align: 'center',
+        //   minWidth: 200,
+        //   render: (h, params) => {
+        //     // console.log('baseulr', this.baseulr);
+        //     return h('div', [
+        //       h('a', {
+        //         attrs: {
+        //           href: this.getCaseLogUrl(params.row.log_path)
+        //         }
+        //       }, this.getCaseLogUrl(params.row.log_path))
+        //     ]);
+        //   }
+        // }
       ]
     };
   },
@@ -130,9 +124,6 @@ export default {
       }
       name.push(row.kpi_name);
       return name.join('_');
-    },
-    getCaseLogUrl(log_path) {
-      return this.baseUrl + log_path;
     }
   }
 };

@@ -78,7 +78,7 @@ class DetailManage(MABaseView):
                 model_name = item.get("model_name")
                 if model_name not in result:
                     result[model_name] = {"kpis": dict(), "status": "Passed"}
-                step_name = item.get("step_name")
+                step_name = item.get("step_name", "TRAIN")
                 if step_name not in result[model_name]["kpis"]:
                     result[model_name]["kpis"][step_name]= {"step_name": step_name, "status": "Passed", "data": list()}
                 result[model_name]["kpis"][step_name]["data"].append(item)
