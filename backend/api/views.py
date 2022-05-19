@@ -43,6 +43,11 @@ class CaseDetailView(MABaseView):
         duration: 任务执行时长
         case_detail: case的执行详情
         """
+        remote_ip = self.request.remote_ip
+        #print("remote_ip=", remote_ip)
+        #TODO 后续设计机器管理能力，统计支持CE/集测的资源情况
+        #特殊情况：1）PDC相关的可能需要加个字段区分出来PDC
+        #           2）复用研发CCE集群/windows集群的资源
         build_type_id = kwargs.get("build_type_id")
         build_id = kwargs.get("build_id")
         status = kwargs.get("status")
@@ -66,10 +71,6 @@ class CaseDetailView(MABaseView):
                 details = json.loads(kwargs.get("case_detail"))
             except:
                 details = []
-            #detail为0，case_deatail为None，即代表任务异常
-            if 0 == len(details):
-                #直接返回,case详情表和mongo均不需要入库
-                return 
             total = 0
             passed_num = 0
             #print("details=",deatails)
@@ -96,6 +97,7 @@ class CaseDetailView(MABaseView):
                        #await model_result.insert(item)
             failed_num = total - passed_num
             # case详细入库mysql 
+            #print("status=", status)
             await CeCases.create_or_update_build(tid, build_id, status, total, passed_num, failed_num, secondary_type)
             case_obj = await CeCases.aio_get_object(
                  **{"tid": tid, "build_id" : build_id}
