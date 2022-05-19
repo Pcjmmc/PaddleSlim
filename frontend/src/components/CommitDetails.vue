@@ -19,7 +19,7 @@
           class="center-card-s"
           v-if="commitData.length !== 0"
         >
-          <p align="center" style="font-size: 16px"> {{ this.selectCommit }} </p>
+          <p align="center" style="font-size: 16px"> {{ selectCommit }} </p>
           <div :key="index" v-for="(item, index) in commitData">
             <Divider orientation="left" style="font-size: 0.6em;font-style: italic;">{{item.scenes}}</Divider>
             <Table border
@@ -34,7 +34,7 @@
           class="center-card-s"
           v-else
         >
-          <p align="center" style="font-size: 16px">{{ this.selectCommit }} 暂无数据 </p>
+          <p align="center" style="font-size: 16px">{{ selectCommit }} 暂无数据 </p>
         </div>
       </Split>
     </div>
@@ -177,7 +177,7 @@ export default {
         }
       } else if (item.task_type === 'compile') {
         // 不跳转
-        return
+        return;
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');
