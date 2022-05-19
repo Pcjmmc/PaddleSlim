@@ -47,12 +47,6 @@ export default {
       default: function () {
         return '';
       }
-    },
-    'baseUrl': {
-      type: [String],
-      default: function () {
-        return '';
-      }
     }
   },
   data: function () {
@@ -65,8 +59,7 @@ export default {
             // console.log('params', this.modelName);
             return h(DetailBase, {
                 props: {
-                    kpis: params.row.data,
-                    baseUrl: this.baseUrl
+                    kpis: params.row.data
                 }
             });
           }
