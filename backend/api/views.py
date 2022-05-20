@@ -115,5 +115,6 @@ class CaseDetailView(MABaseView):
             #print("del ok")
             #tmp_mongo = await model_result.find_all()
             #print("tmp_mongo=",tmp_mongo)
-            await model_result.insert_many(details)
-            model_result.close() 
+            if details:
+                await model_result.insert_many(details)
+                model_result.close() 
