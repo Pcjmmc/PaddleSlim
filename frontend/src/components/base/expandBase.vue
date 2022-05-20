@@ -347,8 +347,10 @@ export default {
       // let _params = {};
       // _params = Object.assign(_params, item);
       // console.log('item', _params);
-      let detail_name = 'ApiDetails';
-      if (item.task_type === 'model') {
+      let detail_name = '';
+      if (item.reponame === 'Paddle2ONNX' || item.reponame === 'PaddleHub') {
+        detail_name = 'FuncDetail';
+      } else if (item.task_type === 'model') {
         detail_name = 'model';
       } else if (item.task_type === 'frame') {
         detail_name = 'FuncDetail';
@@ -363,6 +365,8 @@ export default {
           // console.log('model secondary_type', item.secondary_type);
           detail_name = 'model';
         }
+      } else {
+        return;
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');

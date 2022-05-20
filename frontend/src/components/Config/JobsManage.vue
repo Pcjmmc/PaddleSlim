@@ -288,7 +288,8 @@ export default {
         'PaddleSpeech',
         'PaddleRec',
         'PaddleSlim',
-        'PaddleHub'
+        'PaddleHub',
+        'Paddle2ONNX'
       ],
       systemList: [
         {
@@ -615,7 +616,8 @@ export default {
         appid: Cookies.get('appid')
       }
       if (params.secondary_type instanceof Array) {
-        params.secondary_type = params.secondary_type.join(',');
+        let tmp = params.secondary_type.filter(v => this.sendType2.includes(v));
+        params.secondary_type = tmp.join(',');
       }
       // 将数组用都好分割拼接
       // console.log('up data job params is', this.selectedRow.secondary_type);

@@ -214,11 +214,15 @@ export default {
       };
       // _params = Object.assign(_params, item);
       // console.log('item', item)
-      let detail_name = 'ApiDetails';
-      if (item.task_type === 'model') {
+      let detail_name = '';
+      if (item.reponame === 'Paddle2ONNX' || item.reponame === 'PaddleHub') {
+        detail_name = 'FuncDetail';
+      } else if (item.task_type === 'model') {
         detail_name = 'model';
       } else if (item.task_type === 'lite') {
         detail_name = 'lite';
+      } else {
+        return;
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');
