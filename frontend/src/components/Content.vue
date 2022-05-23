@@ -61,7 +61,7 @@
 <script>
 import Cookies from 'js-cookie';
 import api from '../api/index';
-import { ReleaseVersionUrl, BugUrl } from '../api/url.js';
+import { ReleaseVersionUrl, BugUrl, DevelopVersionUrl } from '../api/url.js';
 import BaseInfo from './BaseInfo.vue';
 import { dateFmt } from '../util/help.js';
 import Intergration from './Intergration.vue';
@@ -108,12 +108,25 @@ export default {
   methods: {
     async getData() {
       // 判断参数如果参数中有tag，则name=version；如果没有，则name=release+version
+      let tmpVersion = Cookies.get('version');
       let _params = {
-        'version':
-        this.versionName,
+        'version': tmpVersion,
         'appid': Cookies.get('appid')
       };
-      const {code, data, version} = await api.get(ReleaseVersionUrl, _params);
+      let code = null;
+      let data = null;
+      let version = null;
+      if (tmpVersion === 'develop') {
+        let res = await api.get(DevelopVersionUrl, _params);
+        code = res.code;
+        data = res.data;
+        version = res.version;
+      } else {
+        let res = await api.get(ReleaseVersionUrl, _params);
+        code = res.code;
+        data = res.data;
+        version = res.version;
+      }
       // 获取任务进展数据
       // 获取bug数据
       // console.log("code", code)

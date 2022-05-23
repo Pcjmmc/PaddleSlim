@@ -172,7 +172,7 @@ export default {
     async getData() {
       // 根据需求实时获取
       let params = {
-        'version': this.version,
+        'version': Cookies.get('version'),
         'task_type': this.childname,
         'appid': Cookies.get('appid')
       };

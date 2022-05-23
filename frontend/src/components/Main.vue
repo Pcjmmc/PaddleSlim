@@ -96,7 +96,7 @@ export default {
       userName: '',
       menuDesc: {},
       verisonList: [],
-      option: '',
+      option: Cookies.get('version'),
       currentPageMinHeight: '861px',
       currentPageMaxHeight: ''
     };
@@ -144,7 +144,6 @@ export default {
   methods: {
     handleClickTag (item) {
       this.option = item.desc;
-      Cookies.set('version', this.option);
       this.$store.commit('changeVersion', this.option);
     },
      handleClickUser (name) {
@@ -163,13 +162,16 @@ export default {
         appname: Cookies.get("appname")
       };
       const { code, data } = await api.get(MenuInfoUrl, params);
-      // console.log("menu data is", data);
       this.menuDesc = data;
       // 暂时定义menu
       this.verisonList = this.menuDesc["version"];
-      this.option = this.verisonList[0].desc;
-      Cookies.set('version', this.option);
-      this.$store.commit('changeVersion', this.option);
+      if (Cookies.get('version')) {
+        this.option = Cookies.get('version');
+      } else {
+        this.option = this.verisonList[0].desc;
+        Cookies.set('version', this.option);
+        this.$store.commit('changeVersion', this.option);
+      }
       this.$delete(this.menuDesc, 'version');
     }
   }

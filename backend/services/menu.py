@@ -33,6 +33,8 @@ async def update_menu(appid=1):
         menuDescContent.pop("version")
         # 初始化成空的状态
         menuDescContent["version"] = []
+        # 插入develop
+        menuDescContent["version"].append({'name': 'develop', 'desc': 'develop'})
     for item in menu_info:
         name = item.get("name")
         menuDescContent["version"].append({"name": name, "desc": name})

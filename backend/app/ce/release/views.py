@@ -259,138 +259,150 @@ class TaskManage(MABaseView):
         data = []
         if not version or not task_type:
             return 0, integration_data
-        res = await CeReleaseVersion().aio_get_object(**{"name": version})
-        if res:
+        if version == "develop":
+            version_id = None
+            branch = version
+            today = datetime.date.today()
+            today_time = int(time.mktime(today.timetuple()))
+            begin_time = today_time - 7 * 24 * 60 * 60
+            end_time = None
+            step = version
+        else:
+            res = await CeReleaseVersion().aio_get_object(**{"name": version})
             version_id = res.get("id")
-            # 根据release 的细腻来查询,改接口是负责release的，故step=release
-            all_release_task = await TasksInfo.get_all_task_info_by_filter(
-                step="release", task_type=task_type, appid=appid
-            )
-            # 查询到来全量任务
-            tids = [item.get("id") for item in all_release_task]
-            # 获取任务的最新状态
-            build_info = await TaskBuildInfo.get_task_latest_status_by_tids(
-                tids, res.get("branch"), res.get("begin_time"), end_time=res.get("end_time", None)
-            )
-            # 获取豁免状态
-            exempt_info = await ExemptInfo.get_task_exempt_status_by_tids(
-                tids, version_id
-            )
-            temp_data = [{
-                "tid": item["id"], 
-                "tname": item["tname"], 
-                "description": item["description"],
-                "system": item["system"],
-                "task_type": item["task_type"],
-                "secondary_type": item["secondary_type"],
-                "build_type_id": item["build_type_id"],
-                "platform": item["platform"],
-                "reponame": item["reponame"]} for item in all_release_task]
-            for item in temp_data:
-                tid = item["tid"]
-                task_type = item["task_type"]
-                platform = item["platform"]
-                # 这里要从任务信息里获取；暂时先写成这样
-                workspace = 'paddlepaddle-whl' if task_type == 'compile' else 'paddle-release'
-                if tid in build_info:
-                    item["status"] = build_info[tid].get("status")
-                    item["exit_code"] = build_info[tid].get("exit_code")
-                    item["left_time"] = build_info[tid].get("left_time")
-                    item["build_id"] = build_info[tid].get("build_id")
-                    item["job_id"] = build_info[tid].get("job_id")
-                    item["commit_id"] = build_info[tid].get("commit_id")
-                    item["branch"] = build_info[tid].get("branch")
-                    item["repo"] = build_info[tid].get("repo")
-                    item["artifact_url"] = build_info[tid].get("artifact_url")
-                    if platform == "xly":
-                        log_url = XLY_BASE_URL.format(
-                                workspace=workspace,
-                                build_id=item["build_id"],
-                                job_id=item['job_id']
-                            )  if item.get('job_id') else XLY_BASE_URL2.format(
-                                workspace=workspace,
-                                build_id=item["build_id"]
-                            )
-                    elif platform == 'teamcity':
-                        log_url = TC_BASE_URL.format(
+            branch = res.get("branch")
+            begin_time = res.get("begin_time")
+            end_time = res.get("end_time", None)
+            step = "release"
+        # 根据release 的细腻来查询,改接口是负责release的，故step=release
+        all_release_task = await TasksInfo.get_all_task_info_by_filter(
+            step=step, task_type=task_type, appid=appid
+        )
+        # 查询到来全量任务
+        tids = [item.get("id") for item in all_release_task]
+        # 获取任务的最新状态
+        build_info = await TaskBuildInfo.get_task_latest_status_by_tids(
+            tids, branch, begin_time, end_time=end_time
+        )
+        # 获取豁免状态
+        exempt_info = await ExemptInfo.get_task_exempt_status_by_tids(
+            tids, version_id
+        )
+        temp_data = [{
+            "tid": item["id"],
+            "tname": item["tname"],
+            "description": item["description"],
+            "system": item["system"],
+            "task_type": item["task_type"],
+            "secondary_type": item["secondary_type"],
+            "build_type_id": item["build_type_id"],
+            "platform": item["platform"],
+            "reponame": item["reponame"]} for item in all_release_task]
+        for item in temp_data:
+            tid = item["tid"]
+            task_type = item["task_type"]
+            platform = item["platform"]
+            # 这里要从任务信息里获取；暂时先写成这样
+            workspace = 'paddlepaddle-whl' if task_type == 'compile' else 'paddle-release'
+            if tid in build_info:
+                item["status"] = build_info[tid].get("status")
+                item["exit_code"] = build_info[tid].get("exit_code")
+                item["left_time"] = build_info[tid].get("left_time")
+                item["build_id"] = build_info[tid].get("build_id")
+                item["job_id"] = build_info[tid].get("job_id")
+                item["commit_id"] = build_info[tid].get("commit_id")
+                item["branch"] = build_info[tid].get("branch")
+                item["repo"] = build_info[tid].get("repo")
+                item["artifact_url"] = build_info[tid].get("artifact_url")
+                if platform == "xly":
+                    log_url = XLY_BASE_URL.format(
+                            workspace=workspace,
                             build_id=item["build_id"],
-                            build_type_id=item["build_type_id"]
+                            job_id=item['job_id']
+                        )  if item.get('job_id') else XLY_BASE_URL2.format(
+                            workspace=workspace,
+                            build_id=item["build_id"]
                         )
-                    else:
-                        log_url = ""
-                    item["log_url"] = log_url
+                elif platform == 'teamcity':
+                    log_url = TC_BASE_URL.format(
+                        build_id=item["build_id"],
+                        build_type_id=item["build_type_id"]
+                    )
                 else:
-                    item["status"] = "undone"
-                exempt_status = exempt_info.get(tid, {}).get("status", False)    
-                item["exempt_status"] = True if exempt_status else False
-            # 根据task_type来组装数据 todo
-            if task_type == "compile":
-                for item in temp_data:
-                    system = item["system"]
-                    if item.get("artifact_url"):
-                        try:
-                            artifact_url = json.loads(item.get("artifact_url", ""))
-                            artifact_url = [url for url in artifact_url if url.endswith(".whl")]
-                        except:
-                            artifact_url = []
-                        item["artifact_url"] = artifact_url[0] if artifact_url else ""
-                    if system not in integration_data:
-                        integration_data[system] = list()
-                    integration_data[system].append(item)
-                data = [{"system": k, "data": v} for k, v in integration_data.items()]
-            elif task_type == "model":
-                for item in temp_data:
-                    system = item["system"]
-                    reponame = item["reponame"]
-                    secondary_type = item["secondary_type"]
-                    try:
-                        secondary_type = secondary_type.split(",")
-                    except:
-                        secondary_type = [secondary_type]
-                    if system not in integration_data:
-                        integration_data[system] = dict()
-                    if reponame not in integration_data[system]:
-                        integration_data[system][reponame] = dict()
-                    for _type in secondary_type:
-                        if _type not in integration_data[system][reponame]:
-                            integration_data[system][reponame][_type] = list()
-                        # 根据二级分类更新下case成功失败数
-                        case_detail = await self.get_case_detail(item["tid"], item["build_id"], _type)
-                        # 保留任务的status
-                        job_status = item.get("status")
-                        # 用case的状态覆盖任务的状态
-                        item.update(case_detail)
-                        if not job_status or job_status == "undone": # 则保留任务原来的状态
-                            item["status"] = "undone"
-                        temp_item = copy.deepcopy(item)
-                        temp_item['secondary_type'] = _type
-                        integration_data[system][reponame][_type].append(temp_item)
-                data = [{"system": k, "data": v} for k, v in integration_data.items()]
+                    log_url = ""
+                item["log_url"] = log_url
             else:
-                for item in temp_data:
-                    system = item["system"]
-                    secondary_type = item["secondary_type"]
+                item["status"] = "undone"
+            exempt_status = exempt_info.get(tid, {}).get("status", False)    
+            item["exempt_status"] = True if exempt_status else False
+        # 根据task_type来组装数据 todo
+        if task_type == "compile":
+            for item in temp_data:
+                system = item["system"]
+                if item.get("artifact_url"):
                     try:
-                        secondary_type = secondary_type.split(",")
+                        artifact_url = json.loads(item.get("artifact_url", ""))
+                        artifact_url = [url for url in artifact_url if url.endswith(".whl")]
                     except:
-                        secondary_type = [secondary_type]
-                    if system not in integration_data:
-                        integration_data[system] = dict()
-                    for _type in secondary_type:
-                        if _type not in integration_data[system]:
-                            integration_data[system][_type] = list()
-                        # 根据二级分类更新下case成功失败数
-                        case_detail = await self.get_case_detail(item["tid"], item["build_id"], _type)
-                        # 保留任务的status
-                        job_status = item.get("status")
-                        # 用case的状态覆盖任务的状态
-                        item.update(case_detail)
-                        if not job_status or job_status == "undone": # 则保留任务原来的状态
-                            item["status"] = "undone"
-                        temp_item = copy.deepcopy(item)
-                        temp_item['secondary_type'] = _type
-                        integration_data[system][_type].append(temp_item)
-                data = [{"system": k, "data": v} for k, v in integration_data.items()]
+                        artifact_url = []
+                    item["artifact_url"] = artifact_url[0] if artifact_url else ""
+                if system not in integration_data:
+                    integration_data[system] = list()
+                integration_data[system].append(item)
+            data = [{"system": k, "data": v} for k, v in integration_data.items()]
+        elif task_type == "model":
+            for item in temp_data:
+                system = item["system"]
+                reponame = item["reponame"]
+                secondary_type = item["secondary_type"]
+                try:
+                    secondary_type = secondary_type.split(",")
+                except:
+                    secondary_type = [secondary_type]
+                if system not in integration_data:
+                    integration_data[system] = dict()
+                if reponame not in integration_data[system]:
+                    integration_data[system][reponame] = dict()
+                for _type in secondary_type:
+                    if _type not in integration_data[system][reponame]:
+                        integration_data[system][reponame][_type] = list()
+                    # 根据二级分类更新下case成功失败数
+                    case_detail = await self.get_case_detail(item["tid"], item["build_id"], _type)
+                    # 保留任务的status
+                    job_status = item.get("status")
+                    # 用case的状态覆盖任务的状态
+                    item.update(case_detail)
+                    if not job_status or job_status == "undone": # 则保留任务原来的状态
+                        item["status"] = "undone"
+                    temp_item = copy.deepcopy(item)
+                    temp_item['secondary_type'] = _type
+                    integration_data[system][reponame][_type].append(temp_item)
+            data = [{"system": k, "data": v} for k, v in integration_data.items()]
+        else:
+            for item in temp_data:
+                system = item["system"]
+                secondary_type = item["secondary_type"]
+                try:
+                    secondary_type = secondary_type.split(",")
+                except:
+                    secondary_type = [secondary_type]
+                if system not in integration_data:
+                    integration_data[system] = dict()
+                for _type in secondary_type:
+                    if _type not in integration_data[system]:
+                        integration_data[system][_type] = list()
+                    # 根据二级分类更新下case成功失败数
+                    case_detail = await self.get_case_detail(item["tid"], item["build_id"], _type)
+                    # 保留任务的status
+                    job_status = item.get("status")
+                    # 用case的状态覆盖任务的状态
+                    item.update(case_detail)
+                    if not job_status or job_status == "undone": # 则保留任务原来的状态
+                        item["status"] = "undone"
+                    temp_item = copy.deepcopy(item)
+                    temp_item['secondary_type'] = _type
+                    integration_data[system][_type].append(temp_item)
+            data = [{"system": k, "data": v} for k, v in integration_data.items()]
         return len(data), data
 
 

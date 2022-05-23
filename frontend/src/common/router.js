@@ -31,12 +31,12 @@ export const ROUTES = [
           component: CommitDetails
         },
         { // API 配置
-          path: '/paddle/release/:tag/:version',
+          path: '/paddle/integration/:tag/:version',
           name: 'Content',
           component: Content
         },
         { // API 配置
-          path: '/paddle/release/:version?',
+          path: '/paddle/integration/:version?',
           name: 'Content',
           component: Content
         },

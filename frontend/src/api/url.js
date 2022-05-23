@@ -7,6 +7,7 @@ export const loginUrl = '/ce/login/';
 export const logOutUrl = '/ce/logout/';
 export const MenuInfoUrl = '/ce/menu';
 export const ReleaseVersionUrl = '/ce/release';
+export const DevelopVersionUrl = '/ce/develop';
 export const ReleaseJobUrl = '/ce/task';
 export const ScenesUrl = '/ce/config/scenes';
 export const JobUrl = '/ce/job';

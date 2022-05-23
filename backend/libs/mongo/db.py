@@ -127,7 +127,7 @@ if __name__ == "__main__":
             "desc": "测试",
             "icon": "ios-bulb-outline"
         },
-        "release": {
+        "integration": {
             "desc": "集测",
             "icon": "ios-analytics"
         },
