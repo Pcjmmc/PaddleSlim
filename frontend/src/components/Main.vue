@@ -144,6 +144,7 @@ export default {
   methods: {
     handleClickTag (item) {
       this.option = item.desc;
+      Cookies.set('version', this.option);
       this.$store.commit('changeVersion', this.option);
     },
      handleClickUser (name) {
