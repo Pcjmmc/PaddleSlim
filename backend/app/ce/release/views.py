@@ -377,7 +377,7 @@ class TaskManage(MABaseView):
                     temp_item = copy.deepcopy(item)
                     temp_item['secondary_type'] = _type
                     integration_data[system][reponame][_type].append(temp_item)
-            data = [{"system": k, "data": v} for k, v in integration_data.items()]
+            data = [{"system": k, "data": dict(sorted(v.items(), key=lambda item:item[0]))} for k, v in integration_data.items()]
         else:
             for item in temp_data:
                 system = item["system"]

@@ -16,8 +16,7 @@ secondary_type = {
         "预测-Linux",
         "预测-Linux-Jetson",
         "预测-Mac",
-        "XPU + ARM",
-        "XPU-X86",
+        "XPU2",
         "ROCM"
     ],
     "frame": [

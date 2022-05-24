@@ -125,10 +125,14 @@
               </span>
             </Tooltip>
           </Col>
-          <Col :xs="{ span: 6 }">
+          <Col :xs="{ span: 2 }">
             <span v-if="child.total > 0" style="color:green;font-size:13px;"> {{ child.total }} </span>
             <span v-else style="color:red;font-size:13px;"> {{ child.total }} </span>
+          </Col>
+          <Col :xs="{ span: 1 }">
             <span> | </span>
+          </Col>
+          <Col :xs="{ span: 2 }">
             <span
               style="color:red;font-size:13px;"
               v-if="child.failed_num > 0 || child.total == 0"

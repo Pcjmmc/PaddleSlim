@@ -119,7 +119,7 @@
           </div>
         </div>
       </Col>
-      <Col :xs="{ span: 0.5 }" align="center">
+      <Col :xs="{ span: 1 }" align="center">
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <div v-for="(child, idx) in item">
             <span v-if="child.total > 0" style="color:green;"> {{ child.total }} </span>
@@ -134,7 +134,7 @@
           </div>
         </div>
       </Col>
-      <Col :xs="{ span: 0.5 }" align="center">
+      <Col :xs="{ span: 1 }" align="center">
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <div v-for="(child, idx) in item">
             <span style="color:red;" v-if="child.failed_num > 0 || child.total == 0"> {{ child.failed_num }} </span>
