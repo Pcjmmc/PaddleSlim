@@ -337,6 +337,10 @@ export default {
           'desc': 'Linux_Cpu'
         },
         {
+          'key': 'Linux_ROCM',
+          'desc': 'Linux_ROCM'
+        },
+        {
           'key': 'Mac',
           'desc': 'Mac'
         },
