@@ -119,16 +119,26 @@
           </div>
         </div>
       </Col>
-      <Col :xs="{ span: 1.5, offset: 1 }">
+      <Col :xs="{ span: 0.5 }" align="center">
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <div v-for="(child, idx) in item">
-            <span style="float:right;">
-              <span v-if="child.total > 0" style="color:green;"> {{ child.total }} </span>
-              <span v-else style="color:red;"> {{ child.total }} </span>
-              <span> | </span>
-              <span style="color:red;" v-if="child.failed_num > 0 || child.total == 0"> {{ child.failed_num }} </span>
-              <span style="color:green;" v-else> {{ child.failed_num }} </span>
-            </span>
+            <span v-if="child.total > 0" style="color:green;"> {{ child.total }} </span>
+            <span v-else style="color:red;"> {{ child.total }} </span>
+          </div>
+        </div>
+      </Col>
+      <Col :xs="{ span: 0.5 }" align="center">
+        <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
+          <div v-for="(child, idx) in item">
+            <span> | </span>
+          </div>
+        </div>
+      </Col>
+      <Col :xs="{ span: 0.5 }" align="center">
+        <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
+          <div v-for="(child, idx) in item">
+            <span style="color:red;" v-if="child.failed_num > 0 || child.total == 0"> {{ child.failed_num }} </span>
+            <span style="color:green;" v-else> {{ child.failed_num }} </span>
           </div>
         </div>
       </Col>

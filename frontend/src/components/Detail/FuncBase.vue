@@ -3,6 +3,12 @@
       <Card :bordered="false">
         <p
           slot="title"
+          style="text-align: left;font-size: 1.3em;"
+        >
+          commit: {{ $route.query.commit_id }}
+        </p>
+        <p
+          slot="title"
           style="text-align: left;font-size: 1.3em;color: red"
           v-if="$route.query.status.toLowerCase()=='failed'"
         >

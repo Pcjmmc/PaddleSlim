@@ -36,16 +36,23 @@ class CommitsManage(MABaseView):
         version = kwargs.get("version")
         page = kwargs.get("page", 1)
         per_page = kwargs.get("pagesize", 30)
-        # 分页获取
-        res = await CeReleaseVersion().aio_get_object(**{"name": version})
-        if res:
-            if res.activated:
-                sha = res.branch
-            else:
-                sha = res.end_commit
+        # develop的特殊处理
+        if version == "develop":
+            sha = version
             commits = await GetCommits(
                 {'page': page, "per_page": per_page, "sha": sha}
-            ).get_commit_list()
+            ).get_commit_list() 
+        else:
+            # 分页获取
+            res = await CeReleaseVersion().aio_get_object(**{"name": version})
+            if res:
+                if res.activated:
+                    sha = res.branch
+                else:
+                    sha = res.end_commit
+                commits = await GetCommits(
+                    {'page': page, "per_page": per_page, "sha": sha}
+                ).get_commit_list()
 
         return len(commits), commits
 
@@ -66,10 +73,10 @@ class CommitDetailManage(MABaseView):
         commit = kwargs.get("commit")
         version = kwargs.get("version")
         if commit and version:
-            if version.startswith("develop"):
-                step = "develop"
-            else:
+            if version.startswith("release"):
                 step = "release"
+            else:
+                step = version
             # 根据release 的细腻来查询,改接口是负责release的，故step=release
             all_release_task = await TasksInfo.get_all_task_info_by_filter(
                 step=step
