@@ -98,7 +98,7 @@ class CaseDetailView(MABaseView):
                 "passed_case": passed_num,
                 "failed_case": failed_num
             }
-            task_data = validated_data.copy()
+            task_data = kwargs.copy()
             task_data.update(case_info)
             #build信息入库
             await CeTaskBuilds.create_or_update_build(
