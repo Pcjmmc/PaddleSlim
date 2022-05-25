@@ -35,6 +35,9 @@ class CeTaskBuilds(BaseModel, BaseModelMixin):
     duration = Column(Integer, comment="任务本次的执行时长，单位秒") # 执行时长，单位秒
     created = Column(Integer, comment="任务本次构建的开始时间，单位秒") # 开始构建的时间
     updated = Column(Integer, comment="本条记录的修改时间，单位秒") # 本记录的更新时间
+    total_case = Column(Integer, comment="任务执行的总case数")
+    passed_case = Column(Integer, comment="任务成功的case数")
+    failed_case = Column(Integer, comment="任务失败的case数")
 
     class Meta:
         """
@@ -64,5 +67,8 @@ class CeTaskBuilds(BaseModel, BaseModelMixin):
             "created": validated_data.get("created"),
             "duration": validated_data.get("duration"),
             "status": validated_data.get("status"),
-             "exit_code": validated_data.get("exit_code")
+            "exit_code": validated_data.get("exit_code"),
+            "total_case": validated_data.get("total_case"),
+            "passed_case": validated_data.get("passed_case"),
+            "failed_case": validated_data.get("failed_case")
             })
