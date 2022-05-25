@@ -134,7 +134,7 @@ export default {
   },
   computed: {
     version: {
-      get () {
+      get() {
         return this.$store.state.version;
       }
     }
