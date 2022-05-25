@@ -4,7 +4,7 @@
       <Split v-model="split1">
         <div slot="left" class="center-card-s">
           <div style="margin-bottom: 10px;">
-            <p>{{ queryParams.version }} commit列表 </p>
+            <p>{{ version }} commit列表 </p>
           </div>
           <div>
             <Timeline>
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import api from '../api/index';
 import {CommitsUrl, CommitDetailUrl} from '../api/url.js';
 import IntegrationTest from './IntegrationTest.vue';
@@ -88,19 +89,27 @@ export default {
           }
         }
       ],
-      queryParams: {},
       commitList: [],
       split1: 0.3,
       commitData: [],
       selectCommit: ''
     };
   },
+  watch: {
+    version: function () {
+      this.getData();
+    }
+  },
   mounted: function () {
-    this.queryParams = this.$route.query;
     // console.log('this query params', this.queryParams);
     this.getData();
   },
   computed: {
+    version: {
+      get () {
+        return this.$store.state.version;
+      }
+    }
   },
   components: {
     IntegrationTest
@@ -108,7 +117,7 @@ export default {
   methods: {
     async getData() {
       let params = {
-        version: this.queryParams.version,
+        version: Cookies.get('version'),
         page: this.search.page,
         pagesize: this.search.pagesize
       }
@@ -132,7 +141,7 @@ export default {
     },
     async getCommitDetail() {
       let params = {
-        version: this.queryParams.version,
+        version: Cookies.get('version'),
         commit: this.selectCommit
       }
       const {code, data, msg} = await api.get(CommitDetailUrl, params);
@@ -159,10 +168,13 @@ export default {
         repo: item.repo,
         branch: item.branch,
         commit_id: item.commit_id,
-        tname: item.tname
+        tname: item.tname,
+        reponame: item.reponame
       };
       let detail_name = '';
-      if (item.task_type === 'model') {
+      if (item.reponame === 'Paddle2ONNX' || item.reponame === 'PaddleHub') {
+        detail_name = 'FuncDetail';
+      } else if (item.task_type === 'model') {
         detail_name = 'model';
       } else if (item.task_type === 'frame') {
         detail_name = 'FuncDetail';

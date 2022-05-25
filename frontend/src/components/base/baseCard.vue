@@ -188,7 +188,8 @@ export default {
         repo: item.repo,
         branch: item.branch,
         commit_id: item.commit_id,
-        tname: item.tname
+        tname: item.tname,
+        reponame: item.reponame
       };
       // _params = Object.assign(_params, item);
       let detail_name = '';

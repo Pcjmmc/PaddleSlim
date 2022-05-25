@@ -70,7 +70,7 @@ export default {
         version: name
       }
       // 根据branch获取commit列表
-      const { href } = this.$router.resolve({name: 'CommitDetails', query: _params})
+      const { href } = this.$router.resolve({name: 'CommitDetails'})
       window.open(href, '_blank');
     },
     jumperPaddle(branch) {

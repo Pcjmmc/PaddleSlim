@@ -49,11 +49,19 @@ class ReleaseVersionManage(MABaseView):
             return 0, release_info
         res = await CeReleaseVersion().aio_get_object(**{"name": version})
         if res:
+            if res.activated:
+                branch_info = await GetBranches().get_commit_info_by_branch(
+                    **{'branch': version}
+                )
+                latest_commit = branch_info.get("commit")
+            else:
+                # 如果是已发版的，则直接从库里拿到封版的commit
+                latest_commit = res.end_commit
             release_info["repo_info"] = {
                 "name": res.name,
                 "version_id": res.id,
                 "branch": res.branch,
-                "commit": res.begin_commit,
+                "commit": latest_commit,
                 "tag": res.tag
             }
             version_id = res.get("id")

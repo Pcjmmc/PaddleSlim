@@ -34,7 +34,8 @@ export default {
         'tid': this.$route.query.tid,
         'build_id': this.$route.query.build_id,
         'task_type': this.$route.query.task_type,
-        'secondary_type': this.$route.query.secondary_type
+        'secondary_type': this.$route.query.secondary_type,
+        'reponame': this.$route.query.reponame
       };
       // 自己知道自己值传递了一个secondary_type
       const { code, data, message } = await api.get(DetailUrl, _params);

@@ -39,11 +39,11 @@ class DevelopVersionManage(MABaseView):
         branch_info = await GetBranches().get_commit_info_by_branch(
             **{'branch': version}
         )
-        begin_commit = branch_info.get("commit")
+        latest_commit = branch_info.get("commit")
         release_info["repo_info"] = {
             "name": version,
             "branch": version,
-            "commit": begin_commit
+            "commit": latest_commit
         }
         all_release_task = await TasksInfo.get_all_task_info_by_filter(
             step="develop", appid=appid)

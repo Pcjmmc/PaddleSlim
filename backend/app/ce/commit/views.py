@@ -96,6 +96,7 @@ class CommitDetailManage(MABaseView):
                 "description": item["description"],
                 "system": item["system"],
                 "secondary_type": item["secondary_type"],
+                "reponame": item.get("reponame"),
                 "task_type": item["task_type"]} for item in all_release_task]
             for item in temp_data:
                 tid = item["tid"]

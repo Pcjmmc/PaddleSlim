@@ -33,18 +33,19 @@ class DetailManage(MABaseView):
         build_id = kwargs.get("build_id")
         task_type = kwargs.get("task_type")
         secondary_type = kwargs.get("secondary_type")
+        reponame = kwargs.get("reponame")
         secondary_type = secondary_type.split(",")
         for sed_type in secondary_type:
             if sed_type not in result:
                 result[sed_type] = {"summary_data": [], "case_detail": None}
             summary_data, res = await self.get_single_data(
-                tid, build_id, task_type, sed_type
+                tid, build_id, task_type, sed_type, reponame
             )
             result[sed_type]["summary_data"] = [summary_data]
             result[sed_type]["case_detail"] = res
         return len(result), result
 
-    async def get_single_data(self, tid, build_id, task_type, secondary_type):
+    async def get_single_data(self, tid, build_id, task_type, secondary_type, reponame=None):
         """
         根据查询条件：
         任务类型（task_type）， 
@@ -69,7 +70,7 @@ class DetailManage(MABaseView):
         label_id = case_obj.id
         table_name = table_prefix.format(task_id=tid, build_id=build_id, label_id=label_id)
         model_result = Mongo("paddle_quality", table_name)
-        if self.check_model_tag(task_type, secondary_type):
+        if self.check_model_tag(task_type, secondary_type, reponame=reponame):
             details = await model_result.find_all()
             self.pop_object_id(details)
             result = dict()
@@ -98,8 +99,8 @@ class DetailManage(MABaseView):
         model_result.close()
         return summary_data, details
 
-    def check_model_tag(self, task_type, secondary_type):
-        if task_type == "model":
+    def check_model_tag(self, task_type, secondary_type, reponame=None):
+        if task_type == "model" and reponame not in ["PaddleHub", "Paddle2ONNX"]:
             return True
         elif task_type == "dist" and "api" not in secondary_type.lower():
             return True
