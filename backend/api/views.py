@@ -63,10 +63,6 @@ class CaseDetailView(MABaseView):
             tid = task_obj.id
             task_type = task_obj.task_type
             secondary_type = task_obj.secondary_type
-            # build 入库逻辑
-            await CeTaskBuilds.create_or_update_build(
-                tid, build_id, validated_data=kwargs
-            )
             try:
                 details = json.loads(kwargs.get("case_detail"))
             except:
@@ -96,8 +92,19 @@ class CaseDetailView(MABaseView):
                        #改为统一入库，一次插入
                        #await model_result.insert(item)
             failed_num = total - passed_num
+            #增加task_build级别case数量信息
+            case_info = { 
+                "total_case": total,
+                "passed_case": passed_num,
+                "failed_case": failed_num
+            }
+            task_data = kwargs.copy()
+            task_data.update(case_info)
+            #build信息入库
+            await CeTaskBuilds.create_or_update_build(
+                tid, build_id, validated_data=task_data
+            )
             # case详细入库mysql 
-            #print("status=", status)
             await CeCases.create_or_update_build(tid, build_id, status, total, passed_num, failed_num, secondary_type)
             case_obj = await CeCases.aio_get_object(
                  **{"tid": tid, "build_id" : build_id}
