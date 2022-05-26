@@ -1,3 +1,7 @@
+# !/usr/bin/env python3
+"""
+主要负责汇聚进展
+"""
 # encoding=utf-8
 import time
 from ce_web.settings.scenes import scenes_dict
@@ -5,6 +9,9 @@ from ce_web.settings.scenes import scenes_dict
 class Summary(object):
     @classmethod
     def get_summary(cls, temp_data):
+        """
+        根据数据汇聚成想要的格式
+        """
         init_sumary = {k: {
             "task_type": v,
             "status": "Passed",

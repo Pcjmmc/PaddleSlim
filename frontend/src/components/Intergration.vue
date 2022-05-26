@@ -74,7 +74,7 @@ import BugFix from './BugFix.vue';
 import ApiCoverage from './ApiCoverage.vue';
 import BaseInfo from './BaseInfo.vue';
 import CircleBase from './CommonUtil/CircleBase.vue';
-import CaseBase from './CommonUtil/CaseBase.vue'
+import CaseBase from './CommonUtil/CaseBase.vue';
 
 export default {
   props: {
@@ -116,7 +116,7 @@ export default {
             style: {
               fontSize: '14px'
             }
-          }, params.row.task_type)
+          }, params.row.task_type);
         }
       },
       {
@@ -124,7 +124,7 @@ export default {
         key: 'status',
         align: 'center',
         render: (h, params) => {
-          let ret = []
+          let ret = [];
           if (params.row.status.toLowerCase() === 'passed') {
             ret.push(
               h('Icon', {
@@ -135,7 +135,7 @@ export default {
                   }
                 }
               )
-            )
+            );
           } else if (params.row.status.toLowerCase() === 'failed') {
             ret.push(
               h('Icon', {
@@ -146,7 +146,7 @@ export default {
                   }
                 }
               )
-            )
+            );
           } else {
             ret.push(
               h(CircleBase, {
@@ -158,9 +158,9 @@ export default {
                   }
                 }
               )
-            )
+            );
           }
-        return h('div', ret)
+        return h('div', ret);
         }
       },
       {
@@ -176,7 +176,7 @@ export default {
             style: {
               fontSize: '14px'
             }
-          })
+          });
         }
       }
       // {
@@ -241,8 +241,7 @@ export default {
     BaseInfo,
     ApiCoverage,
     BugFix,
-    IntegrationTest,
-    CircleBase
+    IntegrationTest
   },
   computed: {
     version: {
