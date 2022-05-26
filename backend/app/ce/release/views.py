@@ -15,6 +15,7 @@ from models.release_version import CeReleaseVersion
 from models.steps import CeSteps
 from rpc.github import GetBranches, GetCommit, GetTags
 from services.menu import update_menu
+from services.summary import Summary
 from services.tasks import ExemptInfo, TaskBuildInfo, TasksInfo
 from utils.change_time import stmp_by_date
 
@@ -41,8 +42,8 @@ class ReleaseVersionManage(MABaseView):
         
         release_info = {
             "repo_info": {},
-            "process_data": {}
-        }
+            "process_data": {},
+            "summary": []}
         percent = 0
         total = 0
         if not version:
@@ -100,18 +101,24 @@ class ReleaseVersionManage(MABaseView):
                 tid = item["tid"]
                 if tid in build_info:
                     item["status"] = build_info[tid].get("status")
+                    item["total_case"] = build_info[tid].get("total_case") or 0 
+                    item["failed_case"] = build_info[tid].get("failed_case") or 0
                 else:
                     item["status"] = "undone"
-                exempt_status = exempt_info.get(tid, {}).get("status", False)    
+                    item["total_case"] = 0
+                    item["failed_case"] = 0
+                exempt_status = exempt_info.get(tid, {}).get("status", False)
                 item["exempt_status"] = True if exempt_status else False
                 if item["exempt_status"] or item["status"] == "Passed":
                     # 如果成功或者豁免就记录进入进度
                     percent += 1
             # 封装process_data
-            percent = '%.2f' % ((percent/total)*100)
+            percent = '%.2f' % ((percent / total) * 100)
             release_info["process_data"].update(
                 {"total": total, "percent": float(percent)}
             )
+            summary = Summary.get_summary(temp_data)
+            release_info["summary"] = summary
         return 0, release_info
 
 
@@ -288,7 +295,7 @@ class TaskManage(MABaseView):
         )
         # 查询到来全量任务
         tids = [item.get("id") for item in all_release_task]
-        # 获取任务的最新状态
+        # 如果是已封板的话; branch就会变成tag；则还算集测吗？？？tag都打了，应该不算
         build_info = await TaskBuildInfo.get_task_latest_status_by_tids(
             tids, branch, begin_time, end_time=end_time
         )

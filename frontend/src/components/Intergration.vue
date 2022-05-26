@@ -24,7 +24,7 @@
               align=center
               border
               :columns="columns"
-              :data="taskTypeList"
+              :data="summary"
               style="margin-left: 2%;margin-right: 2%;"
             >
             </Table>
@@ -73,6 +73,8 @@ import IntegrationTest from './IntegrationTest.vue';
 import BugFix from './BugFix.vue';
 import ApiCoverage from './ApiCoverage.vue';
 import BaseInfo from './BaseInfo.vue';
+import CircleBase from './CommonUtil/CircleBase.vue';
+import CaseBase from './CommonUtil/CaseBase.vue'
 
 export default {
   props: {
@@ -89,6 +91,12 @@ export default {
     processdata: {
       type: Object,
       default: null
+    },
+    summary: {
+      type: [Array],
+      default: function () {
+        return [];
+      }
     }
   },
   data: function () {
@@ -100,20 +108,123 @@ export default {
       integrationdata: [],
       columns: [
       {
-        title: '分类',
-        key: 'desc',
-        align: 'center'
+        title: '阶段',
+        key: 'task_type',
+        align: 'center',
+        render: (h, params) => {
+          return h('div', {
+            style: {
+              fontSize: '14px'
+            }
+          }, params.row.task_type)
+        }
       },
       {
         title: '状态',
         key: 'status',
-        align: 'center'
+        align: 'center',
+        render: (h, params) => {
+          let ret = []
+          if (params.row.status.toLowerCase() === 'passed') {
+            ret.push(
+              h('Icon', {
+                  props: {
+                    type: 'md-checkmark-circle',
+                    color: 'green',
+                    size: '35'
+                  }
+                }
+              )
+            )
+          } else if (params.row.status.toLowerCase() === 'failed') {
+            ret.push(
+              h('Icon', {
+                  props: {
+                    type: 'md-close-circle',
+                    color: 'red',
+                    size: '35'
+                  }
+                }
+              )
+            )
+          } else {
+            ret.push(
+              h(CircleBase, {
+                  props: {
+                    percent: params.row.percent
+                  },
+                  style: {
+                    fontSize: '12px'
+                  }
+                }
+              )
+            )
+          }
+        return h('div', ret)
+        }
       },
       {
-        title: '运行用例数',
-        key: 'case',
-        align: 'center'
+       title: '运行用例数',
+       key: 'case',
+       align: 'center',
+        render: (h, params) => {
+          return h(CaseBase, {
+            props: {
+              total: params.row.total,
+              failed: params.row.failed
+            },
+            style: {
+              fontSize: '14px'
+            }
+          })
+        }
       }
+      // {
+      //   title: '运行用例数',
+      //   key: 'case',
+      //   align: 'center',
+      //   render: (h, params) => {
+      //     let ret = []
+      //     ret.push(
+      //       h(
+      //         'span',
+      //         {
+      //           style: {
+      //             marginRight: '5px',
+      //             marginBottom: '3px',
+      //             width: '50px',
+      //             color: params.row.failed ? 'red' : 'green',
+      //             fontSize: '14px'
+      //           }
+      //         }, params.row.total)
+      //     )
+      //     ret.push(
+      //       h(
+      //         'span',
+      //         {
+      //           style: {
+      //             marginRight: '5px',
+      //             marginBottom: '3px',
+      //             width: '50px'
+      //           }
+      //         }, '|')
+      //     )
+      //     ret.push(
+      //       h(
+      //         'span',
+      //         {
+      //           style: {
+      //             marginRight: '5px',
+      //             marginBottom: '3px',
+      //             width: '50px',
+      //             color: params.row.failed ? 'red' : 'green',
+      //             fontSize: '14px'
+      //           }
+      //         }, params.row.failed)
+      //     )
+      //     return h('div', ret)
+      //   }
+      // }
     ]
     };
   },
@@ -130,7 +241,8 @@ export default {
     BaseInfo,
     ApiCoverage,
     BugFix,
-    IntegrationTest
+    IntegrationTest,
+    CircleBase
   },
   computed: {
     version: {

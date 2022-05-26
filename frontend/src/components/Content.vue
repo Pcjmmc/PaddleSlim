@@ -30,6 +30,7 @@
         :repoinfo="repoinfo"
         :bugdata="bugdata"
         :processdata="processdata"
+        :summary="summary"
       >
       </intergration>
     </div>
@@ -77,6 +78,7 @@ export default {
       },
       repoinfo: {},
       processdata: {},
+      summary: [],
       allSteps: {},
       // integrationdata: {
       //   data: []
@@ -136,6 +138,7 @@ export default {
         this.tagForm.branch = this.repoinfo.branch;
         // this.integrationdata = data.integration_data;
         this.processdata = data.process_data;
+        this.summary = data.summary;
       } else {
         this.repoinfo = {};
         // this.allSteps = {};

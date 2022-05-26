@@ -12,6 +12,7 @@ from ce_web.settings.common import (
 from models.release_version import CeReleaseVersion
 from models.steps import CeSteps
 from rpc.github import GetBranches, GetCommit, GetTags
+from services.summary import Summary
 from services.tasks import TaskBuildInfo, TasksInfo
 
 from views.base_view import MABaseView
@@ -29,7 +30,7 @@ class DevelopVersionManage(MABaseView):
         # 根据查询需求将版本的相关信息以及steps信息返回到前端
         version = kwargs.get("version")
         appid = kwargs.get("appid", 1)
-        release_info = {"repo_info": {}, "process_data": {}}
+        release_info = {"repo_info": {}, "process_data": {}, "summary": []}
         percent = 0
         total = 0
         if not version:
@@ -68,8 +69,12 @@ class DevelopVersionManage(MABaseView):
             tid = item["tid"]
             if tid in build_info:
                 item["status"] = build_info[tid].get("status")
+                item["total_case"] = build_info[tid].get("total_case") or 0 
+                item["failed_case"] = build_info[tid].get("failed_case") or 0
             else:
                 item["status"] = "undone"
+                item["total_case"] = 0
+                item["failed_case"] = 0
             if item["status"] == "Passed":
                 # 如果成功或者豁免就记录进入进度
                 percent += 1
@@ -79,6 +84,8 @@ class DevelopVersionManage(MABaseView):
             "total": total,
             "percent": float(percent)
         })
+        summary = Summary.get_summary(temp_data)
+        release_info["summary"] = summary
         return 0, release_info
 
     async def post(self, **kwargs):

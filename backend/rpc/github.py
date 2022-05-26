@@ -147,8 +147,9 @@ if __name__ == "__main__":
     print("tag  latest commit info  is", commit_info)
     begin_time = str(commit_info['date'])
     begin_time = stmp_by_date(begin_time, fmt="%Y-%m-%dT%H:%M:%SZ")
+    # 时间戳+8
+    begin_time = begin_time + 28800
     print(begin_time)
     # git_branches = loop.run_until_complete(GetBranches().get_commit_info_by_branch(**{"branch": "release/2.2"}))
     # commits = loop.run_until_complete(GetCommits({'page': 1, "per_page": 3, "sha": "release/2.2"}).get_commit_list())
     # print("branches  latest commit info is", commits)
-       
