@@ -134,8 +134,16 @@
         <FormItem label="任务唯一id: " prop="build_type_id">
           <Input v-model="addForm.build_type_id" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
         </FormItem>
-        <FormItem label="任务空间（xly）: " prop="workspace" v-if="addForm.step != 'compile'">
-          <Input v-model="addForm.workspace" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
+        <FormItem
+          label="任务空间（xly）: "
+          prop="workspace"
+          v-if="addForm.step != 'compile'"
+        >
+          <Input
+            v-model="addForm.workspace"
+            type="textarea"
+            :autosize="{minRows: 2,maxRows: 20}"
+          ></Input>
         </FormItem>
         <FormItem label="任务负责人: " prop="owner">
           <Input v-model="addForm.owner" />
@@ -228,7 +236,11 @@
           <Input v-model="selectedRow.build_type_id" type="textarea" :autosize="{minRows: 2,maxRows: 20}" disabled/>
         </FormItem>
         <FormItem label="任务空间（xly）: " prop="workspace">
-          <Input v-model="selectedRow.workspace" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
+          <Input
+          v-model="selectedRow.workspace"
+          type="textarea"
+          :autosize="{minRows: 2,maxRows: 20}"
+          ></Input>
         </FormItem>
         <FormItem label="任务负责人: " prop="owner">
           <Input v-model="selectedRow.owner" />
