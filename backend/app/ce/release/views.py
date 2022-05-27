@@ -312,13 +312,15 @@ class TaskManage(MABaseView):
             "secondary_type": item["secondary_type"],
             "build_type_id": item["build_type_id"],
             "platform": item["platform"],
+            "workspace": item["workspace"],
             "reponame": item["reponame"]} for item in all_release_task]
         for item in temp_data:
             tid = item["tid"]
             task_type = item["task_type"]
             platform = item["platform"]
-            # 这里要从任务信息里获取；暂时先写成这样
-            workspace = 'paddlepaddle-whl' if task_type == 'compile' else 'paddle-release'
+            workspace = item["workspace"]
+            # # 这里要从任务信息里获取；暂时先写成这样
+            # workspace = 'paddlepaddle-whl' if task_type == 'compile' else 'paddle-release'
             if tid in build_info:
                 item["status"] = build_info[tid].get("status")
                 item["exit_code"] = build_info[tid].get("exit_code")

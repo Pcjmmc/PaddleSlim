@@ -134,8 +134,8 @@
         <FormItem label="任务唯一id: " prop="build_type_id">
           <Input v-model="addForm.build_type_id" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
         </FormItem>
-        <FormItem label="依赖任务唯一id: " prop="dependencies" v-if="addForm.step != 'compile'">
-          <Input v-model="addForm.dependencies" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
+        <FormItem label="任务空间（xly）: " prop="workspace" v-if="addForm.step != 'compile'">
+          <Input v-model="addForm.workspace" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
         </FormItem>
         <FormItem label="任务负责人: " prop="owner">
           <Input v-model="addForm.owner" />
@@ -227,8 +227,8 @@
         <FormItem label="任务唯一id: " prop="build_type_id">
           <Input v-model="selectedRow.build_type_id" type="textarea" :autosize="{minRows: 2,maxRows: 20}" disabled/>
         </FormItem>
-        <FormItem label="依赖任务唯一id: " prop="dependencies">
-          <Input v-model="selectedRow.dependencies" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
+        <FormItem label="任务空间（xly）: " prop="workspace">
+          <Input v-model="selectedRow.workspace" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
         </FormItem>
         <FormItem label="任务负责人: " prop="owner">
           <Input v-model="selectedRow.owner" />
@@ -395,7 +395,7 @@ export default {
         'system': '',
         'task_type': '',
         'secondary_type': null,
-        'dependencies': '',
+        'workspace': '',
         'description': '',
         'step': '',
         'reponame': ''
@@ -473,8 +473,8 @@ export default {
           key: 'build_type_id'
         },
         {
-          title: '任务依赖',
-          key: 'dependencies'
+          title: '任务空间',
+          key: 'workspace'
         },
         {
           title: '操作',
@@ -608,7 +608,7 @@ export default {
       let params = {
         id: this.selectedRow.id,
         build_type_id: this.selectedRow.build_type_id,
-        dependencies: this.selectedRow.dependencies,
+        workspace: this.selectedRow.workspace,
         description: this.selectedRow.description,
         owner: this.selectedRow.owner,
         step: this.selectedRow.step,
