@@ -72,7 +72,7 @@ system_list = {
     'compile': [
         'Linux_Gpu_Cuda10.2', 'Linux_Gpu_Cuda11.0',
         'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1',
-        'Linux_Gpu_Cuda11.2','Linux_Gpu_Cuda11.3',
+        'Linux_Gpu_Cuda11.2', 'Linux_Gpu_Cuda11.3',
         'Linux_Gpu(T4)_Cuda10.2', 'Linux_Gpu(T4)_Cuda11.1',
         'Linux_Gpu(T4)_Cuda11.2', 'Linux-Jetpack', 'Xpu',
         'Linux_ROCM', 'Linux_Cpu', 'Windows_GPU_2080',
@@ -80,7 +80,7 @@ system_list = {
     'model': [
         'Linux_Gpu_Cuda10.2', 'Linux_Gpu_Cuda11.0',
         'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1',
-        'Linux_Gpu_Cuda11.2','Linux_Gpu_Cuda11.3',
+        'Linux_Gpu_Cuda11.2', 'Linux_Gpu_Cuda11.3',
         'Linux_Gpu(T4)_Cuda10.2', 'Linux_Gpu(T4)_Cuda11.1',
         'Linux_Gpu(T4)_Cuda11.2', 'Linux-Jetpack', 'Xpu',
         'Linux_ROCM', 'Linux_Cpu', 'Windows_GPU_2080',
@@ -89,7 +89,7 @@ system_list = {
     'dist': [
         'Linux_Gpu_Cuda11.0', 'Linux_Gpu_Cuda10.2',
         'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1',
-        'Linux_Gpu_Cuda11.2','Linux_Gpu_Cuda11.3',
+        'Linux_Gpu_Cuda11.2', 'Linux_Gpu_Cuda11.3',
         'Linux_Gpu(T4)_Cuda10.2', 'Linux_Gpu(T4)_Cuda11.1',
         'Linux_Gpu(T4)_Cuda11.2', 'Linux-Jetpack', 'Xpu',
         'Linux_ROCM', 'Linux_Cpu', 'Windows_GPU_2080',
