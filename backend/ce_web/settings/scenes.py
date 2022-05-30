@@ -71,7 +71,7 @@ system_list = {
     # compile是一个全量的，其他块自己按环境重要程度排序
     'compile': [ 
         'Linux_Gpu_Cuda10.2', 'Linux_Gpu_Cuda11.0',
-        'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1', 
+        'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1',
         'Linux_Gpu_Cuda11.2','Linux_Gpu_Cuda11.3',
         'Linux_Gpu(T4)_Cuda10.2', 'Linux_Gpu(T4)_Cuda11.1',
         'Linux_Gpu(T4)_Cuda11.2', 'Linux-Jetpack', 'Xpu',
@@ -79,7 +79,7 @@ system_list = {
         'Windows_GPU_3080', 'Npu', 'Windows_Cpu', 'Mac'],
     'model': [
         'Linux_Gpu_Cuda10.2', 'Linux_Gpu_Cuda11.0',
-        'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1', 
+        'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1',
         'Linux_Gpu_Cuda11.2','Linux_Gpu_Cuda11.3',
         'Linux_Gpu(T4)_Cuda10.2', 'Linux_Gpu(T4)_Cuda11.1',
         'Linux_Gpu(T4)_Cuda11.2', 'Linux-Jetpack', 'Xpu',
@@ -88,7 +88,7 @@ system_list = {
     ],
     'dist': [
         'Linux_Gpu_Cuda11.0', 'Linux_Gpu_Cuda10.2',
-        'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1', 
+        'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1',
         'Linux_Gpu_Cuda11.2','Linux_Gpu_Cuda11.3',
         'Linux_Gpu(T4)_Cuda10.2', 'Linux_Gpu(T4)_Cuda11.1',
         'Linux_Gpu(T4)_Cuda11.2', 'Linux-Jetpack', 'Xpu',
@@ -96,8 +96,8 @@ system_list = {
         'Windows_GPU_3080', 'Npu', 'Windows_Cpu', 'Mac'
     ],
     'benchmark': [
-        'Linux_Gpu_Cuda11.2', 'Linux_Gpu_Cuda11.0', 
-        'Linux_Gpu_Cuda10.2', 'Linux_Gpu_Cuda10.1', 
+        'Linux_Gpu_Cuda11.2', 'Linux_Gpu_Cuda11.0',
+        'Linux_Gpu_Cuda10.2', 'Linux_Gpu_Cuda10.1',
         'Linux_Gpu_Cuda11.1', 'Linux_Gpu_Cuda11.3',
         'Linux_Gpu(T4)_Cuda10.2', 'Linux_Gpu(T4)_Cuda11.1',
         'Linux_Gpu(T4)_Cuda11.2', 'Linux-Jetpack', 'Xpu',
