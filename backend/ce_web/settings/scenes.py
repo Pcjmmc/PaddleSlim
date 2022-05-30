@@ -67,9 +67,9 @@ secondary_type = {
 }
 
 # 环境列表
+# compile是一个全量的，其他块自己按环境重要程度排序
 system_list = {
-    # compile是一个全量的，其他块自己按环境重要程度排序
-    'compile': [ 
+    'compile': [
         'Linux_Gpu_Cuda10.2', 'Linux_Gpu_Cuda11.0',
         'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1',
         'Linux_Gpu_Cuda11.2','Linux_Gpu_Cuda11.3',
