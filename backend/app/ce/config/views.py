@@ -4,7 +4,7 @@ import datetime
 import json
 import time
 
-from ce_web.settings.scenes import scenes_dict, secondary_type
+from ce_web.settings.scenes import scenes_dict, secondary_type, system_list
 from libs.mongo.db import Mongo
 
 from views.base_view import MABaseView
@@ -25,7 +25,8 @@ class ScenesManage(MABaseView):
         """
         data = {
             "taskTypeList": [],
-            "sendTypeList": secondary_type
+            "sendTypeList": secondary_type,
+            "systemList": [{'key': item, 'desc': item} for item in system_list['compile']]
         }
         result = [{'key': key, 'desc': val} for key, val in scenes_dict.items()]
         data["taskTypeList"] = result

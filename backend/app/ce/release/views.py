@@ -8,7 +8,7 @@ import time
 from ce_web.settings.common import (
     STORAGE, TC_BASE_URL, XLY_BASE_URL, XLY_BASE_URL2
 )
-from ce_web.settings.scenes import scenes_dict
+from ce_web.settings.scenes import scenes_dict, system_list
 from libs.mongo.db import Mongo
 from models.details import CeCases
 from models.release_version import CeReleaseVersion
@@ -422,8 +422,14 @@ class TaskManage(MABaseView):
                     integration_data[system][_type].append(temp_item)
             data = [{"system": k, "data": v} for k, v in integration_data.items()]
         # 数组中的数据，都按照system排序
-        # 待排序TODO
-        return len(data), data
+        sys = system_list.get(task_type) or system_list.get("compile")
+        final_data = {item: {} for item in sys}
+        for item in data:
+            system = item["system"]
+            data = item["data"]
+            final_data[system] = data
+        final_data = [{"system": k, "data": v} for k, v in final_data.items() if v]
+        return len(final_data), final_data
 
 
     async def get_case_detail(self, tid, build_id, secondary_type):

@@ -309,84 +309,7 @@ export default {
         'PaddleHub',
         'Paddle2ONNX'
       ],
-      systemList: [
-        {
-          'key': 'Linux_Gpu_Cuda10.1',
-          'desc': 'Linux_Gpu_Cuda10.1'
-        },
-        {
-          'key': 'Linux_Gpu_Cuda10.2',
-          'desc': 'Linux_Gpu_Cuda10.2'
-        },
-        {
-          'key': 'Linux_Gpu_Cuda11.0',
-          'desc': 'Linux_Gpu_Cuda11.0'
-        },
-        {
-          'key': 'Linux_Gpu_Cuda11.1',
-          'desc': 'Linux_Gpu_Cuda11.1'
-        },
-        {
-          'key': 'Linux_Gpu_Cuda11.2',
-          'desc': 'Linux_Gpu_Cuda11.2'
-        },
-        {
-          'key': 'Linux_Gpu_Cuda11.3',
-          'desc': 'Linux_Gpu_Cuda11.3'
-        },
-        {
-          'key': 'Linux_Gpu(T4)_Cuda10.2',
-          'desc': 'Linux_Gpu(T4)_Cuda10.2'
-        },
-        {
-          'key': 'Linux_Gpu(T4)_Cuda11.1',
-          'desc': 'Linux_Gpu(T4)_Cuda11.1'
-        },
-        {
-          'key': 'Linux_Gpu(T4)_Cuda11.2',
-          'desc': 'Linux_Gpu(T4)_Cuda11.2'
-        },
-        {
-          'key': 'Linux_Gpu_Cuda11.2',
-          'desc': 'Linux_Gpu_Cuda11.2'
-        },
-        {
-          'key': 'Linux_Cpu',
-          'desc': 'Linux_Cpu'
-        },
-        {
-          'key': 'Linux_ROCM',
-          'desc': 'Linux_ROCM'
-        },
-        {
-          'key': 'Mac',
-          'desc': 'Mac'
-        },
-        {
-          'key': 'Windows_GPU_3080',
-          'desc': 'Windows_GPU_3080'
-        },
-        {
-          'key': 'Windows_GPU_2080',
-          'desc': 'Windows_GPU_2080'
-        },
-        {
-          'key': 'Windows_Cpu',
-          'desc': 'Windows_Cpu'
-        },
-        {
-          'key': 'Xpu',
-          'desc': 'Xpu'
-        },
-        {
-          'key': 'Npu',
-          'desc': 'Npu'
-        },
-        {
-          'key': 'Linux-Jetpack',
-          'desc': 'Linux-Jetpack'
-        }
-      ],
+      systemList: [],
       stepList: [
         // {
         //   'key': 'compile',
@@ -691,6 +614,7 @@ export default {
       if (parseInt(code) == 200) {
         this.taskTypeList = data.taskTypeList;
         this.sendTypeList = data.sendTypeList;
+        this.systemList = data.systemList;
       } else {
         this.taskTypeList = []
         this.$Message.error({
