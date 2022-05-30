@@ -55,7 +55,7 @@ class DevelopVersionManage(MABaseView):
         # 选择最近一周的develop新任务
         today = datetime.date.today()
         today_time = int(time.mktime(today.timetuple()))
-        begin_time = today_time - 7 * 24 * 60 * 60
+        begin_time = today_time - 14 * 24 * 60 * 60
         build_info = await TaskBuildInfo.get_task_latest_status_by_tids(
             tids, version, begin_time)
         temp_data = [{

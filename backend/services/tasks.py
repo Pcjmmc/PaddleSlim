@@ -75,7 +75,8 @@ class TaskBuildInfo(object):
         # branch这里需要入库的时候处理下
         query_params = {
             "commit_time__gt": begin_time,
-            "branch": branch
+            "branch": branch,
+            "commit_id__ne": None
         }
         if end_time:
             query_params.update({"commit_time__lte": end_time})

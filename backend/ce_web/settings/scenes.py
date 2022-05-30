@@ -40,7 +40,8 @@ secondary_type = {
         "原生推理_Python_API",
         "TensorRT推理_C++_API",
         "TensorRT推理_Python_API",
-        "MKLDNN推理_Python_API"
+        "MKLDNN推理_Python_API",
+        "厂内模型_C++_API"
     ],
     "dist": [
         "分布式api功能",

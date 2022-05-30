@@ -7,7 +7,7 @@
       <div v-for="child, idx in item">
         <Row align="middle">
           <Col
-            :xs="{ span: 11 }"
+            :xs="{ span: 15 }"
             v-if="child.status && child.status.toLowerCase()=='passed'"
           >
             <i-circle
@@ -26,7 +26,7 @@
               href="javascript:void(0)"
               style="font-size:13px;"
               @click="jumper(child)"
-            > {{ key + '_' + idx }} </a>
+            > {{ key + '_' + child.show_name }} </a>
             <a
               v-else
               href="javascript:void(0)"
@@ -35,7 +35,7 @@
             > {{ key }} </a>
           </Col>
           <Col
-            :xs="{ span: 11 }"
+            :xs="{ span: 15 }"
             v-else-if="child.status && child.status.toLowerCase()=='failed'"
           >
             <i-circle
@@ -54,7 +54,7 @@
               href="javascript:void(0)"
               style="font-size:13px;"
               @click="jumper(child)"
-            > {{ key + '_' + idx }} </a>
+            > {{ key + '_' + child.show_name }} </a>
             <a
               v-else
               href="javascript:void(0)"
@@ -64,7 +64,7 @@
           </Col>
           <!--
           <Col
-            :xs="{ span: 11 }"
+            :xs="{ span: 15 }"
             v-else-if="child.status && child.status.toLowerCase()=='running'"
           >
             <Icon
@@ -107,7 +107,7 @@
           -->
           <Col
             v-else
-            :xs="{ span: 11 }"
+            :xs="{ span: 15 }"
           >
             <Tooltip placement="top" content="未执行">
               <Icon type="ios-alert-outline" size="17"/>
@@ -115,7 +115,7 @@
                 v-if="item.length > 1"
                 style="font-size:13px;"
               >
-                {{ key + '_' + idx }}
+                {{ key + '_' + child.show_name }}
               </span>
               <span
                 v-else

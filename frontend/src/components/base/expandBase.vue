@@ -21,7 +21,7 @@
                 href="javascript:void(0)"
                 style="font-size:13px;"
                 @click="jumper(child)"
-              > {{ key + '_' + idx }} </a>
+              > {{ key + '_' + child.show_name }} </a>
               <a
                 v-else
                 href="javascript:void(0)"
@@ -46,7 +46,7 @@
                 href="javascript:void(0)"
                 style="font-size:13px;"
                 @click="jumper(child)"
-              > {{ key + '_' + idx }} </a>
+              > {{ key + '_' + child.show_name }} </a>
               <a
                 v-else
                 href="javascript:void(0)"
@@ -66,7 +66,7 @@
                   href="javascript:void(0)"
                   style="font-size:13px;"
                   @click="jumper(child)"
-                > {{ key + '_' + idx }} </a>
+                > {{ key + '_' + child.show_name }} </a>
                 <a
                   v-else
                   href="javascript:void(0)"
@@ -106,7 +106,7 @@
                   v-if="item.length > 1"
                   style="font-size:13px;"
                 >
-                  {{ key + '_' + idx }}
+                  {{ key + '_' + child.show_name }}
                 </span>
                 <span
                   v-else

@@ -16,7 +16,11 @@
               ></Icon>
             </i-circle>
               <a
-                :href="item.artifact_url"
+                v-if="item.show_name"
+                style="font-size:13px;"
+              > {{ item.show_name }} </a>
+              <a
+                v-else
                 style="font-size:13px;"
               > {{ item.tname }} </a>
             <!--
@@ -36,7 +40,14 @@
               ></Icon>
             </i-circle>
             <Tooltip placement="right" :content="getErrorReason(item.exit_code)">
-              <span style="font-size:13px;"> {{ item.tname }} </span>
+              <span
+                v-if="item.show_name"
+                style="font-size:13px;"
+              > {{ item.tname }} </span>
+              <span
+                v-else
+                style="font-size:13px;"
+              > {{ item.tname }} </span>
             </Tooltip>
           </span>
           <span v-else-if="item.status && item.status.toLowerCase()=='running'">
@@ -46,7 +57,14 @@
               class="demo-spin-icon-load"
             ></Icon>
             <Tooltip placement="right" width="400">
-              <span style="font-size:13px;"> {{ item.tname }} </span>
+              <span
+                v-if="item.show_name"
+                style="font-size:13px;"
+              > {{ item.tname }} </span>
+              <span
+                v-else
+                style="font-size:13px;"
+              > {{ item.tname }} </span>
               <span
                 slot="content"
                 data-test="ring-dropdown"
@@ -76,9 +94,14 @@
           <span v-else>
             <Tooltip placement="right" content="未执行">
               <Icon type="ios-alert-outline" size="17"/>
-              <span style="font-size:13px;">
-                {{ item.tname }}
-              </span>
+              <span
+                v-if="item.show_name"
+                style="font-size:13px;"
+              > {{ item.tname }} </span>
+              <span
+                v-else
+                style="font-size:13px;"
+              > {{ item.tname }} </span>
             </Tooltip>
           </span>
         </div>

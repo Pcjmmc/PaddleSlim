@@ -119,6 +119,9 @@
         <FormItem label="任务名: " prop="tname">
           <Input v-model="addForm.tname" placeholder="与tc或者效率云一致"/>
         </FormItem>
+        <FormItem label="任务别名/后缀: " prop="show_name">
+          <Input v-model="addForm.show_name" placeholder="简短、概括、可读"/>
+        </FormItem>
         <FormItem label="任务描述: " prop="description">
           <Input v-model="addForm.description" placeholder="请简短准确概述"/>
         </FormItem>
@@ -219,6 +222,9 @@
         </FormItem>
         <FormItem label="任务名: " prop="tname">
           <Input v-model="selectedRow.tname" placeholder="与tc或者效率云一致"/>
+        </FormItem>
+        <FormItem label="任务别名/后缀: " prop="show_name">
+          <Input v-model="selectedRow.show_name" placeholder="简短、概括、可读"/>
         </FormItem>
         <FormItem label="任务描述: " prop="description">
           <Input v-model="selectedRow.description" placeholder="请简短准确概述"/>
@@ -410,7 +416,8 @@ export default {
         'workspace': '',
         'description': '',
         'step': '',
-        'reponame': ''
+        'reponame': '',
+        'show_name': ''
       },
       addRules: {
         step: [
@@ -455,6 +462,10 @@ export default {
         {
           title: '任务描述',
           key: 'description'
+        },
+        {
+          title: '任务别名/后缀',
+          key: 'show_name'
         },
         {
           title: '任务所在平台',
@@ -629,6 +640,7 @@ export default {
         secondary_type: this.selectedRow.secondary_type,
         tname: this.selectedRow.tname,
         reponame: this.selectedRow.reponame,
+        show_name: this.selectedRow.show_name,
         appid: Cookies.get('appid')
       }
       if (params.secondary_type instanceof Array) {

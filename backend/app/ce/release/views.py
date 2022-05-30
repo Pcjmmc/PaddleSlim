@@ -279,7 +279,7 @@ class TaskManage(MABaseView):
             branch = version
             today = datetime.date.today()
             today_time = int(time.mktime(today.timetuple()))
-            begin_time = today_time - 7 * 24 * 60 * 60
+            begin_time = today_time - 14 * 24 * 60 * 60
             end_time = None
             step = version
         else:
@@ -307,6 +307,7 @@ class TaskManage(MABaseView):
             "tid": item["id"],
             "tname": item["tname"],
             "description": item["description"],
+            "show_name": item["show_name"],
             "system": item["system"],
             "task_type": item["task_type"],
             "secondary_type": item["secondary_type"],
@@ -420,6 +421,8 @@ class TaskManage(MABaseView):
                     temp_item['secondary_type'] = _type
                     integration_data[system][_type].append(temp_item)
             data = [{"system": k, "data": v} for k, v in integration_data.items()]
+        # 数组中的数据，都按照system排序
+        # 待排序TODO
         return len(data), data
 
 
