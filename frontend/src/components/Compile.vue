@@ -106,9 +106,9 @@ export default {
           render: (h, params) => {
             var key = params.row.key;
             var value = params.row.value;
-            let arr = []
+            let arr = [];
             var newArr = [];
-            if (key == 'artifact_url') {
+            if (key === 'artifact_url') {
               if (value instanceof Array) {
                 arr = value;
               } else {
@@ -159,7 +159,7 @@ export default {
               });
             } else {
               newArr.push(
-                h('div', [h('span', {}, value)
+                h('div', [h('span', {}, value != "" ? value : '—')
                 ])
               );
             }
@@ -209,11 +209,13 @@ export default {
       }
     },
     getColumn(obj) {
-      let _columns = []
+      let _columns = [];
       if (obj.length > 0) {
         let tmpobj = obj[0];
         for (let key in tmpobj) {
-          _columns.push(key);
+          if (tmpobj.hasOwnProperty(key)) {
+            _columns.push(key);
+          }
         }
       }
       let result = [];
@@ -222,19 +224,21 @@ export default {
           title: _columns[idx],
           key: _columns[idx]
         };
-        result.push(tmp)
+        result.push(tmp);
       }
-      console.log(result)
-      return result
+      // console.log(result);
+      return result;
     },
     pocessData(obj) {
       let result = [];
       for (let key in obj) {
-        let tmp = {
-          key: key,
-          value: obj[key]
-        };
-        result.push(tmp)
+        if (obj.hasOwnProperty(key)) {
+          let tmp = {
+            key: key,
+            value: obj[key]
+          };
+          result.push(tmp);
+        }
       }
       return result;
     },
@@ -256,7 +260,7 @@ export default {
               this.env_info = this.pocessData(this.detail[0].env_info);
               this.compile_param = this.pocessData(this.detail[0].compile_param);
               this.gpu_arch = this.pocessData(this.detail[0].gpu_arch);
-              this.gpu_arch.push({key: "artifact_url", value: this.$route.query.artifact_url});
+              this.gpu_arch.push({key: 'artifact_url', value: this.$route.query.artifact_url});
             }
           }
         }

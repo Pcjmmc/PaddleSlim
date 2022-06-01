@@ -357,7 +357,7 @@ export default {
           detail_name = 'model';
         }
       } else if (item.task_type === 'compile') {
-          _params['artifact_url'] = item['artifact_url'];
+          _params.artifact_url = item.artifact_url;
           detail_name = 'Compile';
       } else {
         return;
