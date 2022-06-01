@@ -23,6 +23,12 @@
                 @click="jumper(child)"
               > {{ key + '_' + child.show_name }} </a>
               <a
+                v-else-if="child.show_name !== null && child.show_name !== ''"
+                href="javascript:void(0)"
+                style="font-size:13px;"
+                @click="jumper(child)"
+              > {{ key + '_' + child.show_name }} </a>
+              <a
                 v-else
                 href="javascript:void(0)"
                 style="font-size:13px;"
@@ -48,6 +54,12 @@
                 @click="jumper(child)"
               > {{ key + '_' + child.show_name }} </a>
               <a
+                v-else-if="child.show_name !== null && child.show_name !== ''"
+                href="javascript:void(0)"
+                style="font-size:13px;"
+                @click="jumper(child)"
+              > {{ key + '_' + child.show_name }} </a>
+              <a
                 v-else
                 href="javascript:void(0)"
                 style="font-size:13px;"
@@ -63,6 +75,12 @@
               <Tooltip placement="right" width="400">
                 <a
                   v-if="item.length > 1"
+                  href="javascript:void(0)"
+                  style="font-size:13px;"
+                  @click="jumper(child)"
+                > {{ key + '_' + child.show_name }} </a>
+                <a
+                  v-else-if="child.show_name !== null && child.show_name !== ''"
                   href="javascript:void(0)"
                   style="font-size:13px;"
                   @click="jumper(child)"
@@ -104,6 +122,12 @@
                 <Icon type="ios-alert-outline" size="17"/>
                 <span
                   v-if="item.length > 1"
+                  style="font-size:13px;"
+                >
+                  {{ key + '_' + child.show_name }}
+                </span>
+                <span
+                  v-else-if="child.show_name !== null && child.show_name !== ''"
                   style="font-size:13px;"
                 >
                   {{ key + '_' + child.show_name }}
@@ -360,7 +384,7 @@ export default {
       let detail_name = '';
       if (item.reponame === 'Paddle2ONNX' || item.reponame === 'PaddleHub') {
         detail_name = 'FuncDetail';
-      } else if (item.task_type === 'model') {
+      } else if (item.task_type === 'model' || item.task_type === 'benchmark') {
         detail_name = 'model';
       } else if (item.task_type === 'frame') {
         detail_name = 'FuncDetail';

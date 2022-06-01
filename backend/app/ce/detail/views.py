@@ -105,6 +105,8 @@ class DetailManage(MABaseView):
             return True
         elif task_type == "dist" and "api" not in secondary_type.lower():
             return True
+        elif task_type == "benchmark":
+            return True
         else:
             return False
 
