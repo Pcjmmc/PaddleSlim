@@ -159,7 +159,7 @@ export default {
               });
             } else {
               newArr.push(
-                h('div', [h('span', {}, value != "" ? value : '—')
+                h('div', [h('span', {}, value !== '' ? value : '—')
                 ])
               );
             }
