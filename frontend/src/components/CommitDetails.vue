@@ -174,7 +174,7 @@ export default {
       let detail_name = '';
       if (item.reponame === 'Paddle2ONNX' || item.reponame === 'PaddleHub') {
         detail_name = 'FuncDetail';
-      } else if (item.task_type === 'model') {
+      } else if (item.task_type === 'model' || item.task_type === 'benchmark') {
         detail_name = 'model';
       } else if (item.task_type === 'frame') {
         detail_name = 'FuncDetail';

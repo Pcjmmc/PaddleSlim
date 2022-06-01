@@ -83,8 +83,8 @@ system_list = {
         'Linux_Gpu_Cuda11.2', 'Linux_Gpu_Cuda11.3',
         'Linux_Gpu(T4)_Cuda10.2', 'Linux_Gpu(T4)_Cuda11.1',
         'Linux_Gpu(T4)_Cuda11.2', 'Linux-Jetpack', 'Xpu',
-        'Linux_ROCM', 'Linux_Cpu', 'Windows_GPU_2080',
-        'Windows_GPU_3080', 'Npu', 'Mac', 'Windows_Cpu'
+        'Linux_ROCM', 'Windows_GPU_2080', 'Windows_GPU_3080', 
+        'Npu', 'Mac', 'Windows_Cpu', 'Linux_Cpu'
     ],
     'dist': [
         'Linux_Gpu_Cuda11.0', 'Linux_Gpu_Cuda10.2',
