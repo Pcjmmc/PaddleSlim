@@ -60,15 +60,16 @@ class DetailManage(MABaseView):
         case_obj = await CeCases.aio_get_object(
             **{"tid": tid, "build_id" : build_id, "label": secondary_type}
         )
-        if not case_obj:
-            return 0, {}
+        label_id = case_obj.id if case_obj else None
         summary_data = {
-            'total': case_obj.total,
-            'passed_num': case_obj.passed_num,
-            'failed_num': case_obj.failed_num
+            'total': case_obj.total if case_obj else 0,
+            'passed_num': case_obj.passed_num if case_obj else 0,
+            'failed_num': case_obj.failed_num if case_obj else 0
         }
-        label_id = case_obj.id
-        table_name = table_prefix.format(task_id=tid, build_id=build_id, label_id=label_id)
+        if task_type == "compile":
+            table_name = "case_detail_{task_id}_{build_id}".format(task_id=tid, build_id=build_id)
+        else:
+            table_name = table_prefix.format(task_id=tid, build_id=build_id, label_id=label_id)
         model_result = Mongo("paddle_quality", table_name)
         if self.check_model_tag(task_type, secondary_type, reponame=reponame):
             details = await model_result.find_all()

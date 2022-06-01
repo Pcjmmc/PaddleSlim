@@ -359,11 +359,9 @@ class TaskManage(MABaseView):
                 system = item["system"]
                 if item.get("artifact_url"):
                     try:
-                        artifact_url = json.loads(item.get("artifact_url", ""))
-                        artifact_url = [url for url in artifact_url if url.endswith(".whl")]
+                        item["artifact_url"] = json.loads(item.get("artifact_url", ""))
                     except:
-                        artifact_url = []
-                    item["artifact_url"] = artifact_url[0] if artifact_url else ""
+                        item["artifact_url"] = []
                 if system not in integration_data:
                     integration_data[system] = list()
                 integration_data[system].append(item)

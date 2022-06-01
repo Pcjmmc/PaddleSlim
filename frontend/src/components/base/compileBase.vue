@@ -17,11 +17,15 @@
             </i-circle>
               <a
                 v-if="item.show_name"
+                href="javascript:void(0)"
                 style="font-size:13px;"
+                @click="jumper(item)"
               > {{ item.show_name }} </a>
               <a
                 v-else
+                href="javascript:void(0)"
                 style="font-size:13px;"
+                @click="jumper(item)"
               > {{ item.tname }} </a>
             <!--
             <span style="font-size:13px;"> {{ item.tname }} </span>
@@ -317,15 +321,46 @@ export default {
   },
   methods: {
     jumper(item) {
+      // console.log('item is', item);
       // 还是根据任务的type来确定跳转到function还是model，目前暂时都用ApiDetails
-      let _params = {};
-      _params = Object.assign(_params, item);
-      // console.log('item', item)
-      let detail_name = 'ApiDetails';
-      if (item.task_type === 'model') {
+      let _params = {
+        task_type: item.task_type,
+        tid: item.tid,
+        build_id: item.build_id,
+        secondary_type: item.secondary_type,
+        status: item.status,
+        exit_code: item.exit_code,
+        repo: item.repo,
+        branch: item.branch,
+        commit_id: item.commit_id,
+        tname: item.tname
+      };
+      // let _params = {};
+      // _params = Object.assign(_params, item);
+      // console.log('item', _params);
+      let detail_name = '';
+      if (item.reponame === 'Paddle2ONNX' || item.reponame === 'PaddleHub') {
+        detail_name = 'FuncDetail';
+      } else if (item.task_type === 'model') {
         detail_name = 'model';
-      } else if (item.task_type === 'lite') {
-        detail_name = 'lite';
+      } else if (item.task_type === 'frame') {
+        detail_name = 'FuncDetail';
+      } else if (item.task_type === 'infer') {
+        detail_name = 'FuncDetail';
+      } else if (item.task_type === 'dist') {
+        // 如果二级分类是api的则跳转api详情页；否则按模型汇聚
+        if (item.secondary_type.toLowerCase().includes('api')) {
+          // console.log('secondary_type', item.secondary_type);
+          detail_name = 'FuncDetail';
+        } else {
+          // console.log('model secondary_type', item.secondary_type);
+          detail_name = 'model';
+        }
+      } else if (item.task_type === 'compile') {
+          _params['artifact_url'] = item['artifact_url'];
+          detail_name = 'Compile';
+      } else {
+        return;
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});
       window.open(href, '_blank');
