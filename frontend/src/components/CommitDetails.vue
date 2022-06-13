@@ -135,7 +135,7 @@ export default {
       if (parseInt(code, 10) === 200) {
         this.commitList = data;
         // console.log('this.commitList', this.commitList);
-        this.selectCommit = this.commitList[0];
+        this.selectCommit = this.commitList[0].commit;
         this.getCommitDetail();
       } else {
         this.commitList = [];
