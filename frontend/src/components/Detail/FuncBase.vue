@@ -1,23 +1,47 @@
 <template>
     <div style="padding: 0px 20px 0px 20px">
       <Card :bordered="false">
-        <p slot="title" style="text-align: center;font-size: 1.4em;" v-if="index==0">
+        <p
+          slot="title"
+          style="text-align: center;font-size: 1.4em;"
+          v-if="index==0"
+        >
           <Icon type="ios-information-circle" size="20"></Icon>
           {{ "任务信息概述" }}
         </p>
-        <p slot="title" style="text-align: left;font-size: 1.0em;" v-if="index==0">
+        <p
+          slot="title"
+          style="text-align: left;font-size: 1.0em;"
+          v-if="index==0"
+        >
           任务名: {{ $route.query.tname }}
         </p>
-        <p slot="title" style="text-align: left;font-size: 1.0em;" v-if="index==0">
+        <p
+          slot="title"
+          style="text-align: left;font-size: 1.0em;"
+          v-if="index==0"
+        >
           repo信息: {{ $route.query.repo }}
         </p>
-        <p slot="title" style="text-align: left;font-size: 1.0em;" v-if="index==0">
+        <p
+          slot="title"
+          style="text-align: left;font-size: 1.0em;"
+          v-if="index==0"
+        >
           commit信息: {{ $route.query.commit_id }}
         </p>
-        <p slot="title" style="text-align: left;font-size: 1.0em;" v-if="index==0">
+        <p
+          slot="title"
+          style="text-align: left;font-size: 1.0em;"
+          v-if="index==0"
+        >
           分支信息: {{ $route.query.branch }}
         </p>
-        <p slot="title" style="text-align: left;font-size: 1.0em;" v-if="index==0">
+        <p
+          slot="title"
+          style="text-align: left;font-size: 1.0em;"
+          v-if="index==0"
+        >
           执行时间: {{ changeTimestamp($route.query.created) }}
         </p>
         <p

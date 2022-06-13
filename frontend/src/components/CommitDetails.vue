@@ -11,9 +11,13 @@
               <TimelineItem v-for="(item, index) in commitList" v-if="commitList" :key="index">
                 <span>
                   <span>
-                    {{item.commit_time}} {{ "(" }}
+                    {{ item.commit_time }} {{ "(" }}
                   </span>
-                  <a class="content" href="javascript:void(0)" @click="setCommit(item.commit)"> {{ item.commit.substring(0, 14) }} </a>
+                  <a
+                    class="content"
+                    href="javascript:void(0)"
+                    @click="setCommit(item.commit)"
+                  > {{ item.commit.substring(0, 14) }} </a>
                   {{ ")" }}
                 </span>
               </TimelineItem>
