@@ -1,36 +1,49 @@
 <template>
     <div style="padding: 0px 20px 0px 20px">
       <Card :bordered="false">
-        <p
-          slot="title"
-          style="text-align: left;font-size: 1.3em;"
-        >
-          commit: {{ $route.query.commit_id }}
+        <p slot="title" style="text-align: center;font-size: 1.4em;" v-if="index==0">
+          <Icon type="ios-information-circle" size="20"></Icon>
+          {{ "任务信息概述" }}
+        </p>
+        <p slot="title" style="text-align: left;font-size: 1.0em;" v-if="index==0">
+          任务名: {{ $route.query.tname }}
+        </p>
+        <p slot="title" style="text-align: left;font-size: 1.0em;" v-if="index==0">
+          repo信息: {{ $route.query.repo }}
+        </p>
+        <p slot="title" style="text-align: left;font-size: 1.0em;" v-if="index==0">
+          commit信息: {{ $route.query.commit_id }}
+        </p>
+        <p slot="title" style="text-align: left;font-size: 1.0em;" v-if="index==0">
+          分支信息: {{ $route.query.branch }}
+        </p>
+        <p slot="title" style="text-align: left;font-size: 1.0em;" v-if="index==0">
+          执行时间: {{ changeTimestamp($route.query.created) }}
         </p>
         <p
           slot="title"
-          style="text-align: left;font-size: 1.3em;color: red"
-          v-if="$route.query.status.toLowerCase()=='failed'"
+          style="text-align: left;font-size: 1.0em;color: red"
+          v-if="index==0 && $route.query.status.toLowerCase()=='failed'"
         >
-          {{ secondarytype }}: {{ $route.query.status }}
+          执行结果: {{ $route.query.status }}
         </p>
         <p
           slot="title"
-          style="text-align: left;font-size: 1.3em;color: green"
-          v-else
+          style="text-align: left;font-size: 1.0em;color: green"
+          v-else-if="index==0"
         >
-          {{ secondarytype }}: {{ $route.query.status }}
+          执行结果: {{ $route.query.status }}
         </p>
         <p
           slot="title"
-          style="text-align: left;font-size: 1.3em;color: red"
-          v-if="$route.query.status.toLowerCase()=='failed'"
+          style="text-align: left;font-size: 1.0em;color: red"
+          v-if="$route.query.status.toLowerCase()=='failed' && index==0"
         >
           原因: {{ getErrorReason($route.query.exit_code) }}
         </p>
         <Card :bordered="false" class="center-card-s">
           <p slot="title" style="text-align: center;font-size: 1.2em;">
-            {{ "整体情况" }}
+            {{ secondarytype }}
           </p>
           <Table
             border
@@ -46,14 +59,21 @@
           class="center-card-s"
         >
           <p slot="title" style="text-align: center;font-size: 1.2em;">
-            {{ "失败的case详情" }}
+            {{ "失败case" }}
           </p>
+          <frame-detail-base
+            :data="failedData"
+            :columns="Columns"
+          >
+          </frame-detail-base>
+          <!--
           <Table
             :columns="ExpandColumns"
             :data="failedData"
             style="margin-right: 2%"
             border
           ></Table>
+          -->
         </Card>
         <Card
           v-if="succeedData.length > 0"
@@ -61,19 +81,26 @@
           class="center-card-s"
         >
           <p slot="title" style="text-align: center;font-size: 1.2em;">
-            {{ "成功case详情" }}
+            {{ "成功case" }}
           </p>
-            <Table
-              :columns="ExpandColumns"
-              :data="succeedData"
-              style="margin-right: 2%"
-              border
-            ></Table>
+          <!--
+          <Table
+            :columns="ExpandColumns"
+            :data="succeedData"
+            style="margin-right: 2%"
+            border
+          ></Table>
+          -->
+          <frame-detail-base
+            :data="succeedData"
+            :columns="Columns"
+          >
+          </frame-detail-base>
         </Card>
       </Card>
       <Modal
         v-model="ShowDetail"
-        title="错误详情"
+        title="用例详情"
         width="1000px"
       >
         <vue-json-pretty
@@ -110,6 +137,12 @@ export default {
       type: [Array],
       default: function () {
         return [];
+      }
+    },
+    index: {
+      type: [Number],
+      default: function () {
+        return null;
       }
     }
   },
@@ -229,7 +262,8 @@ export default {
     // console.log('data', this.detail);
   },
   components: {
-    VueJsonPretty
+    VueJsonPretty,
+    frameDetailBase
   },
   computed: {
     failedData() {
@@ -306,14 +340,10 @@ export default {
         'faliedArray': []
       };
       if (succeedArray.length > 0) {
-        result.succeedArray = [
-          {'step': 'succeed case', 'status': 'Passed', 'data': succeedArray}
-        ];
+        result.succeedArray = succeedArray;
       }
       if (faliedArray.length > 0) {
-        result.faliedArray = [
-          {'step': 'failed case', 'status': 'Failed', 'data': faliedArray}
-        ];
+        result.faliedArray = faliedArray;
       }
       return result;
     },

@@ -8,6 +8,18 @@
       <p slot="title" style="text-align: left;font-size: 1.0em; margin-top: 5%">
         任务名: {{ $route.query.tname }}
       </p>
+      <p slot="title" style="text-align: left;font-size: 1.0em;">
+        repo信息: {{ $route.query.repo }}
+      </p>
+      <p slot="title" style="text-align: left;font-size: 1.0em;">
+        commit信息: {{ $route.query.commit_id }}
+      </p>
+      <p slot="title" style="text-align: left;font-size: 1.0em;">
+        分支信息: {{ $route.query.branch }}
+      </p>
+      <p slot="title" style="text-align: left;font-size: 1.0em;">
+        执行时间: {{ changeTimestamp($route.query.created) }}
+      </p>
       <p
         slot="title"
         style="text-align: left;font-size: 1.0em;color: red"
@@ -28,15 +40,6 @@
         v-if="$route.query.status.toLowerCase()=='failed'"
       >
         原因: {{ getErrorReason($route.query.exit_code) }}
-      </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
-        repo信息: {{ $route.query.repo }}
-      </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
-        commit信息: {{ $route.query.commit_id }}
-      </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
-        分支信息: {{ $route.query.branch }}
       </p>
     </Card>
     <Card class="center-card-s" v-if="JSON.stringify(env_info) != '[]'">
@@ -90,6 +93,7 @@
 <script>
 import Clipboard from 'clipboard';
 import api from '../api/index';
+import { dateFmt, timestampToTime } from '../util/help.js';
 import { DetailUrl } from '../api/url.js';
 export default {
   data: function () {
@@ -206,6 +210,15 @@ export default {
           return 'tc任务取消';
         default:
           return '未知';
+      }
+    },
+    changeTimestamp(timestamp, offset = 8) {
+      if (timestamp) {
+        let date = timestampToTime(timestamp, offset);
+        let dt = dateFmt(date, 'yyyy-MM-dd hh:mm:ss');
+        return dt;
+      } else {
+        return '';
       }
     },
     getColumn(obj) {

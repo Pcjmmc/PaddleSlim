@@ -6,6 +6,7 @@
       :columns="columns"
       :data="data"
       style="margin-right: 2%"
+      border
     >
     </Table>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <Card class="center-card-s">
     <Row align="middle">
-      <Col :xs="{ span: 6, offset: 0 }">
+      <Col :xs="{ span: 8, offset: 0 }">
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <div v-for="(child, idx) in item">
             <span v-if="child.status && child.status.toLowerCase()=='passed'">
@@ -179,7 +179,7 @@
           </div>
         </div>
       </Col>
-      <Col :xs="{ span: 8, offset: 5 }" align="center">
+      <Col :xs="{ span: 6, offset: 5 }" align="center">
         <div class="one-fifth-video-col">
           <div v-if="system.includes('Windows')">
             <Icon type="logo-windows" size="50"> </Icon>
@@ -376,7 +376,8 @@ export default {
         repo: item.repo,
         branch: item.branch,
         commit_id: item.commit_id,
-        tname: item.tname
+        tname: item.tname,
+        created: item.created
       };
       // let _params = {};
       // _params = Object.assign(_params, item);

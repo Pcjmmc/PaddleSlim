@@ -1,5 +1,5 @@
 <template>
-  <div style="font-size:8px">
+  <div style="font-size:15px">
     <Row type="flex" justify="start">
       <div class="branch">
         <div style="text-align:center">
@@ -12,22 +12,22 @@
           </a>
         </div>
       </div>
-      <Divider type="vertical" style="height:35px"/>
+      <Divider type="vertical" style="height:40px"/>
       <div class="commit">
         <div style="text-align:center">
           <h3>commit</h3>
         </div>
-        <div style="text-align:center">
+        <div style="text-align:center;font-size:13px">
           <Icon type="md-git-commit" />
           <a href="javascript:void(0)" @click="jumper(repoinfo.name)">
             {{ repoinfo.commit }}
           </a> 
         </div>
       </div>
-      <Divider type="vertical" style="height:35px"/>
+      <Divider type="vertical" style="height:40px"/>
       <div class="abc">
         <div style="text-align:center">
-          <h5>任务成功占比</h5>
+          <h3>任务成功占比</h3>
         </div>
         <div style="text-align:center">
          <Progress

@@ -9,7 +9,13 @@
           <div>
             <Timeline>
               <TimelineItem v-for="(item, index) in commitList" v-if="commitList" :key="index">
-                <a class="content" href="javascript:void(0)" @click="setCommit(item)">{{item}}</a>
+                <span>
+                  <span>
+                    {{item.commit_time}} {{ "(" }}
+                  </span>
+                  <a class="content" href="javascript:void(0)" @click="setCommit(item.commit)"> {{ item.commit.substring(0, 14) }} </a>
+                  {{ ")" }}
+                </span>
               </TimelineItem>
             </Timeline>
           </div>
@@ -124,6 +130,7 @@ export default {
       const {code, data, msg} = await api.get(CommitsUrl, params);
       if (parseInt(code, 10) === 200) {
         this.commitList = data;
+        // console.log('this.commitList', this.commitList);
         this.selectCommit = this.commitList[0];
         this.getCommitDetail();
       } else {
@@ -169,7 +176,8 @@ export default {
         branch: item.branch,
         commit_id: item.commit_id,
         tname: item.tname,
-        reponame: item.reponame
+        reponame: item.reponame,
+        created: item.created
       };
       let detail_name = '';
       if (item.reponame === 'Paddle2ONNX' || item.reponame === 'PaddleHub') {
@@ -188,7 +196,9 @@ export default {
           detail_name = 'model';
         }
       } else if (item.task_type === 'compile') {
-        // 不跳转
+          _params.artifact_url = item.artifact_url;
+          detail_name = 'Compile';
+      } else {
         return;
       }
       const { href } = this.$router.resolve({name: detail_name, query: _params});

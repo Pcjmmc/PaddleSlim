@@ -5,6 +5,7 @@
         :detail="item.case_detail"
         :secondarytype="key"
         :summarydata="item.summary_data"
+        :index="index"
       ></func-base>
     </div>
   </div>

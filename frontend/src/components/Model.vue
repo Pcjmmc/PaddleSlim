@@ -8,6 +8,18 @@
       <p slot="title" style="text-align: left;font-size: 1.0em; margin-top: 5%">
         任务名: {{ $route.query.tname }}
       </p>
+      <p slot="title" style="text-align: left;font-size: 1.0em;">
+        repo信息: {{ $route.query.repo }}
+      </p>
+      <p slot="title" style="text-align: left;font-size: 1.0em;">
+        commit信息: {{ $route.query.commit_id }}
+      </p>
+      <p slot="title" style="text-align: left;font-size: 1.0em;">
+        分支信息: {{ $route.query.branch }}
+      </p>
+      <p slot="title" style="text-align: left;font-size: 1.0em;">
+        执行时间: {{ changeTimestamp($route.query.created) }}
+      </p>
       <p
         slot="title"
         style="text-align: left;font-size: 1.0em;color: red"
@@ -29,20 +41,6 @@
       >
         原因: {{ getErrorReason($route.query.exit_code) }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
-        repo信息: {{ $route.query.repo }}
-      </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
-        commit信息: {{ $route.query.commit_id }}
-      </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
-        分支信息: {{ $route.query.branch }}
-      </p>
-      <!--
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
-        <a :href="getTaskUrl()"> 任务链接</a>
-      </p>
-      -->
       <Table
         border
         :columns="detailColumns"

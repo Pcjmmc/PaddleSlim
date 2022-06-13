@@ -127,7 +127,13 @@ class GetCommits(BaseRpc):
 
     async def get_commit_list(self, **kwargs):
         res = await self.get_data()
-        commits = [item.get('sha') for item in res]
+        commits = []
+        for item in res:
+            commit = item.get('sha')
+            commiter = item.get('commit', {})
+            author = commiter.get("author", {})
+            commit_time = author.get("date", '')
+            commits.append({"commit": commit, "commit_time": commit_time})
         return commits
 
     async def get_data(self, **kwargs):

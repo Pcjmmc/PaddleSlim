@@ -104,8 +104,15 @@ class CommitDetailManage(MABaseView):
                 item["exit_code"] = build_info[tid].get("exit_code")
                 item["build_id"] = build_info[tid].get("build_id")
                 item["commit_id"] = build_info[tid].get("commit_id")
+                item["created"] = build_info[tid].get("created")
                 item["branch"] = build_info[tid].get("branch")
                 item["repo"] = build_info[tid].get("repo")
+                artifact_url = build_info[tid].get("artifact_url")
+                if artifact_url:
+                    try:
+                        item["artifact_url"] = json.loads(artifact_url)
+                    except:
+                        item["artifact_url"] = []
             # 先获取到所有的seneces,origin_scenes主要用来维持顺序
             origin_scenes = [item for item in scenes_dict]
             scenes = set()
