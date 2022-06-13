@@ -41,7 +41,17 @@ export default {
         {
           title: '状态',
           key: 'kpi_status',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            const { kpi_status, kpi_value } = params.row;
+            return h('div', [
+              h('Tag', {
+                props: {
+                  color: kpi_status.toLowerCase() === 'passed' ? 'success' : 'error'
+                }
+              }, kpi_status)
+            ]);
+          }
         },
         {
           title: '基准值',

@@ -91,10 +91,15 @@ class DetailManage(MABaseView):
             for key, val in result.items():
                 val["kpis"] = [value for item, value in val["kpis"].items()]
             details = result 
+        elif task_type == "compile":
+            details = await model_result.find_all()
+            for item in details:
+                item.pop("_id")
         else:
             details = await model_result.find_all()
             for item in details:
                 item.pop("_id")
+            details = self.separate_data(details)
 
         # 主动关闭mongodb的链接
         model_result.close()
@@ -117,4 +122,20 @@ class DetailManage(MABaseView):
         for item in data:
             item.pop("_id") 
         return data
-        
+
+    def separate_data(self, details):
+        """
+        将case分成成功和失败两份
+        """
+        result = {
+            "failed_data": [],
+            "succeed_data": []
+        }
+        for item in details:
+            if item.get("status", "").lower() == 'broken':
+                item["status"] = 'failed'
+            if (item.get("status", "").lower() == 'failed'):
+                result["failed_data"].append(item)
+            else:
+                result["succeed_data"].append(item)
+        return result

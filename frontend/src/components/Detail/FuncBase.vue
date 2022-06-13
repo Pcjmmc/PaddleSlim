@@ -1,6 +1,6 @@
 <template>
     <div style="padding: 0px 20px 0px 20px">
-      <Card :bordered="false">
+      <Card :bordered="false" class="center-card-s">
         <p
           slot="title"
           style="text-align: center;font-size: 1.4em;"
@@ -65,62 +65,56 @@
         >
           原因: {{ getErrorReason($route.query.exit_code) }}
         </p>
-        <Card :bordered="false" class="center-card-s">
-          <p slot="title" style="text-align: center;font-size: 1.2em;">
-            {{ secondarytype }}
-          </p>
-          <Table
-            border
-            :columns="detailColumns"
-            :data="summarydata"
-            style="margin-right: 2%"
-          >
-          </Table>
-        </Card>
-        <Card
-          v-if="failedData.length > 0"
-          :bordered="false"
-          class="center-card-s"
+      </Card>
+      <Card :bordered="false" class="center-card-s">
+        <p slot="title" style="text-align: center;font-size: 1.2em;">
+          {{ secondarytype }}
+        </p>
+        <Table
+          border
+          :columns="detailColumns"
+          :data="summarydata"
+          style="margin-right: 1%"
         >
-          <p slot="title" style="text-align: center;font-size: 1.2em;">
-            {{ "失败case" }}
-          </p>
+        </Table>
+      </Card>
+      <Card
+        v-if="failedData.length > 0" 
+        :bordered="false"
+        class="center-card-s"
+      >
+        <p slot="title" style="text-align: center;font-size: 1.2em;">
+          {{ "失败case" }}
+        </p>
+        <Scroll
+          :on-reach-bottom="addDataArr"
+          :height="contentHeight"
+        >
           <frame-detail-base
             :data="failedData"
             :columns="Columns"
           >
           </frame-detail-base>
-          <!--
-          <Table
-            :columns="ExpandColumns"
-            :data="failedData"
-            style="margin-right: 2%"
-            border
-          ></Table>
-          -->
-        </Card>
-        <Card
-          v-if="succeedData.length > 0"
-          :bordered="false"
-          class="center-card-s"
+        </Scroll>
+      </Card>
+      <Card
+        v-if="succeedData.length > 0"
+        :bordered="false"
+        class="center-card-s"
+      >
+        <p slot="title" style="text-align: center;font-size: 1.2em;">
+          {{ "成功case" }}
+        </p>
+        <Scroll
+          :on-reach-bottom="addDataArr"
+          :height="contentHeight2"
         >
-          <p slot="title" style="text-align: center;font-size: 1.2em;">
-            {{ "成功case" }}
-          </p>
-          <!--
-          <Table
-            :columns="ExpandColumns"
-            :data="succeedData"
-            style="margin-right: 2%"
-            border
-          ></Table>
-          -->
           <frame-detail-base
             :data="succeedData"
             :columns="Columns"
           >
           </frame-detail-base>
-        </Card>
+        </Scroll>
       </Card>
       <Modal
         v-model="ShowDetail"
@@ -146,9 +140,9 @@ import frameDetailBase from '../base/frameDetailBase.vue';
 export default {
   props: {
     'detail': {
-      type: [Array],
+      type: Object,
       default: function () {
-        return [];
+        return null;
       }
     },
     'secondarytype': {
@@ -174,6 +168,11 @@ export default {
     return {
       ShowDetail: false,
       ErrorDetail: {},
+      failedData: [],
+      succeedData: [],
+      contentHeight2: 100,
+      contentHeight: 100,
+      num: 10,
       detailColumns: [
         {
           title: '总数',
@@ -284,20 +283,19 @@ export default {
   },
   mounted: function () {
     // console.log('data', this.detail);
+    this.addDataArr();
+    this.initHeight();
   },
   components: {
     VueJsonPretty,
     frameDetailBase
   },
   computed: {
-    failedData() {
-      const {faliedArray} = this.separateData();
-      // console.log('faliedArray', faliedArray);
-      return faliedArray;
+    allSourceFailed() {
+      return this.detail.failed_data;
     },
-    succeedData() {
-      const {succeedArray} = this.separateData();
-      return succeedArray;
+    allSourceSuccess() {
+      return this.detail.succeed_data;
     }
   },
   methods: {
@@ -342,35 +340,92 @@ export default {
       this.ShowDetail = true;
       this.ErrorDetail = row;
     },
-    separateData() {
-      let succeedArray = [];
-      let faliedArray = [];
-      for (var idx = 0; idx < this.detail.length; idx++) {
-        let item = this.detail[idx];
-        if (!item.status) {
-          continue;
-        }
-        if (item.status.toLowerCase() === 'broken') {
-          item.status = 'failed';
-        }
-        if (item.status.toLowerCase() === 'failed') {
-          faliedArray.push(item);
+    initHeight() {
+      let max_len1 = this.failedData.length;
+      if (max_len1 > 0) {
+        if (max_len1 <= 5) {
+          this.contentHeight = (100 - (max_len1 - 1) * 10) * max_len1;
+        } else if (max_len1 < 10) {
+          this.contentHeight = 80 * max_len1;
         } else {
-          succeedArray.push(item);
+          this.contentHeight = 500;
         }
       }
-      let result = {
-        'succeedArray': [],
-        'faliedArray': []
-      };
-      if (succeedArray.length > 0) {
-        result.succeedArray = succeedArray;
+      let max_len = this.succeedData.length;
+      if (max_len > 0) {
+        if (max_len <= 5) {
+          this.contentHeight2 = (100 - (max_len - 1) * 10) * max_len;
+        } else if (max_len < 10) {
+          this.contentHeight2 = 80 * max_len;
+        } else {
+          this.contentHeight2 = 500;
+        }
       }
-      if (faliedArray.length > 0) {
-        result.faliedArray = faliedArray;
-      }
-      return result;
     },
+    addDataArr() {
+      let max_len1 = Object.keys(this.allSourceFailed).length;
+      if (max_len1 > 0) {
+        let i = 0;
+        max_len1 = max_len1 > this.num ? this.num : max_len1;
+        for (let vd in this.allSourceFailed) {
+          if (i < max_len1 && this.allSourceFailed[vd]) {
+            this.failedData.push(this.allSourceFailed[vd]);
+            this.allSourceFailed[vd] = null;
+            delete this.allSourceFailed[vd];
+            i = i + 1;
+          } else {
+            break;
+          }
+        }
+      }
+      let max_len = Object.keys(this.allSourceSuccess).length;
+      if (max_len > 0) {
+        let j = 0;
+        max_len = max_len > this.num ? this.num : max_len;
+        for (let vd in this.allSourceSuccess) {
+          if (j < max_len && this.allSourceSuccess[vd]) {
+            this.succeedData.push(this.allSourceSuccess[vd]);
+            this.allSourceSuccess[vd] = null;
+            delete this.allSourceSuccess[vd];
+            j = j + 1;
+          } else {
+            break;
+          }
+        }
+      }
+      if (max_len1 == 0  && max_len == 0) {
+        console.log('finish load');
+      }
+    },
+    // separateData() {
+    //   let succeedArray = [];
+    //   let faliedArray = [];
+    //   for (var idx = 0; idx < this.detail.length; idx++) {
+    //     let item = this.detail[idx];
+    //     if (!item.status) {
+    //       continue;
+    //     }
+    //     if (item.status.toLowerCase() === 'broken') {
+    //       item.status = 'failed';
+    //     }
+    //     if (item.status.toLowerCase() === 'failed') {
+    //       faliedArray.push(item);
+    //     } else {
+    //       succeedArray.push(item);
+    //     }
+    //   }
+    //   let result = {
+    //     'succeedArray': [],
+    //     'faliedArray': []
+    //   };
+    //   if (succeedArray.length > 0) {
+    //     result.succeedArray = succeedArray;
+    //   }
+    //   if (faliedArray.length > 0) {
+    //     result.faliedArray = faliedArray;
+    //   }
+    //   return result;
+    // },
     setColor(status) {
       switch (status.toLowerCase()) {
         case 'passed':
@@ -393,10 +448,13 @@ export default {
     margin-bottom: 0.5%;
     margin-left: 0.5%;
   }
+  .scroll-cls {
+    overflow-y: auto;
+  }
   .center-card-s {
     width: 98%;
     max-height: 600px;
     overflow:auto;
-    margin-bottom: 2%
+    margin-bottom: 0.5%
   }
 </style>
