@@ -24,7 +24,7 @@ class CeTaskBuilds(BaseModel, BaseModelMixin):
     repo = Column(VARCHAR(50), comment='repo name') # 这里默认是paddle
     commit_id = Column(VARCHAR(100), comment= '提交版本号') # 任务回归覆盖的commit id
     commit_time = Column(Integer, comment="覆盖paddle的commit提交的时间，单位秒")
-    build_time = Column(Integer, comment="编包时间，单位秒") # 上游任务开始编包的时间
+    build_time = Column(Integer, comment="任务开始执行时间戳，单位秒") # 任务开始执行时间
     branch = Column(VARCHAR(50), comment="提交分支") # 任务覆盖的分支信息
     build_id = Column(VARCHAR(50), comment="任务序列号") # xly:AGILE_PIPELINE_BUILD_ID; tc:%teamcity.build.id%
     job_id = Column(VARCHAR(50), comment="step id") # xly:AGILE_JOB_BUILD_ID; tc:不需要改参数，但是为了占位，可以传递%teamcity.build.step.name%

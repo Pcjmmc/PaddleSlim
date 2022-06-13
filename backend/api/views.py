@@ -35,7 +35,7 @@ class CaseDetailView(MABaseView):
         branch: branch分支信息
         commit_id: commit 信息
         commit_time: commit 的提交信息
-        build_time: 编包的时间
+        build_time: 任务执行时间（建议结束时间为准）
         job_id: 多阶段的job build id ,任务并行追加逻辑
         left_time: status=running中的剩余时间
         status: 任务状态
