@@ -26,7 +26,7 @@ export default {
       appData: [
         {
           'id': 1,
-          'name': '飞桨移核心框架'
+          'name': '飞桨核心框架'
         },
         {
           'id': 2,

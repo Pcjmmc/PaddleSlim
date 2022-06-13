@@ -16,3 +16,4 @@ export const CommitsUrl = '/ce/commits';
 export const CommitDetailUrl = '/ce/commit/detail';
 export const BugUrl = '/ce/bugs';
 export const DetailUrl = '/ce/detail';
+export const OpBenchmarkUrl = '/ce/op-benchmark';

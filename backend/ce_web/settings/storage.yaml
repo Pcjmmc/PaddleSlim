@@ -14,6 +14,12 @@ PRODUCTION:
       db_name: "paddle_quality"
       user: "paddle_test"
       password: "paddle@test"
+    api_benchmark:
+      host: "180.76.178.190"
+      port: 3306
+      db_name: "api_benchmark"
+      user: "paddle_test"
+      password: "paddle@test"
 
 
 DEV:
