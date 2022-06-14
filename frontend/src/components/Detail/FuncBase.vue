@@ -79,7 +79,7 @@
         </Table>
       </Card>
       <Card
-        v-if="failedData.length > 0" 
+        v-if="failedData.length > 0"
         :bordered="false"
         class="center-card-s"
       >
@@ -87,8 +87,8 @@
           {{ "失败case" }}
         </p>
         <Scroll
-          :on-reach-bottom="addDataArr"
           :height="contentHeight"
+          @on-reach-bottom="addDataArr"
         >
           <frame-detail-base
             :data="failedData"
@@ -106,8 +106,8 @@
           {{ "成功case" }}
         </p>
         <Scroll
-          :on-reach-bottom="addDataArr"
           :height="contentHeight2"
+          @on-reach-bottom="addDataArr"
         >
           <frame-detail-base
             :data="succeedData"
@@ -393,7 +393,7 @@ export default {
           }
         }
       }
-      if (max_len1 == 0  && max_len == 0) {
+      if (max_len1 === 0 && max_len === 0) {
         console.log('finish load');
       }
     },

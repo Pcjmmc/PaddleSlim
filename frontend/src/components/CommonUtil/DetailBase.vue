@@ -43,7 +43,7 @@ export default {
           key: 'kpi_status',
           align: 'center',
           render: (h, params) => {
-            const { kpi_status, kpi_value } = params.row;
+            const { kpi_status } = params.row;
             return h('div', [
               h('Tag', {
                 props: {
