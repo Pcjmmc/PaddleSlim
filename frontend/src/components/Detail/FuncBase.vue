@@ -109,7 +109,7 @@
         <Scroll
           :height="contentHeight2"
           :on-reach-bottom="addDataArr"
-          :loading-text="loadingText"
+          :loading-text="loadingText2"
         >
           <frame-detail-base
             :data="succeedData"
@@ -175,6 +175,7 @@ export default {
       contentHeight2: 100,
       contentHeight: 100,
       loadingText: '加载中',
+      loadingText2: '加载中',
       num: 10,
       detailColumns: [
         {
@@ -396,9 +397,11 @@ export default {
           }
         }
       }
-      if (max_len1 === 0 && max_len === 0) {
+      if (max_len === 0) {
+        this.loadingText2 = '加载完成';
+      }
+      if (max_len1 === 0) {
         this.loadingText = '加载完成';
-        console.log('finish load');
       }
     },
     // separateData() {
