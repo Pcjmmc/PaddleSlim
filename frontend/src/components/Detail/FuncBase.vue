@@ -88,7 +88,8 @@
         </p>
         <Scroll
           :height="contentHeight"
-          @on-reach-bottom="addDataArr"
+          :on-reach-bottom="addDataArr"
+          :loading-text="loadingText"
         >
           <frame-detail-base
             :data="failedData"
@@ -107,7 +108,8 @@
         </p>
         <Scroll
           :height="contentHeight2"
-          @on-reach-bottom="addDataArr"
+          :on-reach-bottom="addDataArr"
+          :loading-text="loadingText"
         >
           <frame-detail-base
             :data="succeedData"
@@ -172,6 +174,7 @@ export default {
       succeedData: [],
       contentHeight2: 100,
       contentHeight: 100,
+      loadingText: '加载中',
       num: 10,
       detailColumns: [
         {
@@ -394,6 +397,7 @@ export default {
         }
       }
       if (max_len1 === 0 && max_len === 0) {
+        this.loadingText = '加载完成';
         console.log('finish load');
       }
     },
