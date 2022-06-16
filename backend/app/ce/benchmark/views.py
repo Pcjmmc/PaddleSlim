@@ -56,11 +56,14 @@ class BenchmarkManage(MABaseView):
         res = {}
         for k, val in value.items():
             new_key = key + '_' + k
-            try:
-                # 如果可以转换成flaot型，则保留4位有效数字
-                data = '%.4f' % (float(val))
-                data = str(data) + 'x'
-            except:
+            if key == "compare":
+                try:
+                    # 如果可以转换成flaot型，则保留4位有效数字
+                    data = '%.4f' % (float(val))
+                    data = str(data) + 'x'
+                except:
+                    data = val
+            else:
                 data = val
             res[new_key] = data
         return res
