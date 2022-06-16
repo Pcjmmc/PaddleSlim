@@ -60,7 +60,7 @@ class BenchmarkManage(MABaseView):
                 try:
                     # 如果可以转换成flaot型，则保留4位有效数字
                     data = '%.4f' % (float(val))
-                    data = str(data) + 'x'
+                    data = str(data)
                 except:
                     data = val
             else:

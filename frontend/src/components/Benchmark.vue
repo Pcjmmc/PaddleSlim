@@ -87,7 +87,7 @@ export default {
                 style: {
                   color: compare_forward < 0 ? 'red' : 'green'
                 }
-              }, compare_forward)
+              }, compare_forward + 'x')
             ]);
           }
         },
@@ -102,7 +102,7 @@ export default {
                 style: {
                   color: compare_backward < 0 ? 'red' : 'green'
                 }
-              }, compare_backward)
+              }, compare_backward + 'x')
             ]);
           }
         },
@@ -117,7 +117,7 @@ export default {
                 style: {
                   color: compare_total < 0 ? 'red' : 'green'
                 }
-              }, compare_total)
+              }, compare_total + 'x')
             ]);
           }
         }
