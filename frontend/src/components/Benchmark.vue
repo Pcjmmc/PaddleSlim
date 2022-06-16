@@ -1,13 +1,16 @@
 <template>
-    <Table :columns="columns11" :data="details" border></Table>
+    <Table
+     border
+    :columns="columns11"
+    :data="details"
+  ></Table>
 </template>
 <script>
-import Cookies from 'js-cookie';
 import api from '../api/index';
 import { OpBenchmarkUrl } from '../api/url.js';
 
 export default {
-  data () {
+  data() {
     return {
       details: [],
       columns11: [
@@ -114,16 +117,16 @@ export default {
           align: 'center'
         }
       ]
-    }
+    };
   },
-  mounted () {
+  mounted() {
     this.getData();
   },
   methods: {
     async getData() {
       // 判断参数如果参数中有tag，则name=version；如果没有，则name=release+version
       const { code, data } = await api.get(OpBenchmarkUrl);
-      if (parseInt(code) == 200) {
+      if (parseInt(code, 10) === 200) {
         this.details = data;
         console.log(this.details);
       } else {
@@ -132,11 +135,11 @@ export default {
           content: '请求出错: ',
           duration: 30,
           closable: true
-        })
+        });
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
