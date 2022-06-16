@@ -15,8 +15,18 @@ export default {
       details: [],
       columns11: [
         {
+          title: '配置',
+          key: 'yaml',
+          align: 'center'
+        },
+        {
           title: 'API',
           key: 'paddle_api'
+        },
+        {
+          title: 'CaseName',
+          width: 120,
+          key: 'case_name'
         },
         {
           title: '前向',
@@ -110,11 +120,6 @@ export default {
               }, compare_total)
             ]);
           }
-        },
-        {
-          title: '配置',
-          key: 'yaml',
-          align: 'center'
         }
       ]
     };

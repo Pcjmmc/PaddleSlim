@@ -35,15 +35,20 @@ class BenchmarkManage(MABaseView):
         case_details = await BenchmarkCases.aio_filter_details(
             need_all=True, **{"jid": jobid}
         )
-        details = [json.loads(item.get("result")) for item in case_details if item.get("result")]
+        details = [
+            {"case_name": item.get("case_name"),
+            "result_detail": json.loads(item.get("result"))}
+            for item in case_details if item.get("result")
+        ]
         for item in details:
-            tep = {}
-            for key, value in item.items():
-                if key != "yaml":
+            tep = {"case_name": item.get("case_name")}
+            content = item.get("result_detail")
+            for key, value in content.items():
+                if key not in ["yaml"]:
                     res = self.process_data(key, value)
                     tep.update(res)
                 else:
-                    tep.update({"yaml": value})
+                    tep.update({key: value})
             results.append(tep)
         return len(results), results
 
@@ -51,5 +56,11 @@ class BenchmarkManage(MABaseView):
         res = {}
         for k, val in value.items():
             new_key = key + '_' + k
-            res[new_key] = val
+            try:
+                # 如果可以转换成flaot型，则保留4位有效数字
+                data = '%.4f' % (float(val))
+                data = str(data) + 'x'
+            except:
+                data = val
+            res[new_key] = data
         return res
