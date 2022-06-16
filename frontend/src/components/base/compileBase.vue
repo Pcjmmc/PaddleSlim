@@ -101,7 +101,7 @@
               <span
                 v-if="item.show_name"
                 style="font-size:13px;"
-              > {{ item.tname }} </span>
+              > {{ item.show_name }} </span>
               <span
                 v-else
                 style="font-size:13px;"

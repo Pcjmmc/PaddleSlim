@@ -21,7 +21,7 @@ class CeTasks(BaseModel, BaseModelMixin):
     __tablename__ = 'ce_task'
     id = Column(Integer, primary_key=True, autoincrement=True)
     tname = Column(VARCHAR(200), comment='任务名') # xly: ''; tc: %system.teamcity.buildConfName%
-    show_name = Column(VARCHAR(50), comment='任务名') # 自定义展示名称
+    show_name = Column(VARCHAR(200), comment='任务名') # 自定义展示名称
     workspace = Column(VARCHAR(50), comment='所属的空间名') # xly：AGILE_WORKSPACE； tc:非必需，填写上一级的名字%system.teamcity.projectName% 
     owner = Column(VARCHAR(50), comment="任务所属人")
     build_type_id = Column(VARCHAR(255), comment="任务的build type") # xly： "pipelineConfId;得确定下这个值唯一吗"； teamcity："%system.teamcity.buildType.id%"
