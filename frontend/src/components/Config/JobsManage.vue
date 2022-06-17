@@ -625,6 +625,7 @@ export default {
       }
     },
     searchData() {
+      this.search.page = 1;
       this.getJobData();
     },
     getDescBykey(key) {
