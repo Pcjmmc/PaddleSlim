@@ -5,7 +5,7 @@
           <Icon type="ios-information-circle" size="20"></Icon>
           {{ "任务信息概述" }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em; margin-top: 5%">
+      <p slot="title" style="text-align: left;font-size: 1.0em; margin-top: 1%">
         任务名: {{ $route.query.tname }}
       </p>
       <p slot="title" style="text-align: left;font-size: 1.0em;">
