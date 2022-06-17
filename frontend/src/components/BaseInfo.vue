@@ -105,7 +105,7 @@ export default {
 }
 @media screen and (max-width: 1500px) {
 .commit {
-  width: 300px;}
+  width: 400px;}
 }
 .branch{ height:40px; margin:0 auto}
 @media screen and (min-width: 1501px) {

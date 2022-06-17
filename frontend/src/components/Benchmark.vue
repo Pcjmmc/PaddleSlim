@@ -35,12 +35,24 @@ export default {
             {
               title: 'paddle',
               key: 'paddle_forward',
-              align: 'center'
+              align: 'center',
+              render: (h, params) => {
+                return h('div', [
+                  h('span', {
+                  }, params.row.paddle_forward + 'x')
+                ]);
+              }
             },
             {
               title: 'torch',
               key: 'torch_forward',
-              align: 'center'
+              align: 'center',
+              render: (h, params) => {
+                return h('div', [
+                  h('span', {
+                  }, params.row.torch_forward + 'x')
+                ]);
+              }
             }
           ]
         },
@@ -51,12 +63,24 @@ export default {
             {
               title: 'paddle',
               key: 'paddle_backward',
-              align: 'center'
+              align: 'center',
+              render: (h, params) => {
+                return h('div', [
+                  h('span', {
+                  }, params.row.paddle_backward + 'x')
+                ]);
+              }
             },
             {
               title: 'torch',
               key: 'torch_backward',
-              align: 'center'
+              align: 'center',
+              render: (h, params) => {
+                return h('div', [
+                  h('span', {
+                  }, params.row.torch_backward + 'x')
+                ]);
+              }
             }
           ]
         },
@@ -67,12 +91,24 @@ export default {
             {
               title: 'paddle',
               key: 'paddle_total',
-              align: 'center'
+              align: 'center',
+              render: (h, params) => {
+                return h('div', [
+                  h('span', {
+                  }, params.row.paddle_total + 'x')
+                ]);
+              }
             },
             {
               title: 'torch',
               key: 'torch_total',
-              align: 'center'
+              align: 'center',
+              render: (h, params) => {
+                return h('div', [
+                  h('span', {
+                  }, params.row.torch_total + 'x')
+                ]);
+              }
             }
           ]
         },
