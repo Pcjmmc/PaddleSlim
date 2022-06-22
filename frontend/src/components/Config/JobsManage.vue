@@ -386,8 +386,8 @@ export default {
           filters: [
           ],
           filterMultiple: false,
-          filterMethod (value, row) {
-            return row.system == value;
+          filterMethod(value, row) {
+            return row.system === value;
           }
         },
         {
@@ -658,7 +658,6 @@ export default {
     getStatusFilters() {
       let filterst = [];
       let filters = [];
-      let res = {};
       for (var i = 0; i < this.jobsList.length; i++) {
         let system = this.jobsList[i].system;
         filterst.push(system);
