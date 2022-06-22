@@ -307,7 +307,8 @@ export default {
         'PaddleRec',
         'PaddleSlim',
         'PaddleHub',
-        'Paddle2ONNX'
+        'Paddle2ONNX',
+        'CINN'
       ],
       systemList: [],
       stepList: [
@@ -380,7 +381,14 @@ export default {
         },
         {
           title: '覆盖平台',
-          key: 'system'
+          key: 'system',
+          width: '120',
+          filters: [
+          ],
+          filterMultiple: false,
+          filterMethod (value, row) {
+            return row.system == value;
+          }
         },
         {
           title: '任务描述',
@@ -509,6 +517,7 @@ export default {
       if (parseInt(code) == 200) {
         this.total = all_count;
         this.jobsList = data;
+        this.getStatusFilters();
       } else {
         this.total = 0;
         this.jobsList = [];
@@ -645,6 +654,23 @@ export default {
     pageChange(pageNum) {
       this.search.page = pageNum;
       this.getJobData();
+    },
+    getStatusFilters() {
+      let filterst = [];
+      let filters = [];
+      let res = {};
+      for (var i = 0; i < this.jobsList.length; i++) {
+        let system = this.jobsList[i].system;
+        filterst.push(system);
+      }
+      this.newfilterst = Array.from(new Set(filterst));
+      for (var j = 0; j < this.newfilterst.length; j++) {
+        filters[j] = {
+          label: this.newfilterst[j],
+          value: this.newfilterst[j]
+        };
+      }
+      this.jobsColumn[2].filters = filters;
     }
   }
 };

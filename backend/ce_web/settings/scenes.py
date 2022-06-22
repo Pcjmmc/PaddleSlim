@@ -17,7 +17,8 @@ secondary_type = {
         "预测-Linux-Jetson",
         "预测-Mac",
         "XPU2",
-        "ROCM"
+        "ROCM",
+        "NPU"
     ],
     "frame": [
         "api功能测试",
