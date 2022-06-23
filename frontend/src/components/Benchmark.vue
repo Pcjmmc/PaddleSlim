@@ -1,11 +1,23 @@
 <template>
+  <div>
+    <div>
+      <span style="text-align: center;font-size: 1.2em;"> job 信息 </span>
+      <vue-json-pretty
+        :data="job"
+      >
+      </vue-json-pretty>
+    </div>
+    <span style="text-align: center;font-size: 1.2em;"> case 详情 </span>
     <Table
-     border
-    :columns="columns11"
-    :data="details"
-  ></Table>
+      border
+      :columns="columns11"
+      :data="details"
+    ></Table>
+  </div>
 </template>
 <script>
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 import api from '../api/index';
 import { OpBenchmarkUrl } from '../api/url.js';
 
@@ -13,11 +25,30 @@ export default {
   data() {
     return {
       details: [],
+      job: {},
+      ShowDetail: false,
+      ErrorDetail: {},
       columns11: [
         {
           title: '配置',
           key: 'yaml',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [
+              h('Tooltip', {
+                props: {
+                  placement: 'right',
+                  transfer: true
+                }
+              }, [params.row.yaml.value, h('vue-json-pretty', {
+                slot: 'content',
+                props: {
+                  data: params.row.yaml.conf_detail
+                }
+              })
+              ])
+            ]);
+          }
         },
         {
           title: 'API',
@@ -163,13 +194,17 @@ export default {
   mounted() {
     this.getData();
   },
+  components: {
+    VueJsonPretty
+  },
   methods: {
     async getData() {
       // 判断参数如果参数中有tag，则name=version；如果没有，则name=release+version
       const { code, data } = await api.get(OpBenchmarkUrl);
       if (parseInt(code, 10) === 200) {
-        this.details = data;
-        console.log(this.details);
+        this.job = data.job;
+        this.details = data.case_detail;
+        // console.log(this.details);
       } else {
         this.details = [];
         this.$Message.error({
@@ -189,8 +224,8 @@ export default {
   margin-left: 0.5%;
 }
 .center-card-s {
-    width: 100%;
-    max-height: 600px;
-    overflow:auto;
-  }
+  width: 100%;
+  max-height: 600px;
+  overflow:auto;
+}
 </style>

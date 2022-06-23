@@ -1,3 +1,4 @@
+wget
 motor==2.3.0
 numpy
 PyYAML==5.3.1
