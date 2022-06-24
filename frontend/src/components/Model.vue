@@ -15,6 +15,9 @@
         commit信息: {{ $route.query.commit_id }}
       </p>
       <p slot="title" style="text-align: left;font-size: 1.0em;">
+        commit提交时间: {{ changeTimestamp($route.query.commit_time) }}
+      </p>
+      <p slot="title" style="text-align: left;font-size: 1.0em;">
         分支信息: {{ $route.query.branch }}
       </p>
       <p slot="title" style="text-align: left;font-size: 1.0em;">

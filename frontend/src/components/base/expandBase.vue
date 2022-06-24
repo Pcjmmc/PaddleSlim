@@ -377,7 +377,8 @@ export default {
         branch: item.branch,
         commit_id: item.commit_id,
         tname: item.tname,
-        created: item.created
+        created: item.created,
+        commit_time: item.commit_time
       };
       // let _params = {};
       // _params = Object.assign(_params, item);

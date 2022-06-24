@@ -35,6 +35,13 @@
           style="text-align: left;font-size: 1.0em;"
           v-if="index==0"
         >
+          commit提交时间: {{ changeTimestamp($route.query.commit_time) }}
+        </p>
+        <p
+          slot="title"
+          style="text-align: left;font-size: 1.0em;"
+          v-if="index==0"
+        >
           分支信息: {{ $route.query.branch }}
         </p>
         <p

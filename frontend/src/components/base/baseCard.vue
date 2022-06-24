@@ -208,7 +208,8 @@ export default {
         commit_id: item.commit_id,
         tname: item.tname,
         reponame: item.reponame,
-        created: item.created
+        created: item.created,
+        commit_time: item.commit_time
       };
       // _params = Object.assign(_params, item);
       let detail_name = '';

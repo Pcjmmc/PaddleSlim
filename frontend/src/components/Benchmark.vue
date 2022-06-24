@@ -70,7 +70,7 @@ export default {
               render: (h, params) => {
                 return h('div', [
                   h('span', {
-                  }, params.row.paddle_forward + 'x')
+                  }, params.row.paddle_forward + 's')
                 ]);
               }
             },
@@ -81,7 +81,7 @@ export default {
               render: (h, params) => {
                 return h('div', [
                   h('span', {
-                  }, params.row.torch_forward + 'x')
+                  }, params.row.torch_forward + 's')
                 ]);
               }
             }
@@ -98,7 +98,7 @@ export default {
               render: (h, params) => {
                 return h('div', [
                   h('span', {
-                  }, params.row.paddle_backward + 'x')
+                  }, params.row.paddle_backward + 's')
                 ]);
               }
             },
@@ -109,7 +109,7 @@ export default {
               render: (h, params) => {
                 return h('div', [
                   h('span', {
-                  }, params.row.torch_backward + 'x')
+                  }, params.row.torch_backward + 's')
                 ]);
               }
             }
@@ -126,7 +126,7 @@ export default {
               render: (h, params) => {
                 return h('div', [
                   h('span', {
-                  }, params.row.paddle_total + 'x')
+                  }, params.row.paddle_total + 's')
                 ]);
               }
             },
@@ -137,7 +137,7 @@ export default {
               render: (h, params) => {
                 return h('div', [
                   h('span', {
-                  }, params.row.torch_total + 'x')
+                  }, params.row.torch_total + 's')
                 ]);
               }
             }

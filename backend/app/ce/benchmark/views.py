@@ -69,7 +69,7 @@ class BenchmarkManage(MABaseView):
             results["case_detail"].append(tep)
         return len(results), results
 
-    def read_remote_yaml(self, url="https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/framework/e2e/yaml/test0.yml"):
+    def read_remote_yaml(self, url="https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/framework/e2e/yaml/nn.yml"):
         _, file_name = url.rsplit("/", 1)
         out = path(PROJECT_ROOT, "opBenchemarkConf")
         if not os.path.exists(out):
@@ -81,8 +81,8 @@ class BenchmarkManage(MABaseView):
             os.remove(whl_file)
         wget.download(url, out=out)
         try:
-            f = open(whl_file)
-            store_dict = yaml.safe_load(f)
+            f = open(whl_file, encoding="utf-8")
+            store_dict = yaml.load(f, Loader=yaml.FullLoader)
         except Exception as e:
             store_dict = {}
         finally:

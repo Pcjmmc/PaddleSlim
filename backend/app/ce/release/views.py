@@ -330,6 +330,7 @@ class TaskManage(MABaseView):
                 item["job_id"] = build_info[tid].get("job_id")
                 item["commit_id"] = build_info[tid].get("commit_id")
                 item["created"] = build_info[tid].get("created")
+                item["commit_time"] = build_info[tid].get("commit_time")
                 item["branch"] = build_info[tid].get("branch")
                 item["repo"] = build_info[tid].get("repo")
                 item["artifact_url"] = build_info[tid].get("artifact_url")
