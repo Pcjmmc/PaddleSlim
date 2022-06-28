@@ -1,6 +1,28 @@
 <template>
   <div>
-    <div>
+    <div style="margin-top: 1.5%">
+      <Row
+        type="flex"
+        justify="start"
+        class="all-line-row"
+      >
+        <Col span="3">
+          <Input
+            clearable
+            v-model="jid"
+            placeholder="输入job id"
+          ></Input>
+        </Col>
+        <Col span="1" offset="1">
+          <Button
+            icon="ios-search"
+            type="primary"
+            @click="getData"
+          >search</Button>
+        </Col>
+      </Row>
+    </div>
+    <div style="margin-top: 1.5%">
       <span style="text-align: center;font-size: 1.2em;"> job 信息 </span>
       <vue-json-pretty
         :data="job"
@@ -24,6 +46,7 @@ import { OpBenchmarkUrl } from '../api/url.js';
 export default {
   data() {
     return {
+      jid: null,
       details: [],
       job: {},
       ShowDetail: false,
@@ -200,7 +223,10 @@ export default {
   methods: {
     async getData() {
       // 判断参数如果参数中有tag，则name=version；如果没有，则name=release+version
-      const { code, data } = await api.get(OpBenchmarkUrl);
+      let params = {
+        jid: this.jid
+      };
+      const { code, data } = await api.get(OpBenchmarkUrl, params);
       if (parseInt(code, 10) === 200) {
         this.job = data.job;
         this.details = data.case_detail;

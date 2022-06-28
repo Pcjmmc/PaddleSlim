@@ -33,10 +33,16 @@ class BenchmarkManage(MABaseView):
         """
         筛选策略，选出最新的1个job；拿到case详情
         """
+        job_id = kwargs.get("jid")
         results = {"job": {}, "case_detail": []}
-        result = await BenchmarkJobs.aio_get_object(
-            order_by="-id"
-        )
+        if not job_id:
+            result = await BenchmarkJobs.aio_get_object(
+                order_by="-id", **{"status": "done"}
+            )
+        else:
+            result = await BenchmarkJobs.aio_get_object(
+                **{"id": job_id}
+            )
         job = {key: val for key, val in result.items()}
         if job.get("update_time"):
             job["update_time"] = str(job.get("update_time"))
@@ -69,7 +75,7 @@ class BenchmarkManage(MABaseView):
             results["case_detail"].append(tep)
         return len(results), results
 
-    def read_remote_yaml(self, url="https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/framework/e2e/yaml/nn.yml"):
+    def read_remote_yaml(self, url="https://paddle-qa.bj.bcebos.com/github/nn.yml"):
         _, file_name = url.rsplit("/", 1)
         out = path(PROJECT_ROOT, "opBenchemarkConf")
         if not os.path.exists(out):
