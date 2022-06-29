@@ -72,6 +72,8 @@ class TaskBuildInfo(object):
         # in查询如果太多的话会很慢的
         tids = tids if type(tids) == list else [tids]
         final_result = {tid: {} for tid in tids}
+        results = []
+        all_results = []
         # branch这里需要入库的时候处理下
         query_params = {
             "commit_time__gt": begin_time,
@@ -88,8 +90,15 @@ class TaskBuildInfo(object):
                     **query_params, order_by="-created"
                 )
             )
+            if len(job_list) >= 10:
+                result = await asyncio.gather(*job_list)
+                job_list = []
+                results.append(result)
         result = await asyncio.gather(*job_list)
-        for res in result:
+        results.append(result)
+        for res in results:
+            all_results.extend(res)
+        for res in all_results:
             if res:
                 tid = res.tid
                 final_result[tid].update(res)

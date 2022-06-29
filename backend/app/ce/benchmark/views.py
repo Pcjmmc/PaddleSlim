@@ -36,13 +36,19 @@ class BenchmarkManage(MABaseView):
         job_id = kwargs.get("jid")
         results = {"job": {}, "case_detail": []}
         if not job_id:
+            begin_time = int(time.time())
             result = await BenchmarkJobs.aio_get_object(
                 order_by="-id", **{"status": "done"}
             )
+            end_time = int(time.time()) - begin_time
+            print("seach max id need %s time S", end_time, flush=True)
         else:
+            begin_time = int(time.time())
             result = await BenchmarkJobs.aio_get_object(
                 **{"id": job_id}
             )
+            end_time = int(time.time()) - begin_time
+            print("seach select id need %s time S", end_time, flush=True)
         job = {key: val for key, val in result.items()}
         if job.get("update_time"):
             job["update_time"] = str(job.get("update_time"))
@@ -50,12 +56,18 @@ class BenchmarkManage(MABaseView):
             job["create_time"] = str(job.get("create_time"))
         jobid = result.id
         results["job"] = job
+        begin_time = int(time.time())
         conf_dict = self.read_remote_yaml()
+        end_time = int(time.time()) - begin_time
+        print("download yaml need %s time S", end_time, flush=True)
         #获取到即可删除
         self.delete_path()
+        begin_time = int(time.time())
         case_details = await BenchmarkCases.aio_filter_details(
             need_all=True, **{"jid": jobid}
         )
+        end_time = int(time.time()) - begin_time
+        print("search cadetail need %s time S", end_time, flush=True)
         details = [
             {"case_name": item.get("case_name"),
             "result_detail": json.loads(item.get("result"))}

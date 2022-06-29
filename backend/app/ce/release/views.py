@@ -48,12 +48,18 @@ class ReleaseVersionManage(MABaseView):
         total = 0
         if not version:
             return 0, release_info
+        begin_time = int(time.time())
         res = await CeReleaseVersion().aio_get_object(**{"name": version})
+        end_time = int(time.time()) - begin_time
+        print("seach mysql get version info 1111", end_time, flush=True)
         if res:
             if res.activated:
+                begin_time = int(time.time())
                 branch_info = await GetBranches().get_commit_info_by_branch(
                     **{'branch': version}
                 )
+                end_time = int(time.time()) - begin_time
+                print("seach git hub commit info 2222", end_time, flush=True)
                 latest_commit = branch_info.get("commit")
             else:
                 # 如果是已发版的，则直接从库里拿到封版的commit
@@ -77,20 +83,31 @@ class ReleaseVersionManage(MABaseView):
             #     } for item in new_steps
             # }
             # 根据release 的细腻来查询,改接口是负责release的，故step=release
+            begin_time = int(time.time())
             all_release_task = await TasksInfo.get_all_task_info_by_filter(
                 step="release", appid=appid
             )
+            end_time = int(time.time()) - begin_time
+            print("get all release task 3333", end_time, flush=True)
             total = len(all_release_task)
             # 查询到来全量任务
             tids = [item.get("id") for item in all_release_task]
             # 获取任务的最新状态
+            begin_time = int(time.time())
             build_info = await TaskBuildInfo.get_task_latest_status_by_tids(
                 tids, res.get("branch"), res.get("begin_time"), end_time=res.get("end_time", None)
             )
+            end_time = int(time.time()) - begin_time
+            print("get all release task build info 4444", end_time, flush=True)
             # 获取豁免状态
-            exempt_info = await ExemptInfo.get_task_exempt_status_by_tids(
-                tids, version_id
-            )
+            begin_time = int(time.time())
+            exempt_info = {}
+            # exempt_info = await ExemptInfo.get_task_exempt_status_by_tids(
+            #     tids, version_id
+            # )
+            end_time = int(time.time()) - begin_time
+            print("get all release task exempt info build info 5555", end_time, flush=True)
+            begin_time = int(time.time())
             temp_data = [{
                 "tid": item["id"], 
                 "tname": item["tname"], 
@@ -119,6 +136,8 @@ class ReleaseVersionManage(MABaseView):
             )
             summary = Summary.get_summary(temp_data)
             release_info["summary"] = summary
+            end_time = int(time.time()) - begin_time
+            print("generate data 6666", end_time, flush=True)
         return 0, release_info
 
 
@@ -300,9 +319,10 @@ class TaskManage(MABaseView):
             tids, branch, begin_time, end_time=end_time
         )
         # 获取豁免状态
-        exempt_info = await ExemptInfo.get_task_exempt_status_by_tids(
-            tids, version_id
-        )
+        exempt_info = {}
+        # exempt_info = await ExemptInfo.get_task_exempt_status_by_tids(
+        #     tids, version_id
+        # )
         temp_data = [{
             "tid": item["id"],
             "tname": item["tname"],
