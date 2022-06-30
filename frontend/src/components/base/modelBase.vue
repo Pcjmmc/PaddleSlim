@@ -358,7 +358,7 @@ export default {
 <style scoped>
   .center-card-s {
     width: 100%;
-    max-height: 600px;
+    max-height: 700px;
     overflow:auto;
     border-color:green;
   }
