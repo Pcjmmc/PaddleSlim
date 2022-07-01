@@ -6,13 +6,10 @@ import asyncio
 import datetime
 import json
 import os
-import shutil
 import time
 import urllib.request
 
-# encoding=utf-8
-import wget
-import yaml
+from app.ce.benchmark.cache import BenchmarkCase
 from ce_web.settings.common import PROJECT_ROOT, path
 from ce_web.settings.scenes import scenes_dict
 from models.benchmark_cases import BenchmarkCases
@@ -41,14 +38,14 @@ class BenchmarkManage(MABaseView):
                 order_by="-id", **{"status": "done"}
             )
             end_time = int(time.time()) - begin_time
-            print("seach max id need %s time S", end_time, flush=True)
+            print("seach max id need %s s" % (end_time), flush=True)
         else:
             begin_time = int(time.time())
             result = await BenchmarkJobs.aio_get_object(
                 **{"id": job_id}
             )
             end_time = int(time.time()) - begin_time
-            print("seach select id need %s time S", end_time, flush=True)
+            print("seach select id need %s s" % (end_time), flush=True)
         job = {key: val for key, val in result.items()}
         if job.get("update_time"):
             job["update_time"] = str(job.get("update_time"))
@@ -57,17 +54,16 @@ class BenchmarkManage(MABaseView):
         jobid = result.id
         results["job"] = job
         begin_time = int(time.time())
-        conf_dict = self.read_remote_yaml()
+        conf_dict = await BenchmarkCase.get_value()
         end_time = int(time.time()) - begin_time
-        print("download yaml need %s time S", end_time, flush=True)
+        print("download yaml need %s s" % (end_time), flush=True)
         #获取到即可删除
-        self.delete_path()
         begin_time = int(time.time())
         case_details = await BenchmarkCases.aio_filter_details(
             need_all=True, **{"jid": jobid}
         )
         end_time = int(time.time()) - begin_time
-        print("search cadetail need %s time S", end_time, flush=True)
+        print("search cadetail need %s s" % (end_time), flush=True)
         details = [
             {"case_name": item.get("case_name"),
             "result_detail": json.loads(item.get("result"))}
@@ -87,30 +83,6 @@ class BenchmarkManage(MABaseView):
             results["case_detail"].append(tep)
         return len(results), results
 
-    def read_remote_yaml(self, url="https://paddle-qa.bj.bcebos.com/github/nn.yml"):
-        _, file_name = url.rsplit("/", 1)
-        out = path(PROJECT_ROOT, "opBenchemarkConf")
-        if not os.path.exists(out):
-            # 不存在则创建路径
-            os.makedirs(out)
-        whl_file = path(out, file_name)
-        # 判断下是否存在改文件存在则删除
-        if file_name and os.path.exists(whl_file):
-            os.remove(whl_file)
-        wget.download(url, out=out)
-        try:
-            f = open(whl_file, encoding="utf-8")
-            store_dict = yaml.load(f, Loader=yaml.FullLoader)
-        except Exception as e:
-            store_dict = {}
-        finally:
-            f.close()
-        return store_dict
-
-    def delete_path(self):
-        out = path(PROJECT_ROOT, "opBenchemarkConf")
-        if os.path.exists(out):
-            shutil.rmtree(out)
 
     def process_data(self, key, value):
         res = {}

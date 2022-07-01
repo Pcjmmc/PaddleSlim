@@ -10,5 +10,6 @@ docker run -d --name=paddle_quality_web_backend  --net=host \
     pip install -r requirements.txt
     unset https_proxy
     unset http_proxy
+    python cron/task.py
     /usr/local/bin/supervisord -n -c /home/app/backend/supervisor/supervisord.conf
     "
