@@ -1,3 +1,6 @@
+"""
+benchmark 定时更新缓存任务
+"""
 # encoding: utf-8
 import asyncio
 import os
@@ -15,6 +18,9 @@ from ce_web.settings.common import PROJECT_ROOT, path
 
 
 async def update_benchmark_config(url="https://paddle-qa.bj.bcebos.com/github/nn.yml"):
+    """
+    将远程的yaml缓存到redis
+    """
     # download config
     result = read_remote_yaml(url=url)
     # 更新缓存
@@ -23,11 +29,17 @@ async def update_benchmark_config(url="https://paddle-qa.bj.bcebos.com/github/nn
 
 
 def delete_path():
+    """
+    删除本地的yaml文件
+    """
     out = path(PROJECT_ROOT, "opBenchemarkConf")
     if os.path.exists(out):
         shutil.rmtree(out)
 
 def read_remote_yaml(url):
+    """
+    下载远程的yaml
+    """
     _, file_name = url.rsplit("/", 1)
     out = path(PROJECT_ROOT, "opBenchemarkConf")
     if not os.path.exists(out):

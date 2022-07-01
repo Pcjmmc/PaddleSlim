@@ -1,3 +1,6 @@
+"""
+定时任务的创建
+"""
 # encoding: utf-8
 from crontab import CronTab
 cron = CronTab(user='root')
