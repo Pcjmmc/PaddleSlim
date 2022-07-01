@@ -1,7 +1,8 @@
+# !/usr/bin/env python3
+# encoding: utf-8
 """
 benchmark 定时更新缓存任务
 """
-# encoding: utf-8
 import asyncio
 import os
 import shutil

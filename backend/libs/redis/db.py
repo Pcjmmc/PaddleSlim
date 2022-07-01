@@ -1,3 +1,4 @@
+# !/usr/bin/env python3
 # -*- coding:utf8 -*-
 """
 创建redis连接池

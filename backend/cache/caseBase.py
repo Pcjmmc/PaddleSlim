@@ -1,7 +1,8 @@
+# !/usr/bin/env python3
+# encoding: utf-8
 """
 Cache 的基类定义
 """
-# encoding: utf-8
 from libs.redis.db import redis_pools
 
 class CacheBase(object):
