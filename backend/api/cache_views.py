@@ -1,6 +1,7 @@
 """
 提供api负责单个任务最新的一次build 结果保存
 """
+# !/usr/bin/env python3
 # encoding: utf-8
 import asyncio
 import json
