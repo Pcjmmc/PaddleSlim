@@ -1,8 +1,8 @@
+# !/usr/bin/env python3
+# encoding: utf-8
 """
 提供api负责单个任务最新的一次build 结果保存
 """
-# !/usr/bin/env python3
-# encoding: utf-8
 import asyncio
 import json
 
@@ -16,6 +16,9 @@ class BuildCacheView(MABaseView):
     """
 
     async def post(self, **kwargs):
+        """
+        request 入口,调用父类post
+        """
         return await super().post(**kwargs)
 
     async def post_data(self, **kwargs):
