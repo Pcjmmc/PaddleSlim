@@ -31,6 +31,7 @@ class BaseRpc(object):
     params = {}
     headers = {}
     auth = None
+    proxy = None
     need_data = False
 
     def __init__(self, params=empty, headers=empty):
@@ -136,6 +137,7 @@ class BaseRpc(object):
                                                               method=self.method,
                                                               json=self._json_data,
                                                               auth=self.auth,
+                                                              proxy=self.proxy,
                                                               **{'headers': self.headers})
         except Exception as e:
             self._errors = e.args

@@ -35,6 +35,6 @@ class BuildCacheView(MABaseView):
         if branch in ["release", "develop"]:
             cache_branch = branch
         if tid and cache_branch:
-            # 删除已经存在的key；不支持追究，因为每次都是完整存入
+            # 删除已经存在的key；不支持追加，因为每次都是完整存入
             await BuildCacheBase.delete_keys(tid, cache_branch)
             await BuildCacheBase.set_multi(tid, cache_branch, data=kwargs)

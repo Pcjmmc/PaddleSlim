@@ -23,6 +23,7 @@ class GetTags(BaseRpc):
     method = 'get'
     gateway = PADDLE_GIT_GATEWAY
     api = 'tags'
+    proxy = "http://172.19.57.45:3128"
     auth = aiohttp.BasicAuth(
         login=PADDLE_GIT_USER,
         password=PADDLE_GIT_PASSD,
@@ -51,6 +52,7 @@ class GetBranches(BaseRpc):
     method = 'get'
     gateway = PADDLE_GIT_GATEWAY
     api = 'branches/{branch}'
+    proxy = "http://172.19.57.45:3128"
     auth = aiohttp.BasicAuth(
         login=PADDLE_GIT_USER,
         password=PADDLE_GIT_PASSD, 
@@ -84,6 +86,7 @@ class GetCommit(BaseRpc):
     method = 'get'
     gateway = PADDLE_GIT_GATEWAY
     api = 'commits/{commit}'
+    proxy = "http://172.19.57.45:3128"
     auth = aiohttp.BasicAuth(
         login=PADDLE_GIT_USER,
         password=PADDLE_GIT_PASSD, 
@@ -102,6 +105,7 @@ class GetCommit(BaseRpc):
 
     async def get_data(self, **kwargs):
         result = await self.is_valid()
+        print(result)
         if result and str(self._status == '200'):
             return self.response_json
         return {}
@@ -113,6 +117,7 @@ class GetCommits(BaseRpc):
     method = 'get'
     gateway = PADDLE_GIT_GATEWAY
     api = 'commits'
+    proxy = "http://172.19.57.45:3128"
     auth = aiohttp.BasicAuth(
         login=PADDLE_GIT_USER,
         password=PADDLE_GIT_PASSD, 

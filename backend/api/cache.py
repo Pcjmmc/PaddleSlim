@@ -24,7 +24,7 @@ class BuildCacheBase(CacheBase):
     @classmethod
     async def delete_keys(cls, tid, branch):
         """
-        如果已经存在则删除，不存在追究的情况，因为任务的最新一次信息都是一次性存入的
+        如果已经存在则删除，不存在追加的情况，因为任务的最新一次信息都是一次性存入的
         """
         key = cls.key_format.format(tid=tid, branch=branch)
         with await cls.get_pools() as redis_conn:

@@ -17,6 +17,10 @@ async def send_http_request(access_url, access_params, method='get', json=None, 
         raise TypeError("Http request cannot support the [%s] method!" % method)
 
     _kwargs = {'params': None, 'data': None, 'json': None, 'headers': None, 'auth': None}
+
+    if kwargs.get('proxy'):
+        _kwargs['proxy'] = kwargs['proxy']
+
     if 'headers' in kwargs:
         _kwargs['headers'] = kwargs['headers']
     
