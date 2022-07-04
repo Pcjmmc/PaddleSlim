@@ -7,7 +7,7 @@ import json
 
 import aioredis
 
-from cache.caseBase import CacheBase
+from cache.cacheBase import CacheBase
 
 
 class BenchmarkCase(CacheBase):
