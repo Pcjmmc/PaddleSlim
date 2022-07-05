@@ -14,6 +14,7 @@ from models.tasks import CeTasks
 from models.details import CeCases
 
 from api.forms import AddCaseForm
+from api.cache import BuildCacheBase
 from views.base_view import MABaseView
 
 
@@ -51,6 +52,7 @@ class CaseDetailView(MABaseView):
         build_type_id = kwargs.get("build_type_id")
         build_id = kwargs.get("build_id")
         status = kwargs.get("status")
+        branch = kwargs.get("branch")
         #print("status=",status)
         # task 入库逻辑
         task_obj = await CeTasks.aio_get_object(
@@ -104,6 +106,14 @@ class CaseDetailView(MABaseView):
             await CeTaskBuilds.create_or_update_build(
                 tid, build_id, validated_data=task_data
             )
+            #更新cache
+            branch = branch.strip().split("/")[0]
+            cache_branch = None
+            if branch in ["develop", "release"]:
+                cache_branch = branch
+            if tid and cache_branch:
+                await BuildCacheBase.delete_keys(tid, cache_branch)
+                await BuildCacheBase.set_muti(tid, cache_branch, data = case_info) 
             # case详细入库mysql 
             await CeCases.create_or_update_build(tid, build_id, status, total, passed_num, failed_num, secondary_type)
             case_obj = await CeCases.aio_get_object(
