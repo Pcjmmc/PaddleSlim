@@ -113,7 +113,8 @@ class CaseDetailView(MABaseView):
                 cache_branch = branch
             if tid and cache_branch:
                 await BuildCacheBase.delete_keys(tid, cache_branch)
-                await BuildCacheBase.set_muti(tid, cache_branch, data = case_info) 
+                #task 信息全部缓存
+                await BuildCacheBase.set_muti(tid, cache_branch, data=task_data) 
             # case详细入库mysql 
             await CeCases.create_or_update_build(tid, build_id, status, total, passed_num, failed_num, secondary_type)
             case_obj = await CeCases.aio_get_object(
