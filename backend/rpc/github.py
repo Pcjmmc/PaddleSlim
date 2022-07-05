@@ -7,7 +7,7 @@ import aiohttp
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
-from ce_web.settings.common import RPC_SETTINGS
+from ce_web.settings.common import RPC_SETTINGS, PROXY
 from utils.change_time import stmp_by_date
 
 from rpc.base import BaseRpc
@@ -23,7 +23,7 @@ class GetTags(BaseRpc):
     method = 'get'
     gateway = PADDLE_GIT_GATEWAY
     api = 'tags'
-    proxy = "http://172.19.57.45:3128"
+    proxy = PROXY
     auth = aiohttp.BasicAuth(
         login=PADDLE_GIT_USER,
         password=PADDLE_GIT_PASSD,
@@ -52,7 +52,7 @@ class GetBranches(BaseRpc):
     method = 'get'
     gateway = PADDLE_GIT_GATEWAY
     api = 'branches/{branch}'
-    proxy = "http://172.19.57.45:3128"
+    proxy = PROXY
     auth = aiohttp.BasicAuth(
         login=PADDLE_GIT_USER,
         password=PADDLE_GIT_PASSD, 
@@ -86,7 +86,7 @@ class GetCommit(BaseRpc):
     method = 'get'
     gateway = PADDLE_GIT_GATEWAY
     api = 'commits/{commit}'
-    proxy = "http://172.19.57.45:3128"
+    proxy = PROXY
     auth = aiohttp.BasicAuth(
         login=PADDLE_GIT_USER,
         password=PADDLE_GIT_PASSD, 
@@ -117,7 +117,7 @@ class GetCommits(BaseRpc):
     method = 'get'
     gateway = PADDLE_GIT_GATEWAY
     api = 'commits'
-    proxy = "http://172.19.57.45:3128"
+    proxy = PROXY
     auth = aiohttp.BasicAuth(
         login=PADDLE_GIT_USER,
         password=PADDLE_GIT_PASSD, 

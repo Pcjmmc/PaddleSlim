@@ -27,6 +27,9 @@ XLY_BASE_URL = """https://xly.bce.baidu.com/paddlepaddle/{workspace}/newipipe/""
 XLY_BASE_URL2 = """https://xly.bce.baidu.com/paddlepaddle/{workspace}/newipipe"""\
                 """/detail/{build_id}/job/"""
 
+
+PROXY = "http://172.19.57.45:3128"
+
 # Development type setting
 class DeploymentType(object):
     """
