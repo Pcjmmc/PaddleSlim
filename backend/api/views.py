@@ -115,6 +115,7 @@ class CaseDetailView(MABaseView):
                 await BuildCacheBase.delete_keys(tid, cache_branch)
                 #task 信息全部缓存
                 cache_task_data = task_data.copy()
+                cache_task_data.updae({"tid":tid})
                 del cache_task_data["case_detail"]
                 await BuildCacheBase.set_multi(tid, cache_branch, data=cache_task_data) 
             # case详细入库mysql 
