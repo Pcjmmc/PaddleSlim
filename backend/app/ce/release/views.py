@@ -32,6 +32,10 @@ class ReleaseVersionManage(MABaseView):
 
     async def get_data(self, **kwargs):
         # 根据查询需求将版本的相关信息以及steps信息返回到前端
+        """
+        open_cache: 是否从缓存获取，默认False
+        """
+        open_cache = False
         version = kwargs.get("version")
         appid = kwargs.get("appid", 1)
         if version == "release/undefined":
@@ -54,6 +58,7 @@ class ReleaseVersionManage(MABaseView):
         print("seach mysql get version info 1111", end_time, flush=True)
         if res:
             if res.activated:
+                open_cache = True
                 begin_time = int(time.time())
                 branch_info = await GetBranches().get_commit_info_by_branch(
                     **{'branch': version}
@@ -94,8 +99,12 @@ class ReleaseVersionManage(MABaseView):
             tids = [item.get("id") for item in all_release_task]
             # 获取任务的最新状态
             begin_time = int(time.time())
+            # 如果是release的则走缓存,
+            print("是否开启缓存", open_cache, flush=True)
             build_info = await TaskBuildInfo.get_task_latest_status_by_tids(
-                tids, res.get("branch"), res.get("begin_time"), end_time=res.get("end_time", None)
+                tids, res.get("branch"), 
+                res.get("begin_time"), end_time=res.get("end_time", None),
+                open_cache=open_cache
             )
             end_time = int(time.time()) - begin_time
             print("get all release task build info 4444", end_time, flush=True)
@@ -284,6 +293,7 @@ class TaskManage(MABaseView):
         version = kwargs.get("version")
         appid = kwargs.get("appid", 1)
         task_type = kwargs.get("task_type")
+        open_cache = False
         if version == "release/undefined":
             obj = await CeReleaseVersion().aio_get_object(
                 **{"activated": True}
@@ -301,6 +311,7 @@ class TaskManage(MABaseView):
             begin_time = today_time - 14 * 24 * 60 * 60
             end_time = None
             step = version
+            open_cache = True
         else:
             res = await CeReleaseVersion().aio_get_object(**{"name": version})
             version_id = res.get("id")
@@ -308,15 +319,18 @@ class TaskManage(MABaseView):
             begin_time = res.get("begin_time")
             end_time = res.get("end_time", None)
             step = "release"
-        # 根据release 的细腻来查询,改接口是负责release的，故step=release
+            if res.activated:
+                open_cache = True
+        # 根据release 的细化来查询,改接口是负责release的，故step=release
         all_release_task = await TasksInfo.get_all_task_info_by_filter(
             step=step, task_type=task_type, appid=appid
         )
         # 查询到来全量任务
         tids = [item.get("id") for item in all_release_task]
         # 如果是已封板的话; branch就会变成tag；则还算集测吗？？？tag都打了，应该不算
+        print("是否开启缓存", open_cache, flush=True)
         build_info = await TaskBuildInfo.get_task_latest_status_by_tids(
-            tids, branch, begin_time, end_time=end_time
+            tids, branch, begin_time, end_time=end_time, open_cache=open_cache
         )
         # 获取豁免状态
         exempt_info = {}

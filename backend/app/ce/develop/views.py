@@ -57,7 +57,7 @@ class DevelopVersionManage(MABaseView):
         today_time = int(time.mktime(today.timetuple()))
         begin_time = today_time - 14 * 24 * 60 * 60
         build_info = await TaskBuildInfo.get_task_latest_status_by_tids(
-            tids, version, begin_time)
+            tids, version, begin_time, open_cache=True)
         temp_data = [{
             "tid": item["id"],
             "tname": item["tname"],

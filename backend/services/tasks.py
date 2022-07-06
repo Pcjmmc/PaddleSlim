@@ -8,6 +8,7 @@ import datetime
 import json
 import time
 
+from api.cache import BuildCacheBase
 from ce_web.settings.common import STORAGE
 from libs.mongo.db import Mongo
 from models.exempt import CeExempt
@@ -64,7 +65,58 @@ class TaskBuildInfo(object):
         return {tid: build_obj} if build_obj else {}
 
     @classmethod
-    async def get_task_latest_status_by_tids(cls, tids, branch, begin_time, end_time=None):
+    async def get_task_latest_status_by_tids(cls, tids, branch, begin_time, end_time=None, open_cache=False):
+        data = {}
+        if open_cache:
+            data = await cls.get_task_latest_build_from_cache(tids, branch, begin_time, end_time=end_time)
+        else:
+            data = await cls.get_task_latest_build_from_db(tids, branch, begin_time, end_time=end_time)
+        
+        return data
+
+    @classmethod
+    async def get_task_latest_build_from_cache(cls, tids, branch, begin_time, end_time=None):
+        """
+        根据筛选条件获取相同条件下的多个tid的执行信息
+        """
+        # 这里分批查询一次并发10个左右
+        tids = tids if type(tids) == list else [tids]
+        print("全量tid", tids, flush=True)
+        final_result = {tid: {} for tid in tids}
+        results = []
+        all_results = []
+        # 这里优先从redis获取
+        job_list = []
+        db_tids = []
+        for tid in tids:
+            # 从redis获取数据
+            branch_name = branch if branch == "develop" else "release"
+            job_list.append(
+                BuildCacheBase.get_all_data(tid, branch_name)
+            )
+            if len(job_list) >= 10:
+                result = await asyncio.gather(*job_list)
+                job_list = []
+                results.append(result)
+        result = await asyncio.gather(*job_list)
+        results.append(result)
+        for res in results:
+            all_results.extend(res)
+        for res in all_results:
+            if res:
+                tid = res.get("tid")
+                final_result[int(tid)].update(res)
+        # 缓存中没找到的走db
+        for key, value in final_result.items():
+            if not value:
+                db_tids.append(key)
+        print("从db查询", db_tids, flush=True)
+        db_result = await cls.get_task_latest_build_from_db(db_tids, branch, begin_time, end_time)
+        final_result.update(db_result)
+        return final_result
+
+    @classmethod
+    async def get_task_latest_build_from_db(cls, tids, branch, begin_time, end_time=None):
         """
         根据筛选条件获取相同条件下的多个tid的执行信息
         """
