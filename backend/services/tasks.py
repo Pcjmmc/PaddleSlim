@@ -128,7 +128,7 @@ class TaskBuildInfo(object):
         all_results = []
         # branch这里需要入库的时候处理下
         query_params = {
-            "commit_time__gt": begin_time,
+            "commit_time__gte": begin_time,
             "branch": branch,
             "commit_id__ne": None
         }

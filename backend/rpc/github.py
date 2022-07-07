@@ -154,7 +154,7 @@ if __name__ == "__main__":
     # print("latest tag info is", latest_tag)
     # commit = latest_tag.get("commit", {}).get("sha")
     # print("tag  latest commit is", commit)
-    commit_info = loop.run_until_complete(GetCommit().get_commit_info(**{"commit": '58f40144c91f6dfe39f63a6fde89e8baa57f2423'}))
+    commit_info = loop.run_until_complete(GetCommit().get_commit_info(**{"commit": '3cc6ae69ed93388b2648bcc819d593130dede752'}))
     print("tag  latest commit info  is", commit_info)
     begin_time = str(commit_info['date'])
     begin_time = stmp_by_date(begin_time, fmt="%Y-%m-%dT%H:%M:%SZ")
