@@ -23,7 +23,7 @@ class AddCaseForm(object):
         "case_detail": [str],
         "exit_code": [int, str],
     }
-    need_data_params = ["build_type_id", "build_id", "repo", "branch", "commit_id", "commit_time"] 
+    need_data_params = ["build_type_id", "build_id", "repo", "branch", "commit_id", "commit_time", "status"] 
 
     @classmethod
     def check_request_data(cls, **kwargs):
