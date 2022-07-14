@@ -308,6 +308,8 @@ export default {
         'PaddleSlim',
         'PaddleHub',
         'Paddle2ONNX',
+        'PaddleScience',
+        'MultipleRepos',
         'CINN'
       ],
       systemList: [],
