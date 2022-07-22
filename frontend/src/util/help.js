@@ -94,6 +94,17 @@ export function timestampToTime(timestamp, offset) {
   return date;
 }
 
+// 判断是否超过3天, 时间戳，单位是秒
+export function isExpired(latest_time, now_time) {
+  let default_delta = 1 * 86400;
+  let now_delta = parseInt(latest_time) - parseInt(now_time);
+  if (now_delta > default_delta) { // 超期3天
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export function getOffsetInfo(offset) {
   let tmp = Math.abs(offset * 60);
   let hourOffset = Math.floor(tmp / 60);

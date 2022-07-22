@@ -1,7 +1,7 @@
 <template>
   <Card class="center-card-s">
     <Row align="middle">
-      <Col :xs="{ span: 11, offset: 0 }">
+      <Col :xs="{ span: 12, offset: 0 }">
         <div v-for="(item, key, index) in data" style="margin-top: 0.5%;">
           <span v-if="item.status && item.status.toLowerCase()=='passed'">
             <i-circle
@@ -27,6 +27,15 @@
                 style="font-size:13px;"
                 @click="jumper(item)"
               > {{ item.tname }} </a>
+              <Tooltip placement="top">
+                <Icon
+                  custom="iconfont icon-warning"
+                  v-if="checkExpired(latest_commit_time, item.commit_time)"
+                />
+                 <div slot="content">
+                  <p>距离最新的commit超过3天</p>
+                </div>
+              </Tooltip>
             <!--
             <span style="font-size:13px;"> {{ item.tname }} </span>
             -->
@@ -47,11 +56,22 @@
               <span
                 v-if="item.show_name"
                 style="font-size:13px;"
-              > {{ item.tname }} </span>
+              > {{ item.tname }}
+              </span>
               <span
                 v-else
                 style="font-size:13px;"
-              > {{ item.tname }} </span>
+              > {{ item.tname }}
+              </span>
+            </Tooltip>
+            <Tooltip placement="top">
+              <Icon
+                custom="iconfont icon-warning"
+                v-if="checkExpired(latest_commit_time, item.commit_time)"
+              />
+                <div slot="content">
+                <p>距离最新的commit超过3天</p>
+              </div>
             </Tooltip>
           </span>
           <span v-else-if="item.status && item.status.toLowerCase()=='running'">
@@ -133,7 +153,7 @@
           </span> 
         </div>
       </Col>
-      <Col :xs="{ span: 5, offset: 5 }" align="center">
+      <Col :xs="{ span: 4, offset: 5 }" align="center">
         <div class="one-fifth-video-col">
           <div v-if="system.includes('Windows')">
             <Icon type="logo-windows" size="50"> </Icon>
@@ -218,6 +238,7 @@
 <script>
 import Modal from "../ModalSimple";
 import { ExemptUrl, BugUrl } from '../../api/url.js';
+import { isExpired } from "../../util/help.js";
 import api from '../../api/index';
 export default {
   name: 'compileBase',
@@ -256,6 +277,12 @@ export default {
       type: [Number],
       default: function () {
         return 0;
+      }
+    },
+    'latest_commit_time': {
+      type: [Number],
+      default: function () {
+        return null;
       }
     }
   },
@@ -521,12 +548,16 @@ export default {
       this.uploadList.push(file);
       this.getImageBs64(file);
       return false;
+    },
+    checkExpired(time1, time2) {
+      return isExpired(time1, time2)
     }
   }
 };
 </script>
 
 <style scoped>
+@import "../../assets/font_m3t1ua85h0a/iconfont.css";
   .center-card-s {
     width: 100%;
     max-height: 600px;

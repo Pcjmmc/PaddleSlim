@@ -66,14 +66,19 @@ class ReleaseVersionManage(MABaseView):
                 end_time = int(time.time()) - begin_time
                 print("seach git hub commit info 2222", end_time, flush=True)
                 latest_commit = branch_info.get("commit")
+                latest_commit_time = branch_info.get("time")
+                latest_commit_time = stmp_by_date(latest_commit_time, fmt="%Y-%m-%dT%H:%M:%SZ")
+                latest_commit_time = latest_commit_time + 28800
             else:
                 # 如果是已发版的，则直接从库里拿到封版的commit
                 latest_commit = res.end_commit
+                latest_commit_time = res.end_time
             release_info["repo_info"] = {
                 "name": res.name,
                 "version_id": res.id,
                 "branch": res.branch,
                 "commit": latest_commit,
+                "latest_commit_time": latest_commit_time,
                 "tag": res.tag
             }
             version_id = res.get("id")

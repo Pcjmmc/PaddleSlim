@@ -8,6 +8,7 @@ import time
 from ce_web.settings.common import RPC_SETTINGS
 from ce_web.settings.scenes import scenes_dict
 from libs.mongo.db import Mongo
+from models.conclusion import CeConclusion
 from rpc.icafe import CreateBug, GetBug
 
 from views.base_view import MABaseView
@@ -117,4 +118,56 @@ class BugManage(MABaseView):
         await CreateBug(data).get_data()
         
 
-        
+
+class ConclusionManage(MABaseView):
+
+    async def get(self, **kwargs):
+        """
+        调用基类的get方法
+        """
+        return await super().get(**kwargs)
+
+    async def get_data(self, **kwargs):
+        """
+        响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
+        """
+        result = {}
+        query_param = {}
+        tag = kwargs.get("tag")
+        branch = kwargs.get("branch")
+        if tag:
+            query_param["tag"] = tag
+        if branch:
+            query_param["branch"] = branch
+        records = await CeConclusion.aio_filter_objects(**query_param)
+        # 将数据组装成1条
+        result = {res.task_type: res.conclusion for res in records}
+        return len(result), result
+
+    async def post(self, **kwargs):
+        """
+        调用基类的get方法
+        """
+        return await super().post(**kwargs)
+
+    async def post_data(self, **kwargs):
+        """
+        响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
+        """
+        tag = None
+        branch = None
+        query_param = {}
+        if kwargs.get("tag"):
+            tag = kwargs.get("tag")
+            query_param["tag"] = tag
+            kwargs.pop("tag")
+        if kwargs.get("branch"):
+            branch = kwargs.get("branch")
+            query_param["branch"] = branch
+            kwargs.pop("branch")
+        records = [{"task_type": key, "conclusion": val} for key, val in kwargs.items() if key in scenes_dict]
+        for record in records:
+            record.update({"branch": branch, "tag": tag})
+        # 永远覆盖， 删除已有的
+        await CeConclusion.aio_delete(params_data=query_param)
+        await CeConclusion.aio_insert(validated_data=records)

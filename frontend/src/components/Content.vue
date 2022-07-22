@@ -134,14 +134,11 @@ export default {
       // console.log("code", code)
       if (parseInt(code) == 200) {
         this.repoinfo = data.repo_info;
-        // this.allSteps = data.all_steps;
         this.tagForm.branch = this.repoinfo.branch;
-        // this.integrationdata = data.integration_data;
         this.processdata = data.process_data;
         this.summary = data.summary;
       } else {
         this.repoinfo = {};
-        // this.allSteps = {};
         this.$Message.error({
           content: '请求出错: ' + version,
           duration: 30,

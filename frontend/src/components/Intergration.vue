@@ -44,6 +44,7 @@
               <integration-test
                 :data="integrationdata"
                 :tag="repoinfo.tag"
+                :latest_commit_time="repoinfo.latest_commit_time"
                 :versionid="repoinfo.version_id"
                 :versionname="repoinfo.name"
                 :secondtype="sendTypeList[item.key]"
@@ -61,6 +62,17 @@
       >
         <bug-fix ref="mychild" :datas="bugdata"></bug-fix>
       </TabPane>
+      <TabPane
+        label="结论"
+        name="10003"
+        icon="md-document"
+      >
+        <Conclusion ref="mychild2"
+          :taskTypeList="taskTypeList"
+          :tag="repoinfo.tag"
+          :branch="repoinfo.branch"
+        ></Conclusion>
+      </TabPane>
     </Tabs>
   </div>
 </template>
@@ -75,6 +87,7 @@ import ApiCoverage from './ApiCoverage.vue';
 import BaseInfo from './BaseInfo.vue';
 import CircleBase from './CommonUtil/CircleBase.vue';
 import CaseBase from './CommonUtil/CaseBase.vue';
+import Conclusion from './Result/Conclusion.vue';
 
 export default {
   props: {
@@ -241,7 +254,8 @@ export default {
     BaseInfo,
     ApiCoverage,
     BugFix,
-    IntegrationTest
+    IntegrationTest,
+    Conclusion
   },
   computed: {
     version: {

@@ -39,6 +39,15 @@
               style="font-size:13px;"
               @click="jumper(child)"
             > {{ key }} </a>
+            <Tooltip placement="top">
+              <Icon
+                custom="iconfont icon-warning"
+                v-if="checkExpired(latest_commit_time, child.commit_time)"
+              />
+                <div slot="content">
+                <p>距离最新的commit超过3天</p>
+              </div>
+            </Tooltip>
           </Col>
           <Col
             :xs="{ span: 15 }"
@@ -73,6 +82,15 @@
               style="font-size:13px;"
               @click="jumper(child)"
             > {{ key }} </a>
+            <Tooltip placement="top">
+              <Icon
+                custom="iconfont icon-warning"
+                v-if="checkExpired(latest_commit_time, child.commit_time)"
+              />
+                <div slot="content">
+                <p>距离最新的commit超过3天</p>
+              </div>
+            </Tooltip>
           </Col>
           <!--
           <Col
@@ -171,6 +189,7 @@
 </template>
 
 <script>
+import { isExpired } from "../../util/help.js";
 export default {
   name: 'baseCard',
   props: {
@@ -182,6 +201,12 @@ export default {
     },
     'data': {
       type: Object
+    },
+    'latest_commit_time': {
+      type: [Number],
+      default: function () {
+        return null;
+      }
     }
   },
   data: function () {
@@ -195,6 +220,9 @@ export default {
   computed: {
   },
   methods: {
+    checkExpired(time1, time2) {
+      return isExpired(time1, time2)
+    },
     jumper(item) {
       let _params = {
         task_type: item.task_type,
@@ -236,4 +264,5 @@ export default {
 </script>
 
 <style scoped>
+@import "../../assets/font_m3t1ua85h0a/iconfont.css";
 </style>

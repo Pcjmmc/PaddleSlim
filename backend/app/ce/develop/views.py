@@ -14,6 +14,7 @@ from models.steps import CeSteps
 from rpc.github import GetBranches, GetCommit, GetTags
 from services.summary import Summary
 from services.tasks import TaskBuildInfo, TasksInfo
+from utils.change_time import stmp_by_date
 
 from views.base_view import MABaseView
 
@@ -41,10 +42,14 @@ class DevelopVersionManage(MABaseView):
             **{'branch': version}
         )
         latest_commit = branch_info.get("commit")
+        latest_commit_time = branch_info.get("time")
+        latest_commit_time = stmp_by_date(latest_commit_time, fmt="%Y-%m-%dT%H:%M:%SZ")
+        latest_commit_time = latest_commit_time + 28800 # 8小时时差
         release_info["repo_info"] = {
             "name": version,
             "branch": version,
-            "commit": latest_commit
+            "commit": latest_commit,
+            "latest_commit_time": latest_commit_time
         }
         all_release_task = await TasksInfo.get_all_task_info_by_filter(
             step="develop", appid=appid)

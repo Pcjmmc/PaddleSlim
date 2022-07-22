@@ -34,6 +34,15 @@
                 style="font-size:13px;"
                 @click="jumper(child)"
               > {{ key }} </a>
+              <Tooltip placement="top">
+                <Icon
+                  custom="iconfont icon-warning"
+                  v-if="checkExpired(latest_commit_time, child.commit_time)"
+                />
+                 <div slot="content">
+                  <p>距离最新的commit超过3天</p>
+                </div>
+              </Tooltip>
             </span>
             <span v-else-if="child.status && child.status.toLowerCase()=='failed'">
               <i-circle
@@ -65,6 +74,15 @@
                 style="font-size:13px;"
                 @click="jumper(child)"
               > {{ key }} </a>
+              <Tooltip placement="top">
+                <Icon
+                  custom="iconfont icon-warning"
+                  v-if="checkExpired(latest_commit_time, child.commit_time)"
+                />
+                 <div slot="content">
+                  <p>距离最新的commit超过3天</p>
+                </div>
+              </Tooltip>
             </span>
             <span v-else-if="child.status && child.status.toLowerCase()=='running'">
               <Icon
@@ -264,6 +282,7 @@
 <script>
 import Modal from "../ModalSimple";
 import { ExemptUrl, BugUrl } from '../../api/url.js';
+import { isExpired } from "../../util/help.js";
 import api from '../../api/index';
 export default {
   name: 'expandBase',
@@ -299,6 +318,12 @@ export default {
       type: [Number],
       default: function () {
         return 0;
+      }
+    },
+    'latest_commit_time': {
+      type: [Number],
+      default: function () {
+        return null;
       }
     }
   },
@@ -415,6 +440,9 @@ export default {
     },
     handleReset(auto) {
       this.initData(auto);
+    },
+    checkExpired(time1, time2) {
+      return isExpired(time1, time2)
     },
     initData(auto) {
       this.$refs['addForm'].resetFields();
@@ -539,6 +567,7 @@ export default {
 </script>
 
 <style scoped>
+@import "../../assets/font_m3t1ua85h0a/iconfont.css";
   .center-card-s {
     width: 100%;
     max-height: 600px;

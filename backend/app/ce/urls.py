@@ -3,7 +3,7 @@
 URL 配置
 """
 from app.ce.benchmark.views import BenchmarkManage
-from app.ce.bug.views import BugManage
+from app.ce.bug.views import BugManage, ConclusionManage
 from app.ce.commit.views import CommitDetailManage, CommitsManage
 from app.ce.config.views import ScenesManage
 from app.ce.detail.views import DetailManage
@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'commits', CommitsManage),
     url(r'commit/detail/?$', CommitDetailManage),
     url(r'bugs', BugManage),
+    url(r'conclusion/?$', ConclusionManage),
     url(r'detail', DetailManage),
     url(r'develop/?$', DevelopVersionManage),
     url(r'op-benchmark/?$', BenchmarkManage),
