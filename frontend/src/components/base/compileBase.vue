@@ -550,7 +550,6 @@ export default {
       return false;
     },
     checkExpired(time1, time2) {
-      // console.log("time1", time1);
       return isExpired(time1, time2);
     }
   }

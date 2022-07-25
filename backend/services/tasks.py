@@ -186,6 +186,38 @@ class TaskBuildInfo(object):
                 final_result[tid].update(res)
         return final_result
 
+    @classmethod
+    async def check_commit(cls, commits):
+        """
+        检查commit是否被QA测试过
+        """
+        final_result = {commit: {} for commit in commits}
+        results = []
+        all_results = []
+        # branch这里需要入库的时候处理下
+        query_params = {}
+        job_list = []
+        for commit in commits:
+            query_params["commit_id"] = commit
+            job_list.append(
+                CeTaskBuilds().aio_get_object(
+                    **query_params
+                )
+            )
+            if len(job_list) >= 10:
+                result = await asyncio.gather(*job_list)
+                job_list = []
+                results.append(result)
+        result = await asyncio.gather(*job_list)
+        results.append(result)
+        for res in results:
+            all_results.extend(res)
+        for res in all_results:
+            if res:
+                commit_id = res.commit_id
+                final_result[commit_id].update(res)
+        return final_result
+
 class CaseDetails(object):
     @classmethod
     async def get_task_detail_by_filter(cls, tid, build_id, job_id):

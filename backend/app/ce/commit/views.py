@@ -54,8 +54,20 @@ class CommitsManage(MABaseView):
                     {'page': page, "per_page": per_page, "sha": sha}
                 ).get_commit_list()
 
+        commit_list = [item.get("commit") for item in commits]
+        commits_info = await self.check_commit(commit_list)
+        for item in commits:
+            commit = item.get("commit")
+            item["checked"] = True if commits_info.get(commit) else False
         return len(commits), commits
 
+    async def check_commit(self, commits):
+        """
+        check commit 是否QA回归过
+        """
+        # 获取覆盖此commit的任务
+        commits_info = await TaskBuildInfo.check_commit(commits)
+        return commits_info
 
 class CommitDetailManage(MABaseView):
 

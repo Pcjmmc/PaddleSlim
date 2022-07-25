@@ -1,53 +1,57 @@
-
-  <template>
-    <div>
-      <Split v-model="split1">
-        <div slot="left" class="center-card-s">
-          <div style="margin-bottom: 10px;">
-            <p>{{ version }} commit列表 </p>
-          </div>
-          <div>
-            <Timeline>
-              <TimelineItem v-for="(item, index) in commitList" v-if="commitList" :key="index">
-                <span>
-                  <span>
-                    {{ item.commit_time }} {{ "(" }}
-                  </span>
-                  <a
-                    class="content"
-                    href="javascript:void(0)"
-                    @click="setCommit(item.commit)"
-                  > {{ item.commit.substring(0, 14) }} </a>
-                  {{ ")" }}
-                </span>
-              </TimelineItem>
-            </Timeline>
-          </div>
+<template>
+  <div>
+    <Split v-model="split1">
+      <div slot="left" class="center-card-s">
+        <div style="margin-bottom: 10px;">
+          <p>{{ version }} commit列表 </p>
         </div>
-        <div
-          slot="right"
-          class="center-card-s"
-          v-if="commitData.length !== 0"
-        >
-          <p align="center" style="font-size: 16px"> {{ selectCommit }} </p>
-          <div :key="index" v-for="(item, index) in commitData">
-            <Divider orientation="left" style="font-size: 0.6em;font-style: italic;">{{item.scenes}}</Divider>
-            <Table border
-              :columns="columns"
-              :data="item.data"
+        <div>
+          <Timeline>
+            <TimelineItem
+              v-for="(item, index) in commitList"
+              v-if="commitList"
+              :key="index"
+              :color="setColor(item)"
             >
-            </Table>
-          </div>
+              <span>
+                <span>
+                  {{ item.commit_time }} {{ "(" }}
+                </span>
+                <a
+                  class="content"
+                  href="javascript:void(0)"
+                  @click="setCommit(item.commit)"
+                > {{ item.commit.substring(0, 14) }} </a>
+                {{ ")" }}
+              </span>
+            </TimelineItem>
+          </Timeline>
         </div>
-        <div
-          slot="right"
-          class="center-card-s"
-          v-else
-        >
-          <p align="center" style="font-size: 16px">{{ selectCommit }} 暂无数据 </p>
+      </div>
+      <div
+        slot="right"
+        class="center-card-s"
+        v-if="commitData.length !== 0"
+      >
+        <p align="center" style="font-size: 16px"> {{ selectCommit }} </p>
+        <div :key="index" v-for="(item, index) in commitData">
+          <Divider orientation="left" style="font-size: 0.6em;font-style: italic;">{{item.scenes}}</Divider>
+          <Table border
+            :columns="columns"
+            :data="item.data"
+          >
+          </Table>
         </div>
-      </Split>
-    </div>
+      </div>
+      <div
+        slot="right"
+        class="center-card-s"
+        v-else
+      >
+        <p align="center" style="font-size: 16px">{{ selectCommit }} 暂无数据 </p>
+      </div>
+    </Split>
+  </div>
 </template>
 
 <script>
@@ -62,7 +66,7 @@ export default {
     return {
       search: {
         page: 1,
-        pagesize: 20
+        pagesize: 50
       },
       columns: [
         {
@@ -134,7 +138,6 @@ export default {
       const {code, data, msg} = await api.get(CommitsUrl, params);
       if (parseInt(code, 10) === 200) {
         this.commitList = data;
-        // console.log('this.commitList', this.commitList);
         this.selectCommit = this.commitList[0].commit;
         this.getCommitDetail();
       } else {
@@ -144,6 +147,13 @@ export default {
           duration: 30,
           closable: true
         });
+      }
+    },
+    setColor(item) {
+      if (item.checked) {
+        return 'green';
+      } else {
+        return 'gray';
       }
     },
     setCommit(commit) {
