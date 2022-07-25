@@ -44,7 +44,7 @@
               <integration-test
                 :data="integrationdata"
                 :tag="repoinfo.tag"
-                :latestCommitTime="repoinfo.latest_commit_time"
+                :latestcommittime="repoinfo.latest_commit_time"
                 :versionid="repoinfo.version_id"
                 :versionname="repoinfo.name"
                 :secondtype="sendTypeList[item.key]"
@@ -68,7 +68,7 @@
         icon="md-document"
       >
         <conclusion
-          :taskTypeList="taskTypeList"
+          :tasktypelist="taskTypeList"
           :tag="repoinfo.tag"
           :branch="repoinfo.branch"
         ></conclusion>

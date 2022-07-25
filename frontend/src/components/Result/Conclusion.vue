@@ -13,9 +13,8 @@
         <span v-else> {{ branch }} </span>
       </span>
     </div>
-    <div v-for="(item, index) in taskTypeList" style="margin-top: 1%;margin-right: 2%">
+    <div v-for="(item, index) in tasktypelist" style="margin-top: 1%;margin-right: 2%">
       <Form
-        ref="addForm"
         :model="addForm"
         :label-width="150"
       >
@@ -45,7 +44,7 @@ import { TestConclusionUrl } from '../../api/url.js';
 
 export default {
    props: {
-    taskTypeList: {
+    tasktypelist: {
       type: [Array],
       default: function () {
         return [];
@@ -159,7 +158,7 @@ export default {
         appid: Cookies.get('appid')
       };
       // 将数组用都好分割拼接
-      console.log('up data job params is', params);
+      // console.log('up data job params is', params);
       const {code, msg} = await api.post(TestConclusionUrl, params);
       if (parseInt(code, 10) !== 200) {
         this.$Message.error({

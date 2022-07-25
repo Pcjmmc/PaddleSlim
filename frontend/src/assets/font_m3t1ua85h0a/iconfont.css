@@ -12,11 +12,11 @@
     color: brown;
 }
 
-.icon-warning-fill:before {
+.icon-warning-fill::before {
     content: "\e790";
 }
 
-.icon-warning:before {
+.icon-warning::before {
     content: "\e682";
 }
 
