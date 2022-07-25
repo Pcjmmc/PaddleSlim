@@ -9,8 +9,8 @@
           <Timeline>
             <TimelineItem
               v-for="(item, index) in commitList"
-              v-if="commitList"
               :key="index"
+              v-if="commitList"
               :color="setColor(item)"
             >
               <span>
@@ -35,8 +35,9 @@
       >
         <p align="center" style="font-size: 16px"> {{ selectCommit }} </p>
         <div :key="index" v-for="(item, index) in commitData">
-          <Divider orientation="left" style="font-size: 0.6em;font-style: italic;">{{item.scenes}}</Divider>
-          <Table border
+          <Divider orientation="left" style="font-size: 0.6em;font-style: italic;">{{ item.scenes }}</Divider>
+          <Table
+            border
             :columns="columns"
             :data="item.data"
           >
