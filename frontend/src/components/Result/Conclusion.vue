@@ -5,7 +5,7 @@
       <Button type="primary" @click="exportToPDF">导出</Button>
     </Col>
   </Row> -->
-  <div ref="document">
+  <div>
     <div style="margin-top: 1%;margin-left: 7%">
       <span>
         <label> 所属计划: </label>
@@ -14,13 +14,18 @@
       </span>
     </div>
     <div v-for="(item, index) in taskTypeList" style="margin-top: 1%;margin-right: 2%">
-      <Form ref="addForm" :model="addForm" :label-width="150">
+      <Form
+        ref="addForm"
+        :model="addForm"
+        :label-width="150"
+      >
         <FormItem :label="item.desc" :prop="item.key">
           <Input
             v-model="addForm[item.key]"
             type="textarea"
             placeholder="描述风险"
-            :autosize="{minRows: 2,maxRows: 30}"/>
+            :autosize="{minRows: 2,maxRows: 30}"
+          />
         </FormItem>
       </Form>
     </div>
@@ -49,13 +54,13 @@ export default {
     tag: {
       type: [String],
       default: function () {
-        return "";
+        return '';
       }
     },
     branch: {
       type: [String],
       default: function () {
-        return "";
+        return '';
       }
     }
   },
@@ -70,7 +75,7 @@ export default {
         benchmark: '',
         doc: ''
       }
-    }
+    };
   },
   mounted: function () {
     this.getData();
@@ -98,15 +103,15 @@ export default {
         tag: this.tag,
         branch: this.branch,
         appid: Cookies.get('appid')
-      }
+      };
       // 将数组用都好分割拼接
       const {code, data, msg} = await api.get(TestConclusionUrl, params);
-      if (parseInt(code) != 200) {
+      if (parseInt(code, 10) !== 200) {
         this.$Message.error({
           content: '请求出错: ' + msg,
           duration: 30,
           closable: true
-        })
+        });
       } else {
         this.addForm = data;
       }
@@ -152,16 +157,16 @@ export default {
         benchmark: this.addForm.benchmark,
         doc: this.addForm.doc,
         appid: Cookies.get('appid')
-      }
+      };
       // 将数组用都好分割拼接
       console.log('up data job params is', params);
       const {code, msg} = await api.post(TestConclusionUrl, params);
-      if (parseInt(code) != 200) {
+      if (parseInt(code, 10) !== 200) {
         this.$Message.error({
           content: '请求出错: ' + msg,
           duration: 30,
           closable: true
-        })
+        });
       }
       this.getData();
     }

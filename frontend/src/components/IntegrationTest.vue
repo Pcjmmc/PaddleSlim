@@ -10,7 +10,7 @@
         :data="item.data"
         :index="index"
         :tag="tag"
-        :latest_commit_time="latest_commit_time"
+        :latestCommitTime="latestCommitTime"
         :versionid="versionid"
         :versionname="versionname"
       >
@@ -21,7 +21,7 @@
         :data="item.data"
         :index="index"
         :tag="tag"
-        :latest_commit_time="latest_commit_time"
+        :latestCommitTime="latestCommitTime"
         :versionid="versionid"
         :versionname="versionname"
       >
@@ -32,7 +32,7 @@
         :data="item.data"
         :index="index"
         :tag="tag"
-        :latest_commit_time="latest_commit_time"
+        :latestCommitTime="latestCommitTime"
         :versionid="versionid"
         :versionname="versionname"
       >
@@ -64,7 +64,7 @@ export default {
         return null;
       }
     },
-    latest_commit_time: {
+    latestCommitTime: {
       type: [Number],
       default: function () {
         return null;

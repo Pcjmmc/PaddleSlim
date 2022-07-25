@@ -37,7 +37,7 @@
               <Tooltip placement="top">
                 <Icon
                   custom="iconfont icon-warning"
-                  v-if="checkExpired(latest_commit_time, child.commit_time)"
+                  v-if="checkExpired(latestCommitTime, child.commit_time)"
                 />
                  <div slot="content">
                   <p>距离最新的commit超过3天</p>
@@ -77,7 +77,7 @@
               <Tooltip placement="top">
                 <Icon
                   custom="iconfont icon-warning"
-                  v-if="checkExpired(latest_commit_time, child.commit_time)"
+                  v-if="checkExpired(latestCommitTime, child.commit_time)"
                 />
                  <div slot="content">
                   <p>距离最新的commit超过3天</p>
@@ -282,7 +282,7 @@
 <script>
 import Modal from "../ModalSimple";
 import { ExemptUrl, BugUrl } from '../../api/url.js';
-import { isExpired } from "../../util/help.js";
+import { isExpired } from '../../util/help.js';
 import api from '../../api/index';
 export default {
   name: 'expandBase',
@@ -320,7 +320,7 @@ export default {
         return 0;
       }
     },
-    'latest_commit_time': {
+    'latestCommitTime': {
       type: [Number],
       default: function () {
         return null;
@@ -442,7 +442,7 @@ export default {
       this.initData(auto);
     },
     checkExpired(time1, time2) {
-      return isExpired(time1, time2)
+      return isExpired(time1, time2);
     },
     initData(auto) {
       this.$refs['addForm'].resetFields();

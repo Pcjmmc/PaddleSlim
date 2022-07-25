@@ -97,7 +97,7 @@ export function timestampToTime(timestamp, offset) {
 // 判断是否超过3天, 时间戳，单位是秒
 export function isExpired(latest_time, now_time) {
   let default_delta = 1 * 86400;
-  let now_delta = parseInt(latest_time) - parseInt(now_time);
+  let now_delta = parseInt(latest_time, 10) - parseInt(now_time, 10);
   if (now_delta > default_delta) { // 超期3天
     return true;
   } else {

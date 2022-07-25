@@ -44,7 +44,7 @@
               <integration-test
                 :data="integrationdata"
                 :tag="repoinfo.tag"
-                :latest_commit_time="repoinfo.latest_commit_time"
+                :latestCommitTime="repoinfo.latest_commit_time"
                 :versionid="repoinfo.version_id"
                 :versionname="repoinfo.name"
                 :secondtype="sendTypeList[item.key]"
@@ -67,11 +67,11 @@
         name="10003"
         icon="md-document"
       >
-        <Conclusion ref="mychild2"
+        <conclusion
           :taskTypeList="taskTypeList"
           :tag="repoinfo.tag"
           :branch="repoinfo.branch"
-        ></Conclusion>
+        ></conclusion>
       </TabPane>
     </Tabs>
   </div>

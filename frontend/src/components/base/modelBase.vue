@@ -10,7 +10,7 @@
               <base-card
                 :reponame="key"
                 :data="item"
-                :latest_commit_time="latest_commit_time"
+                :latestCommitTime="latestCommitTime"
               >
               </base-card>
             </Col>
@@ -140,7 +140,7 @@ export default {
         return 0;
       }
     },
-    'latest_commit_time': {
+    'latestCommitTime': {
       type: [Number],
       default: function () {
         return null;

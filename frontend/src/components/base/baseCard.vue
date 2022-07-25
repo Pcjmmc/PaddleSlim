@@ -42,7 +42,7 @@
             <Tooltip placement="top">
               <Icon
                 custom="iconfont icon-warning"
-                v-if="checkExpired(latest_commit_time, child.commit_time)"
+                v-if="checkExpired(latestCommitTime, child.commit_time)"
               />
                 <div slot="content">
                 <p>距离最新的commit超过3天</p>
@@ -85,7 +85,7 @@
             <Tooltip placement="top">
               <Icon
                 custom="iconfont icon-warning"
-                v-if="checkExpired(latest_commit_time, child.commit_time)"
+                v-if="checkExpired(latestCommitTime, child.commit_time)"
               />
                 <div slot="content">
                 <p>距离最新的commit超过3天</p>
@@ -189,7 +189,7 @@
 </template>
 
 <script>
-import { isExpired } from "../../util/help.js";
+import { isExpired } from '../../util/help.js';
 export default {
   name: 'baseCard',
   props: {
@@ -202,7 +202,7 @@ export default {
     'data': {
       type: Object
     },
-    'latest_commit_time': {
+    'latestCommitTime': {
       type: [Number],
       default: function () {
         return null;
@@ -221,7 +221,7 @@ export default {
   },
   methods: {
     checkExpired(time1, time2) {
-      return isExpired(time1, time2)
+      return isExpired(time1, time2);
     },
     jumper(item) {
       let _params = {
