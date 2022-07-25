@@ -37,7 +37,7 @@
               <Tooltip placement="top">
                 <Icon
                   custom="iconfont icon-warning"
-                  v-if="checkExpired(latestCommitTime, child.commit_time)"
+                  v-if="checkExpired(latestcommittime, child.commit_time)"
                 />
                  <div slot="content">
                   <p>距离最新的commit超过3天</p>
@@ -77,7 +77,7 @@
               <Tooltip placement="top">
                 <Icon
                   custom="iconfont icon-warning"
-                  v-if="checkExpired(latestCommitTime, child.commit_time)"
+                  v-if="checkExpired(latestcommittime, child.commit_time)"
                 />
                  <div slot="content">
                   <p>距离最新的commit超过3天</p>
@@ -320,7 +320,7 @@ export default {
         return 0;
       }
     },
-    'latestCommitTime': {
+    'latestcommittime': {
       type: [Number],
       default: function () {
         return null;
