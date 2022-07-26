@@ -1,4 +1,16 @@
 # encoding: utf-8
+selects = ["主框架CE任务", "模型CE任务"]
+# 与集测平台的映射关系：
+inner_dict = {
+    "9239063": "单机训练", # 主框架CE任务
+    "8738985": "套件工具兼容性", # 模型CE任务
+}
+# 反向映射
+back_dict = {
+    "frame": "主框架CE任务",
+    "model": "模型CE任务"
+}
+
 scenes_dict = {
     "compile": "编译安装",
     "frame": "单机训练",

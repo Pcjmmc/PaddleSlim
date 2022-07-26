@@ -31,7 +31,7 @@
         this.charts.setOption(
           {
             title: {
-              'text': 'bug 修复状态分布'
+              'text': 'bug分布'
             },
             tooltip: {},
             legend: {

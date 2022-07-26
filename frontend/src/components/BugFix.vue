@@ -1,42 +1,80 @@
 <template>
 <div>
-    <row type="flex" justify="center" align="middle">
-      <histogram-base
-      ref="child"
-      :xdata="newfilterst"
-      :count="count"
-    > </histogram-base>
-    </Row>
-    <div>
-      <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">bug列表</Divider>
-    </div>
-    <div style="margin-bottom: 10px;">
-      <Table
-        :columns="columns"
-        :data="datas"
-        style="width: 100%;"
+  <div>
+    <row>
+      <col style="margin-left: 30px;">
+        <pie-base
+          ref="cdpie"
+          :column="sts_column"
+          :xdata="sts_datas"
+        ></pie-base>
+      </col>
+      <col slot="right">
+        <histogram-base
+          ref="child"
+          :xdata="dis_datas"
+          :count="dis_count"
+        ></histogram-base>
+      </col>
+    </row>
+  </div>
+  <div>
+    <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">bug列表</Divider>
+  </div>
+  <div style="margin-bottom: 10px;">
+    <el-tabs
+      type="card"
+      v-model="childname"
+      @tab-click="clickChildTab"
+      style="margin-left: 1%;"
+    >
+      <el-tab-pane
+      :label="item.desc"
+      :name="item.key"
+      :key="index"
+      v-for="(item, index) in tasktypelist"
       >
-      </Table>
-    </div>
+        <Table
+          :columns="columns"
+          :data="datas"
+          style="width: 100%;"
+        >
+        </Table>
+      </el-tab-pane>
+    </el-tabs>
+  </div>
   </div>
 </template>
 <script>
+
+import PieBase from './PieBase.vue';
+import api from '../api/index';
 import HistogramBase from './HistogramBase.vue';
 import { isEmpty } from "../util/help.js";
+import { BugUrl } from '../api/url.js';
+
 export default {
   name: 'BugFix',
   props: {
-    datas: {
-      type: Array,
-      default() {
+    tasktypelist: {
+      type: [Array],
+      default: function () {
         return [];
       }
+    },
+    tag: {
+      type: [String],
+      default: ''
     }
   },
   data: function () {
     return {
-      count: [],
-      newfilterst: [],
+      childname: 'compile',
+      datas: [],
+      dis_datas: [],
+      dis_count: [],
+      sts_datas: [],
+      sts_column: [],
       columns: [
         {
           title: '标题',
@@ -101,7 +139,8 @@ export default {
     }
   },
   components: {
-    HistogramBase
+    HistogramBase,
+    PieBase
   },
   watch: {
     datas: function () {
@@ -109,6 +148,7 @@ export default {
     }
   },
   mounted: function () {
+    this.getbugdata();
     this.getStatusFilters();
   },
   methods: {
@@ -124,21 +164,59 @@ export default {
           return 'error';
       }
     },
+    clickChildTab(item) {
+      this.childname = item.name;
+      this.datas = [];
+      // 将选中的tab标记成蓝色
+      // console.log('this child name', this.childname);
+      this.getFilterData();
+    },
+    async getFilterData() {
+      let _params = {'tag': this.tag, 'task_type': this.childname};
+      const {code, data, version} = await api.get(BugUrl, _params);
+      if (parseInt(code, 10) === 200) {
+        this.datas = data;
+      } else {
+        this.datas = [];
+        this.$Message.error({
+          content: '请求出错: ' + version,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
+    async getbugdata() {
+      let _params = {'tag': this.tag};
+      const {code, data, version} = await api.get(BugUrl, _params);
+      if (parseInt(code, 10) === 200) {
+        this.dis_datas = data.dis_datas;
+        this.dis_count = data.dis_count;
+        this.sts_datas = data.sts_datas;
+        this.sts_column = data.sts_column;
+        this.getStatusFilters();
+      } else {
+        this.dis_datas = [];
+        this.dis_count = [];
+        this.sts_datas = [];
+        this.sts_column = [];
+        this.$Message.error({
+          content: '请求出错: ' + version,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
     getStatusFilters() {
       let filterst = [];
       let filters = [];
-      let res = {};
       for (var i = 0; i < this.datas.length; i++) {
         let status = this.datas[i].status;
-        filterst.push(status);
-        if (!res[status]) {
-          res[status] = 0;
+        if (status) {
+          filterst.push(status);
         }
-        res[status] += 1;
       }
       this.newfilterst = Array.from(new Set(filterst));
       for (var j = 0; j < this.newfilterst.length; j++) {
-        this.count.push(res[this.newfilterst[j]]);
         filters[j] = {
           label: this.newfilterst[j],
           value: this.newfilterst[j]
@@ -147,6 +225,7 @@ export default {
       this.columns[5].filters = filters;
       this.$nextTick(function () {
         this.$refs.child.drawPie('main1');
+        this.$refs.cdpie.drawPieChart('chartPie');
       });
     }
   }

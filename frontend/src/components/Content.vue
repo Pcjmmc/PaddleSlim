@@ -28,7 +28,6 @@
     <div>
       <intergration
         :repoinfo="repoinfo"
-        :bugdata="bugdata"
         :processdata="processdata"
         :summary="summary"
       >
@@ -144,21 +143,6 @@ export default {
           duration: 30,
           closable: true
         })
-      }
-      await this.getbugdata();
-    },
-    async getbugdata() {
-      let _params = {'tag': this.repoinfo.tag};
-      const {code, data, version} = await api.get(BugUrl, _params);
-      if (parseInt(code, 10) === 200) {
-        this.bugdata = data;
-      } else {
-        this.bugdata = [];
-        this.$Message.error({
-          content: '请求出错: ' + version,
-          duration: 30,
-          closable: true
-        });
       }
     },
     async selectDate() {

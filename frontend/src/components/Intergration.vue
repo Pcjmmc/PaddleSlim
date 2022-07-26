@@ -60,7 +60,7 @@
         name="10002"
         icon="ios-bug"
       >
-        <bug-fix ref="mychild" :datas="bugdata"></bug-fix>
+        <bug-fix ref="mychild" :tag="repoinfo.tag" :tasktypelist="taskTypeList"></bug-fix>
       </TabPane>
       <TabPane
         label="结论"
@@ -91,12 +91,6 @@ import Conclusion from './Result/Conclusion.vue';
 
 export default {
   props: {
-    bugdata: {
-      type: [Array],
-      default: function () {
-        return [];
-      }
-    },
     repoinfo: {
       type: Object,
       default: null
@@ -269,6 +263,7 @@ export default {
       this.tabName = name;
       // console.log(this.tabName);
       this.$nextTick(function () {
+        this.$refs.mychild.getbugdata();
         this.$refs.mychild.getStatusFilters();
       });
     },

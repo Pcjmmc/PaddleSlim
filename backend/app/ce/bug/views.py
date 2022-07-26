@@ -6,7 +6,7 @@ import json
 import time
 
 from ce_web.settings.common import RPC_SETTINGS
-from ce_web.settings.scenes import scenes_dict
+from ce_web.settings.scenes import back_dict, inner_dict, scenes_dict, selects
 from libs.mongo.db import Mongo
 from models.conclusion import CeConclusion
 from rpc.icafe import CreateBug, GetBug
@@ -30,12 +30,36 @@ class BugManage(MABaseView):
         """
         响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
         """
-        # 获取所有的bug卡片
-        ptag = kwargs.get("tag", "v2.3.0-RC")
-        ptag = "v2.3.0-RC"
-        auto_tag = "auto_issue"  # 创建一个自己的
-        query = '所属计划 = 飞桨项目集/Paddle/{plan} AND auto_tag = {auto_tag}'.format(
-            plan=ptag, auto_tag=auto_tag)
+        # 获取所有的bug卡片, 根据plan tag 和 类型来查询
+        ptag = kwargs.get("tag")
+        task_type = kwargs.get("task_type")
+        if task_type:
+            # 根据方向查询
+            # 将task_type 转化成查询条件
+            task_type = back_dict.get(task_type)
+            query = 'plan_tag = {ptag} AND 类型 = Bug AND bug发现方式 = {task_type}'.format(
+            ptag=ptag, task_type=task_type)
+            # 先用测试的覆盖下
+            query = '所属计划 = 飞桨项目集/Paddle/{plan} AND 类型 = Bug AND bug发现方式 = {task_type}'.format(
+                plan="v2.3.1", task_type=task_type
+            )
+            return await self.get_bugs_by_filter(query)
+        else:
+            # 查询全量
+            condition = ",".join(selects)
+            query = 'plan_tag = {ptag}  AND 类型 = Bug AND bug发现方式 in ({condition})'.format(
+                ptag=ptag, condition=condition
+            )
+            # 先用测试的覆盖下
+            query = '所属计划 = 飞桨项目集/Paddle/{plan} AND 类型 = Bug AND bug发现方式 in ({condition})'.format(
+                plan="v2.3.1", condition=condition
+            )
+            return await self.get_all_bugs(query)
+
+    async def get_bugs_by_filter(self, query):
+        """
+        返回指定类型的数据详情
+        """
         result = await GetBug({
             'u': PADDLE_ICAFE_USER,
             'pw': PADDLE_ICAFE_PASSD,
@@ -69,6 +93,43 @@ class BugManage(MABaseView):
             }
             result.append(tmp)
         return len(result), result
+
+    async def get_all_bugs(self, query):
+        """
+        返回统计数据；按状态统计；按bug的发现方式统计
+        """
+        result = await GetBug({
+            'u': PADDLE_ICAFE_USER,
+            'pw': PADDLE_ICAFE_PASSD,
+            'iql': query
+        }).get_data()
+        bugData = result.get('cards', [])
+        # 过滤下数据，太多了
+        process = {}
+        distribution = {}
+        for item in bugData:
+            task_type = None
+            status = item.get("status")
+            if status not in process:
+                process[status] = 0
+            process[status] += 1
+            properties = item.get("properties", [])
+            for i in properties:
+                if i.get("propertyName") == "bug发现方式":
+                    task_type = i.get("value")
+                    task_type = inner_dict.get(task_type)
+                    break
+            if task_type and task_type not in distribution:
+                distribution[task_type] = 0
+            if task_type:
+                distribution[task_type] += 1
+        results = {
+            "sts_datas": [{"value": val, "name": key} for key, val in process.items()],
+            "sts_column": list(process.keys()),
+            "dis_datas": list(distribution.keys()),
+            "dis_count": list(distribution.values())
+        }
+        return len(results), results
 
     async def post(self, **kwargs):
         """
