@@ -60,7 +60,11 @@
         name="10002"
         icon="ios-bug"
       >
-        <bug-fix ref="mychild" :tag="repoinfo.tag" :tasktypelist="taskTypeList"></bug-fix>
+        <bug-fix
+          ref="mychild"
+          :tag="repoinfo.tag"
+          :tasktypelist="taskTypeList"
+        ></bug-fix>
       </TabPane>
       <TabPane
         label="结论"

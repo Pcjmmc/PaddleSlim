@@ -25,13 +25,13 @@
     <el-tabs
       type="card"
       v-model="childname"
-      @tab-click="clickChildTab"
       style="margin-left: 1%;"
+      @tab-click="clickChildTab"
     >
       <el-tab-pane
       :label="item.desc"
-      :name="item.key"
       :key="index"
+      :name="item.key"
       v-for="(item, index) in tasktypelist"
       >
         <Table

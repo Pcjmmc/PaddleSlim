@@ -23,22 +23,22 @@ export default {
   data() {
     return {
       chartPie: null
-    }
+    };
   },
   mounted() {
     this.$nextTick(() => {
       this.drawPieChart('chartPie');
-    })
+    });
   },
   methods: {
     drawPieChart() {
       let mytextStyle = {
-        color: "#333",
+        color: '#333',
         fontSize: 18
       };
       let mylabel = {
         show: true,
-        position: "right",
+        position: 'right',
         offset: [30, 40],
         formatter: '{b} : {c} ({d}%)',
         textStyle: mytextStyle
@@ -52,13 +52,13 @@ export default {
         },
         tooltip: {
           trigger: 'item',
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
           data: this.column,
-          left: "center",
-          top: "bottom",
-          orient: "horizontal"
+          left: 'center',
+          top: 'bottom',
+          orient: 'horizontal'
         },
         series: [
           {
@@ -77,7 +77,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style scope>
