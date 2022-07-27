@@ -46,5 +46,10 @@ class BuildManage(MABaseView):
         kwargs = self.process_params(**kwargs)
         # print("request params is", kwargs)
         count, details = await CeTaskBuilds.aio_filter_details_with_total_count(**kwargs, order_by="-created")
+        for item in details:
+            try:
+                item["artifact_url"] = json.loads(item["artifact_url"])
+            except:
+                item["artifact_url"] = []
         return count, details
 

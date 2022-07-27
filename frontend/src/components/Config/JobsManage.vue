@@ -568,6 +568,7 @@ export default {
         workspace: this.selectedRow.workspace,
         description: this.selectedRow.description,
         owner: this.selectedRow.owner,
+        platform: this.selectedRow.platform,
         step: this.selectedRow.step,
         system: this.selectedRow.system,
         task_type: this.selectedRow.task_type,
