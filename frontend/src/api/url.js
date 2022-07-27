@@ -18,3 +18,4 @@ export const BugUrl = '/ce/bugs';
 export const DetailUrl = '/ce/detail';
 export const OpBenchmarkUrl = '/ce/op-benchmark';
 export const TestConclusionUrl = '/ce/conclusion';
+export const BuildUrl = '/ce/builds';

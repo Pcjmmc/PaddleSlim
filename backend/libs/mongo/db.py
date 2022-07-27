@@ -125,7 +125,15 @@ if __name__ == "__main__":
         },
         "test": {
             "desc": "测试",
-            "icon": "ios-bulb-outline"
+            "icon": "ios-bulb-outline",
+            "sub": {
+                "history": {
+                    "desc": '历史记录'
+                },
+                "package": {
+                    "desc": '编包列表'
+                },
+            }
         },
         "integration": {
             "desc": "集测",

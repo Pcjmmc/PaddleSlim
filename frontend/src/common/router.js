@@ -10,6 +10,7 @@ import AppStore from '../components/AppStore/index.vue';
 import FuncDetail from '../components/FuncDetail.vue';
 import Compile from '../components/Compile.vue';
 import Benchmark from '../components/Benchmark.vue';
+import SingleReport from '../components/SingleReport.vue';
 
 // Vue.use(VueRouter);
 export const ROUTES = [
@@ -66,6 +67,11 @@ export const ROUTES = [
           path: '/paddle/op-benchmark',
           name: 'Benchmark',
           component: Benchmark
+        },
+        { // API 配置
+          path: '/paddle/test/history',
+          name: 'single_report',
+          component: SingleReport
         }
       ]
     }
