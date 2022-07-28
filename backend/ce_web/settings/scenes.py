@@ -1,15 +1,26 @@
 # encoding: utf-8
-selects = ["主框架CE任务", "模型CE任务"]
+
 # 与集测平台的映射关系：
 inner_dict = {
     "9239063": "单机训练", # 主框架CE任务
     "8738985": "套件工具兼容性", # 模型CE任务
+    "11455195": "benchmark性能测试", # benchmark
+    "11455197": "编译安装",
+    "11455198": "文档教程",
+    "11455199": "预测部署",
+    "11455200": "分布式测试"
 }
+
 # 反向映射
 back_dict = {
-    "frame": "主框架CE任务",
-    "model": "模型CE任务"
+    "frame": "单机训练",
+    "model": "模型套件",
+    "infer": "预测部署",
+    "dist": "分布式",
+    "benchmark": "benchmark",
+    "doc": "文档测试"
 }
+selects = list(back_dict.values())
 
 scenes_dict = {
     "compile": "编译安装",

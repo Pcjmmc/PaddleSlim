@@ -46,7 +46,6 @@ export default {
       this.chartPie = echarts.init(document.getElementById('chartPie'), 'macarons');
       this.chartPie.setOption({
         title: {
-          text: 'Pie Chart',
           subtext: '风险进度',
           x: 'center'
         },

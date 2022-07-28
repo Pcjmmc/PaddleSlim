@@ -13,7 +13,7 @@ frontend/yarn-debug.log*
 frontend/yarn-error.log*
 .vscode
 *pyc
-
+.DS_Store
 # pyenv
 .python-version
 
