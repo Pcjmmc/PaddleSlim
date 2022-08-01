@@ -23,6 +23,7 @@ class CeConclusion(BaseModel, BaseModelMixin):
     tag = Column(VARCHAR(50), comment="tag名或计划名")
     task_type = Column(VARCHAR(20), comment="任务的类型") #目前支持；model、frame、lite、infer、dist；表示一级别分类以及框架的按类处理
     conclusion = Column(Text, comment="测试结论")
+    model_repo = Column(VARCHAR(50), comment="套件名")
     created = Column(Integer, comment="本记录创建的时间")
     updated = Column(Integer, comment="本记录更新的时间")
 

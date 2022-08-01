@@ -37,22 +37,14 @@ class BugManage(MABaseView):
             # 根据方向查询
             # 将task_type 转化成查询条件
             task_type = back_dict.get(task_type)
-            query = 'plan_tag = {ptag} AND 类型 = Bug AND bug发现方式 = {task_type}'.format(
+            query = 'plan_tag ~ {ptag} AND 类型 = Bug AND bug发现方式 = {task_type} AND repo = Paddle'.format(
             ptag=ptag, task_type=task_type)
-            # 先用测试的覆盖下
-            query = '所属计划 = 飞桨项目集/Paddle/{plan} AND 类型 = Bug AND bug发现方式 = {task_type}'.format(
-                plan="v2.3.1", task_type=task_type
-            )
             return await self.get_bugs_by_filter(query)
         else:
             # 查询全量
             condition = ",".join(selects)
-            query = 'plan_tag = {ptag}  AND 类型 = Bug AND bug发现方式 in ({condition})'.format(
-                ptag=ptag, condition=condition
-            )
-            # 先用测试的覆盖下
-            query = '所属计划 = 飞桨项目集/Paddle/{plan} AND 类型 = Bug AND bug发现方式 in ({condition})'.format(
-                plan="v2.3.1", condition=condition
+            query = 'repo = Paddle AND bug发现方式 in ({condition}) AND plan_tag ~ {ptag} AND 类型 = Bug'.format(
+                condition=condition, ptag=ptag
             )
             return await self.get_all_bugs(query)
 
@@ -202,7 +194,13 @@ class ConclusionManage(MABaseView):
             query_param["branch"] = branch
         records = await CeConclusion.aio_filter_objects(**query_param)
         # 将数据组装成1条
-        result = {res.task_type: res.conclusion for res in records}
+        result = {res.task_type: res.conclusion for res in records if res.task_type != "model"}
+
+        # 将models组装好
+        models = {res.model_repo: res.conclusion for res in records if res.task_type == "model"}
+
+        result["model"] = models
+
         return len(result), result
 
     async def post(self, **kwargs):
@@ -226,9 +224,15 @@ class ConclusionManage(MABaseView):
             branch = kwargs.get("branch")
             query_param["branch"] = branch
             kwargs.pop("branch")
-        records = [{"task_type": key, "conclusion": val} for key, val in kwargs.items() if key in scenes_dict]
+
+        records = [{"task_type": key, "conclusion": val, "model_repo": ""} for key, val in kwargs.items() if key in scenes_dict and key != 'model']
         for record in records:
             record.update({"branch": branch, "tag": tag})
+        # 处理models:
+        models = json.loads(kwargs.get('model', ""))
+        for key, val in models.items():
+            recd = {"branch": branch, "tag": tag, "model_repo": key, "task_type": "model", "conclusion": val}
+            records.append(recd)
         # 永远覆盖， 删除已有的
         await CeConclusion.aio_delete(params_data=query_param)
         await CeConclusion.aio_insert(validated_data=records)

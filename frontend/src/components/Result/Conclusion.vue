@@ -18,6 +18,20 @@
         :model="addForm"
         :label-width="150"
       >
+      <div v-if="item.key=='model'" style="margin-top: 1%;margin-left: 7%">
+        <label> 套件兼容性: </label>
+        <div v-for="(repo, idx) in repoNames">
+            <FormItem :label="repo" :prop="repo">
+              <Input
+                v-model="addForm[item.key][repo]"
+                type="textarea"
+                placeholder="描述风险"
+                :autosize="{minRows: 2,maxRows: 30}"
+              />
+            </FormItem>
+        </div>
+      </div>
+      <div v-else>
         <FormItem :label="item.desc" :prop="item.key">
           <Input
             v-model="addForm[item.key]"
@@ -26,6 +40,7 @@
             :autosize="{minRows: 2,maxRows: 30}"
           />
         </FormItem>
+      </div>
       </Form>
     </div>
   </div>
@@ -68,16 +83,46 @@ export default {
       addForm: {
         compile: '',
         frame: '',
-        model: '',
         infer: '',
         dist: '',
         benchmark: '',
-        doc: ''
-      }
+        doc: '',
+        model: {
+          PaddleClas: '',
+          PaddleGAN: '',
+          PaddleOCR: '',
+          PaddleNLP: '',
+          PaddleSeg: '',
+          PaddleDetection: '',
+          PaddleSpeech: '',
+          PaddleRec: '',
+          PaddleSlim: '',
+          PaddleHub: '',
+          Paddle2ONNX: '',
+          PaddleScience: '',
+          Xpu: ''
+        }
+      },
+      repoNames: [
+        'PaddleClas',
+        'PaddleGAN',
+        'PaddleOCR',
+        'PaddleNLP',
+        'PaddleSeg',
+        'PaddleDetection',
+        'PaddleSpeech',
+        'PaddleRec',
+        'PaddleSlim',
+        'PaddleHub',
+        'Paddle2ONNX',
+        'PaddleScience',
+        'Xpu'
+      ]
     };
   },
   mounted: function () {
     this.getData();
+    // console.log('tasktypelist', this.tasktypelist);
   },
   watch: {
     versionName: function () {
@@ -131,7 +176,21 @@ export default {
       this.addForm = {
         compile: '',
         frame: '',
-        model: '',
+        model: {
+          PaddleClas: '',
+          PaddleGAN: '',
+          PaddleOCR: '',
+          PaddleNLP: '',
+          PaddleSeg: '',
+          PaddleDetection: '',
+          PaddleSpeech: '',
+          PaddleRec: '',
+          PaddleSlim: '',
+          PaddleHub: '',
+          Paddle2ONNX: '',
+          PaddleScience: '',
+          Xpu: ''
+        },
         infer: '',
         dist: '',
         benchmark: '',
@@ -150,7 +209,7 @@ export default {
         branch: this.branch,
         compile: this.addForm.compile,
         frame: this.addForm.frame,
-        model: this.addForm.model,
+        model: JSON.stringify(this.addForm.model),
         infer: this.addForm.infer,
         dist: this.addForm.dist,
         benchmark: this.addForm.benchmark,

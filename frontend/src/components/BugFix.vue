@@ -7,6 +7,7 @@
           ref="cdpie"
           :column="sts_column"
           :xdata="sts_datas"
+          v-if="sts_datas.length > 0"
         ></pie-base>
       </col>
       <col slot="right">
@@ -14,6 +15,7 @@
           ref="child"
           :xdata="dis_datas"
           :count="dis_count"
+          v-if="dis_datas.length > 0"
         ></histogram-base>
       </col>
     </row>
@@ -224,8 +226,12 @@ export default {
       }
       this.columns[5].filters = filters;
       this.$nextTick(function () {
-        this.$refs.child.drawPie('main1');
-        this.$refs.cdpie.drawPieChart('chartPie');
+        if (this.sts_datas.length > 0) {
+          this.$refs.cdpie.drawPieChart('chartPie');
+        }
+        if (this.dis_datas.length > 0) {
+          this.$refs.child.drawPie('main1');
+        }
       });
     }
   }
