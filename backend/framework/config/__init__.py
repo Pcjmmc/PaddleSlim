@@ -1,3 +1,6 @@
+"""
+__init__
+"""
 #!/bin/env python
 # -*- coding: utf-8 -*-
 # @author DDDivano

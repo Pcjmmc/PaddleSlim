@@ -22,8 +22,14 @@ API = "http://127.0.0.1:8005/framework/runner"
 
 
 class Framework(object):
+    """
+    Framework
+    """
     API_FUNCTION = "http://127.0.0.1:8005/framework/runner"
     API_BENCHMARK = ""
 
 class Local(Framework):
+    """
+    Framework
+    """
     pass

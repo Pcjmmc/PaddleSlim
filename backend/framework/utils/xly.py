@@ -19,6 +19,9 @@ class xlyAuthorization(object):
     """
 
     def __init__(self):
+        """
+        comment
+        """
         self.access_id = "4f93954b-75c9-4629-b053-c4bcc9f74eab"
         self.serect = '''-----BEGIN PUBLIC KEY-----
         MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDEfHbv2jtSj5/+tpBmNdBU7x01WQg2h0R7ys1OVQUTnxDruz0Yd0S3zanJ1E9hPf5ek9NO8m8vXq7nHgc/uSGr2waezL4vxQdRw1oTlU4k/aX/imiEOO+1z7brJqNmQcOvziDwHqtnjl9lEkF05/Sp9W/y2Fb0+dTvv36jFSPwxwIDAQAB
@@ -32,12 +35,18 @@ class xlyAuthorization(object):
         return crypt_text  # 加密后的密文
 
     def query_2_md5(self, param):
+        """
+                comment
+        """
         m = hashlib.md5()
         m.update(bytes(param.encode('utf-8')))
         dig = m.hexdigest()
         return dig
 
     def set_sign(self, param):
+        """
+                comment
+        """
         dig = self.query_2_md5(param)
         auth_string = self.encrypt(self.serect, dig)
         cipher_text = base64.b64encode(auth_string)
@@ -78,12 +87,18 @@ class xlyOpenApiRequest(xlyAuthorization):
 
 
 def encrypt(pub, original_text):  # 用公钥加密
+    """
+            comment
+    """
     pub = rsa.PublicKey.load_pkcs1_openssl_pem(pub)
     crypt_text = rsa.encrypt(bytes(original_text.encode('utf-8')), pub)
     return crypt_text  # 加密后的密文
 
 
 def query_2_md5(query_param):
+    """
+            comment
+    """
     m = hashlib.md5()
     m.update(bytes(query_param.encode('utf-8')))
     dig = m.hexdigest()
@@ -91,6 +106,9 @@ def query_2_md5(query_param):
 
 
 def Sign(query_param):
+    """
+            comment
+    """
     dig = query_2_md5(query_param)
     auth_string = encrypt(serect, dig)
     cipher_text = base64.b64encode(auth_string)
@@ -100,6 +118,9 @@ def Sign(query_param):
 
 
 def Get_ipipe_auth(url, query_param=''):
+    """
+            comment
+    """
     session = requests.Session()
     req = requests.Request(
         "GET", url, headers={"Content-Type": "application/json"}).prepare()
