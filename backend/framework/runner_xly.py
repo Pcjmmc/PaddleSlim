@@ -11,7 +11,7 @@ from views.base_view import MABaseView
 from models.framework import Job, Mission, Compile
 from exception import HTTP400Error
 from datetime import datetime
-from framework.utils.xly import xlyOpenApiRequest
+from framework.utils.xly import XlyOpenApiRequest
 import os
 import subprocess
 
@@ -31,7 +31,7 @@ class RunnerXLY(MABaseView):
 
     def runner(self, id, wheel):
         # todo: 编写代码执行程序
-        xly_agent = xlyOpenApiRequest()
+        xly_agent = XlyOpenApiRequest()
         pipelineid = "23490"
         url_param = "pipelineId={}".format(pipelineid)
         # branch ciType commit 毛用没有

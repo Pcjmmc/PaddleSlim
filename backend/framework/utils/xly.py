@@ -1,3 +1,5 @@
+"""
+"""
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # copy from  https://github.com/PaddlePaddle/Paddle-bot/blob/master/webservice/utils/auth_ipipe.py
@@ -13,7 +15,7 @@ serect = '''-----BEGIN PUBLIC KEY-----
         MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDEfHbv2jtSj5/+tpBmNdBU7x01WQg2h0R7ys1OVQUTnxDruz0Yd0S3zanJ1E9hPf5ek9NO8m8vXq7nHgc/uSGr2waezL4vxQdRw1oTlU4k/aX/imiEOO+1z7brJqNmQcOvziDwHqtnjl9lEkF05/Sp9W/y2Fb0+dTvv36jFSPwxwIDAQAB
         -----END PUBLIC KEY-----'''
 
-class xlyAuthorization(object):
+class XlyAuthorization(object):
     """
     效率云认证
     """
@@ -55,7 +57,7 @@ class xlyAuthorization(object):
         return sign
 
 
-class xlyOpenApiRequest(xlyAuthorization):
+class XlyOpenApiRequest(XlyAuthorization):
     """请求xly的openAPI"""
     def get_method(self,
                    url,
@@ -130,6 +132,9 @@ def Get_ipipe_auth(url, query_param=''):
 
 
 def Post_ipipe_auth(url, data, query_param=''):
+    """
+            comment
+    """
     session = requests.Session()
     req = requests.Request(
         "POST", url, data=data,
