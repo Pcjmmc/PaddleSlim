@@ -18,18 +18,52 @@ LOCAL = {
 }
 API = "http://127.0.0.1:8005/framework/runner"
 """
+CLOUD = "xly"
+LOCAL = "local"
+
+
+PLACE = {
+    "api_function": CLOUD,
+    "op_function": CLOUD,
+    "paddleclas": CLOUD,
+}
 
 
 
-class Framework(object):
+class Cloud(object):
+    """
+    for xly , value is "pipeline conf id"
+    """
+    API_FUNCTION = ""
+    OP_FUNCTION = "23490"
+    API_BENCHMARK = ""
+    PADDLE_CLAS = "23369"
+
+class Local(object):
     """
     Framework
     """
-    API_FUNCTION = "http://127.0.0.1:8005/framework/runner"
+    API_FUNCTION = ""
     API_BENCHMARK = ""
 
-class Local(Framework):
+
+class CloudMission(object):
     """
-    Framework
+    for xly
     """
-    pass
+    ROUTER = {
+        "api_function": ["op_function", "external_api_function", "io_function"],
+        "op_function": Cloud.OP_FUNCTION,
+        "api_benchmark": [],
+        "paddleclas": Cloud.PADDLE_CLAS
+    }
+
+
+class LocalMission(object):
+    """
+    for local testing
+    """
+    ROUTER = {
+        "api_function": ["op_function", "external_api_function", "io_function"]
+
+    }
