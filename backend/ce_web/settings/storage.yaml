@@ -20,6 +20,12 @@ PRODUCTION:
       db_name: "api_benchmark"
       user: "paddle_test"
       password: "paddle@test"
+    framework:
+      host: "180.76.178.190"
+      port: 3306
+      db_name: "framework"
+      user: "paddle_test"
+      password: "paddle@test"
   redis:
     paddle_quality:
       host: "10.11.37.64"
