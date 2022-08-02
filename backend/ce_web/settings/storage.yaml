@@ -20,12 +20,6 @@ PRODUCTION:
       db_name: "api_benchmark"
       user: "paddle_test"
       password: "paddle@test"
-    framework:
-      host: "127.0.0.1"
-      port: 3306
-      db_name: "framework"
-      user: "paddle_test"
-      password: "paddle@test"
   redis:
     paddle_quality:
       host: "10.11.37.64"
@@ -37,21 +31,21 @@ PRODUCTION:
 
 
 DEV:
-#  mongo:
-#    paddle_quality:
-#      host: "127.0.0.1"
-#      port: 27017
-#      db_name: "paddle"
-#      case_detail: "case_detail_{task_id}_{build_id}_{label_id}"
-#      user: "root"
-#      password: "Paddle@root"
+  mongo:
+    paddle_quality:
+      host: "127.0.0.1"
+      port: 27017
+      db_name: "paddle"
+      case_detail: "case_detail_{task_id}_{build_id}_{label_id}"
+      user: "root"
+      password: "Paddle@root"
   mysql:
-#    paddle_quality:
-#      host: "127.0.0.1"
-#      port: 3306
-#      db_name: "paddle"
-#      user: "root"
-#      password: "Paddle@root"
+    paddle_quality:
+      host: "127.0.0.1"
+      port: 3306
+      db_name: "paddle"
+      user: "root"
+      password: "Paddle@root"
     framework:
       host: "127.0.0.1"
       port: 3306
