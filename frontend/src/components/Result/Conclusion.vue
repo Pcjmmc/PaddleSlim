@@ -6,45 +6,43 @@
     </Col>
   </Row> -->
   <div>
-    <div style="margin-top: 1%;margin-left: 7%">
+    <div style="margin-top: 1%;margin-left: 2%">
       <span>
         <label> 所属计划: </label>
         <span v-if="tag"> {{ tag }} </span>
         <span v-else> {{ branch }} </span>
       </span>
     </div>
-    <div v-for="(item, index) in tasktypelist" style="margin-top: 1%;margin-right: 2%">
-      <Form
-        :model="addForm"
-        :label-width="150"
-      >
-      <div v-if="item.key=='model'" style="margin-top: 1%;margin-left: 7%">
-        <label> 套件兼容性: </label>
-        <div v-for="(repo, idx) in repoNames">
-            <FormItem :label="repo" :prop="repo">
-              <Input
-                v-model="addForm[item.key][repo]"
-                type="textarea"
-                placeholder="描述风险"
-                :autosize="{minRows: 2,maxRows: 30}"
-              />
-            </FormItem>
+    <CheckboxGroup v-model="checkAllGroup">
+      <div v-for="(item, index) in tasktypelist" style="margin-top: 1%;margin-right: 2%;margin-left: 2%">
+        <div v-if="item.key=='model'">
+          <label> 套件兼容性: </label>
+          <div v-for="(repo, idx) in repoNames" style="margin-top: 1%;margin-left: 1%">
+            <Checkbox :label="repo"> {{ repo }} </Checkbox>
+            <Input
+              clearable
+              v-model="addForm[item.key][repo]"
+              type="textarea"
+              placeholder="描述风险"
+              :autosize="{minRows: 2,maxRows: 30}"
+            />
+          </div>
         </div>
-      </div>
-      <div v-else>
-        <FormItem :label="item.desc" :prop="item.key">
+        <div v-else>
+          <Checkbox :label="item.key"> {{ item.desc }} </Checkbox>
           <Input
+            clearable
             v-model="addForm[item.key]"
             type="textarea"
             placeholder="描述风险"
             :autosize="{minRows: 2,maxRows: 30}"
           />
-        </FormItem>
+        </div>
+        </Form>
       </div>
-      </Form>
-    </div>
+    </CheckboxGroup>
   </div>
-  <div slot="footer" align="center">
+  <div slot="footer" align="center" style="margin-top: 1%">
     <Button type="warning" @click="handleReset">取消</Button>
     <Button type="primary" @click="handleSubmit">提交</Button>
   </div>
@@ -56,6 +54,7 @@
 import Cookies from 'js-cookie';
 import api from '../../api/index';
 import { TestConclusionUrl } from '../../api/url.js';
+import { isEmpty } from '../../util/help';
 
 export default {
    props: {
@@ -80,6 +79,7 @@ export default {
   },
   data: function () {
     return {
+      checkAllGroup: [],
       addForm: {
         compile: '',
         frame: '',
@@ -173,6 +173,7 @@ export default {
       this.initData();
     },
     initData() {
+      this.checkAllGroup = [];
       this.addForm = {
         compile: '',
         frame: '',
@@ -204,20 +205,43 @@ export default {
       this.sendType2 = this.sendTypeList[row.task_type];
     },
     async handleSubmit() {
+      if (this.checkAllGroup.length == 0) {
+        this.$Message.warning({
+          content: "请勾选修改内容，再提交！",
+          duration: 3,
+          closable: true
+        });
+        return false;
+      }
+      let data = [];
+      for (let item in this.checkAllGroup) {
+        let key = this.checkAllGroup[item];
+        let content = '';
+        let task_type = '';
+        let model_repo = '';
+        if (key in this.addForm) {
+          content = this.addForm[key];
+          task_type = key;
+          model_repo = '';
+        } else {
+          content = this.addForm.model[key];
+          task_type = 'model';
+          model_repo = key;
+        }
+        let record = {
+          appid: Cookies.get('appid'),
+          tag: this.tag,
+          branch: this.branch,
+          task_type: task_type,
+          model_repo: model_repo,
+          conclusion: content
+        };
+        data.push(record)
+      }
       let params = {
-        tag: this.tag,
-        branch: this.branch,
-        compile: this.addForm.compile,
-        frame: this.addForm.frame,
-        model: JSON.stringify(this.addForm.model),
-        infer: this.addForm.infer,
-        dist: this.addForm.dist,
-        benchmark: this.addForm.benchmark,
-        doc: this.addForm.doc,
-        appid: Cookies.get('appid')
+        data: JSON.stringify(data)
       };
       // 将数组用都好分割拼接
-      // console.log('up data job params is', params);
       const {code, msg} = await api.post(TestConclusionUrl, params);
       if (parseInt(code, 10) !== 200) {
         this.$Message.error({
@@ -227,6 +251,7 @@ export default {
         });
       }
       this.getData();
+      this.checkAllGroup = [];
     }
   }
 };

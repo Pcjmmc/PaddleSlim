@@ -160,7 +160,9 @@ class BugManage(MABaseView):
             "QA负责人" : fields.get("qa_owner"),
             "RD负责人" : fields.get("rd_owner"),
             "流程状态" : "新建",
-            "auto_tag" : fields.get("tag"),
+            "plan_tag" : fields.get("tag"),
+            "repo": fields.get("repo"),
+            "bug发现方式": fields.get("repo"),
             "优先级": fields.get("level")
         }
         data = {
@@ -213,26 +215,16 @@ class ConclusionManage(MABaseView):
         """
         响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
         """
-        tag = None
-        branch = None
-        query_param = {}
-        if kwargs.get("tag"):
-            tag = kwargs.get("tag")
-            query_param["tag"] = tag
-            kwargs.pop("tag")
-        if kwargs.get("branch"):
-            branch = kwargs.get("branch")
-            query_param["branch"] = branch
-            kwargs.pop("branch")
-
-        records = [{"task_type": key, "conclusion": val, "model_repo": ""} for key, val in kwargs.items() if key in scenes_dict and key != 'model']
-        for record in records:
-            record.update({"branch": branch, "tag": tag})
-        # 处理models:
-        models = json.loads(kwargs.get('model', ""))
-        for key, val in models.items():
-            recd = {"branch": branch, "tag": tag, "model_repo": key, "task_type": "model", "conclusion": val}
-            records.append(recd)
-        # 永远覆盖， 删除已有的
-        await CeConclusion.aio_delete(params_data=query_param)
-        await CeConclusion.aio_insert(validated_data=records)
+        try:
+            data = json.loads(kwargs.get('data', ''))
+        except:
+            data = []
+        for item in data:
+            query_param = {
+                "branch": item.get("branch"),
+                "tag": item.get("tag"),
+                "task_type": item.get("task_type"),
+                "model_repo": item.get("model_repo")
+            }
+            await CeConclusion.aio_delete(params_data=query_param)
+        await CeConclusion.aio_insert(validated_data=data)
