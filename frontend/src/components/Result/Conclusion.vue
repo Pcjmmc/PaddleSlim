@@ -42,7 +42,11 @@
       </div>
     </CheckboxGroup>
   </div>
-  <div slot="footer" align="center" style="margin-top: 1%">
+  <div
+    slot="footer"
+    align="center"
+    style="margin-top: 1%"
+  >
     <Button type="warning" @click="handleReset">取消</Button>
     <Button type="primary" @click="handleSubmit">提交</Button>
   </div>
@@ -54,7 +58,6 @@
 import Cookies from 'js-cookie';
 import api from '../../api/index';
 import { TestConclusionUrl } from '../../api/url.js';
-import { isEmpty } from '../../util/help';
 
 export default {
    props: {
@@ -205,17 +208,17 @@ export default {
       this.sendType2 = this.sendTypeList[row.task_type];
     },
     async handleSubmit() {
-      if (this.checkAllGroup.length == 0) {
+      if (this.checkAllGroup.length === 0) {
         this.$Message.warning({
-          content: "请勾选修改内容，再提交！",
+          content: '请勾选修改内容，再提交！',
           duration: 3,
           closable: true
         });
         return false;
       }
       let data = [];
-      for (let item in this.checkAllGroup) {
-        let key = this.checkAllGroup[item];
+      for (var idx = 0; idx < this.checkAllGroup.length; idx++) {
+        let key = this.checkAllGroup[idx];
         let content = '';
         let task_type = '';
         let model_repo = '';
@@ -236,7 +239,7 @@ export default {
           model_repo: model_repo,
           conclusion: content
         };
-        data.push(record)
+        data.push(record);
       }
       let params = {
         data: JSON.stringify(data)
