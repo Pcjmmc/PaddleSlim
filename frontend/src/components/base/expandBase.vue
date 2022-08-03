@@ -212,70 +212,6 @@
         </div>
       </Col>
     </Row>
-    <div>
-      <Modal v-model="setBugTagModal" title="快速创建bug卡片" @on-cancel="handleReset" width="600px">
-        <Form ref="addForm" :model="addForm" :rules="addRules" :label-width="80">
-          <FormItem label="所属计划: ">
-            <Input v-model="tag"/>
-          </FormItem>
-          <FormItem label="卡片标题: " prop="title">
-            <Input v-model="addForm.title"/>
-          </FormItem>
-          <FormItem label="等级" prop="level">
-            <Select v-model="addForm.level" >
-              <Option v-for="(item, index) in levelList" :value="item" :key="index">{{ item }}</Option>
-            </Select>
-          </FormItem>
-          <FormItem label="rd负责人" prop="rd_owner">
-            <Input v-model="addForm.rd_owner"/>
-          </FormItem>
-          <FormItem label="qa负责人" prop="qa_owner">
-            <Input v-model="addForm.qa_owner"/>
-          </FormItem>
-          <FormItem label="详情描述: " prop="description">
-            <Input v-model="addForm.description" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
-          </FormItem>
-          <FormItem prop="upimg" label="上传">
-            <div class="demo-upload-list" v-for="item in tmpList">
-              <template v-if="item">
-                <img :src="item.content">
-                <div class="demo-upload-list-cover">
-                  <Icon type="ios-eye-outline" @click.native="handleView(item)"></Icon>
-                  <Icon type="ios-trash-outline" @click.native="handleRemove(item.name)"></Icon>
-                </div>
-              </template>
-              <template v-else>
-                <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-              </template>
-            </div>
-            <Upload
-              ref="upload"
-              :show-upload-list="false"
-              :default-file-list="defaultList"
-              :format="['jpg','jpeg','png']"
-              :max-size="10240"
-              :on-format-error="handleFormatError"
-              :on-exceeded-size="handleMaxSize"
-              :before-upload="handleBeforeUpload"
-              multiple
-              type="drag"
-              action="/"
-              style="display: inline-block;width:58px;">
-              <div style="width: 58px;height:58px;line-height: 58px;">
-                <Button icon="ios-camera"></Button>
-              </div>
-            </Upload>
-            <Modal title="View Image" v-model="visible">
-              <img :src="images" v-if="visible" style="width: 100%">
-            </Modal>
-          </FormItem>
-        </Form>
-        <div slot="footer">
-          <Button type="text" @click="handleReset">取消</Button>
-          <Button type="primary" @click="handleSubmit">确定</Button>
-        </div>
-      </Modal>
-    </div>
   </Card>
 </template>
 
@@ -284,6 +220,7 @@ import Modal from "../ModalSimple";
 import { ExemptUrl, BugUrl } from '../../api/url.js';
 import { isExpired } from '../../util/help.js';
 import api from '../../api/index';
+
 export default {
   name: 'expandBase',
   props: {
@@ -403,7 +340,8 @@ export default {
         commit_id: item.commit_id,
         tname: item.tname,
         created: item.created,
-        commit_time: item.commit_time
+        commit_time: item.commit_time,
+        tag: this.tag
       };
       // let _params = {};
       // _params = Object.assign(_params, item);

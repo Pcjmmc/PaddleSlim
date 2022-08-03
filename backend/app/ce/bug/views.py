@@ -9,6 +9,7 @@ from ce_web.settings.common import RPC_SETTINGS
 from ce_web.settings.scenes import back_dict, inner_dict, scenes_dict, selects
 from libs.mongo.db import Mongo
 from models.conclusion import CeConclusion
+from models.icafe import CeIcafe
 from rpc.icafe import CreateBug, GetBug
 
 from views.base_view import MABaseView
@@ -141,37 +142,56 @@ class BugManage(MABaseView):
             file_list = json.loads(kwargs.get("images"))
         except:
             file_list = []
-        icafe_info = {
-            "title": fields.get("title"),
-            "type": "Bug",
-            "detail": fields.get("description"),
-            "所属计划": fields.get("tag"),
-            "fields": {},
-            "creator": "liuhuanling"
-        }
-        content = ""
-        if file_list:
-            for item in file_list:
-                img_content = item["content"]
-                content +=  "<img src=\"{body}>".format(body=img_content)
-                icafe_info["detail"] += "\n" + content
+        issues_url = fields.get("issues_url")
+        plan_tag = fields.get("tag")
+        tid = fields.get('tid')
+        if issues_url:
+            # 走关联卡片
+            print("关联已有卡片")
+            await CeIcafe.aio_insert({'tid': tid, 'tag':plan_tag, 'issues_url':issues_url})
+        else:
+            # 新建卡片
+            print("新建卡片")
+            repo = fields.get("repo")
+            bug_type = fields.get("bug_type")
+            icafe_info = {
+                "title": fields.get("title"),
+                "type": "Bug",
+                "detail": fields.get("description"),
+                "所属计划": "飞桨项目集/Paddle/{tag}".format(tag=plan_tag),
+                "fields": {},
+                "creator": "liuhuanling"
+            }
+            content = ""
+            if file_list:
+                for item in file_list:
+                    img_content = item["content"]
+                    content +=  "<img src=\"{body}>".format(body=img_content)
+                    icafe_info["detail"] += "\n" + content
 
-        icafe_info["fields"] = {
-            "QA负责人" : fields.get("qa_owner"),
-            "RD负责人" : fields.get("rd_owner"),
-            "流程状态" : "新建",
-            "plan_tag" : fields.get("tag"),
-            "repo": fields.get("repo"),
-            "bug发现方式": fields.get("repo"),
-            "优先级": fields.get("level")
-        }
-        data = {
-            "username": PADDLE_ICAFE_USER,
-            "password": PADDLE_ICAFE_PASSD,
-            "issues": [icafe_info]
-        }
-        await CreateBug(data).get_data()
-        
+            icafe_info["fields"] = {
+                "负责人": fields.get("rd_owner"),
+                "需求来源": "QA团队",
+                "负责人所属团队": "基础框架-训练",
+                "QA负责人" : fields.get("qa_owner"),
+                "RD负责人" : fields.get("rd_owner"),
+                "流程状态" : "新建",
+                "plan_tag" : plan_tag,
+                "repo": repo,
+                "bug发现方式": bug_type,
+                "优先级": fields.get("level")
+            }
+            data = {
+                "username": PADDLE_ICAFE_USER,
+                "password": PADDLE_ICAFE_PASSD,
+                "issues": [icafe_info]
+            }
+            result = await CreateBug(data).get_data()
+            #  将icafe存起来；做关联关系
+            issues = result.get("issues", [])
+            if issues:
+                issues_url = issues[0].get("url")
+                await CeIcafe.aio_insert({'tid': tid, 'tag':plan_tag, 'issues_url':issues_url})
 
 
 class ConclusionManage(MABaseView):

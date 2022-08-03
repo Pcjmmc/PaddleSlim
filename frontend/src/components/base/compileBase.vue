@@ -240,6 +240,7 @@ import Modal from "../ModalSimple";
 import { ExemptUrl, BugUrl } from '../../api/url.js';
 import { isExpired } from '../../util/help.js';
 import api from '../../api/index';
+
 export default {
   name: 'compileBase',
   props: {
@@ -362,7 +363,8 @@ export default {
         commit_id: item.commit_id,
         tname: item.tname,
         created: item.created,
-        commit_time: item.commit_time
+        commit_time: item.commit_time,
+        tag: this.tag
       };
       // let _params = {};
       // _params = Object.assign(_params, item);

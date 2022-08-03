@@ -34,27 +34,6 @@
       </intergration>
     </div>
   </div>
-  <!--
-  <div>
-    <Modal v-model="allSteps.createtag !== undefined && allSteps.createtag.flag" title="快速打tag" @on-cancel="handleReset" width="600px">
-        <Form ref="addForm" :model="tagForm" :label-width="80">
-          <FormItem label="分支" prop="branch">
-            <Input disabled v-model="tagForm.branch"/>
-          </FormItem>
-          <FormItem label="commit: " prop="commit">
-            <Input v-model="tagForm.commit"/>
-          </FormItem>
-          <FormItem label="tag名称: " prop="tagName">
-            <Input v-model="tagForm.tagName"/>
-          </FormItem>
-        </Form>
-        <div slot="footer">
-          <Button type="text" @click="handleReset">取消</Button>
-          <Button type="primary" @click="handleSubmit">确定</Button>
-        </div>
-      </Modal>
-  </div>
-  -->
 </div>
 </template>
 

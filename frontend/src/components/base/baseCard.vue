@@ -202,6 +202,12 @@ export default {
     'data': {
       type: Object
     },
+    'tag': {
+      type: [String],
+      default: function () {
+        return '';
+      }
+    },
     'latestcommittime': {
       type: [Number],
       default: function () {
@@ -237,7 +243,8 @@ export default {
         tname: item.tname,
         reponame: item.reponame,
         created: item.created,
-        commit_time: item.commit_time
+        commit_time: item.commit_time,
+        tag: this.tag
       };
       // _params = Object.assign(_params, item);
       let detail_name = '';

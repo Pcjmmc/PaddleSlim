@@ -13,6 +13,7 @@ inner_dict = {
 
 # 反向映射
 back_dict = {
+    "compile": "编译",
     "frame": "单机训练",
     "model": "模型套件",
     "infer": "预测部署",

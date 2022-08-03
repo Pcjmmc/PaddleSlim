@@ -10,6 +10,7 @@
               <base-card
                 :reponame="key"
                 :data="item"
+                :tag="tag"
                 :latestcommittime="latestcommittime"
               >
               </base-card>
@@ -100,8 +101,8 @@
 </template>
 
 <script>
-import baseCard from "./baseCard.vue";
-import Modal from "../ModalSimple";
+import baseCard from './baseCard.vue';
+import Modal from '../ModalSimple';
 import { ExemptUrl, BugUrl } from '../../api/url.js';
 import api from '../../api/index';
 export default {
