@@ -125,7 +125,6 @@ class JobInitView(MABaseView):
         return await super().get(**kwargs)
 
     async def get_data(self, **kwargs):
-        print(kwargs)
         id = kwargs.get("id")
         data =  await Job.aio_get_object(order_by=None, group_by=None, id=id)
         mission = dict()

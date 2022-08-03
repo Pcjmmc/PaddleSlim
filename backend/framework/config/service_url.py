@@ -21,10 +21,12 @@ API = "http://127.0.0.1:8005/framework/runner"
 CLOUD = "xly"
 LOCAL = "local"
 
-
+# PLACE 是首要判断条件，对接前端返回内容，并check执行环境
 PLACE = {
     "api_function": CLOUD,
     "op_function": CLOUD,
+    "external_api_function": CLOUD,
+    "jit_function": CLOUD,
     "paddleclas": CLOUD,
 }
 
@@ -36,6 +38,8 @@ class Cloud(object):
     """
     API_FUNCTION = ""
     OP_FUNCTION = "23490"
+    EXTERNAL_API_FUNCTION = "23490"
+    JIT_FUNCTION = "23539"
     API_BENCHMARK = ""
     PADDLE_CLAS = "23369"
 
@@ -54,6 +58,8 @@ class CloudMission(object):
     ROUTER = {
         "api_function": ["op_function", "external_api_function", "io_function"],
         "op_function": Cloud.OP_FUNCTION,
+        "external_api_function": Cloud.EXTERNAL_API_FUNCTION,
+        "jit_function": Cloud.JIT_FUNCTION,
         "api_benchmark": [],
         "paddleclas": Cloud.PADDLE_CLAS
     }
