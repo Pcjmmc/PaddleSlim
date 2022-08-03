@@ -143,8 +143,17 @@
         <div slot="footer">
         </div>
       </Modal>
-      <Modal v-model="creatBugTag" title="快速创建bug卡片" @on-cancel="handleReset" width="600px">
-        <Form ref="addForm" :model="addForm" :rules="addRules" :label-width="100">
+      <Modal
+        v-model="creatBugTag"
+        title="快速创建bug卡片"
+        width="600px"
+        v-on:on-cancel="handleReset"
+      >
+        <Form
+          :model="addForm"
+          :rules="addRules"
+          :label-width="100"
+        >
           <FormItem label="计划版本/分支: " v-if="$route.query.branch=='develop'">
             <Input readonly v-model="$route.query.branch"/>
           </FormItem>
@@ -161,7 +170,7 @@
             <Input v-model="addForm.title"/>
           </FormItem>
           <FormItem label="等级" prop="level">
-            <Select v-model="addForm.level" >
+            <Select v-model="addForm.level">
               <Option v-for="(item, index) in levelList" :value="item.desc" :key="index">{{ item.desc }}</Option>
             </Select>
           </FormItem>
@@ -172,7 +181,11 @@
             <Input v-model="addForm.qa_owner"/>
           </FormItem>
           <FormItem label="详情描述: " prop="description">
-            <Input v-model="addForm.description" type="textarea" :autosize="{minRows: 2,maxRows: 20}"/>
+            <Input
+              v-model="addForm.description"
+              type="textarea"
+              :autosize="{minRows: 2,maxRows: 20}"
+            />
           </FormItem>
           <FormItem prop="upimg" label="上传">
             <div class="demo-upload-list" v-for="item in tmpList">
@@ -184,28 +197,36 @@
                 </div>
               </template>
               <template v-else>
-                <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+                <Progress
+                  v-if="item.showProgress"
+                  :percent="item.percentage"
+                  hide-info
+                ></Progress>
               </template>
             </div>
             <Upload
-              ref="upload"
+              type="drag"
+              style="display: inline-block;width:58px;"
+              multiple
+              action="/"
               :show-upload-list="false"
               :default-file-list="defaultList"
               :format="['jpg','jpeg','png']"
               :max-size="10240"
               :on-format-error="handleFormatError"
-              :on-exceeded-size="handleMaxSize"
               :before-upload="handleBeforeUpload"
-              multiple
-              type="drag"
-              action="/"
-              style="display: inline-block;width:58px;">
+              :on-exceeded-size="handleMaxSize"
+            >
               <div style="width: 58px;height:58px;line-height: 58px;">
                 <Button icon="ios-camera"></Button>
               </div>
             </Upload>
             <Modal title="View Image" v-model="visible">
-              <img :src="images" v-if="visible" style="width: 100%">
+              <img
+                :src="images"
+                v-if="visible"
+                style="width: 100%"
+              >
             </Modal>
           </FormItem>
         </Form>
@@ -214,8 +235,16 @@
           <Button type="primary" @click="handleSubmit">确定</Button>
         </div>
       </Modal>
-      <Modal v-model="associatedBugTag" title="关联已有卡片" @on-cancel="cancelAssociate" width="600px">
-        <Form ref="associateForm" :model="associateForm" :label-width="120">
+      <Modal
+        width="600px"
+        v-model="associatedBugTag"
+        title="关联已有卡片"
+        v-on:on-cancel="cancelAssociate"
+      >
+        <Form
+          :model="associateForm"
+          :label-width="120"
+        >
           <FormItem label="计划版本/分支: " v-if="$route.query.branch=='develop'">
             <Input readonly v-model="$route.query.branch"/>
           </FormItem>
@@ -238,7 +267,7 @@
 
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
-import { dateFmt, timestampToTime, isEmpty } from '../../util/help.js';
+import { dateFmt, timestampToTime } from '../../util/help.js';
 import frameDetailBase from '../base/frameDetailBase.vue';
 import { BugUrl, ScenesUrl } from '../../api/url.js';
 import api from '../../api/index';
@@ -649,11 +678,11 @@ export default {
     cancelAssociate(auto) {
       this.initData(auto);
     },
-    handleView (item) {
+    handleView(item) {
       this.images = item.content;
       this.visible = true;
     },
-    getImageBs64 (item) {
+    getImageBs64(item) {
       var _base64 = '';
       const reader = new FileReader();
       reader.readAsDataURL(item);
@@ -662,27 +691,27 @@ export default {
         this.tmpList.push({'name': item.name, 'content': _base64});
       };
     },
-    handleRemove (name) {
+    handleRemove(name) {
       this.uploadList = this.uploadList.filter(item => {
-        return item.name != name;
-      })
+        return item.name !== name;
+      });
       this.tmpList = this.tmpList.filter(item => {
-        return item.name != name;
-      })
+        return item.name !== name;
+      });
     },
-    handleFormatError (file) {
+    handleFormatError(file) {
       this.$Notice.warning({
         title: 'The file format is incorrect',
         desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
       });
     },
-    handleMaxSize (file) {
+    handleMaxSize(file) {
       this.$Notice.warning({
         title: 'Exceeding file size limit',
         desc: 'File ' + file.name + ' is too large, no more than 2M.'
       });
     },
-    handleBeforeUpload (file) {
+    handleBeforeUpload(file) {
       const check = this.uploadList.length < 3;
       if (!check) {
         this.$Notice.warning({
