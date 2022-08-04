@@ -51,7 +51,7 @@
         原因: {{ getErrorReason($route.query.exit_code) }}
       </p>
     </Card>
-    <Card 
+    <Card
       :bordered="false"
       class="center-card-s"
       v-if="bugList.length > 0"
