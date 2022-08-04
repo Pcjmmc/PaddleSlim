@@ -51,7 +51,11 @@
         原因: {{ getErrorReason($route.query.exit_code) }}
       </p>
     </Card>
-    <Card :bordered="false" class="center-card-s" v-if="bugList.length > 0">
+    <Card 
+      :bordered="false"
+      class="center-card-s"
+      v-if="bugList.length > 0"
+    >
       <p slot="title" style="text-align: center;font-size: 1.2em;">
         关联卡片
       </p>
