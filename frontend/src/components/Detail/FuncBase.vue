@@ -79,7 +79,11 @@
           原因: {{ getErrorReason($route.query.exit_code) }}
         </p>
       </Card>
-      <Card :bordered="false" class="center-card-s" v-if="bugList.length > 0">
+      <Card
+        :bordered="false"
+        class="center-card-s"
+        v-if="bugList.length > 0"
+      >
         <p slot="title" style="text-align: center;font-size: 1.2em;">
           关联卡片
         </p>
@@ -184,9 +188,9 @@
           <FormItem label="等级" prop="level">
             <Select v-model="addForm.level">
               <Option
-                v-for="(item, index) in levelList"
                 :key="index"
                 :value="item.desc"
+                v-for="(item, index) in levelList"
               >{{ item.desc }}</Option>
             </Select>
           </FormItem>
@@ -677,7 +681,7 @@ export default {
         tid: this.$route.query.tid,
         tag: this.$route.query.tag,
         secondary_type: this.secondarytype
-      }
+      };
       const {code, data, msg} = await api.get(AssociateBugUrl, params);
       if (parseInt(code, 10) === 200) {
         this.bugList = data;
