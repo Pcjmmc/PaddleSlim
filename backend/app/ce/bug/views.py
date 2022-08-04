@@ -145,10 +145,11 @@ class BugManage(MABaseView):
         issues_url = fields.get("issues_url")
         plan_tag = fields.get("tag")
         tid = fields.get('tid')
+        secondary_type = fields.get('secondary_type')
         if issues_url:
             # 走关联卡片
             print("关联已有卡片")
-            await CeIcafe.aio_insert({'tid': tid, 'tag':plan_tag, 'issues_url':issues_url})
+            await CeIcafe.aio_insert({'tid': tid, 'tag':plan_tag, 'issues_url':issues_url, 'secondary_type': secondary_type})
         else:
             # 新建卡片
             print("新建卡片")
@@ -191,7 +192,7 @@ class BugManage(MABaseView):
             issues = result.get("issues", [])
             if issues:
                 issues_url = issues[0].get("url")
-                await CeIcafe.aio_insert({'tid': tid, 'tag':plan_tag, 'issues_url':issues_url})
+                await CeIcafe.aio_insert({'tid': tid, 'tag':plan_tag, 'issues_url':issues_url, 'secondary_type': secondary_type})
 
 
 class ConclusionManage(MABaseView):

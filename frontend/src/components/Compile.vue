@@ -51,6 +51,18 @@
         原因: {{ getErrorReason($route.query.exit_code) }}
       </p>
     </Card>
+    <Card :bordered="false" class="center-card-s" v-if="bugList.length > 0">
+      <p slot="title" style="text-align: center;font-size: 1.2em;">
+        关联卡片
+      </p>
+      <Table
+        border
+        :columns="bugColumns"
+        :data="bugList"
+        style="margin-right: 1%"
+      >
+      </Table>
+    </Card>
     <Card class="center-card-s" v-if="JSON.stringify(env_info) != '[]'">
       <p slot="title" style="text-align: center;font-size: 1.4em;">
         <Icon type="md-document" size="20"></Icon>
@@ -124,7 +136,11 @@
         </FormItem>
         <FormItem label="等级" prop="level">
           <Select v-model="addForm.level">
-            <Option v-for="(item, index) in levelList" :value="item.desc" :key="index">{{ item.desc }}</Option>
+            <Option
+              v-for="(item, index) in levelList"
+              :key="index"
+              :value="item.desc"
+            >{{ item.desc }}</Option>
           </Select>
         </FormItem>
         <FormItem label="rd负责人" prop="rd_owner">
@@ -166,8 +182,8 @@
             :default-file-list="defaultList"
             :format="['jpg','jpeg','png']"
             :max-size="10240"
-            :on-format-error="handleFormatError"
             :before-upload="handleBeforeUpload"
+            :on-format-error="handleFormatError"
             :on-exceeded-size="handleMaxSize"
           >
             <div style="width: 58px;height:58px;line-height: 58px;">
@@ -220,10 +236,23 @@
 import Clipboard from 'clipboard';
 import api from '../api/index';
 import { dateFmt, timestampToTime } from '../util/help.js';
-import { DetailUrl, BugUrl, ScenesUrl } from '../api/url.js';
+import { DetailUrl, BugUrl, ScenesUrl, AssociateBugUrl } from '../api/url.js';
 export default {
   data: function () {
     return {
+      bugList: [],
+      bugColumns: [
+        {
+          title: '所属计划',
+          key: 'tag',
+          align: 'center'
+        },
+        {
+          title: '卡片地址',
+          key: 'issues_url',
+          align: 'center'
+        }
+      ],
       creatBugTag: false,
       associatedBugTag: false,
       images: '',
@@ -252,9 +281,11 @@ export default {
       associateForm: {
         tid: this.$route.query.tid,
         tag: this.$route.query.tag,
+        secondary_type: this.$route.query.secondary_type,
         issues_url: ''
       },
       addForm: {
+        secondary_type: this.$route.query.secondary_type,
         repo: this.$route.query.repo,
         bug_type: '',
         tag: this.$route.query.tag,
@@ -363,6 +394,7 @@ export default {
   mounted: function () {
     this.getData();
     this.getScenesList();
+    this.getBugList();
   },
   components: {
   },
@@ -440,6 +472,25 @@ export default {
       }
       return result;
     },
+    async getBugList() {
+      let params = {
+        tid: this.$route.query.tid,
+        tag: this.$route.query.tag,
+        secondary_type: this.$route.query.secondary_type
+      }
+      const {code, data, msg} = await api.get(AssociateBugUrl, params);
+      if (parseInt(code, 10) === 200) {
+        this.bugList = data;
+        // console.log('this.bugTypeList', this.bugTypeList);
+      } else {
+        this.bugList = [];
+        this.$Message.error({
+          content: '请求出错: ' + msg,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
     async getData() {
       // console.log('params is', this.$route.query);
       let _params = {
@@ -500,6 +551,7 @@ export default {
       // 发送请求
       await api.postFile(BugUrl, formD);
       this.initData(auto);
+      this.getBugList();
     },
     async handleAssociate(auto) {
       // 发送请求
@@ -507,6 +559,7 @@ export default {
       formD.append('data', JSON.stringify(this.associateForm));
       await api.postFile(BugUrl, formD);
       this.initData(auto);
+      this.getBugList();
     },
     cancelAssociate(auto) {
       this.initData(auto);
@@ -561,11 +614,13 @@ export default {
     initData(auto) {
       this.associatedBugTag = false;
       this.associateForm = {
+        secondary_type: this.$route.query.secondary_type,
         tid: this.$route.query.tid,
         tag: this.$route.query.tag,
         issues_url: ''
       };
       this.addForm = {
+        secondary_type: this.$route.query.secondary_type,
         tid: this.$route.query.tid,
         repo: this.$route.query.repo,
         bug_type: this.bugTypeList[this.$route.query.task_type],

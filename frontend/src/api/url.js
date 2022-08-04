@@ -15,6 +15,7 @@ export const ExemptUrl = '/ce/release/exempt';
 export const CommitsUrl = '/ce/commits';
 export const CommitDetailUrl = '/ce/commit/detail';
 export const BugUrl = '/ce/bugs';
+export const AssociateBugUrl = '/ce/associated/bugs';
 export const DetailUrl = '/ce/detail';
 export const OpBenchmarkUrl = '/ce/op-benchmark';
 export const TestConclusionUrl = '/ce/conclusion';
