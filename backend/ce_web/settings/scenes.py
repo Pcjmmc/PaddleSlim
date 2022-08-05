@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-# 与集测平台的映射关系：
+# icafe与集测平台的映射关系：
 inner_dict = {
     "9239063": "单机训练", # 主框架CE任务
     "8738985": "套件工具兼容性", # 模型CE任务
@@ -11,7 +11,7 @@ inner_dict = {
     "11455200": "分布式测试"
 }
 
-# 反向映射
+# 反向映射icafe
 back_dict = {
     "compile": "编译",
     "frame": "单机训练",
@@ -22,6 +22,14 @@ back_dict = {
     "doc": "文档测试"
 }
 selects = list(back_dict.values())
+
+# 反向映射icafe
+publish_origin_list = [
+    "pypi",
+    "bos",
+    "anaconda-cloud",
+    "docker-hub"
+]
 
 scenes_dict = {
     "compile": "编译安装",

@@ -12,6 +12,7 @@ from app.ce.detail.views import DetailManage
 from app.ce.develop.views import DevelopVersionManage
 from app.ce.job.views import JobManage
 from app.ce.menu.views import MenuManage
+from app.ce.publish.views import PublishVersionManage
 from app.ce.release.exempt_views import ExemptManege
 from app.ce.release.views import ReleaseVersionManage, TaskManage
 
@@ -21,6 +22,7 @@ urlpatterns = [
     url(r'menu', MenuManage),
     url(r'release/exempt', ExemptManege),
     url(r'release/?$', ReleaseVersionManage),
+    url(r'publish/?$', PublishVersionManage),
     url(r'task/?$', TaskManage),
     url(r'job/?$', JobManage),
     url(r'config/scenes', ScenesManage),

@@ -4,7 +4,10 @@ import datetime
 import json
 import time
 
-from ce_web.settings.scenes import back_dict, scenes_dict, secondary_type, system_list
+from ce_web.settings.scenes import (
+    back_dict, publish_origin_list,
+    scenes_dict, secondary_type, system_list
+)
 from libs.mongo.db import Mongo
 
 from views.base_view import MABaseView
@@ -27,7 +30,8 @@ class ScenesManage(MABaseView):
             "taskTypeList": [],
             "sendTypeList": secondary_type,
             "systemList": [{'key': item, 'desc': item} for item in system_list['compile']],
-            "bugTypeList": back_dict
+            "bugTypeList": back_dict,
+            "publishOriginList": publish_origin_list
 
         }
         result = [{'key': key, 'desc': val} for key, val in scenes_dict.items()]

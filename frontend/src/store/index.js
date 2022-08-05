@@ -11,7 +11,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     changeVersion (state, version) {
-        state.version = version
+      state.version = version
     },
     changeAppid (state, appid) {
       state.appid = appid
