@@ -28,11 +28,11 @@
               <div style="margin-bottom: 3%;">
                 <a
                   href="javascript:void(0)"
-                  @click="jumperLog(item.log_url)"
                   style="font-size:13px;"
+                  @click="jumperLog(item.log_url)"
                 > 日志 </a>
               </div>
-          	</span> 
+          	</span>
           </span>
         </div>
       </Col>
@@ -55,10 +55,6 @@
 </template>
 
 <script>
-import Modal from "../ModalSimple";
-import { ExemptUrl, BugUrl } from '../../api/url.js';
-import { isExpired } from '../../util/help.js';
-import api from '../../api/index';
 
 export default {
   name: 'publishBase',
@@ -97,7 +93,7 @@ export default {
       window.open(url, '_blank');
     },
     getStatus(status) {
-      let res = 'wait'
+      let res = 'wait';
       switch (status) {
         case '进行中':
           res = 'process';

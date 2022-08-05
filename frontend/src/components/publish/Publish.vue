@@ -9,7 +9,7 @@
         <div style="margin-bottom: 2%;">
           <Table
               size="small"
-              align=center
+              align="center"
               border
               :columns="columns"
               :data="summary"
@@ -20,14 +20,14 @@
         <div>
           <el-tabs
             type="card"
+            style="margin-left: 1%;"
             v-model="childname"
             @tab-click="clickChildTab"
-            style="margin-left: 1%;"
           >
             <el-tab-pane
               :label="item"
-              :name="item"
               :key="index"
+              :name="item"
               v-for="(item, index) in publishOriginList"
             >
             <publish-test :data="integrationdata"></publish-test>

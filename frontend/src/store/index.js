@@ -11,17 +11,17 @@ const store = new Vuex.Store({
   },
   mutations: {
     changeVersion (state, version) {
-      state.version = version
+      state.version = version;
     },
     changeAppid (state, appid) {
-      state.appid = appid
+      state.appid = appid;
     },
     changeAppName (state, appname) {
-      state.appname = appname
+      state.appname = appname;
     },
     removeCurrentApp (state) {
-      state.appname = ''
-      state.appid = ''
+      state.appname = '';
+      state.appid = '';
     }
   }
 })

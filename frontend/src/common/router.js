@@ -11,7 +11,7 @@ import FuncDetail from '../components/FuncDetail.vue';
 import Compile from '../components/Compile.vue';
 import Benchmark from '../components/Benchmark.vue';
 import SingleReport from '../components/SingleReport.vue';
-import Publish from '../components/publish/Publish.vue'
+import Publish from '../components/publish/Publish.vue';
 
 // Vue.use(VueRouter);
 export const ROUTES = [
