@@ -1,3 +1,4 @@
+# !/usr/bin/env python3
 # encoding=utf-8
 import asyncio
 import copy
@@ -38,6 +39,9 @@ class PublishTaskManage(MABaseView):
         return await super().get(**kwargs)
 
     async def get_data(self, **kwargs):
+        """
+        获取任务详情
+        """
         # 根据查询需求将版本的相关信息以及steps信息返回到前端
         print("requests data", kwargs)
         version = kwargs.get("version")

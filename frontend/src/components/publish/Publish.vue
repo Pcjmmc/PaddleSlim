@@ -25,8 +25,8 @@
             @tab-click="clickChildTab"
           >
             <el-tab-pane
-              :label="item"
               :key="index"
+              :label="item"
               :name="item"
               v-for="(item, index) in publishOriginList"
             >

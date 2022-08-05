@@ -32,7 +32,7 @@
                   @click="jumperLog(item.log_url)"
                 > 日志 </a>
               </div>
-          	</span>
+            </span>
           </span>
         </div>
       </Col>
