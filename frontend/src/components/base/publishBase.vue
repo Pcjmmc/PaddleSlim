@@ -94,11 +94,11 @@ export default {
     },
     getStatus(status) {
       let res = 'wait';
-      switch (status) {
+      switch (status.toLowerCase()) {
         case 'doing':
           res = 'process';
           break;
-        case 'succeed':
+        case 'passed':
           res = 'finish';
           break;
          case 'failed':

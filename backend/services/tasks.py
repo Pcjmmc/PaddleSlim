@@ -12,6 +12,7 @@ from api.cache import BuildCacheBase
 from ce_web.settings.common import STORAGE
 from libs.mongo.db import Mongo
 from models.exempt import CeExempt
+from models.publish_task_builds import PubishTaskBuilds
 from models.task_builds import CeTaskBuilds
 from models.tasks import CeTasks
 
@@ -303,3 +304,41 @@ class ExemptInfo(object):
         获取任务豁免的状态；所以放在任务栏，还需要一个豁免的表结构
         """
         pass
+
+class PublishBuildInfo(object):
+    @classmethod
+    async def get_task_latest_status_by_tids(cls, tids, tag):
+        """
+        根据筛选条件获取相同条件下的多个tid的执行信息
+        """
+        # 为了查询快写，这里分批查询一次查询10个左右
+        # in查询如果太多的话会很慢的
+        tids = tids if type(tids) == list else [tids]
+        final_result = {tid: {} for tid in tids}
+        results = []
+        all_results = []
+        # branch这里需要入库的时候处理下
+        query_params = {
+            "tag": tag,
+        }
+        job_list = []
+        for tid in tids:
+            query_params["tid"] = tid
+            job_list.append(
+                PubishTaskBuilds().aio_get_object(
+                    **query_params, order_by="-created"
+                )
+            )
+            if len(job_list) >= 10:
+                result = await asyncio.gather(*job_list)
+                job_list = []
+                results.append(result)
+        result = await asyncio.gather(*job_list)
+        results.append(result)
+        for res in results:
+            all_results.extend(res)
+        for res in all_results:
+            if res:
+                tid = res.tid
+                final_result[tid].update(res)
+        return final_result

@@ -7,7 +7,7 @@ import json
 import time
 
 from models.release_version import CeReleaseVersion
-from services.tasks import TasksInfo
+from services.tasks import PublishBuildInfo, TasksInfo
 from utils.change_time import stmp_by_date
 
 from views.base_view import MABaseView
@@ -56,17 +56,10 @@ class PublishTaskManage(MABaseView):
         all_task_info = await TasksInfo.get_task_by_filter(**query_params)
         tids = [item.get("id") for item in all_task_info]
         # 如果是已封板的话; branch就会变成tag；则还算集测吗？？？tag都打了，应该不算
-        build_info = {
-            408: {
-                "commit_id": "xxhxhqw",
-                "repo": "paddle",
-                "tag": "v2.3.2",
-                "test_step": 0,
-                "status": "finish"
-            }
-        }
+        build_info = await PublishBuildInfo.get_task_latest_status_by_tids(
+            tids, tag
+        )
         integration_data = {}
-        # 拼接任务详情 TODO
         temp_data = [{
             "tid": item["id"],
             "tname": item["tname"],
