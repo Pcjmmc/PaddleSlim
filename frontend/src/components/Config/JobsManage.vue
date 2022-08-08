@@ -103,6 +103,22 @@
           </RadioGroup>
         </FormItem>
         <FormItem
+          label="发布源: "
+          prop="release_source"
+          :rules="{ required: true, message: '请选择发布源', trigger: 'blur' }"
+          v-if="addForm.step == 'publish'"
+        >
+          <RadioGroup
+            v-model="addForm.release_source"
+          >
+            <Radio
+              :key="index"
+              :label="item"
+              v-for="(item, index) in pushlishOriginList"
+            >{{ item }}</Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem
           label="所属repo:"
           prop="reponame"
           v-if="addForm.task_type=='model'"
@@ -207,6 +223,22 @@
           </RadioGroup>
         </FormItem>
         <FormItem
+          label="发布源: "
+          prop="release_source"
+          :rules="{ required: true, message: '请选择发布源', trigger: 'blur' }"
+          v-if="selectedRow.step == 'publish'"
+        >
+          <RadioGroup
+            v-model="selectedRow.release_source"
+          >
+            <Radio
+              :key="index"
+              :label="item"
+              v-for="(item, index) in pushlishOriginList"
+            >{{ item }}</Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem
           label="所属repo:"
           prop="reponame"
           v-if="selectedRow.task_type=='model'"
@@ -268,6 +300,7 @@ export default {
   props: {},
   data: function () {
     return {
+      pushlishOriginList: [],
       selectedRow: {},
       jobsList: [],
       total: 0,
@@ -329,6 +362,10 @@ export default {
         {
           'key': 'shared',
           'desc': 'dev/发版'
+        },
+        {
+          'key': 'publish',
+          'desc': '发布阶段'
         }
       ],
       addForm: {
@@ -343,7 +380,8 @@ export default {
         'description': '',
         'step': '',
         'reponame': '',
-        'show_name': ''
+        'show_name': '',
+        'release_source': ''
       },
       addRules: {
         step: [
@@ -541,6 +579,7 @@ export default {
     },
     handleReset(auto) {
       this.initData();
+      this.getJobData();
     },
     async handleDel(row) {
       let params = {
@@ -576,6 +615,7 @@ export default {
         tname: this.selectedRow.tname,
         reponame: this.selectedRow.reponame,
         show_name: this.selectedRow.show_name,
+        release_source: this.selectedRow.release_source,
         appid: Cookies.get('appid')
       }
       if (params.secondary_type instanceof Array) {
@@ -627,6 +667,7 @@ export default {
         this.taskTypeList = data.taskTypeList;
         this.sendTypeList = data.sendTypeList;
         this.systemList = data.systemList;
+        this.pushlishOriginList = data.publishOriginList;
       } else {
         this.taskTypeList = []
         this.$Message.error({

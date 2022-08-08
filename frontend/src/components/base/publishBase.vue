@@ -95,13 +95,13 @@ export default {
     getStatus(status) {
       let res = 'wait';
       switch (status) {
-        case '进行中':
+        case 'doing':
           res = 'process';
           break;
-        case '成功':
+        case 'succeed':
           res = 'finish';
           break;
-         case '失败':
+         case 'failed':
           res = 'error';
           break;
         default:

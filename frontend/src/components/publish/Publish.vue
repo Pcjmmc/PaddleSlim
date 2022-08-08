@@ -156,10 +156,10 @@ export default {
     async getData() {
       // 根据需求实时获取; 后台根据version获取到计划tag
       let params = {
-        version: this.version,
+        version: Cookies.get('version'),
         step: 'publish',
         task_type: 'compile',
-        origin: this.childname,
+        release_source: this.childname,
         tag: this.tag,
         appid: Cookies.get('appid')
       };
@@ -167,23 +167,6 @@ export default {
       const {code, data, msg} = await api.get(PublishJobUrl, params);
       if (parseInt(code, 10) === 200) {
         this.integrationdata = data;
-        this.integrationdata = [
-          {
-            system: 'Linux',
-            data: [
-              {
-                tname: 'cuda10.2-cudnn7.6.5-mkl-gcc8.2-avx-py36',
-                test_step: 0,
-                status: '进行中'
-              },
-              {
-                tname: 'cuda10.2-cudnn7.6.5-mkl-gcc8.2-avx-py36',
-                test_step: 1,
-                status: '失败'
-              }
-            ]
-          }
-        ];
       } else {
         this.integrationdata = [];
         this.$Message.error({

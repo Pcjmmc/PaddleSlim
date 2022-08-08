@@ -20,4 +20,5 @@ export const DetailUrl = '/ce/detail';
 export const OpBenchmarkUrl = '/ce/op-benchmark';
 export const TestConclusionUrl = '/ce/conclusion';
 export const BuildUrl = '/ce/builds';
-export const PublishJobUrl = '/ce/publish';
+export const PublishProcessUrl = '/ce/publish';
+export const PublishJobUrl = '/ce/publish_task';

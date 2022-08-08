@@ -18,6 +18,16 @@ from models.tasks import CeTasks
 
 class TasksInfo(object):
     @classmethod
+    async def get_task_by_filter(cls, **kwargs):
+        """
+        根据条件原封不动筛选
+        """
+        task_records = await CeTasks().aio_filter_details(
+            need_all=True, **kwargs
+        )
+        return task_records
+
+    @classmethod
     async def get_all_task_info_by_filter(cls, step=None, task_type=None, secondary_type=None, appid=1):
         """
         根据条件筛选出任务的全集

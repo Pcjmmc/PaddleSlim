@@ -7,6 +7,7 @@ import json
 import time
 
 from models.release_version import CeReleaseVersion
+from services.tasks import TasksInfo
 from utils.change_time import stmp_by_date
 
 from views.base_view import MABaseView
@@ -43,14 +44,52 @@ class PublishTaskManage(MABaseView):
         获取任务详情
         """
         # 根据查询需求将版本的相关信息以及steps信息返回到前端
-        print("requests data", kwargs)
         version = kwargs.get("version")
         # 如果是dev则返回空即可
         if version == "develop":
             return 0, []
         verison_info = await CeReleaseVersion().aio_get_object(**{"name": version})
         tag = verison_info.tag
-        # 根据tag去获取更多的任务详情
-        print(kwargs)
-        print(tag)
-        return 0, []
+        # 获取查询的全量任务
+        query_params = copy.deepcopy(kwargs)
+        query_params.pop('version')
+        all_task_info = await TasksInfo.get_task_by_filter(**query_params)
+        tids = [item.get("id") for item in all_task_info]
+        # 如果是已封板的话; branch就会变成tag；则还算集测吗？？？tag都打了，应该不算
+        build_info = {
+            408: {
+                "commit_id": "xxhxhqw",
+                "repo": "paddle",
+                "tag": "v2.3.2",
+                "test_step": 0,
+                "status": "finish"
+            }
+        }
+        integration_data = {}
+        # 拼接任务详情 TODO
+        temp_data = [{
+            "tid": item["id"],
+            "tname": item["tname"],
+            "description": item["description"],
+            "show_name": item["show_name"],
+            "system": item["system"],
+            "task_type": item["task_type"],
+            "secondary_type": item["secondary_type"],
+            "build_type_id": item["build_type_id"],
+            "release_source": item["release_source"],
+            "platform": item["platform"],
+            "workspace": item["workspace"],
+            "reponame": item["reponame"]} for item in all_task_info]
+        for item in temp_data:
+            # item 进展的阶段内容拼接
+            system = item["system"]
+            tid = item.get("tid")
+            if system not in integration_data:
+                integration_data[system] = list()
+            item.update(build_info.get(tid, {}))
+            status = item.get("status")
+            if status == "finish":
+                item["test_step"] += 1
+            integration_data[system].append(item)
+        data = [{"system": k, "data": v} for k, v in integration_data.items()]
+        return len(data), data
