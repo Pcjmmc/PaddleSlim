@@ -58,3 +58,17 @@ class Case(BaseModel, BaseModelMixin):
         app_label = 'api_benchmark'
 
 
+class Settings(BaseModel, BaseModelMixin):
+    """
+    定义tasks任务的表结构
+    """
+    __tablename__ = 'settings'
+    metadata = MetaData()
+    option = Column(VARCHAR(256), primary_key=True)
+    value = Column(VARCHAR(256))
+
+    class Meta:
+        """
+        定义model属于那个库
+        """
+        app_label = 'api_benchmark'

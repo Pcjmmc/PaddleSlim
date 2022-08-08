@@ -12,15 +12,15 @@ from exception import HTTP400Error
 from datetime import datetime
 import requests
 
-class GetVersion(MABaseView):
+class GetOs(MABaseView):
     """
-    查看Version
+    查看OS
     """
     async def get(self, **kwargs):
         return await super().get(**kwargs)
 
     async def get_data(self, **kwargs):
-        data =  await Settings.aio_get_object(option="version")
+        data =  await Settings.aio_get_object(option="os")
         res = data[1].split(",")
         return len(res), res
 
