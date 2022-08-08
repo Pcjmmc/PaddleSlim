@@ -9,7 +9,7 @@ from views.base_view import MABaseView
 from models.framework import Job, Mission, Compile
 from exception import HTTP400Error
 from datetime import datetime
-from framework.config.service_url import Local, LocalMission, Cloud, CloudMission, PLACE, CLOUD, LOCAL
+from framework.config.service_url import Local, LocalMission, Cloud, CloudMission, PLACE, CLOUD, LOCAL, DOCKER_IMAGE
 import requests
 import framework.config.status as STATUS
 from framework.utils.xly import XlyOpenApiRequest
@@ -35,6 +35,7 @@ class Dispatcher(object):
                 "python": json.loads(env).get("python"),
                 "cuda": json.loads(env).get("cuda"),
                 "env": str(json.loads(env)),
+                "docker_image": DOCKER_IMAGE.get(json.loads(env).get("cuda"))
             }
             data = {
                 "branch": "develop",

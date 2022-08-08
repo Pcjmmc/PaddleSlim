@@ -12,15 +12,16 @@ from exception import HTTP400Error
 from datetime import datetime
 import requests
 
-class GetVersion(MABaseView):
+class GetSettings(MABaseView):
     """
-    查看Version
+    查看Cuda
     """
     async def get(self, **kwargs):
         return await super().get(**kwargs)
 
     async def get_data(self, **kwargs):
-        data =  await Settings.aio_get_object(option="version")
-        res = data[1].split(",")
+        data =  await Settings.aio_filter_details(need_all=True)
+        res = {}
+        for i in data:
+            res[i["option"]] = i["value"].split(",")
         return len(res), res
-

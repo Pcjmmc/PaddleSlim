@@ -9,6 +9,8 @@
 
 
 ###  子服务部署方式有两种， localbuild  OR  xly
+import base64
+
 """
 类配置好处是IDE方便丶出来
 LOCAL = {
@@ -23,10 +25,16 @@ LOCAL = "local"
 
 # PLACE 是首要判断条件，对接前端返回内容，并check执行环境
 PLACE = {
+    # api_function
     "api_function": CLOUD,
     "op_function": CLOUD,
     "external_api_function": CLOUD,
+    "distribution_api_function": CLOUD,
+    # jit
     "jit_function": CLOUD,
+    # api_benchmark
+
+    # models
     "paddleclas": CLOUD,
 }
 
@@ -39,6 +47,7 @@ class Cloud(object):
     API_FUNCTION = ""
     OP_FUNCTION = "23490"
     EXTERNAL_API_FUNCTION = "23490"
+    DISTRIBUTION_API_FUNCTION = "23542"
     JIT_FUNCTION = "23539"
     API_BENCHMARK = ""
     PADDLE_CLAS = "23369"
@@ -59,6 +68,7 @@ class CloudMission(object):
         "api_function": ["op_function", "external_api_function", "io_function"],
         "op_function": Cloud.OP_FUNCTION,
         "external_api_function": Cloud.EXTERNAL_API_FUNCTION,
+        "distribution_api_function": Cloud.DISTRIBUTION_API_FUNCTION,
         "jit_function": Cloud.JIT_FUNCTION,
         "api_benchmark": [],
         "paddleclas": Cloud.PADDLE_CLAS
@@ -73,3 +83,13 @@ class LocalMission(object):
         "api_function": ["op_function", "external_api_function", "io_function"]
 
     }
+
+
+DOCKER_IMAGE = {
+"v11.6": "registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6.2-cudnn8.4.0-gcc82",
+"v11.4": "registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.4.1-cudnn8-gcc82",
+"v11.2": "registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.2-cudnn8-gcc82",
+"v11.0": "registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.0-cudnn8-gcc82",
+"v10.2": "registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.2-cudnn7-gcc82",
+"v10.1": "registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82",
+}
