@@ -3,7 +3,7 @@
     <Tabs :value="tabName" v-on:on-click="clickTab">
       <TabPane
         label="进度"
-        name="10001"
+        name="progress"
         icon="ios-list-box"
       >
         <div>
@@ -57,7 +57,7 @@
       </TabPane>
       <TabPane
         label="风险"
-        name="10002"
+        name="risk"
         icon="ios-bug"
       >
         <bug-fix
@@ -68,7 +68,7 @@
       </TabPane>
       <TabPane
         label="结论"
-        name="10003"
+        name="conclusion"
         icon="md-document"
       >
         <conclusion
@@ -112,7 +112,6 @@ export default {
   },
   data: function () {
     return {
-      tabName: '10001',
       childname: 'compile',
       taskTypeList: [],
       sendTypeList: {},
@@ -260,12 +259,32 @@ export default {
       get() {
         return this.$store.state.version;
       }
+    },
+    tabName() {
+      let tmp = 'progress';
+      if (this.$route.query.tab) {
+        if (['progress', 'risk', 'conclusion'].includes(this.$route.query.tab)) {
+          tmp = this.$route.query.tab;
+        }
+        this.$router.replace({query: {tab: tmp}}).catch(error => {
+          if (error.name != 'NavigationDuplicated') {
+            throw error;
+          }
+        });
+      }
+      return tmp;
     }
   },
   methods: {
     clickTab(name) {
-      this.tabName = name;
-      // console.log(this.tabName);
+      if (this.$route.query.tab) {
+        let query = {tab: name};
+        this.$router.replace({query: query}).catch(error => {
+          if (error.name != 'NavigationDuplicated') {
+            throw error;
+          }
+        });
+      }
       this.$nextTick(function () {
         this.$refs.mychild.getbugdata();
         this.$refs.mychild.getStatusFilters();
