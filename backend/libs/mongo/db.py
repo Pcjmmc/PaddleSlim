@@ -149,6 +149,17 @@ if __name__ == "__main__":
             "sub": {
                 "jobs": {
                     "desc": '任务注册'
+                },
+                "framework": {
+                    "desc": 'FTS',
+                    "sub": {
+                        "service": {
+                            "desc": '任务管理'
+                        },
+                        "detail": {
+                            "desc": '进度查询'
+                        }
+                    }
                 }
             }
         },
