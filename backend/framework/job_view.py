@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env python3
 # -*- coding: utf-8 -*-
 # @author DDDivano
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
@@ -10,12 +10,14 @@ from models.framework import Job, Mission, Compile
 from exception import HTTP400Error
 from datetime import datetime
 from framework.dispatcher import Dispatcher
+from framework.config.service_url import COMPILE_SERVICE
 import requests
 
 class JobInitView(MABaseView):
     """
     任务初始化
     """
+    RETRY_TIME = 5
     def mission_analyse(self, data):
         """
         模块解析器
@@ -28,9 +30,10 @@ class JobInitView(MABaseView):
             mission[i] = None
         return str(json.dumps(mission))
 
-    async def wheel_cache(self, jid, pd_type, value, python, cuda=None, os=None):
+    async def wheel_cache(self, jid, pd_type, value, python, cuda=None, os=None, branch=None):
         """
         编译查询器,后续替换成云燊的服务
+        wheel, version, pr, commit 四个编译类型任务，后三个走编译服务
         """
         data = dict()
         data["jid"] = jid
@@ -39,7 +42,8 @@ class JobInitView(MABaseView):
                        "value": value,
                        "python": python,
                        "cuda": cuda,
-                       "os": os}))
+                       "os": os,
+                       "branch": branch}))
         data["create_time"] = datetime.now()
         data["update_time"] = datetime.now()
         res = await Compile.aio_insert(data)
@@ -48,34 +52,11 @@ class JobInitView(MABaseView):
         res = await Job.aio_update({"compile": res[1]}, {"id": jid})
         if res == 0:
             raise HTTP400Error
-        cache = False
-        if pd_type == "commit":
-            # Todo: 访问编译缓存接口
-            pass
-        elif pd_type == "version":
-            """
-            https://blog.csdn.net/weixin_31866177/article/details/115739189
-            """
-            # Todo: 访问版本缓存接口
-            # Todo: FAKE 假装找到了
-            wheel = "https://paddle-wheel.bj.bcebos.com/2.3.1/linux/linux-gpu-cuda11.6-cudnn8.4.0-mkl-gcc8.2-avx/paddlepaddle_gpu-2.3.1.post116-cp39-cp39-linux_x86_64.whl"
-            cache = True
-        elif pd_type == "wheel":
-            # 直接 给定链接
-            wheel = value
-            cache = True
-
-        if not cache:
-            # todo: 请求编译服务
-            pass
-
-        else:
-            # todo: 写库 执行下游任务
+        if pd_type == "wheel":
             query = dict()
             query["jid"] = jid
-
             data = dict()
-            data["wheel"] = wheel
+            data["wheel"] = value
             data["status"] = "done"
             data["update_time"] = datetime.now()
             res = await Compile.aio_update(data, query)
@@ -84,6 +65,52 @@ class JobInitView(MABaseView):
             # 请求下游服务
             res = await Job.aio_get_object(order_by=None, group_by=None, id=jid)
             await Dispatcher.dispatch_missions(res)
+        else:
+            # todo: 编译服务
+            compile_info = await Compile.aio_get_object(order_by=None, group_by=None, jid=jid)
+            id = compile_info[0]
+            data = {
+                "id": id,
+                "pd_type": pd_type,
+                "value": value,
+                "python": python,
+                "cuda": cuda,
+                "os": os,
+                "branch": branch
+            }
+            RETRY_TIME = 5
+            retry = 0
+            while (retry < RETRY_TIME):
+                res = requests.post(COMPILE_SERVICE, json=data)
+                if res.status_code != 200:
+                    print(res.text)
+                    retry += 1
+                    continue
+                else:
+                    break
+            if retry == RETRY_TIME:
+                query = dict()
+                query["jid"] = jid
+                data = dict()
+                data["status"] = "error"
+                data["update_time"] = datetime.now()
+                res = await Compile.aio_update(data, query)
+                if res == 0:
+                    raise HTTP400Error
+                res = await Job.aio_update({"status": "error"}, {"id": jid})
+                if res == 0:
+                    raise HTTP400Error
+            else:
+                query = dict()
+                query["jid"] = jid
+                data = dict()
+                data["status"] = "running"
+                data["update_time"] = datetime.now()
+                res = await Compile.aio_update(data, query)
+                if res == 0:
+                    raise HTTP400Error
+
+
 
 
     async def post(self, **kwargs):
@@ -115,7 +142,8 @@ class JobInitView(MABaseView):
         python = kwargs.get("python")
         cuda = kwargs.get("cuda")
         os = kwargs.get("os")
-        await self.wheel_cache(jid, pd_type, value, python, cuda, os)
+        branch = kwargs.get("branch")
+        await self.wheel_cache(jid, pd_type, value, python, cuda, os, branch)
 
         return {"jid": jid}
 

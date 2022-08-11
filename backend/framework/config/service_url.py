@@ -65,7 +65,7 @@ class CloudMission(object):
     for xly
     """
     ROUTER = {
-        "api_function": ["op_function", "external_api_function", "io_function"],
+        "api_function": ["op_function", "external_api_function", "io_function", "distribution_api_function"],
         "op_function": Cloud.OP_FUNCTION,
         "external_api_function": Cloud.EXTERNAL_API_FUNCTION,
         "distribution_api_function": Cloud.DISTRIBUTION_API_FUNCTION,
@@ -93,3 +93,6 @@ DOCKER_IMAGE = {
 "v10.2": "registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.2-cudnn7-gcc82",
 "v10.1": "registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82",
 }
+
+
+COMPILE_SERVICE = "http://10.138.35.178:8082/compile"
