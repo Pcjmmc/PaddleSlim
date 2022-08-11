@@ -26,7 +26,7 @@ class CompileCallback(MABaseView):
         """
         id = kwargs.get("id")
         status = kwargs.get("status")
-
+        kwargs["update_time"] = datetime.now()
         # todo:这里需要实现逻辑，如果失败了如何处理，成功了如何处理。
         if status == "done":
             await Compile.aio_update(kwargs, {"id": id})

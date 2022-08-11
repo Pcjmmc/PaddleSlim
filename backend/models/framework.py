@@ -4,7 +4,7 @@
 定义ce 的taks表
 """
 from libs.mysql.db import BaseModel, BaseModelMixin, db_engines
-from sqlalchemy import VARCHAR, BigInteger, Boolean, Column, Float, Integer, Text, DateTime
+from sqlalchemy import VARCHAR, BigInteger, Boolean, Column, Float, Integer, Text, DateTime, MetaData
 
 
 class Job(BaseModel, BaseModelMixin):
@@ -60,6 +60,21 @@ class Mission(BaseModel, BaseModelMixin):
     result = Column(VARCHAR(256), comment='结果')
     create_time = Column(DateTime, comment="本记录创建的时间")
     update_time = Column(DateTime, comment="本记录更新的时间")
+
+    class Meta:
+        """
+        定义model属于那个库
+        """
+        app_label = 'framework'
+
+
+class Settings(BaseModel, BaseModelMixin):
+    """
+    定义tasks任务的表结构
+    """
+    __tablename__ = 'settings'
+    option = Column(VARCHAR(256), primary_key=True)
+    value = Column(VARCHAR(256))
 
     class Meta:
         """
