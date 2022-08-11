@@ -81,13 +81,13 @@
         >
           <p slot="title" style="color:green;"> 选中的测试内容: </p>
           <span
-            span="6"
             :key="index"
+            span="6"
             v-for="(item, index) in selectData"
           >
-            <Button 
+            <Button
               shape="circle"
-              :style="{backgroundColor: randomColor()}" 
+              :style="{backgroundColor: randomColor()}"
               class="one-fifth-video-col"
             >
               <p style="color: white;"> {{ item.title }} </p>
@@ -321,7 +321,6 @@ export default {
     handleSummit() {
       this.$refs.addForm.validate((valid) => {
         if (valid) {
-          let params = {};
         } else {
           this.$Message.error('请完善信息');
         }
