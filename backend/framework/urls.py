@@ -4,7 +4,9 @@ URL 配置
 """
 from framework.views import TestView
 from framework.job_view import JobInitView
+from framework.job_list import JobList
 from framework.dispatcher_view import DispatcherView
+from framework.settings import SettingsView
 from framework.runner import RunnerView
 from framework.runner_xly import RunnerXLY
 from framework.mission_callback import MissionCallback
@@ -15,7 +17,9 @@ urlpatterns = [
     # 传入task_type_id, 同时body中存放case detail详情； post请求
     url(r'test/?$', TestView),
     url(r'jobinit/?$', JobInitView),
+    url(r'joblist/?$', JobList),
     url(r'dispatcher/?$', DispatcherView),
+    url(r'getsettings/?$', SettingsView),
     url(r'runner/?$', RunnerView),
     url(r'runnerxly/?$', RunnerXLY),
     url(r'missioncallback/?$', MissionCallback),
