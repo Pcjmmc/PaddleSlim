@@ -267,7 +267,7 @@ export default {
           tmp = this.$route.query.tab;
         }
         this.$router.replace({query: {tab: tmp}}).catch(error => {
-          if (error.name != 'NavigationDuplicated') {
+          if (error.name !== 'NavigationDuplicated') {
             throw error;
           }
         });
@@ -280,7 +280,7 @@ export default {
       if (this.$route.query.tab) {
         let query = {tab: name};
         this.$router.replace({query: query}).catch(error => {
-          if (error.name != 'NavigationDuplicated') {
+          if (error.name !== 'NavigationDuplicated') {
             throw error;
           }
         });

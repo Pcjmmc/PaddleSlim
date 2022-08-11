@@ -5,7 +5,12 @@
         <div class="main">
           <p align="left"> 请选择测试环境 </p>
         </div>
-        <Form ref="addForm" :model="search" :rules="addRules" :label-width="75">
+        <Form
+          ref="addForm"
+          :model="search"
+          :rules="addRules"
+          :label-width="75"
+        >
           <FormItem label="name:" prop="name">
             <Input v-model="search.name" placeholder="输入任务名"/>
           </FormItem>
@@ -69,11 +74,23 @@
             </Select>
           </FormItem>
         </Form>
-        <Card bordered v-if="selectData.length > 0" class="center-card-s">
+        <Card
+          bordered
+          class="center-card-s"
+          v-if="selectData.length > 0"
+        >
           <p slot="title" style="color:green;"> 选中的测试内容: </p>
-          <span span="6" v-for="(item, index) in selectData" :key="index">
-            <Button shape="circle" :style="{backgroundColor: randomColor()}" class="one-fifth-video-col">
-              <p style="color: white;"> {{item.title}} </p>
+          <span
+            span="6"
+            :key="index"
+            v-for="(item, index) in selectData"
+          >
+            <Button 
+              shape="circle"
+              :style="{backgroundColor: randomColor()}" 
+              class="one-fifth-video-col"
+            >
+              <p style="color: white;"> {{ item.title }} </p>
             </Button>
           </span>
         </Card>
@@ -91,11 +108,16 @@
           :data="data2"
           show-checkbox multiple
           :render="renderContent"
-          @on-check-change="SelectChange"
+          v-on:on-check-change="SelectChange"
         ></Tree>
       </div>
     </Split>
-    <Modal v-model="show" title="任务id" @on-cancel="handleClose" width="20px">
+    <Modal
+      width="20px"
+      v-model="show"
+      title="任务id"
+      v-on:on-cancel="handleClose"
+    >
       <div>
         <p>新建任务的id:  {{ jobid }} </p>
       </div>
@@ -115,7 +137,11 @@ export default {
   data: function () {
     return {
       show: false,
-      colorList: ['#EDE234', '#F78436', '#E03DE0', '#366EF7', '#33F083', '#F20CBD', '#0D36FC', '#00E679', '#FFFE00', '#F57E0F'],
+      colorList: ['#EDE234', '#F78436',
+        '#E03DE0', '#366EF7', '#33F083',
+        '#F20CBD', '#0D36FC', '#00E679',
+        '#FFFE00', '#F57E0F'
+      ],
       search: {
         name: '',
         type: '',
@@ -293,14 +319,13 @@ export default {
       }
     },
     handleSummit() {
-      this.$refs['addForm'].validate((valid) => {
+      this.$refs.addForm.validate((valid) => {
         if (valid) {
           let params = {};
-          this.createJob();
         } else {
           this.$Message.error('请完善信息');
         }
-      })
+      });
     },
     async createJob() {
       let params = {
@@ -324,7 +349,7 @@ export default {
         });
       }
     },
-    renderContent (h, { root, node, data }) {
+    renderContent(h, { root, node, data }) {
       if (node.children && node.children.length > 0) {
         return h('div', [
           h('Icon', {
