@@ -11,10 +11,10 @@
           :rules="addRules"
           :label-width="75"
         >
-          <FormItem label="name:" prop="name">
+          <FormItem label="任务名:" prop="name">
             <Input v-model="search.name" placeholder="输入任务名"/>
           </FormItem>
-          <FormItem label="os:" prop="os">
+          <FormItem label="系统:" prop="os">
             <Select clearable v-model="search.os">
               <Option
                 :key="index"
@@ -25,7 +25,7 @@
           </FormItem>
           <Row>
             <Col span="8">
-              <FormItem label="type:" prop="type">
+              <FormItem label="类型:" prop="type">
                 <Select clearable v-model="search.type">
                   <Option
                     :key="index"
@@ -36,13 +36,13 @@
               </FormItem>
             </Col>
             <Col span="16">
-              <FormItem label="value:" prop="value">
-                <Input v-model="search.value" placeholder="输入 pr、commit or 包地址"/>
+              <FormItem label="取值:" prop="value">
+                <Input v-model="search.value" placeholder="输入 pr、commit 或 包地址"/>
               </FormItem>
             </Col>
           </Row>
           <FormItem
-            label="branch:"
+            label="分支:"
             prop="branch"
             :rules="{ required: true, message: '请选择分支', trigger: 'blur' }"
             v-if="search.type == 'pr'"
@@ -119,7 +119,8 @@
       v-on:on-cancel="handleClose"
     >
       <div>
-        <p>新建任务的id:  {{ jobid }} </p>
+        <p>任务id:  {{ jobid }} </p>
+        <p>任务名:  {{ search.name }} </p>
       </div>
       <div slot="footer">
         <Button type="primary" @click="handleClose">确定</Button>
@@ -328,6 +329,7 @@ export default {
     },
     async createJob() {
       let params = {
+        name: this.search.name,
         type: this.search.type,
         value: this.search.value,
         python: this.search.python,
