@@ -134,7 +134,7 @@ export default {
     branch: function () {
       this.getData();
     },
-    tag: function() {
+    tag: function () {
       this.getData();
     }
   },
