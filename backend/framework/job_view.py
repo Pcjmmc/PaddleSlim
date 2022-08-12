@@ -147,8 +147,6 @@ class JobInitView(MABaseView):
             await self.wheel_cache(jid, pd_type, value, python, cuda, os, branch)
         return {"jid": jid}
 
-
-
     async def get(self, **kwargs):
         return await super().get(**kwargs)
 
