@@ -51,6 +51,7 @@ class JobList(MABaseView):
                 d["create_time"] = str(d["create_time"])
                 d["update_time"] = str(d["update_time"])
                 check_complete = True
+                check_error = True
                 mission = dict()
                 for k, v in json.loads(d["mission"]).items():
                     res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
@@ -59,7 +60,13 @@ class JobList(MABaseView):
                     mission[k] = {"id": v, "status": res["status"], "result": res["result"]}
                     if res["status"] != "done":
                         check_complete = False
+                    if res["status"] == "running" or res["status"] ==  "init":
+                        check_error = False
+
+                print(d["id"])
                 if check_complete:
-                    await Job.aio_update({"status": "done", "update_time": datetime.now()}, {"id": id})
+                    await Job.aio_update({"status": "done", "update_time": datetime.now()}, {"id": d["id"]})
+                if check_error:
+                    await Job.aio_update({"status": "error", "update_time": datetime.now()}, {"id": d["id"]})
                 d["mission_status"] = mission
             return len(data), data
