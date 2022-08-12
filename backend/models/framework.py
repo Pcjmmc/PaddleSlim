@@ -13,6 +13,7 @@ class Job(BaseModel, BaseModelMixin):
     """
     __tablename__ = 'job'
     id = Column(Integer, primary_key=True, autoincrement=True)
+    description = Column(VARCHAR(256), comment='描述，爱写啥写啥')
     status = Column(VARCHAR(256), comment='运行状态， running， error， done')
     version = Column(VARCHAR(200), comment='版本号的值， version， commit or pr array')
     compile =  Column(Integer, comment="编译任务外键")

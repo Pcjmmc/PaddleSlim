@@ -128,6 +128,7 @@ class JobInitView(MABaseView):
         data["mission"] = self.mission_analyse(mission)
         data["version"] = kwargs.get("value")
         data["status"] = "running"
+        data["description"] = kwargs.get("name")
         data["create_time"] = datetime.now()
         data["update_time"] = datetime.now()
         res = await Job.aio_insert(data)
@@ -142,8 +143,8 @@ class JobInitView(MABaseView):
         cuda = kwargs.get("cuda")
         os = kwargs.get("os")
         branch = kwargs.get("branch")
-        await self.wheel_cache(jid, pd_type, value, python, cuda, os, branch)
-
+        if kwargs.get("debug") is None:
+            await self.wheel_cache(jid, pd_type, value, python, cuda, os, branch)
         return {"jid": jid}
 
 
