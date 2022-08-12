@@ -33,7 +33,7 @@ class JobList(MABaseView):
                 mission[k] = {"id": v, "status": res["status"], "result": res["result"]}
                 if res["status"] != "done":
                     check_complete = False
-            if check_complete:
+            if check_complete and data["status"] != "done":
                 await Job.aio_update({"status": "done", "update_time": datetime.now()}, {"id": id})
                 data = await Job.aio_get_object(order_by=None, group_by=None, id=id)
 
@@ -46,7 +46,7 @@ class JobList(MABaseView):
         else:
             page_index = kwargs.get("page_index")
             limit = kwargs.get("limit")
-            data = await Job.aio_filter_details(page_index=page_index, limit=limit)
+            data = await Job.aio_filter_details(page_index=page_index, limit=limit, order_by="-id")
             for d in data:
                 d["create_time"] = str(d["create_time"])
                 d["update_time"] = str(d["update_time"])

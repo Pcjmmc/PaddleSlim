@@ -91,8 +91,9 @@ class Dispatcher(object):
         env = res["env"]
         retry_time = 5
         for k, v in mission.items():
-            # if v is not None:
-            #     continue
+            # 如果任务有id，不继续触发。
+            if v is not None:
+                continue
             retry = 0
             data = {"jid": job.get("id"),
                     "status": "init",
