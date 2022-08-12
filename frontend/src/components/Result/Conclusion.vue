@@ -133,6 +133,9 @@ export default {
     },
     branch: function () {
       this.getData();
+    },
+    tag: function() {
+      this.getData();
     }
   },
   components: {

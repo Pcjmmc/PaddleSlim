@@ -322,6 +322,7 @@ export default {
     handleSummit() {
       this.$refs.addForm.validate((valid) => {
         if (valid) {
+          this.createJob();
         } else {
           this.$Message.error('请完善信息');
         }
