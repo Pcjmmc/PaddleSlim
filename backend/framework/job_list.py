@@ -62,8 +62,6 @@ class JobList(MABaseView):
                         check_complete = False
                     if res["status"] == "running" or res["status"] ==  "init":
                         check_error = False
-
-                print(d["id"])
                 if check_complete:
                     await Job.aio_update({"status": "done", "update_time": datetime.now()}, {"id": d["id"]})
                 if check_error:
