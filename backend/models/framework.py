@@ -59,6 +59,7 @@ class Mission(BaseModel, BaseModelMixin):
     status = Column(VARCHAR(256), comment='运行状态， running， error， done')
     module = Column(VARCHAR(256), comment='模块名字')
     result = Column(VARCHAR(256), comment='结果')
+    description = Column(VARCHAR(256), comment='结果描述')
     create_time = Column(DateTime, comment="本记录创建的时间")
     update_time = Column(DateTime, comment="本记录更新的时间")
 

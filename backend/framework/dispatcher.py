@@ -26,7 +26,9 @@ class Dispatcher(object):
                 cls.cloud_run(CloudMission.ROUTER.get(m), id, env, wheel)
         else:
             xly_agent = XlyOpenApiRequest()
-            pipelineid = module
+            # tuple structure for some special missions must need only one pipeline
+            pipelineid = module[0] if isinstance(module, tuple) else module
+            spec_param = module[1] if isinstance(module, tuple) else {}
             url_param = "pipelineId={}".format(pipelineid)
             # branch ciType commit 毛用没有
             params = {
@@ -37,13 +39,13 @@ class Dispatcher(object):
                 "env": str(json.loads(env)),
                 "docker_image": DOCKER_IMAGE.get(json.loads(env).get("cuda"))
             }
+            total_param = dict(spec_param, **params)
             data = {
                 "branch": "develop",
                 "ciType": "MERGE",
-                "params": json.dumps(params)
+                "params": json.dumps(total_param)
             }
             data = json.dumps(data)
-            print(data)
             url = "https://xly.bce.baidu.com/open-api/ipipe/rest/v3/pipeline-builds?pipelineId={}".format(pipelineid)
             res = xly_agent.post_method(url, data, param=url_param)
             if res.status_code != 200:
@@ -51,7 +53,7 @@ class Dispatcher(object):
                 raise HTTP400Error
             else:
                 print(res.json())
-                return True
+                return res.json()
 
     @classmethod
     def local_run(cls):
@@ -108,9 +110,9 @@ class Dispatcher(object):
 
             while(retry < retry_time):
                 res = self.request_mission(k, id, env, wheel)
-                if res is True:
+                if isinstance(res, dict):
                     # todo:初始化任务
-                    await Mission.aio_update({"status": "running"}, {"id":id})
+                    await Mission.aio_update({"status": "running", "description": str(res)}, {"id":id})
                     break
                 else:
                     await Mission.aio_update({"status": res}, {"id": id})

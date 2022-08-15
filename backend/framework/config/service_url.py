@@ -36,21 +36,24 @@ PLACE = {
 
     # models
     "paddleclas": CLOUD,
+
+
+    # model benchmark
+    "models_benchmark": CLOUD,
 }
-
-
 
 class Cloud(object):
     """
-    for xly , value is "pipeline conf id"
+    for xly , value is "pipeline conf id", parameters.
     """
-    API_FUNCTION = ""
-    OP_FUNCTION = "23490"
+    OP_FUNCTION = "23490", {"whoami": "DDDivano"}
     EXTERNAL_API_FUNCTION = "23490"
     DISTRIBUTION_API_FUNCTION = "23542"
     JIT_FUNCTION = "23539"
     API_BENCHMARK = ""
     PADDLE_CLAS = "23369"
+
+    MODEL_BENCHMARK = "23601"
 
 class Local(object):
     """
@@ -71,7 +74,8 @@ class CloudMission(object):
         "distribution_api_function": Cloud.DISTRIBUTION_API_FUNCTION,
         "jit_function": Cloud.JIT_FUNCTION,
         "api_benchmark": [],
-        "paddleclas": Cloud.PADDLE_CLAS
+        "paddleclas": Cloud.PADDLE_CLAS,
+        "models_benchmark": Cloud.MODEL_BENCHMARK,
     }
 
 
