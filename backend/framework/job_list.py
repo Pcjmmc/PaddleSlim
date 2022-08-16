@@ -24,47 +24,44 @@ class JobList(MABaseView):
         id = kwargs.get("id")
         if id is not None:
             data =  await Job.aio_get_object(order_by=None, group_by=None, id=id)
+            compile = await Compile.aio_get_object(id=data["compile"])
             mission = dict()
-
             check_complete = True
-
+            check_error = True
             for k,v in json.loads(data["mission"]).items():
                 res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
-                mission[k] = {"id": v, "status": res["status"], "result": res["result"]}
+                mission[k] = {"id": v, "status": res["status"], "result": res["result"],
+                              "description": res["description"], "create_time": str(res["create_time"]),
+                              "update_time": str(res["update_time"]),}
                 if res["status"] != "done":
                     check_complete = False
+                if res["status"] in ["done", "init", "running"]:
+                    check_error = False
             if check_complete and data["status"] != "done":
                 await Job.aio_update({"status": "done", "update_time": datetime.now()}, {"id": id})
                 data = await Job.aio_get_object(order_by=None, group_by=None, id=id)
-
+            elif check_error and not check_complete:
+                await Job.aio_update({"status": "error", "update_time": datetime.now()}, {"id": id})
+                data = await Job.aio_get_object(order_by=None, group_by=None, id=id)
             res_data = {
                 "id": data["id"],
                 "status": data["status"],
-                "mission": mission
+                "compile": {
+                    "status": compile["status"],
+                    "wheel": compile["wheel"],
+                    "env": compile["env"],
+                    "create_time": str(compile["create_time"]),
+                    "update_time": str(compile["update_time"]),
+                },
+                "mission": mission,
             }
             return 1, res_data
         else:
+            # 只返回查询列表
             page_index = kwargs.get("page_index")
             limit = kwargs.get("limit")
             data = await Job.aio_filter_details(page_index=page_index, limit=limit, order_by="-id")
             for d in data:
-                d["create_time"] = str(d["create_time"])
-                d["update_time"] = str(d["update_time"])
-                check_complete = True
-                check_error = True
-                mission = dict()
-                for k, v in json.loads(d["mission"]).items():
-                    res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
-                    if res is None:
-                        continue
-                    mission[k] = {"id": v, "status": res["status"], "result": res["result"]}
-                    if res["status"] != "done":
-                        check_complete = False
-                    if res["status"] == "running" or res["status"] ==  "init":
-                        check_error = False
-                if check_complete:
-                    await Job.aio_update({"status": "done", "update_time": datetime.now()}, {"id": d["id"]})
-                if check_error:
-                    await Job.aio_update({"status": "error", "update_time": datetime.now()}, {"id": d["id"]})
-                d["mission_status"] = mission
+                d["create_time"] = str(d.get("create_time"))
+                d["update_time"] = str(d.get("update_time"))
             return len(data), data
