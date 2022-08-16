@@ -54,9 +54,9 @@ class JobList(MABaseView):
                 check_error = True
                 mission = dict()
                 for k, v in json.loads(d["mission"]).items():
-                    res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
-                    if res is None:
+                    if v is None:
                         continue
+                    res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
                     mission[k] = {"id": v, "status": res["status"], "result": res["result"]}
                     if res["status"] != "done":
                         check_complete = False
