@@ -37,6 +37,8 @@ class BuildCacheBase(CacheBase):
         set multi data
         """
         key = cls.key_format.format(tid=tid, branch=branch)
+        # 将value为None的过滤掉
+        data = {k: v for k, v in data.items() if v is not None}
         with await cls.get_pools() as redis_conn:
             await redis_conn.hmset_dict(key, data)
 

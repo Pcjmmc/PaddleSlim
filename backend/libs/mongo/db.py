@@ -147,11 +147,9 @@ if __name__ == "__main__":
             "desc": '测试能力管理',
             "icon": 'ios-paper',
             "sub": {
-                "jobs": {
-                    "desc": '任务注册'
-                },
                 "framework": {
-                    "desc": 'FTS',
+                    "desc": '框架测试服务（PTS）',
+                    "icon": 'md-cube',
                     "sub": {
                         "service": {
                             "desc": '任务管理'
@@ -160,7 +158,10 @@ if __name__ == "__main__":
                             "desc": '进度查询'
                         }
                     }
-                }
+                },
+                "jobs": {
+                    "desc": '任务注册',
+                } 
             }
         },
         "detail": {

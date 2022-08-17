@@ -115,7 +115,7 @@
     <Modal
       width="20px"
       v-model="show"
-      title="任务id"
+      title="任务详情"
       v-on:on-cancel="handleClose"
     >
       <div>
@@ -141,7 +141,12 @@ export default {
       colorList: ['#EDE234', '#F78436',
         '#E03DE0', '#366EF7', '#33F083',
         '#F20CBD', '#0D36FC', '#00E679',
-        '#FFFE00', '#F57E0F'
+        '#FFFE00', '#F57E0F', '#F0BF00',
+        '#F73700', '#9F00E0', '#007EF7',
+        '#00F038', '#F0A700', '#F71400',
+        '#6500E0', '#00BEF7', '#0DF000',
+        '#F06E00', '#F700AF', '#0113E0',
+        '#00F7AB', '#B2F000'
       ],
       search: {
         name: '',
