@@ -65,6 +65,7 @@ class JobList(MABaseView):
                     if v is None:
                         check_complete = False
                         check_error = False
+                        mission[k] = v
                         continue
                     res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
                     mission[k] = {"id": v, "status": res["status"], "result": res["result"],
