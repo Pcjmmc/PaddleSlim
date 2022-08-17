@@ -78,7 +78,7 @@ class JobList(MABaseView):
                 if check_complete and data["status"] == "running":
                     await Job.aio_update({"status": "done", "update_time": datetime.now()}, {"id": id})
                     data = await Job.aio_get_object(order_by=None, group_by=None, id=id)
-                elif check_error and not check_complete:
+                elif check_error and not check_complete and data["status"] == "running":
                     await Job.aio_update({"status": "error", "update_time": datetime.now()}, {"id": id})
                     data = await Job.aio_get_object(order_by=None, group_by=None, id=id)
                 res_data = {
