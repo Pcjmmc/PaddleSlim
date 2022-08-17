@@ -99,7 +99,8 @@ class JobList(MABaseView):
             page_index = kwargs.get("page_index")
             limit = kwargs.get("limit")
             data = await Job.aio_filter_details(page_index=page_index, limit=limit, order_by="-id")
+            total = await Job.aio_filter_count()
             for d in data:
                 d["create_time"] = str(d.get("create_time"))
                 d["update_time"] = str(d.get("update_time"))
-            return len(data), data
+            return total, data
