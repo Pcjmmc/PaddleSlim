@@ -5,6 +5,7 @@ URL 配置
 from framework.views import TestView
 from framework.job_view import JobInitView
 from framework.job_list import JobList
+from framework.job_details import JobDetails
 from framework.dispatcher_view import DispatcherView
 from framework.settings import SettingsView
 from framework.runner import RunnerView
@@ -18,6 +19,7 @@ urlpatterns = [
     url(r'test/?$', TestView),
     url(r'jobinit/?$', JobInitView),
     url(r'joblist/?$', JobList),
+    url(r'jobdetails/?$', JobDetails),
     url(r'dispatcher/?$', DispatcherView),
     url(r'getsettings/?$', SettingsView),
     url(r'runner/?$', RunnerView),
