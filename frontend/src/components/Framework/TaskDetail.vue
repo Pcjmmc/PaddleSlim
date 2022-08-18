@@ -41,11 +41,27 @@
           </span>
           <span style="display:inline-block;width:350px;float:right;margin-right:2%;">
             <span style="float:left;">
-              状态: 
-              <Button type="success" v-if="item.status==='done'" style="width:80px">{{ item.status }}</Button>
-              <Button type="error" v-else-if="item.status==='error'" style="width:80px">{{ item.status }}</Button>
-              <Button type="info" v-else-if="item.status==='running'" style="width:80px">{{ item.status }}</Button>
-              <Button type="warning" v-else style="width:80px">{{ item.status }}</Button>
+              状态:
+              <Button
+                type="success"
+                style="width:80px"
+                v-if="item.status==='done'"
+              >{{ item.status }}</Button>
+              <Button
+                type="error"
+                style="width:80px"
+                v-else-if="item.status==='error'"
+              >{{ item.status }}</Button>
+              <Button
+                type="info"
+                style="width:80px"
+                v-else-if="item.status==='running'"
+              >{{ item.status }}</Button>
+              <Button
+                type="warning"
+                style="width:80px"
+                v-else
+              >{{ item.status }}</Button>
             </span>
             <span style="float:right;">
               任务名: {{ item.create_time }}

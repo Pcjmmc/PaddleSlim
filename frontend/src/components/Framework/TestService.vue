@@ -280,7 +280,7 @@ export default {
       if (this.$route.query.pts) {
         return false;
       } else {
-        return true
+        return true;
       }
     },
     setColor() {

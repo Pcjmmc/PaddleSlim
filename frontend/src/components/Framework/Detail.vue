@@ -43,7 +43,7 @@
                 href="javascript:void(0)"
                 style="font-size:13px;"
                 @click="jumper(val.result)"
-              > {{ val.result}} </a></p>
+              > {{ val.result }} </a></p>
           </div>
         </Card>
       </div>
