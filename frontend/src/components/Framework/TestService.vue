@@ -97,14 +97,12 @@
       </div>
       <div slot="right" class="main">
         <Row>
-          <Col span="12" align="left">
-            <p align="left"> 请选择测试内容 </p>
+          <Col span="15" align="left">
+            <p align="left"> 请选择测试内容(跑编译无需勾选测试任务) </p>
           </Col>
-          <!--
-          <Col span="11" align="right">
+          <Col span="8" align="right">
             <Button type="primary" @click="handleSummit"> 提交 </Button>
           </Col>
-          -->
         </Row>
         <Tree
           ref="tree"
@@ -191,22 +189,27 @@ export default {
           title: 'API功能测试',
           key: 'api_function',
           expand: true,
+          disabled: this.getStatus(),
           children: [
             {
               title: '计算op精度测试',
-              key: 'op_function'
+              key: 'op_function',
+              disabled: this.getStatus()
             },
             {
               title: '功能性API测试',
-              key: 'external_api_function'
+              key: 'external_api_function',
+              disabled: this.getStatus()
             },
             {
               title: 'IO相关测试',
-              key: 'io_function'
+              key: 'io_function',
+              disabled: this.getStatus()
             },
             {
               title: '分布式API测试',
-              key: 'distribution_api_function'
+              key: 'distribution_api_function',
+              disabled: this.getStatus()
             }
           ]
         },
@@ -214,42 +217,50 @@ export default {
           title: '动转静测试',
           key: 'jit_function',
           expand: true,
+          disabled: this.getStatus(),
           children: [
             {
               title: '动转静API单独组网测试',
-              key: 'jit_api_function'
+              key: 'jit_api_function',
+              disabled: this.getStatus()
             },
             {
               title: '动转静模型子结构测试',
-              key: 'jit_models_function'
+              key: 'jit_models_function',
+              disabled: this.getStatus()
             }
           ]
         },
         {
           title: 'API性能测试',
           key: 'api_benchmark',
-          expand: true
+          expand: true,
+          disabled: this.getStatus()
         },
         {
           title: '模型测试',
           key: 'models',
           expand: true,
+          disabled: this.getStatus(),
           children: [
             {
               title: '图像识别',
-              key: 'paddleclas'
+              key: 'paddleclas',
+              disabled: this.getStatus()
             }
           ]
         },
         {
           title: '模型性能测试',
           key: 'models_benchmark',
-          expand: true
+          expand: true,
+          disabled: this.getStatus()
         },
         {
           title: '预测部署',
           key: 'infer',
-          expand: true
+          expand: true,
+          disabled: this.getStatus()
         }
       ]
     };
@@ -265,6 +276,13 @@ export default {
   computed: {
   },
   methods: {
+    getStatus() {
+      if (this.$route.query.pts) {
+        return false;
+      } else {
+        return true
+      }
+    },
     setColor() {
       return randomColor(ColorList);
     },

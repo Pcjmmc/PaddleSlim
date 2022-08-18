@@ -22,36 +22,48 @@
               >Search</Button>
             </div>
           </Col>
-          <Col span="2" offset="5">
-            <Button type="primary" @click="createTask">
-              创建任务
-            </Button>
-          </Col>
         </Row>
       </Form>
     </div>
     <div v-if="datas.length > 0 ">
+      <h3 class="center-sss">任务列表</h3>
       <Collapse
         v-for="(item, index) in datas"
         class="center-card-s"
         v-on:on-change="getDetail(item.id)"
       >
         <Panel :key="item.id">
-          <span style="margin-right: 3%;">
-            {{ item.description }}
+          <span style="margin-right: 1%;">
+            任务ID: {{ item.id }}
           </span>
+          <span style="margin-right: 1%">
+            任务名: {{ item.description }}
+          </span>
+          <span style="display:inline-block;width:350px;float:right;margin-right:2%;">
+            <span style="float:left;">
+              状态: 
+              <Button type="success" v-if="item.status==='done'" style="width:80px">{{ item.status }}</Button>
+              <Button type="error" v-else-if="item.status==='error'" style="width:80px">{{ item.status }}</Button>
+              <Button type="info" v-else-if="item.status==='running'" style="width:80px">{{ item.status }}</Button>
+              <Button type="warning" v-else style="width:80px">{{ item.status }}</Button>
+            </span>
+            <span style="float:right;">
+              任务名: {{ item.create_time }}
+            </span>
+          </span>
+          <!--
           <span
             :key="val"
             v-for="(val, key, idx) in JSON.parse(item.mission)"
           >
             <Button
               shape="circle"
-              :style="{backgroundColor: setColor()}"
               class="one-fifth-video-col"
             >
-              <p style="color: white;"> {{ key }} </p>
+              <p> {{ key }} </p>
             </Button>
           </span>
+          -->
           <p slot="content">
             <detail :ref="item.id"></detail>
           </p>
@@ -67,20 +79,6 @@
         v-on:on-change="pageChange"
         >
       </Page>
-      <Modal
-        fullscreen
-        title="创建任务"
-        v-model="setCreateModal"
-        v-on:on-cancel="handleReset"
-        >
-        <div>
-          <test-service ref="child"> </test-service>
-        </div>
-        <div slot="footer">
-          <Button type="text" @click="handleReset">取消</Button>
-          <Button type="primary" @click="handelUpdateSubmit">确定</Button>
-      </div>
-      </Modal>
     </div>
   </div>
 </template>
@@ -109,7 +107,6 @@ export default {
       testType: [
       ],
       createData: {},
-      setCreateModal: false,
       datas: [],
       total: 0,
       searchId: '',
@@ -138,9 +135,6 @@ export default {
     setColor() {
       return randomColor(ColorList);
     },
-    createTask() {
-      this.setCreateModal = true;
-    },
     async getDatas(search_id) {
       let params = {
         page_index: this.search.page_index,
@@ -165,14 +159,14 @@ export default {
     async getDetail(key) {
       this.$refs[key][0].getDetails(key);
     },
-    handleReset(auto) {
-      this.setCreateModal = false;
-      this.$refs.child.handleClose();
-    },
-    handelUpdateSubmit(auto) {
-      // console.log('调用子组件的提交');
-      this.$refs.child.handleSummit();
-    },
+    // handleReset(auto) {
+    //   this.setCreateModal = false;
+    //   this.$refs.child.handleClose();
+    // },
+    // handelUpdateSubmit(auto) {
+    //   // console.log('调用子组件的提交');
+    //   this.$refs.child.handleSummit();
+    // },
     async pageChange(pageNum) {
       this.search.page_index = pageNum;
       await this.getDatas(this.searchId);
@@ -193,6 +187,15 @@ export default {
   max-height: 600px;
   overflow:auto;
   font-size: 16px;
+  color:lightslategrey
+}
+.center-sss {
+  width: 96%;
+  margin-left: 1%;
+  margin-right: 2%;
+  max-height: 600px;
+  overflow:auto;
+  font-size: 18px;
   color:lightslategrey
 }
 .one-fifth-video-col {

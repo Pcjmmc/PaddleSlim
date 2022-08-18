@@ -8,8 +8,8 @@
                         :name="computeName(key)"
                     >
                         <template slot="title">
-                            <Icon :type="value.icon"></Icon>
-                            {{ value.desc }}
+                          <Icon :type="value.icon" v-if="value.icon"></Icon>
+                          {{ value.desc }}
                         </template>
                         <menu-nav
                             :data="value.sub"

@@ -3,6 +3,11 @@
     <div v-if="JSON.stringify(compile)!=='{}'">
       <h3>编译任务</h3>
       <Card class="center-card-s">
+        <span>状态:</span>
+        <Button type="success" v-if="compile.status==='done'">{{ compile.status }}</Button>
+        <Button type="error" v-else-if="compile.status==='error'">{{ compile.status }}</Button>
+        <Button type="info" v-else-if="compile.status==='running'">{{ compile.status }}</Button>
+        <Button type="warning" v-else>{{ compile.status }}</Button>
         <p>编译参数:</p>
         <div style="font-size:14px;margin-left: 2%;">
           <p>类型: {{ compile.env.type }}</p>
@@ -14,7 +19,7 @@
         </div>
         <p>创建时间: {{ compile.create_time }}</p>
         <p>更新时间: {{ compile.update_time }}</p>
-        <p>包地址: {{ compile.wheel }}</p>
+        <p>包地址: <a :href="compile.wheel">{{ compile.wheel }}</a></p>
       </Card>
     </div>
     <div v-if="JSON.stringify(mission)!=='{}'">
@@ -22,14 +27,23 @@
       <div v-for="(val, key, idx) in mission">
         <Card class="center-card-s">
           <div slot="title">
-            <Button>{{ key }}</Button>
-            <Button>{{ val.status }}</Button>
+            <span>任务名:</span>
+            <Button type="primary">{{ getTaskName(key) }}</Button>
+            <span style="margin-left: 2%;">状态:</span>
+            <Button type="success" v-if="val.status==='done'">{{ val.status }}</Button>
+            <Button type="error" v-else-if="val.status==='error'">{{ val.status }}</Button>
+            <Button type="info" v-else-if="val.status==='running'">{{ val.status }}</Button>
+            <Button type="warning" v-else>{{ val.status }}</Button>
           </div>
           <div>
-            <p>任务名: {{ val.description }}</p>
             <p>创建时间: {{ val.create_time }}</p>
             <p>更新时间: {{ val.update_time }}</p>
-            <p>执行结果: {{ val.result }}</p>
+            <p>执行结果:
+              <a
+                href="javascript:void(0)"
+                style="font-size:13px;"
+                @click="jumper(val.result)"
+              > {{ val.result}} </a></p>
           </div>
         </Card>
       </div>
@@ -48,7 +62,21 @@ export default {
       id: '',
       status: '',
       compile: {},
-      mission: {}
+      mission: {},
+      children: {
+        op_function: '计算op精度测试',
+        external_api_function: '功能性API测试',
+        io_function: 'IO相关测试',
+        distribution_api_function: '分布式API测试',
+        jit_function: '动转静测试',
+        jit_api_function: '动转静API单独组网测试',
+        jit_models_function: '动转静模型子结构测试',
+        api_benchmark: 'API性能测试',
+        paddleclas: '图像识别',
+        models_benchmark: '模型性能测试',
+        infer: '预测部署',
+        compile_function: '编译任务'
+      }
     };
   },
   watch: {
@@ -61,6 +89,24 @@ export default {
   computed: {
   },
   methods: {
+    getTaskName(key) {
+      return this.children[key];
+    },
+    jumper(href) {
+      window.open(href, '_blank');
+    },
+    setColor(status) {
+      let _status = status.toLowerCase();
+      console.log('_status', _status);
+      switch (_status) {
+        case 'fail':
+          return 'Error';
+        case 'done':
+          return 'success';
+        default:
+          return 'warning';
+      }
+    },
     async getDetails(id) {
       let params = {
         id: id

@@ -82,7 +82,12 @@ export const ROUTES = [
           component: Publish
         },
         { // API 配置
-          path: '/paddle/config/framework-service',
+          path: '/paddle/framework/service',
+          name: 'testservice',
+          component: TestService
+        },
+        { // API 配置
+          path: '/paddle/framework/detail',
           name: 'taskdetail',
           component: TaskDetail
         }
