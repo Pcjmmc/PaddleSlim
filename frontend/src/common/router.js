@@ -13,7 +13,7 @@ import Benchmark from '../components/Benchmark.vue';
 import SingleReport from '../components/SingleReport.vue';
 import Publish from '../components/publish/Publish.vue';
 import TestService from '../components/Framework/testService.vue';
-import TaskDetail from '../components/Framework/TaskDetail.vue'
+import TaskDetail from '../components/Framework/TaskDetail.vue';
 
 // Vue.use(VueRouter);
 export const ROUTES = [

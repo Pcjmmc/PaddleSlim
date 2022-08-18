@@ -42,7 +42,7 @@ import { FrameWorkJobDetail } from '../../api/url.js';
 import api from '../../api/index';
 
 export default {
-  name: 'details',
+  name: 'fsdetails',
   data: function () {
     return {
       id: '',
@@ -65,7 +65,7 @@ export default {
       let params = {
         id: id
       };
-      const {code, data, msg, all_count} = await api.get(FrameWorkJobDetail, params);
+      const {code, data, msg} = await api.get(FrameWorkJobDetail, params);
       if (parseInt(code, 10) === 200) {
         // 塞到datas的detais 字段里面
         this.id = data.id;

@@ -32,9 +32,9 @@
     </div>
     <div v-if="datas.length > 0 ">
       <Collapse
-        @on-change="getDetail(item.id)"
         v-for="(item, index) in datas"
         class="center-card-s"
+        v-on:on-change="getDetail(item.id)"
       >
         <Panel :key="item.id">
           <span style="margin-right: 3%;">
@@ -60,18 +60,18 @@
       <Page
         :total="total"
         simple
-        :current="parseInt(search.page_index)"
-        :page-size="parseInt(search.limit)"
-        @on-change="pageChange"
         size="small"
         style="text-align: center;"
+        :current="parseInt(search.page_index)"
+        :page-size="parseInt(search.limit)"
+        v-on:on-change="pageChange"
         >
       </Page>
       <Modal
         fullscreen
         title="创建任务"
         v-model="setCreateModal"
-        @on-cancel="handleReset"
+        v-on:on-cancel="handleReset"
         >
         <div>
           <test-service ref="child"> </test-service>
@@ -145,9 +145,9 @@ export default {
       let params = {
         page_index: this.search.page_index,
         limit: this.search.limit
-      }
+      };
       if (search_id) {
-        params['id'] = search_id;
+        params.id = search_id;
       }
       const {code, data, msg, all_count} = await api.get(FrameWorkJobListUrl, params);
       if (parseInt(code, 10) === 200) {
