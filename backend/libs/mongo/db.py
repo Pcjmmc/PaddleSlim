@@ -147,17 +147,8 @@ if __name__ == "__main__":
             "desc": '测试能力管理',
             "icon": 'ios-paper',
             "sub": {
-                "framework": {
+                "framework-service": {
                     "desc": '框架测试服务（PTS）',
-                    "icon": 'md-cube',
-                    "sub": {
-                        "service": {
-                            "desc": '任务管理'
-                        },
-                        "detail": {
-                            "desc": '进度查询'
-                        }
-                    }
                 },
                 "jobs": {
                     "desc": '任务注册',

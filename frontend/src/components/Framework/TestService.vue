@@ -87,7 +87,7 @@
           >
             <Button
               shape="circle"
-              :style="{backgroundColor: randomColor()}"
+              :style="{backgroundColor: setColor()}"
               class="one-fifth-video-col"
             >
               <p style="color: white;"> {{ item.title }} </p>
@@ -100,11 +100,14 @@
           <Col span="12" align="left">
             <p align="left"> 请选择测试内容 </p>
           </Col>
+          <!--
           <Col span="11" align="right">
             <Button type="primary" @click="handleSummit"> 提交 </Button>
           </Col>
+          -->
         </Row>
         <Tree
+          ref="tree"
           :data="data2"
           show-checkbox multiple
           :render="renderContent"
@@ -132,22 +135,14 @@
 <script>
 import { FrameWorkConfigUrl, FrameWorkJobUrl } from '../../api/url.js';
 import api from '../../api/index';
+import { randomColor } from '../../util/help.js';
+import { ColorList } from '../../util/common.js';
 
 export default {
   name: 'testservice',
   data: function () {
     return {
       show: false,
-      colorList: ['#EDE234', '#F78436',
-        '#E03DE0', '#366EF7', '#33F083',
-        '#F20CBD', '#0D36FC', '#00E679',
-        '#FFFE00', '#F57E0F', '#F0BF00',
-        '#F73700', '#9F00E0', '#007EF7',
-        '#00F038', '#F0A700', '#F71400',
-        '#6500E0', '#00BEF7', '#0DF000',
-        '#F06E00', '#F700AF', '#0113E0',
-        '#00F7AB', '#B2F000'
-      ],
       search: {
         name: '',
         type: '',
@@ -270,8 +265,8 @@ export default {
   computed: {
   },
   methods: {
-    randomColor() {
-      return this.colorList[Math.floor(Math.random() * this.colorList.length)];
+    setColor() {
+      return randomColor(ColorList);
     },
     handleClose() {
       this.initData();
@@ -289,7 +284,14 @@ export default {
         }
       }
     },
+    cancelSelected() {
+      let checkdata = this.$refs.tree.getCheckedAndIndeterminateNodes();
+      for (let idx = 0; idx < checkdata.length; idx++) {
+        checkdata[idx].checked = false;
+      }
+    },
     initData() {
+      this.cancelSelected();
       this.show = false;
       this.selectData = [];
       this.content = [];
@@ -405,7 +407,7 @@ export default {
 
 <style scoped>
 .demo-split{
-  height: 861px;
+  height: 650px;
   overflow:auto;
 }
 .demo-split-pane{

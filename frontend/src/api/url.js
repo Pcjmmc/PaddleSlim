@@ -24,3 +24,5 @@ export const PublishProcessUrl = '/ce/publish';
 export const PublishJobUrl = '/ce/publish_task';
 export const FrameWorkConfigUrl = '/framework/getsettings';
 export const FrameWorkJobUrl = '/framework/jobinit';
+export const FrameWorkJobListUrl = '/framework/joblist';
+export const FrameWorkJobDetail = '/framework/jobdetails';

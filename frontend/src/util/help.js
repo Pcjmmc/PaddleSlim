@@ -115,3 +115,7 @@ export function getOffsetInfo(offset) {
   }
   return [hourOffset, minuteOffset];
 }
+
+export function randomColor(colorList) {
+  return colorList[Math.floor(Math.random() * colorList.length)];
+}

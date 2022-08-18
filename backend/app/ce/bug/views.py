@@ -159,7 +159,6 @@ class BugManage(MABaseView):
                 "title": fields.get("title"),
                 "type": "Bug",
                 "detail": fields.get("description"),
-                "所属计划": "飞桨项目集/Paddle/{tag}".format(tag=plan_tag),
                 "fields": {},
                 "creator": "liuhuanling"
             }
@@ -171,9 +170,10 @@ class BugManage(MABaseView):
                     icafe_info["detail"] += "\n" + content
 
             icafe_info["fields"] = {
+                "所属计划": "飞桨项目集/Paddle/{tag}".format(tag=plan_tag),
                 "负责人": fields.get("rd_owner"),
                 "需求来源": "QA团队",
-                "负责人所属团队": "基础框架-训练",
+                "负责人所属团队": "QA团队",
                 "QA负责人" : fields.get("qa_owner"),
                 "RD负责人" : fields.get("rd_owner"),
                 "流程状态" : "新建",
