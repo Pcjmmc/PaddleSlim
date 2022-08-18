@@ -47,9 +47,9 @@ class Cloud(object):
     for xly , value is "pipeline conf id", parameters.
     """
     OP_FUNCTION = "23490", {"whoami": "DDDivano"}
-    EXTERNAL_API_FUNCTION = "23490"
+    EXTERNAL_API_FUNCTION = "23686"
     DISTRIBUTION_API_FUNCTION = "23542"
-    JIT_FUNCTION = "23539"
+    JIT_FUNCTION = "23640"
     API_BENCHMARK = ""
     PADDLE_CLAS = "23369"
 
