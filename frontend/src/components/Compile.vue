@@ -59,13 +59,7 @@
       <p slot="title" style="text-align: center;font-size: 1.2em;">
         关联卡片
       </p>
-      <Table
-        border
-        :columns="bugColumns"
-        :data="bugList"
-        style="margin-right: 1%"
-      >
-      </Table>
+      <icafe-base :datas="bugList"></icafe-base>
     </Card>
     <Card class="center-card-s" v-if="JSON.stringify(env_info) != '[]'">
       <p slot="title" style="text-align: center;font-size: 1.4em;">
@@ -241,6 +235,8 @@ import Clipboard from 'clipboard';
 import api from '../api/index';
 import { dateFmt, timestampToTime } from '../util/help.js';
 import { DetailUrl, BugUrl, ScenesUrl, AssociateBugUrl } from '../api/url.js';
+import icafeBase from './Base/icafeBase.vue';
+
 export default {
   data: function () {
     return {
@@ -404,6 +400,7 @@ export default {
     this.getBugList();
   },
   components: {
+    icafeBase
   },
   computed: {
   },
@@ -489,7 +486,6 @@ export default {
       const {code, data, msg} = await api.get(AssociateBugUrl, params);
       if (parseInt(code, 10) === 200) {
         this.bugList = data;
-        // console.log('this.bugTypeList', this.bugTypeList);
       } else {
         this.bugList = [];
         this.$Message.error({

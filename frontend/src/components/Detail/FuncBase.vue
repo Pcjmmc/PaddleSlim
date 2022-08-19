@@ -87,13 +87,7 @@
         <p slot="title" style="text-align: center;font-size: 1.2em;">
           关联卡片
         </p>
-        <Table
-          border
-          :columns="bugColumns"
-          :data="bugList"
-          style="margin-right: 1%"
-        >
-        </Table>
+        <icafe-base :datas="bugList"></icafe-base>
       </Card>
       <Card :bordered="false" class="center-card-s">
         <p slot="title" style="text-align: center;font-size: 1.2em;">
@@ -290,6 +284,7 @@ import 'vue-json-pretty/lib/styles.css';
 import { dateFmt, timestampToTime } from '../../util/help.js';
 import frameDetailBase from '../base/frameDetailBase.vue';
 import { BugUrl, ScenesUrl, AssociateBugUrl } from '../../api/url.js';
+import icafeBase from '../Base/icafeBase.vue';
 import api from '../../api/index';
 export default {
   props: {
@@ -522,7 +517,8 @@ export default {
   },
   components: {
     VueJsonPretty,
-    frameDetailBase
+    frameDetailBase,
+    icafeBase
   },
   computed: {
     allSourceFailed() {

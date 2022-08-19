@@ -59,13 +59,7 @@
       <p slot="title" style="text-align: center;font-size: 1.2em;">
         关联卡片
       </p>
-      <Table
-        border
-        :columns="bugColumns"
-        :data="bugList"
-        style="margin-right: 1%"
-      >
-      </Table>
+      <icafe-base :datas="bugList"></icafe-base>
     </Card>
     <Card>
       <p slot="title" style="text-align: center;font-size: 1.2em;">
@@ -243,6 +237,7 @@ import api from '../api/index';
 import { DetailUrl, BugUrl, ScenesUrl, AssociateBugUrl } from '../api/url.js';
 import { dateFmt, timestampToTime } from '../util/help.js';
 import ModelBase from './CommonUtil/ModelBase.vue';
+import icafeBase from './Base/icafeBase.vue';
 
 export default {
   data: function () {
@@ -352,7 +347,8 @@ export default {
     this.getBugList();
   },
   components: {
-    ModelBase
+    ModelBase,
+    icafeBase
   },
   computed: {
     failedData() {

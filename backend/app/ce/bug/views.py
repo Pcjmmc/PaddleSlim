@@ -43,128 +43,14 @@ class BugManage(MABaseView):
             task_type = back_dict.get(task_type)
             query = 'plan_tag ~ {ptag} AND 类型 = Bug AND bug发现方式 = {task_type} AND repo = Paddle'.format(
             ptag=ptag, task_type=task_type)
-            return await self.get_bugs_by_filter(query)
+            return await get_bugs_by_filter(query)
         else:
             # 查询全量
             condition = ",".join(selects)
             query = 'repo = Paddle AND bug发现方式 in ({condition}) AND plan_tag ~ {ptag} AND 类型 = Bug'.format(
                 condition=condition, ptag=ptag
             )
-            return await self.get_bugs_by_filter(query)
-
-    async def get_bugs_by_filter(self, query):
-        """
-        返回指定类型的数据详情
-        """
-        result = await GetBug({
-            'u': PADDLE_ICAFE_USER,
-            'pw': PADDLE_ICAFE_PASSD,
-            'iql': query
-        }).get_data()
-        bugData = result.get('cards', [])
-        # 过滤下数据，太多了
-        result = []
-        for item in bugData:
-            space = item.get('spacePrefixCode')
-            sequence = item.get('sequence')
-            level = ""
-            rd_owner = ""
-            qa_owner = ""
-            properties = item.get("properties", [])
-            for arr in properties:
-                if arr.get("propertyName") == "优先级":
-                    level = arr.get("displayValue")
-                elif arr.get("propertyName") == "QA负责人":
-                    qa_owner = arr.get("displayValue")
-                elif arr.get("propertyName") == "RD负责人":
-                    rd_owner = arr.get("displayValue")
-                elif arr.get("propertyName") == "bug发现方式":
-                    task_type = arr.get("value")
-                    displayValue = arr.get("displayValue")
-            tmp = {
-                "title": item.get("title"),
-                "createdTime": item.get("createdTime"),
-                "status": item.get("status"),
-                "url": baseUrl.format(space=space, sequence=sequence),
-                "level": level,
-                "rd_owner": rd_owner,
-                "qa_owner": qa_owner,
-                "task_type": inner_dict.get(task_type) or displayValue,
-                "log_url": await self.get_result_by_sequence(sequence)
-            }
-            result.append(tmp)
-        return len(result), result
-
-    async def get_result_by_sequence(self, sequence):
-        """
-        获取执行sequence 关联的任务
-        """
-        log_url = []
-        result = await CeIcafe.aio_filter_details(
-            need_all=True, **{"sequence": sequence}
-        )
-        for ret in result:
-            tid = ret.get('tid')
-            secondary_type = ret.get('secondary_type')
-            task_info = await CeTasks.aio_get_object(**{"id": tid})
-            if task_info:
-                platform = task_info.platform
-                workspace = task_info.workspace
-                if platform == "xly":
-                    _url = XLY_BASE_URL.format(
-                            workspace=workspace,
-                            build_id=ret["build_id"],
-                            job_id=ret['job_id']
-                        )  if ret.get('job_id') else XLY_BASE_URL2.format(
-                            workspace=workspace,
-                            build_id=ret["build_id"]
-                        )
-                elif platform == 'teamcity':
-                    _url = TC_BASE_URL.format(
-                        build_id=ret["build_id"],
-                        build_type_id=ret["build_type_id"]
-                    )
-                log_url.append(
-                    {"secondary_type": secondary_type, "url": _url}
-                )
-        return log_url
-
-    async def get_all_bugs(self, query):
-        """
-        返回统计数据；按状态统计；按bug的发现方式统计
-        """
-        result = await GetBug({
-            'u': PADDLE_ICAFE_USER,
-            'pw': PADDLE_ICAFE_PASSD,
-            'iql': query
-        }).get_data()
-        bugData = result.get('cards', [])
-        # 过滤下数据，太多了
-        process = {}
-        distribution = {}
-        for item in bugData:
-            task_type = None
-            status = item.get("status")
-            if status not in process:
-                process[status] = 0
-            process[status] += 1
-            properties = item.get("properties", [])
-            for i in properties:
-                if i.get("propertyName") == "bug发现方式":
-                    task_type = i.get("value")
-                    task_type = inner_dict.get(task_type)
-                    break
-            if task_type and task_type not in distribution:
-                distribution[task_type] = 0
-            if task_type:
-                distribution[task_type] += 1
-        results = {
-            "sts_datas": [{"value": val, "name": key} for key, val in process.items()],
-            "sts_column": list(process.keys()),
-            "dis_datas": list(distribution.keys()),
-            "dis_count": list(distribution.values())
-        }
-        return len(results), results
+            return await get_bugs_by_filter(query)
 
     async def post(self, **kwargs):
         """
@@ -185,17 +71,17 @@ class BugManage(MABaseView):
         except:
             file_list = []
         issues_url = fields.get("issues_url")
-        try:
-            sequence = issues_url.split("https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-")[-1]
-            sequence = sequence.split("/")[0]
-        except:
-            return 
         plan_tag = fields.get("tag")
         tid = fields.get('tid')
         build_id = fields.get('build_id')
         secondary_type = fields.get('secondary_type')
         if issues_url:
             # 走关联卡片
+            try:
+                sequence = issues_url.split("https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-")[-1]
+                sequence = sequence.split("/")[0]
+            except:
+                return 
             print("关联已有卡片")
             await CeIcafe.aio_insert(
                 {
@@ -247,6 +133,7 @@ class BugManage(MABaseView):
             result = await CreateBug(data).get_data()
             #  将icafe存起来；做关联关系
             issues = result.get("issues", [])
+            print('创建参数', issues)
             if issues:
                 sequence = issues[0].get("sequence")
                 issues_url = issues[0].get("url")
@@ -260,6 +147,119 @@ class BugManage(MABaseView):
                     }
                 )
 
+async def get_bugs_by_filter(query):
+    """
+    返回指定类型的数据详情
+    """
+    result = await GetBug({
+        'u': PADDLE_ICAFE_USER,
+        'pw': PADDLE_ICAFE_PASSD,
+        'iql': query
+    }).get_data()
+    bugData = result.get('cards', [])
+    # 过滤下数据，太多了
+    result = []
+    for item in bugData:
+        space = item.get('spacePrefixCode')
+        sequence = item.get('sequence')
+        level = ""
+        rd_owner = ""
+        qa_owner = ""
+        properties = item.get("properties", [])
+        for arr in properties:
+            if arr.get("propertyName") == "优先级":
+                level = arr.get("displayValue")
+            elif arr.get("propertyName") == "QA负责人":
+                qa_owner = arr.get("displayValue")
+            elif arr.get("propertyName") == "RD负责人":
+                rd_owner = arr.get("displayValue")
+            elif arr.get("propertyName") == "bug发现方式":
+                task_type = arr.get("value")
+                displayValue = arr.get("displayValue")
+        tmp = {
+            "title": item.get("title"),
+            "createdTime": item.get("createdTime"),
+            "status": item.get("status"),
+            "url": baseUrl.format(space=space, sequence=sequence),
+            "level": level,
+            "rd_owner": rd_owner,
+            "qa_owner": qa_owner,
+            "task_type": inner_dict.get(task_type) or displayValue,
+            "log_url": await get_result_by_sequence(sequence)
+        }
+        result.append(tmp)
+    return len(result), result
+
+async def get_result_by_sequence(sequence):
+    """
+    获取执行sequence 关联的任务
+    """
+    log_url = []
+    result = await CeIcafe.aio_filter_details(
+        need_all=True, **{"sequence": sequence}
+    )
+    for ret in result:
+        tid = ret.get('tid')
+        secondary_type = ret.get('secondary_type')
+        task_info = await CeTasks.aio_get_object(**{"id": tid})
+        if task_info:
+            platform = task_info.platform
+            workspace = task_info.workspace
+            if platform == "xly":
+                _url = XLY_BASE_URL.format(
+                        workspace=workspace,
+                        build_id=ret["build_id"],
+                        job_id=ret['job_id']
+                    )  if ret.get('job_id') else XLY_BASE_URL2.format(
+                        workspace=workspace,
+                        build_id=ret["build_id"]
+                    )
+            elif platform == 'teamcity':
+                _url = TC_BASE_URL.format(
+                    build_id=ret["build_id"],
+                    build_type_id=ret["build_type_id"]
+                )
+            log_url.append(
+                {"secondary_type": secondary_type, "url": _url}
+            )
+    return log_url
+
+async def get_all_bugs(query):
+    """
+    返回统计数据；按状态统计；按bug的发现方式统计
+    """
+    result = await GetBug({
+        'u': PADDLE_ICAFE_USER,
+        'pw': PADDLE_ICAFE_PASSD,
+        'iql': query
+    }).get_data()
+    bugData = result.get('cards', [])
+    # 过滤下数据，太多了
+    process = {}
+    distribution = {}
+    for item in bugData:
+        task_type = None
+        status = item.get("status")
+        if status not in process:
+            process[status] = 0
+        process[status] += 1
+        properties = item.get("properties", [])
+        for i in properties:
+            if i.get("propertyName") == "bug发现方式":
+                task_type = i.get("value")
+                task_type = inner_dict.get(task_type)
+                break
+        if task_type and task_type not in distribution:
+            distribution[task_type] = 0
+        if task_type:
+            distribution[task_type] += 1
+    results = {
+        "sts_datas": [{"value": val, "name": key} for key, val in process.items()],
+        "sts_column": list(process.keys()),
+        "dis_datas": list(distribution.keys()),
+        "dis_count": list(distribution.values())
+    }
+    return len(results), results
 
 class ConclusionManage(MABaseView):
 

@@ -32,7 +32,7 @@
       <Table
         :columns="columns"
         :data="datas"
-        style="width: 100%;"
+        style="width: 100%;margin-top: 1%;"
       >
       </Table>
     </div>
@@ -138,6 +138,9 @@ export default {
             const { status } = params.row;
             return h('div', [
                 h('Tag', {
+                style: {
+                  'font-size': '14px'
+                },
                 props: {
                   color: this.setColor(status)
                 }
@@ -153,7 +156,15 @@ export default {
             var newArr = [];
               arr.forEach((obj, index) => {
                 newArr.push(h('div', [
-                  h('Button', {
+                  h('a', {
+                    props: {
+                      href: 'javascript:void(0)'
+                    },
+                    style: {
+                      'font-size': '8px',
+                      size: 'small',
+                      'margin-top': '5px'
+                    },
                     on: {
                         click: () => {
                           this.openNew(obj.url);
@@ -188,6 +199,9 @@ export default {
   watch: {
     datas: function () {
       this.getStatusFilters();
+    },
+    tag: function () {
+      this.getbugdata();
     }
   },
   mounted: function () {
@@ -270,7 +284,7 @@ export default {
           value: this.newfilterst[j]
         };
       }
-      this.columns[5].filters = filters;
+      this.columns[6].filters = filters;
       this.$nextTick(function () {
         if (this.sts_datas.length > 0) {
           this.$refs.cdpie.drawPieChart('chartPie');

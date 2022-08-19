@@ -16,7 +16,12 @@
     <CheckboxGroup v-model="checkAllGroup">
       <div v-for="(item, index) in tasktypelist" style="margin-top: 1%;margin-right: 2%;margin-left: 2%">
         <div v-if="item.key=='model'">
-          <label> 套件兼容性: </label>
+          <label> 套件兼容性:
+            <a
+              href="javascript:void(0)"
+              @click="showIcafe(item.key)"
+            >load卡片</a>
+          </label>
           <div v-for="(repo, idx) in repoNames" style="margin-top: 1%;margin-left: 1%">
             <Checkbox :label="repo"> {{ repo }} </Checkbox>
             <Input
@@ -29,7 +34,9 @@
           </div>
         </div>
         <div v-else>
-          <Checkbox :label="item.key"> {{ item.desc }} </Checkbox>
+          <Checkbox :label="item.key"> {{ item.desc }} 
+            <a href="javascript:void(0)" @click="showIcafe(item.key)">load卡片</a>
+          </Checkbox>
           <Input
             clearable
             v-model="addForm[item.key]"
@@ -50,6 +57,14 @@
     <Button type="warning" @click="handleReset">取消</Button>
     <Button type="primary" @click="handleSubmit">提交</Button>
   </div>
+  <div>
+    <Modal v-model="setBugTagModal" title="风险卡片" @on-cancel="handleResetNew" width="1200px">
+      <icafe-base :datas="datas"></icafe-base>
+      <div slot="footer">
+        <Button type="text" @click="handleResetNew">关闭</Button>
+      </div>
+    </Modal>
+  </div>
 </div>
 </template>
 
@@ -57,7 +72,8 @@
 // import html2pdf from 'html2pdf.js';
 import Cookies from 'js-cookie';
 import api from '../../api/index';
-import { TestConclusionUrl } from '../../api/url.js';
+import { TestConclusionUrl, BugUrl } from '../../api/url.js';
+import icafeBase from '../Base/icafeBase.vue';
 
 export default {
    props: {
@@ -82,6 +98,8 @@ export default {
   },
   data: function () {
     return {
+      setBugTagModal: false,
+      datas: [],
       checkAllGroup: [],
       addForm: {
         compile: '',
@@ -139,6 +157,7 @@ export default {
     }
   },
   components: {
+    icafeBase
   },
   computed: {
     versionName: {
@@ -148,6 +167,26 @@ export default {
     }
   },
   methods: {
+    showIcafe(task_type) {
+      console.log(task_type)
+      this.getIcafe(task_type);
+      this.setBugTagModal = true;
+    },
+    async getIcafe(task_type) {
+      // 根据发现方式去获取TODO
+      let _params = {'tag': this.tag, 'task_type': task_type};
+      const {code, data, version} = await api.get(BugUrl, _params);
+      if (parseInt(code, 10) === 200) {
+        this.datas = data;
+      } else {
+        this.datas = [];
+        this.$Message.error({
+          content: '请求出错: ' + version,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
     async getData() {
       let params = {
         tag: this.tag,
@@ -177,6 +216,10 @@ export default {
     },
     handleReset(auto) {
       this.initData();
+    },
+    handleResetNew(auto) {
+      this.datas = [];
+      this.setBugTagModal = false;
     },
     initData() {
       this.checkAllGroup = [];
