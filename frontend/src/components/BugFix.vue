@@ -156,7 +156,7 @@ export default {
                   h('Button', {
                     on: {
                         click: () => {
-                          this.openNew(obj.url)
+                          this.openNew(obj.url);
                         }
                       }
                     }, obj.secondary_type)

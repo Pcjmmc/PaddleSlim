@@ -28,8 +28,8 @@
     <div v-if="datas.length > 0 ">
       <h3 class="center-sss">任务列表</h3>
       <Collapse
-        v-for="(item, index) in datas"
         :key="index"
+        v-for="(item, index) in datas"
         class="center-card-s"
         v-on:on-change="getDetail(item.id)"
       >

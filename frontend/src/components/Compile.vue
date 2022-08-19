@@ -127,7 +127,7 @@
           <Input v-model="$route.query.branch"/>
         </FormItem>
         <FormItem label="计划版本/分支: " v-else>
-          <Input  v-model="addForm.tag"/>
+          <Input v-model="addForm.tag"/>
         </FormItem>
         <FormItem label="bug发现方式: ">
           <Input readonly v-model="addForm.bug_type"/>

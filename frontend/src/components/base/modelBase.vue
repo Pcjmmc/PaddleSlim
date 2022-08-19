@@ -6,8 +6,8 @@
           <Row>
             <Col
               span="8"
-              v-for="(item, key, index) in data"
               :key="index"
+              v-for="(item, key, index) in data"
               >
               <base-card
                 :reponame="key"
