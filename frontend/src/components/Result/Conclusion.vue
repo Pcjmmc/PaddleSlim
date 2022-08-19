@@ -17,10 +17,13 @@
       <div v-for="(item, index) in tasktypelist" style="margin-top: 1%;margin-right: 2%;margin-left: 2%">
         <div v-if="item.key=='model'">
           <label> 套件兼容性:
-            <a
-              href="javascript:void(0)"
+            <Button
+              size="small"
+              type="info"
+              icon="md-cloud-download"
+              style="margin-left:5px;"
               @click="showIcafe(item.key)"
-            >load卡片</a>
+            >load卡片</Button>
           </label>
           <div v-for="(repo, idx) in repoNames" style="margin-top: 1%;margin-left: 1%">
             <Checkbox :label="repo"> {{ repo }} </Checkbox>
@@ -35,7 +38,16 @@
         </div>
         <div v-else>
           <Checkbox :label="item.key"> {{ item.desc }}
+            <!--
             <a href="javascript:void(0)" @click="showIcafe(item.key)">load卡片</a>
+            -->
+            <Button
+              size="small"
+              type="info"
+              icon="md-cloud-download"
+              style="margin-left:5px;"
+              @click="showIcafe(item.key)"
+            >load卡片</Button>
           </Checkbox>
           <Input
             clearable
