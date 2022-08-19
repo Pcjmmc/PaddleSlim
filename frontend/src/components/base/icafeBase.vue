@@ -11,7 +11,7 @@
 
 <script>
 
-import { isEmpty } from "../../util/help.js";
+import { isEmpty } from '../../util/help.js';
 
 export default {
   name: 'icafeBase',
@@ -79,7 +79,7 @@ export default {
               attrs: {
                 href: params.row.url
               }
-            }, isEmpty(params.row.url) == false ? '详情' : '-')])
+            }, isEmpty(params.row.url) === false ? '详情' : '-')]);
           }
         }
       ]

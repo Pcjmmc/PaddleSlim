@@ -34,7 +34,7 @@
           </div>
         </div>
         <div v-else>
-          <Checkbox :label="item.key"> {{ item.desc }} 
+          <Checkbox :label="item.key"> {{ item.desc }}
             <a href="javascript:void(0)" @click="showIcafe(item.key)">load卡片</a>
           </Checkbox>
           <Input
@@ -58,7 +58,12 @@
     <Button type="primary" @click="handleSubmit">提交</Button>
   </div>
   <div>
-    <Modal v-model="setBugTagModal" title="风险卡片" @on-cancel="handleResetNew" width="1200px">
+    <Modal
+      v-model="setBugTagModal"
+      title="风险卡片"
+      width="1200px"
+      v-on:on-cancel="handleResetNew"
+    >
       <icafe-base :datas="datas"></icafe-base>
       <div slot="footer">
         <Button type="text" @click="handleResetNew">关闭</Button>
@@ -168,7 +173,7 @@ export default {
   },
   methods: {
     showIcafe(task_type) {
-      console.log(task_type)
+      // console.log(task_type);
       this.getIcafe(task_type);
       this.setBugTagModal = true;
     },
