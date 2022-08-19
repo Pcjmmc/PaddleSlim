@@ -124,10 +124,10 @@
         :label-width="100"
       >
         <FormItem label="计划版本/分支: " v-if="$route.query.branch=='develop'">
-          <Input readonly v-model="$route.query.branch"/>
+          <Input v-model="$route.query.branch"/>
         </FormItem>
         <FormItem label="计划版本/分支: " v-else>
-          <Input readonly v-model="addForm.tag"/>
+          <Input  v-model="addForm.tag"/>
         </FormItem>
         <FormItem label="bug发现方式: ">
           <Input readonly v-model="addForm.bug_type"/>
@@ -219,10 +219,10 @@
         :label-width="120"
       >
         <FormItem label="计划版本/分支: " v-if="$route.query.branch=='develop'">
-          <Input readonly v-model="$route.query.branch"/>
+          <Input v-model="$route.query.branch"/>
         </FormItem>
         <FormItem label="计划版本/分支: " v-else>
-          <Input readonly v-model="associateForm.tag"/>
+          <Input v-model="associateForm.tag"/>
         </FormItem>
         <FormItem label="卡片地址: ">
           <Input v-model="associateForm.issues_url"/>
@@ -284,11 +284,14 @@ export default {
       ],
       associateForm: {
         tid: this.$route.query.tid,
+        build_id: this.$route.query.build_id,
         tag: this.$route.query.tag,
         secondary_type: this.$route.query.secondary_type,
         issues_url: ''
       },
       addForm: {
+        tid: this.$route.query.tid,
+        build_id: this.$route.query.build_id,
         secondary_type: this.$route.query.secondary_type,
         repo: this.$route.query.repo,
         bug_type: '',
@@ -479,6 +482,7 @@ export default {
     async getBugList() {
       let params = {
         tid: this.$route.query.tid,
+        build_id: this.$route.query.build_id,
         tag: this.$route.query.tag,
         secondary_type: this.$route.query.secondary_type
       };
@@ -620,12 +624,14 @@ export default {
       this.associateForm = {
         secondary_type: this.$route.query.secondary_type,
         tid: this.$route.query.tid,
+        build_id: this.$route.query.build_id,
         tag: this.$route.query.tag,
         issues_url: ''
       };
       this.addForm = {
         secondary_type: this.$route.query.secondary_type,
         tid: this.$route.query.tid,
+        build_id: this.$route.query.build_id,
         repo: this.$route.query.repo,
         bug_type: this.bugTypeList[this.$route.query.task_type],
         tag: this.$route.query.tag,

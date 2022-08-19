@@ -29,6 +29,7 @@
       <h3 class="center-sss">任务列表</h3>
       <Collapse
         v-for="(item, index) in datas"
+        :key="index"
         class="center-card-s"
         v-on:on-change="getDetail(item.id)"
       >
@@ -64,7 +65,7 @@
               >{{ item.status }}</Button>
             </span>
             <span style="float:right;">
-              任务名: {{ item.create_time }}
+              创建时间: {{ item.create_time }}
             </span>
           </span>
           <!--
@@ -104,11 +105,10 @@ import { FrameWorkJobListUrl } from '../../api/url.js';
 import api from '../../api/index';
 import { randomColor } from '../../util/help.js';
 import { ColorList } from '../../util/common.js';
-import TestService from './TestService.vue';
 import Detail from './Detail.vue';
 
 export default {
-  name: 'taskdetail',
+  name: 'PaddleDetail',
   data: function () {
     return {
       value1: {},
@@ -139,7 +139,6 @@ export default {
     this.getDatas();
   },
   components: {
-    TestService,
     Detail
   },
   computed: {

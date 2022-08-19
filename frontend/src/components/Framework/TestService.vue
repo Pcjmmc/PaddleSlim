@@ -137,7 +137,7 @@ import { randomColor } from '../../util/help.js';
 import { ColorList } from '../../util/common.js';
 
 export default {
-  name: 'testservice',
+  name: 'PaddleService',
   data: function () {
     return {
       show: false,
@@ -425,7 +425,7 @@ export default {
 
 <style scoped>
 .demo-split{
-  height: 650px;
+  height: 861px;
   overflow:auto;
 }
 .demo-split-pane{

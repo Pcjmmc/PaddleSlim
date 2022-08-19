@@ -5,11 +5,14 @@ import datetime
 import json
 import time
 
-from ce_web.settings.common import RPC_SETTINGS
+from ce_web.settings.common import (
+    RPC_SETTINGS, TC_BASE_URL, XLY_BASE_URL, XLY_BASE_URL2
+)
 from ce_web.settings.scenes import back_dict, inner_dict, scenes_dict, selects
 from libs.mongo.db import Mongo
 from models.conclusion import CeConclusion
 from models.icafe import CeIcafe
+from models.tasks import CeTasks
 from rpc.icafe import CreateBug, GetBug
 
 from views.base_view import MABaseView
@@ -47,7 +50,7 @@ class BugManage(MABaseView):
             query = 'repo = Paddle AND bug发现方式 in ({condition}) AND plan_tag ~ {ptag} AND 类型 = Bug'.format(
                 condition=condition, ptag=ptag
             )
-            return await self.get_all_bugs(query)
+            return await self.get_bugs_by_filter(query)
 
     async def get_bugs_by_filter(self, query):
         """
@@ -75,6 +78,9 @@ class BugManage(MABaseView):
                     qa_owner = arr.get("displayValue")
                 elif arr.get("propertyName") == "RD负责人":
                     rd_owner = arr.get("displayValue")
+                elif arr.get("propertyName") == "bug发现方式":
+                    task_type = arr.get("value")
+                    displayValue = arr.get("displayValue")
             tmp = {
                 "title": item.get("title"),
                 "createdTime": item.get("createdTime"),
@@ -82,10 +88,46 @@ class BugManage(MABaseView):
                 "url": baseUrl.format(space=space, sequence=sequence),
                 "level": level,
                 "rd_owner": rd_owner,
-                "qa_owner": qa_owner
+                "qa_owner": qa_owner,
+                "task_type": inner_dict.get(task_type) or displayValue,
+                "log_url": await self.get_result_by_sequence(sequence)
             }
             result.append(tmp)
         return len(result), result
+
+    async def get_result_by_sequence(self, sequence):
+        """
+        获取执行sequence 关联的任务
+        """
+        log_url = []
+        result = await CeIcafe.aio_filter_details(
+            need_all=True, **{"sequence": sequence}
+        )
+        for ret in result:
+            tid = ret.get('tid')
+            secondary_type = ret.get('secondary_type')
+            task_info = await CeTasks.aio_get_object(**{"id": tid})
+            if task_info:
+                platform = task_info.platform
+                workspace = task_info.workspace
+                if platform == "xly":
+                    _url = XLY_BASE_URL.format(
+                            workspace=workspace,
+                            build_id=ret["build_id"],
+                            job_id=ret['job_id']
+                        )  if ret.get('job_id') else XLY_BASE_URL2.format(
+                            workspace=workspace,
+                            build_id=ret["build_id"]
+                        )
+                elif platform == 'teamcity':
+                    _url = TC_BASE_URL.format(
+                        build_id=ret["build_id"],
+                        build_type_id=ret["build_type_id"]
+                    )
+                log_url.append(
+                    {"secondary_type": secondary_type, "url": _url}
+                )
+        return log_url
 
     async def get_all_bugs(self, query):
         """
@@ -143,13 +185,28 @@ class BugManage(MABaseView):
         except:
             file_list = []
         issues_url = fields.get("issues_url")
+        try:
+            sequence = issues_url.split("https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-")[-1]
+            sequence = sequence.split("/")[0]
+        except:
+            return 
         plan_tag = fields.get("tag")
         tid = fields.get('tid')
+        build_id = fields.get('build_id')
         secondary_type = fields.get('secondary_type')
         if issues_url:
             # 走关联卡片
             print("关联已有卡片")
-            await CeIcafe.aio_insert({'tid': tid, 'tag':plan_tag, 'issues_url':issues_url, 'secondary_type': secondary_type})
+            await CeIcafe.aio_insert(
+                {
+                'tid': tid,
+                'build_id': build_id,
+                'tag':plan_tag,
+                'issues_url': issues_url,
+                'sequence': sequence,
+                'secondary_type': secondary_type
+                }
+            )
         else:
             # 新建卡片
             print("新建卡片")
@@ -191,8 +248,17 @@ class BugManage(MABaseView):
             #  将icafe存起来；做关联关系
             issues = result.get("issues", [])
             if issues:
+                sequence = issues[0].get("sequence")
                 issues_url = issues[0].get("url")
-                await CeIcafe.aio_insert({'tid': tid, 'tag':plan_tag, 'issues_url':issues_url, 'secondary_type': secondary_type})
+                await CeIcafe.aio_insert(
+                    {'tid': tid,
+                     'build_id': build_id,
+                     'tag': plan_tag,
+                     'issues_url':issues_url,
+                     'sequence': sequence,
+                     'secondary_type': secondary_type
+                    }
+                )
 
 
 class ConclusionManage(MABaseView):

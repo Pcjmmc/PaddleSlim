@@ -1,50 +1,65 @@
 <template>
-<div>
   <div>
-    <row>
-      <col style="margin-left: 30px;">
-        <pie-base
-          ref="cdpie"
-          :column="sts_column"
-          :xdata="sts_datas"
-          v-if="sts_datas.length > 0"
-        ></pie-base>
-      </col>
-      <col slot="right">
-        <histogram-base
-          ref="child"
-          :xdata="dis_datas"
-          :count="dis_count"
-          v-if="dis_datas.length > 0"
-        ></histogram-base>
-      </col>
-    </row>
-  </div>
-  <div>
-    <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">bug列表</Divider>
-  </div>
-  <div style="margin-bottom: 10px;">
-    <el-tabs
-      type="card"
-      v-model="childname"
-      style="margin-left: 1%;"
-      @tab-click="clickChildTab"
-    >
-      <el-tab-pane
-      :label="item.desc"
-      :key="index"
-      :name="item.key"
-      v-for="(item, index) in tasktypelist"
+    <!--
+    <div>
+      <row>
+        <col style="margin-left: 30px;">
+          <pie-base
+            ref="cdpie"
+            :column="sts_column"
+            :xdata="sts_datas"
+            v-if="sts_datas.length > 0"
+          ></pie-base>
+        </col>
+        <col slot="right">
+          <histogram-base
+            ref="child"
+            :xdata="dis_datas"
+            :count="dis_count"
+            v-if="dis_datas.length > 0"
+          ></histogram-base>
+        </col>
+      </row>
+    </div>
+    -->
+    <div>
+      <!--
+      <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">bug列表</Divider>
+      -->
+      <h3>集测bug列表</h3>
+    </div>
+    <div>
+      <Table
+        :columns="columns"
+        :data="datas"
+        style="width: 100%;"
       >
-        <Table
-          :columns="columns"
-          :data="datas"
-          style="width: 100%;"
+      </Table>
+    </div>
+    <!--
+    <div style="margin-bottom: 10px;margin-top:2%;">
+      <el-tabs
+        type="card"
+        v-model="childname"
+        style="margin-left: 1%;"
+        @tab-click="clickChildTab"
+      >
+        <el-tab-pane
+        :label="item.desc"
+        :key="index"
+        :name="item.key"
+        v-for="(item, index) in tasktypelist"
         >
-        </Table>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+          <Table
+            :columns="columns"
+            :data="datas"
+            style="width: 100%;"
+          >
+          </Table>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    -->
   </div>
 </template>
 <script>
@@ -71,7 +86,7 @@ export default {
   },
   data: function () {
     return {
-      childname: 'compile',
+      // childname: 'compile',
       datas: [],
       dis_datas: [],
       dis_count: [],
@@ -82,7 +97,12 @@ export default {
           title: '标题',
           key: 'title',
           align: 'center',
-          width: '350'
+          fixed: 'left'
+        },
+        {
+          title: 'bug所属方向',
+          key: 'task_type',
+          align: 'center'
         },
         {
           title: '等级',
@@ -102,8 +122,7 @@ export default {
         {
           title: '创建日期',
           key: 'createdTime',
-          align: 'center',
-          width: '150'
+          align: 'center'
         },
         {
           title: '状态',
@@ -120,15 +139,37 @@ export default {
             return h('div', [
                 h('Tag', {
                 props: {
-                    color: this.setColor(status)
+                  color: this.setColor(status)
                 }
                 }, status)
             ]);
           }
         },
         {
-          title: '详情',
+          title: '关联任务',
+          key: 'log_url',
+          render: (h, params) => {
+            let arr = params.row.log_url;
+            var newArr = [];
+              arr.forEach((obj, index) => {
+                newArr.push(h('div', [
+                  h('Button', {
+                    on: {
+                        click: () => {
+                          this.openNew(obj.url)
+                        }
+                      }
+                    }, obj.secondary_type)
+                  ])
+                );
+              });
+            return h('div', newArr);
+          }
+        },
+        {
+          title: '卡片详情',
           key: 'url',
+          fixed: 'right',
           render: (h, params) => {
             return h('div', [h('a', {
               attrs: {
@@ -154,6 +195,9 @@ export default {
     this.getStatusFilters();
   },
   methods: {
+    openNew(url) {
+      window.open(url, '_blank');
+    },
     setColor(status) {
       switch (status) {
         case '已关闭':
@@ -191,16 +235,18 @@ export default {
       let _params = {'tag': this.tag};
       const {code, data, version} = await api.get(BugUrl, _params);
       if (parseInt(code, 10) === 200) {
-        this.dis_datas = data.dis_datas;
-        this.dis_count = data.dis_count;
-        this.sts_datas = data.sts_datas;
-        this.sts_column = data.sts_column;
+        this.datas = data;
+        // this.dis_datas = data.dis_datas;
+        // this.dis_count = data.dis_count;
+        // this.sts_datas = data.sts_datas;
+        // this.sts_column = data.sts_column;
         this.getStatusFilters();
       } else {
-        this.dis_datas = [];
-        this.dis_count = [];
-        this.sts_datas = [];
-        this.sts_column = [];
+        // this.dis_datas = [];
+        // this.dis_count = [];
+        // this.sts_datas = [];
+        // this.sts_column = [];
+        this.datas = [];
         this.$Message.error({
           content: '请求出错: ' + version,
           duration: 30,

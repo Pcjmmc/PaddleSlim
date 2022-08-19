@@ -21,9 +21,11 @@ class CeIcafe(BaseModel, BaseModelMixin):
     __tablename__ = 'ce_release_icafe_association'
     id = Column(Integer, primary_key=True, autoincrement=True)
     tid = Column(Integer, comment="关联任务表中的任务id")
+    build_id = Column(VARCHAR(50), comment="任务序列号")
     tag = Column(VARCHAR(50), comment="tag名或计划名")
     secondary_type = Column(VARCHAR(100), comment="bug对应的二级分类")
     issues_url = Column(VARCHAR(200), comment="icafe地址")
+    sequence = Column(Integer, comment="icafe序列号")
     created = Column(Integer, comment="本记录创建的时间")
     updated = Column(Integer, comment="本记录更新的时间")
 
