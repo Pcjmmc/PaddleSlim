@@ -36,9 +36,9 @@
             <Select clearable v-model="addForm.problem_type">
               <Option
                 :key="index"
-                :value="item"
+                :value="item.key"
                 v-for="(item, index) in problemType"
-              >{{ item }}</Option>
+              >{{ item.desc }}</Option>
             </Select>
           </FormItem>
         </Col>
@@ -98,10 +98,22 @@ export default {
         'PaddleSpeech'
       ],
       problemType: [
-        '运行失败',
-        '精度问题',
-        '性能问题',
-        '显存问题'
+        {
+          key: '1',
+          desc: '运行失败'
+        },
+        {
+          key: '2',
+          desc: '精度问题'
+        },
+        {
+          key: '3',
+          desc: '性能问题'
+        },
+        {
+          key: '4',
+          desc: '显存问题'
+        }
       ],
       addForm: {
         repo_name: '',
