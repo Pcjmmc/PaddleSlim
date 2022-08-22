@@ -1,4 +1,8 @@
-# encoding=utf-8
+"""
+负责二分查找服务
+"""
+# !/usr/bin/env python3
+# # encoding=utf-8
 import asyncio
 import base64
 import datetime

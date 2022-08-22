@@ -161,10 +161,10 @@ export default {
         key_word: '',
         threshold: '',
         email_add: ''
-      }
+      };
     },
     async createJob() {
-      const {code, data, msg} = await api.post(BinarySearchUrl, this.addForm);
+      const {code, msg} = await api.post(BinarySearchUrl, this.addForm);
       if (parseInt(code, 10) === 200) {
         console.log('创建任务成功！');
       } else {
