@@ -30,8 +30,8 @@ class Mongo:
         mongo_cfg = STORAGE["mongo"][database]
         self.client = motor.motor_asyncio.AsyncIOMotorClient(
             mongo_cfg["host"], mongo_cfg["port"],
-            username=mongo_cfg["user"],
-            password=mongo_cfg["password"],
+            # username=mongo_cfg["user"],
+            # password=mongo_cfg["password"],
             #authSource=mongo_cfg["db_name"]
         )
         self.db = self.client[mongo_cfg['db_name']]
@@ -149,7 +149,10 @@ if __name__ == "__main__":
             "sub": {
                 "jobs": {
                     "desc": '任务注册',
-                } 
+                },
+                "binary": {
+                    "desc": '二分查找'
+                }
             }
         },
         "framework": {

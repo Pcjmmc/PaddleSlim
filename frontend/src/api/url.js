@@ -26,3 +26,4 @@ export const FrameWorkConfigUrl = '/framework/getsettings';
 export const FrameWorkJobUrl = '/framework/jobinit';
 export const FrameWorkJobListUrl = '/framework/joblist';
 export const FrameWorkJobDetail = '/framework/jobdetails';
+export const BinarySearchUrl = '/ce/tools/binarysearch';

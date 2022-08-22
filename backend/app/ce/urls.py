@@ -15,6 +15,7 @@ from app.ce.menu.views import MenuManage
 from app.ce.publish.views import PublishTaskManage, PublishVersionManage
 from app.ce.release.exempt_views import ExemptManege
 from app.ce.release.views import ReleaseVersionManage, TaskManage
+from app.ce.tools.views import BinarySearchManage
 
 from urls import url
 
@@ -36,4 +37,5 @@ urlpatterns = [
     url(r'op-benchmark/?$', BenchmarkManage),
     url(r'builds/?$', BuildManage),
     url(r'associated/bugs', AssociatedBugManage),
+    url(r'tools/binarysearch', BinarySearchManage),
 ]
