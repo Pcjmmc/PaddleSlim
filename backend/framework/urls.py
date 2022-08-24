@@ -13,6 +13,7 @@ from framework.runner_xly import RunnerXLY
 from framework.mission_callback import MissionCallback
 from framework.compile_callback import CompileCallback
 from framework.report_generator import ReportGenerator
+from framework.mission_info import MissionInfo
 from urls import url
 
 urlpatterns = [
@@ -28,4 +29,5 @@ urlpatterns = [
     url(r'missioncallback/?$', MissionCallback),
     url(r'compilecallback/?$', CompileCallback),
     url(r'reportgenerator/?$', ReportGenerator),
+    url(r'missionreport/?$', MissionInfo),
 ]
