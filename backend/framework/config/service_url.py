@@ -100,3 +100,10 @@ DOCKER_IMAGE = {
 
 
 COMPILE_SERVICE = "http://10.138.35.178:8082/compile"
+
+
+# ALLURE 相关
+REPORT_SOURCE_NAME = "pts_report.tar"
+WWW_DIR = "/ssd1/pts/report/"
+SOURCE_DIR = "/ssd1/pts/source/"
+REPORT_SERVER = "http://10.21.226.171:8333/"

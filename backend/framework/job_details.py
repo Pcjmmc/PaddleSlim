@@ -68,6 +68,7 @@ class JobDetails(MABaseView):
                     continue
                 res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
                 mission[k] = {"id": v, "status": res["status"], "result": res["result"],
+                              "bos_url": res["bos_url"], "allure_report": res["allure_report"],
                               "description": res["description"], "create_time": str(res["create_time"]),
                               "update_time": str(res["update_time"]),}
                 if res["status"] != "done":
