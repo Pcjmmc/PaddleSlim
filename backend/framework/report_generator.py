@@ -26,7 +26,7 @@ import requests
 import random
 import time
 from framework.config.status import ERROR_600, ERROR_601, ERROR_602
-from framework.config.service_url import REPORT_SOURCE_NAME, WWW_DIR, SOURCE_DIR, REPORT_SERVER
+from framework.config.service_url import REPORT_SOURCE_NAME, WWW_DIR, SOURCE_DIR, REPORT_SERVER, ALLURE
 
 
 class ReportGenerator(MABaseView):
@@ -64,7 +64,7 @@ class ReportGenerator(MABaseView):
             raise HTTP400Error(ERROR_600)
 
         # 生成allure html文件
-        res = os.system("./test/allure/bin/allure generate {} -o {} --clean".format(source_path, report_path))
+        res = os.system("{} generate {} -o {} --clean".format(ALLURE, source_path, report_path))
         if res != 0:
             raise HTTP400Error(ERROR_601)
 
