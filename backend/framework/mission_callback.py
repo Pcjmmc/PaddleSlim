@@ -27,8 +27,15 @@ class MissionCallback(MABaseView):
         id = kwargs.get("id")
         status = kwargs.get("status")
         result = kwargs.get("result")
-        kwargs["update_time"] = datetime.now()
-        res = await Mission.aio_update(kwargs, {"id": id})
+        bos_url = kwargs.get("bos_url")
+        data = {
+            "id": id,
+            "status": status,
+            "result": result,
+            "bos_url": bos_url,
+            "update_time": datetime.now()
+        }
+        res = await Mission.aio_update(data, {"id": id})
         if res == 0:
             raise HTTP400Error
 
