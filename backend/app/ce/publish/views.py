@@ -81,7 +81,7 @@ class PublishTaskManage(MABaseView):
                 integration_data[system] = list()
             item.update(build_info.get(tid, {}))
             status = item.get("status")
-            if status == "finish":
+            if status == "success":
                 item["test_step"] += 1
             integration_data[system].append(item)
         data = [{"system": k, "data": v} for k, v in integration_data.items()]

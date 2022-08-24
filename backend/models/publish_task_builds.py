@@ -48,18 +48,19 @@ class PubishTaskBuilds(BaseModel, BaseModelMixin):
         )
         if record:
             row_id = record.id
-            await cls.aio_delete(
-                params_data={"id": row_id}
+            await cls.aio_update(
+                validated_data=validated_data, params_data={"id": row_id}
             )
-        await cls.aio_insert(validated_data={
-            "tid": tid,
-            "repo": validated_data.get("repo"),
-            "tag": validated_data.get("tag"),
-            "commit_id": validated_data.get("commit_id"),
-            "commit_time": validated_data.get("commit_time"),
-            "build_time": validated_data.get("build_time") or int(time.time()),
-            "build_id": build_id,
-            "job_id": validated_data.get("job_id"),
-            "test_step": validated_data.get("test_step"),
-            "status": validated_data.get("status")
-            })
+        else:
+            await cls.aio_insert(validated_data={
+                "tid": tid,
+                "repo": validated_data.get("repo"),
+                "tag": validated_data.get("tag"),
+                "commit_id": validated_data.get("commit_id"),
+                "commit_time": validated_data.get("commit_time"),
+                "build_time": validated_data.get("build_time") or int(time.time()),
+                "build_id": build_id,
+                "job_id": validated_data.get("job_id"),
+                "test_step": validated_data.get("test_step"),
+                "status": validated_data.get("status")
+                })
