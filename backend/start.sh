@@ -1,5 +1,6 @@
 docker run -d --name=paddle_quality_web_backend  --net=host \
     -v /ssd1/app/paddletest/backend:/home/app/backend\
+    -v /ssd1/pts:/ssd1/pts\
     -v /etc/localtime:/etc/localtime\
     -w /home/app/backend \
     ce_web_backend:backend_v1\
