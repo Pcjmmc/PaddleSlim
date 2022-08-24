@@ -52,8 +52,8 @@ class ReportGenerator(MABaseView):
         wget.download(url,out=REPORT_SOURCE_NAME)
         filename = str(random.randint(0, 33)) + str(int(time.time())) + "_id_" + mission_id
         # for test
-        WWW_DIR = "./test/"
-        SOURCE_DIR = "./test/hahaha/"
+        # WWW_DIR = "./test/"
+        # SOURCE_DIR = "./test/hahaha/"
         # end test
         file_path = WWW_DIR + filename
         print("report file path = {}".format(file_path))
