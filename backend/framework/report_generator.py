@@ -55,23 +55,24 @@ class ReportGenerator(MABaseView):
         # WWW_DIR = "./test/"
         # SOURCE_DIR = "./test/hahaha/"
         # end test
-        file_path = WWW_DIR + filename
-        print("report file path = {}".format(file_path))
-        res = os.system("mkdir -p {} && tar xf ./pts_report.tar -C {} --strip-components 1".format(file_path, file_path))
+        source_path = SOURCE_DIR + filename
+        report_path = WWW_DIR + filename
+        print("report file path = {}".format(source_path))
+        res = os.system("mkdir -p {} && tar xf ./{} -C {} --strip-components 1".format(source_path,
+                                                                                       REPORT_SOURCE_NAME,source_path))
         if res != 0:
-            return HTTP400Error(ERROR_600)
+            raise HTTP400Error(ERROR_600)
 
         # 生成allure html文件
-        res = os.system("./test/allure/bin/allure generate {} -o {} --clean".format(file_path, SOURCE_DIR + filename))
+        res = os.system("./test/allure/bin/allure generate {} -o {} --clean".format(source_path, report_path))
         if res != 0:
-            return HTTP400Error(ERROR_601)
+            raise HTTP400Error(ERROR_601)
 
         # 入库
         report_url = REPORT_SERVER + filename
         res = await Mission.aio_update({"allure_report": report_url}, {"id": mission_id})
         if res == 0:
             raise HTTP400Error(ERROR_602)
-        
         return {"allure_report": report_url}
 
 
