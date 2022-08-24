@@ -61,6 +61,7 @@ class Mission(BaseModel, BaseModelMixin):
     result = Column(VARCHAR(256), comment='结果')
     description = Column(VARCHAR(256), comment='xly请求描述')
     bos_url = Column(VARCHAR(256), comment='bos存储地址')
+    allure_report = Column(VARCHAR(256), comment='allure地址')
     create_time = Column(DateTime, comment="本记录创建的时间")
     update_time = Column(DateTime, comment="本记录更新的时间")
 
