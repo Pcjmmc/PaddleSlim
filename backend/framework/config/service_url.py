@@ -102,9 +102,10 @@ DOCKER_IMAGE = {
 COMPILE_SERVICE = "http://10.138.35.178:8082/compile"
 
 
-# ALLURE 相关
+# ALLURE 相关 , 需提前准备环境
 REPORT_SOURCE_NAME = "pts_report.tar"
 WWW_DIR = "/ssd1/pts/report/"
 SOURCE_DIR = "/ssd1/pts/source/"
-REPORT_SERVER = "http://10.21.226.171:8333/"
 ALLURE = "/ssd1/pts/tools/allure/bin/allure"
+JAVA_BIN = "/ssd1/pts/tools/jdk1.8.0_181/bin"
+REPORT_SERVER = "http://10.21.226.171:8333/"
