@@ -13,6 +13,7 @@ from models.details import CeCases
 from models.publish_task_builds import PubishTaskBuilds
 from models.tasks import CeTasks
 
+from api.publish_forms import AddCaseForm
 from views.base_view import MABaseView
 
 
@@ -21,7 +22,7 @@ class PublishCacheView(MABaseView):
     完成模型kpi的快速存储
     """
     # 定义post类型检查类
-    post_form_class = None
+    post_form_class = AddCaseForm
 
     async def post(self, **kwargs):
         return await super().post(**kwargs)

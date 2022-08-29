@@ -1,19 +1,17 @@
 <template>
   <Card class="center-card-s">
     <Row align="middle">
-      <Col :xs="{ span: 17, offset: 0 }">
-        <div v-for="(item, key, index) in data" style="margin-top: 2%;">
-          <span>
+      <Col :xs="{ span: 17, offset: 0 }" >
+        <div v-for="(item, key, index) in data" style="margin-top: 1%;">
+          <span style="float:left;">
+            <a
+              href="javascript:void(0)"
+              style="font-size:13px;"
+            > {{ item.tname }} </a>
+          </span>
+          <span style="display:inline-block;width:350px;float:right;">
             <span style="float:left;">
-              <div style="margin-bottom: 3%;">
-                <a
-                href="javascript:void(0)"
-                style="font-size:13px;"
-                > {{ item.tname }} </a>
-              </div>
-						</span>
-						<span style="margin-left: 10%;float:left;">
-              <div style="width:300px;margin-bottom: 3%;">
+              <div style="width:300px;">
                 <Steps
                   :current="item.test_step"
                   :status="getStatus(item.status)"
@@ -23,20 +21,18 @@
                   <Step title="验证"></Step>
                 </Steps>
               </div>
-						</span>
-						<span style="float:right;">
-              <div style="margin-bottom: 3%;">
-                <a
-                  href="javascript:void(0)"
-                  style="font-size:13px;"
-                  @click="jumperLog(item.log_url)"
-                > 日志 </a>
-              </div>
+            </span>
+            <span style="float:right;">
+              <a
+                href="javascript:void(0)"
+                style="font-size:13px;"
+                @click="jumperLog(item.log_url)"
+              > 日志 </a>
             </span>
           </span>
         </div>
       </Col>
-      <Col :xs="{ span: 3, offset: 4 }" align="center">
+      <Col :xs="{ span: 4, offset: 3 }" align="center">
         <div class="one-fifth-video-col">
           <div v-if="system.includes('Windows')">
             <Icon type="logo-windows" size="50"> </Icon>
@@ -93,19 +89,23 @@ export default {
       window.open(url, '_blank');
     },
     getStatus(status) {
-      let res = 'wait';
-      switch (status.toLowerCase()) {
-        case 'running':
-          res = 'process';
-          break;
-        case 'success':
-          res = 'finish';
-          break;
-         case 'failed':
-          res = 'error';
-          break;
-        default:
-          res = 'wait';
+      let res = '';
+      if (!status) {
+        return null;
+      } else {
+        switch (status.toLowerCase()) {
+          case 'running':
+            res = 'process';
+            break;
+          case 'success':
+            res = 'finish';
+            break;
+          case 'failed':
+            res = 'error';
+            break;
+          default:
+            res = 'wait';
+        }
       }
       return res;
     }
@@ -119,5 +119,11 @@ export default {
     max-height: 600px;
     overflow:auto;
     border-color:green;
+}
+.one-fifth-video-col {
+  margin-right: 2%;
+  margin-left: 2%;
+  margin-bottom: 2%;
+  margin-top: 2%;
 }
 </style>

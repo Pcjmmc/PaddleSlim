@@ -80,9 +80,12 @@ class PublishTaskManage(MABaseView):
             if system not in integration_data:
                 integration_data[system] = list()
             item.update(build_info.get(tid, {}))
-            status = item.get("status")
+            status = item.get("status", None)
             if status == "success":
                 item["test_step"] += 1
+            elif status is None:
+                item['status'] = 'undone'
+                item['test_step'] = -1
             integration_data[system].append(item)
         data = [{"system": k, "data": v} for k, v in integration_data.items()]
         return len(data), data
