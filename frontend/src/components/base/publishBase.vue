@@ -1,7 +1,7 @@
 <template>
   <Card class="center-card-s">
     <Row align="middle">
-      <Col :xs="{ span: 17, offset: 0 }" >
+      <Col :xs="{ span: 17, offset: 0 }">
         <div v-for="(item, key, index) in data" style="margin-top: 1%;">
           <span style="float:left;">
             <a

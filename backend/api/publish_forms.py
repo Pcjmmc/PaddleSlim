@@ -1,3 +1,7 @@
+# encoding: utf-8
+"""
+自定义api的参数检验逻辑，比较简单
+"""
 class AddCaseForm(object):
     """
     实现参数名和类型的检测
