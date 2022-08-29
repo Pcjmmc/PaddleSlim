@@ -13,7 +13,7 @@ from utils.change_time import stmp_by_date
 from views.base_view import MABaseView
 
 
-class PublishVersionManage(MABaseView):
+class PublishSummaryManage(MABaseView):
 
     async def get(self, **kwargs):
         """
@@ -23,11 +23,62 @@ class PublishVersionManage(MABaseView):
 
     async def get_data(self, **kwargs):
         """
-        open_cache: 是否从缓存获取，默认False
-        根据版本获取汇总信息
+        汇总发布流程的整体进度；返回数据
+        获取所有任务；获取所有任务的最新的一次编译，看目前所处的阶段
+        任务总数
+        编译阶段: 编译阶段成功的个数（编译成功：0 sucess、1:（所有状态））失败（0 failed）
+        验证阶段: 成功的个数：（1: success 1:failed）
         """
-        print("requests data", kwargs)
-        return 0, []
+        # 根据查询需求将版本的相关信息以及steps信息返回到前端
+        version = kwargs.get("version")
+        # 如果是dev则返回空即可
+        if version == "develop":
+            return 0, []
+        summary = []
+        verison_info = await CeReleaseVersion().aio_get_object(**{"name": version})
+        tag = verison_info.tag
+        # 获取查询的全量任务
+        query_params = copy.deepcopy(kwargs)
+        query_params.pop('version')
+        all_task_info = await TasksInfo.get_task_by_filter(**query_params)
+        tids = [item.get("id") for item in all_task_info]
+        total = len(tids)
+        compile_res = {
+            'step': '编译',
+            'total': total,
+            'succeed': 0,
+            'failed': 0,
+        }
+        test_res =  {
+            'step': '验证',
+            'total': total,
+            'succeed': 0,
+            'failed': 0,
+        }
+        # 获取每个任务最新的一次执行
+        build_info = await PublishBuildInfo.get_task_latest_status_by_tids(
+            tids, tag
+        )
+        for key, val in build_info.items():
+            step = val.get('test_step', None)
+            status = val.get('status', None)
+            if status and step is not None:
+                if int(step) == 1:
+                    # 到了验证阶段的肯定是编译通过了
+                    compile_res["succeed"] += 1
+                    if status == 'success':
+                       test_res['succeed'] += 1
+                    elif status == 'failed':
+                        test_res['failed'] += 1
+                elif int(step) == 0:
+                    # 如果在编译阶段的则根据状态来判断
+                    if status == 'success':
+                       compile_res['succeed'] += 1
+                    elif status == 'failed':
+                        compile_res['failed'] += 1
+        summary.append(compile_res)
+        summary.append(test_res)
+        return len(summary), summary
 
 
 

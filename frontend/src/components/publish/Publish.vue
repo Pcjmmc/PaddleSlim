@@ -2,7 +2,7 @@
   <div>
     <Tabs :value="tabName" v-on:on-click="clickTab">
       <TabPane
-        label="进度"
+        label="编译"
         name="10001"
         icon="ios-list-box"
       >
@@ -48,7 +48,7 @@
 <script>
 import Cookies from 'js-cookie';
 import api from '../../api/index';
-import { ScenesUrl, PublishJobUrl } from '../../api/url.js';
+import { ScenesUrl, PublishJobUrl, PublishProcessUrl } from '../../api/url.js';
 import CaseBase from '../CommonUtil/CaseBase.vue';
 import publishTest from './publishTest.vue';
 
@@ -132,26 +132,24 @@ export default {
       }
     },
     async getSummary() {
-      this.summary = [
-        {
-          step: '编译',
-          total: 100,
-          succeed: 50,
-          failed: 2
-        },
-        {
-          step: '验证',
-          total: 100,
-          succeed: 4,
-          failed: 1
-        },
-        {
-          step: '发布',
-          total: 100,
-          succeed: 3,
-          failed: 0
-        }
-      ];
+      let params = {
+        version: Cookies.get('version'),
+        step: 'publish',
+        task_type: 'compile',
+        tag: this.tag,
+        appid: Cookies.get('appid')
+      };
+      const {code, data, msg} = await api.get(PublishProcessUrl, params);
+      if (parseInt(code, 10) === 200) {
+        this.summary = data;
+      } else {
+        this.summary = [];
+        this.$Message.error({
+          content: '请求出错: ' + msg,
+          duration: 30,
+          closable: true
+        });
+      }
     },
     async getData() {
       // 根据需求实时获取; 后台根据version获取到计划tag

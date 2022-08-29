@@ -9,9 +9,9 @@
               style="font-size:13px;"
             > {{ item.tname }} </a>
           </span>
-          <span style="float:right;">
-            <span style="float:left;">
-              <div style="width:300px;">
+          <span style="display:inline-block;width:40%;float:right;">
+            <span style="float:left;width:80%;">
+              <div>
                 <Steps
                   :current="item.test_step"
                   :status="getStatus(item.status)"
@@ -25,7 +25,7 @@
             <span style="float:right;">
               <a
                 href="javascript:void(0)"
-                style="font-size:13px;margin-left:15px;"
+                style="font-size:13px;"
                 @click="jumperLog(item.log_url)"
               > 日志 </a>
             </span>
