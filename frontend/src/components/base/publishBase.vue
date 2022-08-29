@@ -1,15 +1,15 @@
 <template>
   <Card class="center-card-s">
     <Row align="middle">
-      <Col :xs="{ span: 17, offset: 0 }">
+      <Col :xs="{ span: 18, offset: 0 }">
         <div v-for="(item, key, index) in data" style="margin-top: 1%;">
-          <span style="float:left;">
+          <span style="display:inline-block;width:60%;float:left;">
             <a
               href="javascript:void(0)"
               style="font-size:13px;"
             > {{ item.tname }} </a>
           </span>
-          <span style="display:inline-block;width:350px;float:right;">
+          <span style="float:right;">
             <span style="float:left;">
               <div style="width:300px;">
                 <Steps
@@ -25,14 +25,14 @@
             <span style="float:right;">
               <a
                 href="javascript:void(0)"
-                style="font-size:13px;"
+                style="font-size:13px;margin-left:15px;"
                 @click="jumperLog(item.log_url)"
               > 日志 </a>
             </span>
           </span>
         </div>
       </Col>
-      <Col :xs="{ span: 4, offset: 3 }" align="center">
+      <Col :xs="{ span: 3, offset: 3 }" align="center">
         <div class="one-fifth-video-col">
           <div v-if="system.includes('Windows')">
             <Icon type="logo-windows" size="50"> </Icon>
