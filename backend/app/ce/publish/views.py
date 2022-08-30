@@ -157,7 +157,9 @@ class PublishTaskManage(MABaseView):
                     )
             item["log_url"] = log_url
             if status == "success":
+                # 目前的阶段已经成功，则展示挪向下一个阶段
                 item["test_step"] += 1
+                item['status'] = 'undone'
             elif status is None:
                 item['status'] = 'undone'
                 item['test_step'] = -1

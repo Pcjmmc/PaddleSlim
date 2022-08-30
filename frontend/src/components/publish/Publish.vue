@@ -4,7 +4,7 @@
       <TabPane
         label="编译"
         name="10001"
-        icon="ios-list-box"
+        icon="md-sync"
       >
         <div style="margin-bottom: 2%;">
           <Table
@@ -38,7 +38,7 @@
       <TabPane
         label="上传"
         name="10002"
-        icon="md-analytics"
+        icon="md-cloud-done"
       >
       </TabPane>
    </Tabs>
@@ -91,6 +91,7 @@ export default {
   watch: {
     version: function () {
       this.getData();
+      this.getSummary();
     }
   },
   mounted: function () {
