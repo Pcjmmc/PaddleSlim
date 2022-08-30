@@ -22,11 +22,17 @@
                 </Steps>
               </div>
             </span>
-            <span style="float:right;">
+            <span style="float:right;" v-if="item.log_url">
               <a
                 href="javascript:void(0)"
                 style="font-size:13px;"
                 @click="jumperLog(item.log_url)"
+              > 日志 </a>
+            </span>
+            <span style="float:right;" v-else>
+              <a
+                href="javascript:void(0)"
+                style="font-size:13px;"
               > 日志 </a>
             </span>
           </span>

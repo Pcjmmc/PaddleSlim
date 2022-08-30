@@ -6,6 +6,10 @@ import datetime
 import json
 import time
 
+from ce_web.settings.common import (
+    STORAGE, TC_BASE_URL, XLY_BASE_URL,
+    XLY_BASE_URL2
+)
 from models.release_version import CeReleaseVersion
 from services.tasks import PublishBuildInfo, TasksInfo
 from utils.change_time import stmp_by_date
@@ -128,10 +132,30 @@ class PublishTaskManage(MABaseView):
             # item 进展的阶段内容拼接
             system = item["system"]
             tid = item.get("tid")
+            platform = item.get("platform")
+            workspace = item.get("workspace")
             if system not in integration_data:
                 integration_data[system] = list()
-            item.update(build_info.get(tid, {}))
+            build_data = build_info.get(tid, {})
+            item.update(build_data)
             status = item.get("status", None)
+            log_url = ""
+            if build_data:
+                if platform == "xly":
+                    log_url = XLY_BASE_URL.format(
+                        workspace=workspace,
+                        build_id=item["build_id"],
+                        job_id=item['job_id']
+                    )  if item.get('job_id') else XLY_BASE_URL2.format(
+                        workspace=workspace,
+                        build_id=item["build_id"]
+                    )
+                elif platform == 'teamcity':
+                    log_url = TC_BASE_URL.format(
+                        build_id=item["build_id"],
+                        build_type_id=item["build_type_id"]
+                    )
+            item["log_url"] = log_url
             if status == "success":
                 item["test_step"] += 1
             elif status is None:
