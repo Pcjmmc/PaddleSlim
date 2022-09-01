@@ -162,7 +162,7 @@ class PublishTaskManage(MABaseView):
                     {
                         "desc": itm[0],
                         "test_url": get_log_url(platform, workspace, itm[2]), 
-                        "status": itm[3]
+                        "status": itm[4]
                     } for itm in check_info
                 ]
             except Exception as e:
