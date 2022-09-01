@@ -37,7 +37,7 @@ class JobInitView(MABaseView):
         """
         data = dict()
         data["jid"] = jid
-        data["status"] = "running"
+        data["status"] = "init"
         data["env"] = str(json.dumps({"type": pd_type,
                        "value": value,
                        "python": python,
@@ -48,10 +48,10 @@ class JobInitView(MABaseView):
         data["update_time"] = datetime.now()
         res = await Compile.aio_insert(data)
         if res[0] == 0:
-            raise HTTP400Error
+            raise HTTP400Error("compile库初始化数据失败")
         res = await Job.aio_update({"compile": res[1]}, {"id": jid})
         if res == 0:
-            raise HTTP400Error
+            raise HTTP400Error("Job库更新状态失败")
         if pd_type == "wheel":
             query = dict()
             query["jid"] = jid
@@ -61,7 +61,7 @@ class JobInitView(MABaseView):
             data["update_time"] = datetime.now()
             res = await Compile.aio_update(data, query)
             if res == 0:
-                raise HTTP400Error
+                raise HTTP400Error("compile库更新失败")
             # 请求下游服务
             res = await Job.aio_get_object(order_by=None, group_by=None, id=jid)
             await Dispatcher.dispatch_missions(res)
@@ -96,10 +96,10 @@ class JobInitView(MABaseView):
                 data["update_time"] = datetime.now()
                 res = await Compile.aio_update(data, query)
                 if res == 0:
-                    raise HTTP400Error
+                    raise HTTP400Error("Compile 库更新结果失败")
                 res = await Job.aio_update({"status": "error"}, {"id": jid})
                 if res == 0:
-                    raise HTTP400Error
+                    raise HTTP400Error("Job 库更新结果失败")
             else:
                 query = dict()
                 query["jid"] = jid
@@ -108,7 +108,7 @@ class JobInitView(MABaseView):
                 data["update_time"] = datetime.now()
                 res = await Compile.aio_update(data, query)
                 if res == 0:
-                    raise HTTP400Error
+                    raise HTTP400Error("Compile 库更新编译状态失败")
 
 
 

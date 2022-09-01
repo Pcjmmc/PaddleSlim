@@ -33,11 +33,8 @@ PLACE = {
     # jit
     "jit_function": CLOUD,
     # api_benchmark
-
     # models
     "paddleclas": CLOUD,
-
-
     # model benchmark
     "models_benchmark": CLOUD,
 }
@@ -46,21 +43,29 @@ class Cloud(object):
     """
     for xly , value is "pipeline conf id", parameters.
     """
+    ##########  LINUX  ##########
     OP_FUNCTION = "23490", {"whoami": "DDDivano"}
     EXTERNAL_API_FUNCTION = "23686"
     DISTRIBUTION_API_FUNCTION = "23542"
     JIT_FUNCTION = "23640"
     API_BENCHMARK = ""
     PADDLE_CLAS = "23369"
-
     MODEL_BENCHMARK = "23601"
+    ##########  WINDOWS  ##########
+    WIN_OP_FUNCTION = ""
+    ##########  DARWIN  ##########
+    MAC_OP_FUNCTION = ""
 
 class Local(object):
     """
     Framework
     """
+    ##########  LINUX  ##########
     API_FUNCTION = ""
     API_BENCHMARK = ""
+    ##########  WINDOWS  ##########
+
+    ##########  DARWIN  ##########
 
 
 class CloudMission(object):
@@ -85,7 +90,6 @@ class LocalMission(object):
     """
     ROUTER = {
         "api_function": ["op_function", "external_api_function", "io_function"]
-
     }
 
 
