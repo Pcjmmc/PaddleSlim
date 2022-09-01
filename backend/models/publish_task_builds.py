@@ -31,6 +31,7 @@ class PubishTaskBuilds(BaseModel, BaseModelMixin):
     build_id = Column(VARCHAR(50), comment="任务序列号") # xly:AGILE_PIPELINE_BUILD_ID; tc:%teamcity.build.id%
     job_id = Column(VARCHAR(50), comment="step id") # xly:AGILE_JOB_BUILD_ID; tc:不需要改参数，但是为了占位，可以传递%teamcity.build.step.name%
     test_step = Column(Integer, comment="任务执行的阶段")
+    check_info = Column(Text, comment="验证任务的补充信息")
     status = Column(VARCHAR(20), comment="任务的直接结果") # 任务的状态： Doing、Passed、Failed
     created = Column(Integer, comment="任务本次构建的开始时间，单位秒") # 开始构建的时间
     updated = Column(Integer, comment="本条记录的修改时间，单位秒") # 本记录的更新时间
@@ -62,5 +63,6 @@ class PubishTaskBuilds(BaseModel, BaseModelMixin):
                 "build_id": build_id,
                 "job_id": validated_data.get("job_id"),
                 "test_step": validated_data.get("test_step"),
-                "status": validated_data.get("status")
+                "status": validated_data.get("status"),
+                "check_info": validated_data.get("check_info")
                 })

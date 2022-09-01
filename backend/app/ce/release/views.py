@@ -5,15 +5,13 @@ import datetime
 import json
 import time
 
-from ce_web.settings.common import (
-    STORAGE, TC_BASE_URL, XLY_BASE_URL, XLY_BASE_URL2
-)
 from ce_web.settings.scenes import scenes_dict, system_list
 from libs.mongo.db import Mongo
 from models.details import CeCases
 from models.release_version import CeReleaseVersion
 from models.steps import CeSteps
 from rpc.github import GetBranches, GetCommit, GetTags
+from services.log_url import get_log_url
 from services.menu import update_menu
 from services.summary import Summary
 from services.tasks import ExemptInfo, TaskBuildInfo, TasksInfo
@@ -373,22 +371,13 @@ class TaskManage(MABaseView):
                 item["branch"] = build_info[tid].get("branch")
                 item["repo"] = build_info[tid].get("repo")
                 item["artifact_url"] = build_info[tid].get("artifact_url")
-                if platform == "xly":
-                    log_url = XLY_BASE_URL.format(
-                            workspace=workspace,
-                            build_id=item["build_id"],
-                            job_id=item['job_id']
-                        )  if item.get('job_id') else XLY_BASE_URL2.format(
-                            workspace=workspace,
-                            build_id=item["build_id"]
-                        )
-                elif platform == 'teamcity':
-                    log_url = TC_BASE_URL.format(
-                        build_id=item["build_id"],
-                        build_type_id=item["build_type_id"]
-                    )
-                else:
-                    log_url = ""
+                log_url = get_log_url(
+                    platform,
+                    workspace,
+                    item.get("build_id"),
+                    job_id=item.get("job_id"),
+                    build_type_id=item.get("build_type_id")
+                )
                 item["log_url"] = log_url
             else:
                 item["status"] = "undone"

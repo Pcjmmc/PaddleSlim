@@ -6,11 +6,8 @@ import datetime
 import json
 import time
 
-from ce_web.settings.common import (
-    STORAGE, TC_BASE_URL, XLY_BASE_URL,
-    XLY_BASE_URL2
-)
 from models.release_version import CeReleaseVersion
+from services.log_url import get_log_url
 from services.tasks import PublishBuildInfo, TasksInfo
 from utils.change_time import stmp_by_date
 
@@ -141,20 +138,13 @@ class PublishTaskManage(MABaseView):
             status = item.get("status", None)
             log_url = ""
             if build_data:
-                if platform == "xly":
-                    log_url = XLY_BASE_URL.format(
-                        workspace=workspace,
-                        build_id=item["build_id"],
-                        job_id=item['job_id']
-                    )  if item.get('job_id') else XLY_BASE_URL2.format(
-                        workspace=workspace,
-                        build_id=item["build_id"]
-                    )
-                elif platform == 'teamcity':
-                    log_url = TC_BASE_URL.format(
-                        build_id=item["build_id"],
-                        build_type_id=item["build_type_id"]
-                    )
+                log_url = get_log_url(
+                    platform,
+                    workspace,
+                    item.get("build_id"),
+                    job_id=item.get("job_id"),
+                    build_type_id=item.get("build_type_id")
+                )
             item["log_url"] = log_url
             if status == "success":
                 # 目前的阶段已经成功，则展示挪向下一个阶段
@@ -163,6 +153,21 @@ class PublishTaskManage(MABaseView):
             elif status is None:
                 item['status'] = 'undone'
                 item['test_step'] = -1
+            # 初始化前端控制
+            item["showTestModal"] = False
+            # 处理test_log
+            try:
+                check_info = json.loads(item.get("check_info"))
+                item["check_info"] = [
+                    {
+                        "desc": itm[0],
+                        "test_url": get_log_url(platform, workspace, itm[2]), 
+                        "status": itm[3]
+                    } for itm in check_info
+                ]
+            except Exception as e:
+                print("load check info got error", e)
+                item["check_info"] = []
             integration_data[system].append(item)
         data = [{"system": k, "data": v} for k, v in integration_data.items()]
         return len(data), data

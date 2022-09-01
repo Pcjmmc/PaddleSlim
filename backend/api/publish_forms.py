@@ -17,6 +17,7 @@ class AddCaseForm(object):
         "test_step": [str, int],
         "job_id": [int, str],
         "build_time": [int, str],
+        "check_info": [str]
     }
     need_data_params = ["build_type_id", "build_id", "repo", "tag", "commit_id", "test_step", "status"] 
 
