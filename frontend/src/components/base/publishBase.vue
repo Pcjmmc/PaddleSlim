@@ -49,7 +49,7 @@
                 <span style="display:inline-block;width:40%;float:right;">
                   <div>
                     <span style="float:left;margin-left:8%;" v-if="item.log_url">
-                      <Icon type="md-return-right" />
+                      <Icon type="md-return-right"/>
                       <a
                         href="javascript:void(0)"
                         style="font-size:13px;"
@@ -59,8 +59,16 @@
                     <span style="float:right;" v-if="item.check_info && item.check_info.length > 0">
                       <div v-for="(itm, idx) in item.check_info">
                         <Icon type="md-return-right"/>
-                        <Icon type="ios-close" style="color:red;" v-if="itm.status === 'failed'"/>
-                        <Icon type="ios-checkmark" style="color:green;" v-else-if="itm.status === 'success'"/>
+                        <Icon
+                          type="ios-close"
+                          style="color:red;"
+                          v-if="itm.status === 'failed'"
+                        />
+                        <Icon
+                          type="ios-checkmark"
+                          style="color:green;"
+                          v-else-if="itm.status === 'success'"
+                        />
                         <Icon type="ios-alert-outline" v-else/>
                         <a
                           href="javascript:void(0)"
