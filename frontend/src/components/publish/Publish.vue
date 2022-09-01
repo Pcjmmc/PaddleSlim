@@ -36,7 +36,7 @@
         </div>
       </TabPane>
       <TabPane
-        label="上传"
+        label="发布"
         name="10002"
         icon="md-cloud-done"
       >
@@ -56,7 +56,7 @@ export default {
   data: function () {
     return {
       tabName: '10001',
-      childname: 'pypi',
+      childname: 'pypi/bos',
       summary: [],
       integrationdata: [],
       columns: [

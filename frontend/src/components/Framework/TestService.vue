@@ -361,6 +361,7 @@ export default {
         python: this.search.python,
         cuda: this.search.cuda,
         os: this.search.os,
+        branch: this.search.branch,
         mission: JSON.stringify(this.content)
       };
       const {code, data, msg} = await api.post(FrameWorkJobUrl, params);

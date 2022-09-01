@@ -25,8 +25,7 @@ selects = list(back_dict.values())
 
 # 反向映射icafe
 publish_origin_list = [
-    "pypi",
-    "bos",
+    "pypi/bos",
     "anaconda-cloud",
     "docker-hub"
 ]
