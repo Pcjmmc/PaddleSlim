@@ -9,6 +9,7 @@
                 <a
                   href="javascript:void(0)"
                   style="font-size:13px;"
+                  @click="showModal(item)"
                 > {{ item.tname }} </a>
               </span>
               <span style="display:inline-block;width:40%;float:right;">

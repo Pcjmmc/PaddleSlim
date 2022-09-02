@@ -6,21 +6,21 @@
         name="10001"
         icon="md-sync"
       >
-        <div style="margin-bottom: 2%;">
+        <div style="margin-bottom:2%;">
           <Table
-              size="small"
-              align="center"
-              border
-              :columns="columns"
-              :data="summary"
-              style="margin-left: 2%;margin-right: 2%;"
+            size="large"
+            align="center"
+            border
+            :columns="columns"
+            :data="summary"
+            style="margin-left:2%;margin-right:2%;"
           >
           </Table>
         </div>
         <div>
           <el-tabs
             type="card"
-            style="margin-left: 1%;"
+            style="margin-left:1%;"
             v-model="childname"
             @tab-click="clickChildTab"
           >
