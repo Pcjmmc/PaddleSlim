@@ -12,10 +12,11 @@ from app.ce.detail.views import DetailManage
 from app.ce.develop.views import DevelopVersionManage
 from app.ce.job.views import JobManage
 from app.ce.menu.views import MenuManage
-from app.ce.publish.views import PublishTaskManage, PublishSummaryManage
+from app.ce.publish.views import PublishSummaryManage, PublishTaskManage
 from app.ce.release.exempt_views import ExemptManege
 from app.ce.release.views import ReleaseVersionManage, TaskManage
 from app.ce.tools.views import BinarySearchManage
+from app.ce.version.views import CreateRVersion
 
 from urls import url
 
@@ -38,4 +39,5 @@ urlpatterns = [
     url(r'builds/?$', BuildManage),
     url(r'associated/bugs', AssociatedBugManage),
     url(r'tools/binarysearch', BinarySearchManage),
+    url(r'version/?$', CreateRVersion),
 ]

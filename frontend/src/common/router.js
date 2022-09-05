@@ -15,6 +15,7 @@ import Publish from '../components/publish/Publish.vue';
 import TestService from '../components/Framework/testService.vue';
 import TaskDetail from '../components/Framework/TaskDetail.vue';
 import BinarySearch from '../components/BinarySearch.vue';
+import ReleaseVersion from '../components/Config/ReleaseVersion.vue';
 
 // Vue.use(VueRouter);
 export const ROUTES = [
@@ -51,6 +52,11 @@ export const ROUTES = [
           path: '/paddle/config/jobs',
           name: 'JobsManage',
           component: JobsManage
+        },
+        { // API 配置
+          path: '/paddle/config/version',
+          name: 'VersionManage',
+          component: ReleaseVersion
         },
         { // API 配置
           path: '/paddle/config/binary',
