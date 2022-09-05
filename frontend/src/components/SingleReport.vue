@@ -177,13 +177,18 @@ export default {
         page_index: this.params.page,
         limit: this.params.size
       };
-      const { code, data, message, all_count } = await api.get(BuildUrl, _params);
-      if (message === 'success' && parseInt(code, 10) === 200) {
-        this.builds = data;
-        // console.log("this builds", this.builds)
-        this.total = all_count;
+      // 有tid再发请求
+      if (_params.tid) {
+        const { code, data, message, all_count } = await api.get(BuildUrl, _params);
+        if (message === 'success' && parseInt(code, 10) === 200) {
+          this.builds = data;
+          this.total = all_count;
+        } else {
+          this.$Message.error({content: message || this.$trans('获取编译列表失败'), duration: 5, closable: true});
+        }
       } else {
-        this.$Message.error({content: message || this.$trans('获取编译列表失败'), duration: 5, closable: true});
+        this.builds = [];
+        this.total = 0;
       }
     },
     async getTaskData() {
@@ -254,6 +259,10 @@ export default {
       } else if (item.task_type === 'model' || item.task_type === 'benchmark') {
         detail_name = 'model';
       } else if (item.task_type === 'frame') {
+        // 框架的secondary_type是数组
+        if (Array.isArray(item.secondary_type)) {
+          _params.secondary_type = item.secondary_type.join(',');
+        }
         detail_name = 'FuncDetail';
       } else if (item.task_type === 'infer') {
         detail_name = 'FuncDetail';
