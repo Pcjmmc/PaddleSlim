@@ -30,7 +30,6 @@ class Compare(MABaseView):
         data1 = await Case.aio_filter_details(need_all=True, jid=version1)
         data2 = await Case.aio_filter_details(need_all=True, jid=version2)
         res = []
-
         # todo: 数据预处理
         res1 = {}
         res2 = {}
@@ -38,7 +37,6 @@ class Compare(MABaseView):
             res1[i["case_name"]] = i
         for i in data2:
             res2[i["case_name"]] = i
-
         for i in data1:
             case_name = i.get("case_name")
             temp = {
@@ -73,12 +71,14 @@ class Compare(MABaseView):
                     forward = (forward_v1 / forward_v2) * -1
                 else:
                     forward = forward_v2 / forward_v1
-
-                if backward_v1 > backward_v2:
-                    backward = (backward_v1 / backward_v2) * -1
+                # 判断除数不能为0
+                if backward_v1 == 0 or backward_v2 == 0:
+                    backward = 0
                 else:
-                    backward = backward_v2 / backward_v1
-
+                    if backward_v1 > backward_v2:
+                        backward = (backward_v1 / backward_v2) * -1
+                    else:
+                        backward = backward_v2 / backward_v1
                 if total_v1 > total_v2:
                     total = (total_v1 / total_v2) * -1
                 else:
