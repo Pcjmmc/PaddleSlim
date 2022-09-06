@@ -7,12 +7,12 @@
     >
       <div v-if="jobsList.length > 0">
         <Button disabled>
-          创建发版计划
+          开启集测
         </Button>
       </div>
       <div v-else>
         <Button type="primary" @click="activateCreateModal()">
-          创建发版计划
+          开启集测
         </Button>
       </div>
     </Row>
@@ -34,13 +34,13 @@
         :rules="addRules"
         :label-width="120"
       >
-        <FormItem label="分支: " prop="branch">
+        <FormItem label="分支:" prop="branch">
           <Input v-model="addForm.branch" placeholder="输入分支"/>
         </FormItem>
-        <FormItem label="计划版本: " prop="tag">
+        <FormItem label="计划版本:" prop="tag">
          <Input v-model="addForm.tag" placeholder="输入计划的版本"/>
         </FormItem>
-        <FormItem label="集测开始commit: " prop="begin_commit">
+        <FormItem label="开始commit:" prop="begin_commit">
           <Input v-model="addForm.begin_commit" placeholder="输入开始的commit"/>
         </FormItem>
       </Form>
@@ -51,23 +51,37 @@
     </Modal>
     <Modal
       v-model="updateModelFlag"
-      title="更新tag"
+      title="集测结束,更新tag"
       width="700px"
       v-on:on-cancel="handleReset"
     >
       <Form :model="selectedRow" :label-width="120">
-        <FormItem label="分支: " prop="branch">
+        <FormItem label="分支:" prop="branch">
           <Input
             disabled
             v-model="selectedRow.branch"
             placeholder="输入分支"
           />
         </FormItem>
-        <FormItem label="正式tag: " prop="tag">
-         <Input v-model="selectedRow.tag" placeholder="输入计划的版本"/>
+        <FormItem
+          label="正式tag:"
+          prop="tag"
+          :rules="{ required: true, message: '请输入tag名', trigger: 'blur' }"
+        >
+         <Input
+            v-model="selectedRow.tag"
+            placeholder="输入计划的版本"
+        />
         </FormItem>
-        <FormItem label="集测结束commit: " prop="end_commit">
-          <Input v-model="selectedRow.end_commit" placeholder="输入开始的commit"/>
+        <FormItem
+          label="结束commit:"
+          prop="end_commit"
+          :rules="{ required: true, message: '请输入结束commit', trigger: 'blur' }"
+        >
+          <Input
+            v-model="selectedRow.end_commit"
+            placeholder="输入开始的commit"
+          />
         </FormItem>
       </Form>
       <div slot="footer">
@@ -166,7 +180,7 @@ export default {
                     }
                   }
                 },
-                '修改'
+                '打tag'
               )
             );
             return h(
@@ -307,7 +321,6 @@ export default {
 </script>
 <style scoped>
 .all-line-row {
-  margin-bottom: 1%;
   margin-top: 1%;
   margin-right: 1%;
   margin-left: 1%;
