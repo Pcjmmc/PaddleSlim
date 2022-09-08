@@ -12,6 +12,7 @@ from app.ce.detail.views import DetailManage
 from app.ce.develop.views import DevelopVersionManage
 from app.ce.job.views import JobManage
 from app.ce.menu.views import MenuManage
+from app.ce.publish.result_views import PublishResultManage
 from app.ce.publish.views import PublishSummaryManage, PublishTaskManage
 from app.ce.release.views import ReleaseVersionManage, TaskManage
 from app.ce.tools.views import BinarySearchManage
@@ -22,6 +23,7 @@ from urls import url
 urlpatterns = [
     url(r'menu', MenuManage),
     url(r'release/?$', ReleaseVersionManage),
+    url(r'publish/result/?$', PublishResultManage),
     url(r'publish/?$', PublishSummaryManage),
     url(r'publish_task/?$', PublishTaskManage),
     url(r'task/?$', TaskManage),

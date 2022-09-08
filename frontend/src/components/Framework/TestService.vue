@@ -364,14 +364,14 @@ export default {
         branch: this.search.branch,
         mission: JSON.stringify(this.content)
       };
-      const {code, data, msg} = await api.post(FrameWorkJobUrl, params);
+      const {code, data, message} = await api.post(FrameWorkJobUrl, params);
       if (parseInt(code, 10) === 200) {
         this.jobid = data.jid;
         this.show = true;
       } else {
         this.show = false;
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

@@ -40,6 +40,7 @@
         name="10002"
         icon="md-cloud-done"
       >
+      <upload-result> </upload-result>
       </TabPane>
    </Tabs>
   </div>
@@ -51,6 +52,7 @@ import api from '../../api/index';
 import { ScenesUrl, PublishJobUrl, PublishProcessUrl } from '../../api/url.js';
 import CaseBase from '../CommonUtil/CaseBase.vue';
 import publishTest from './publishTest.vue';
+import uploadResult from './uploadResult.vue';
 
 export default {
   data: function () {
@@ -100,12 +102,18 @@ export default {
     this.getData();
   },
   components: {
-    publishTest
+    publishTest,
+    uploadResult
   },
   computed: {
     version: {
       get() {
-        return this.$store.state.version;
+        if (this.$route.query.version) {
+          // 将url中的版本优先
+          return this.$route.query.version;
+        } else {
+          return this.$store.state.version;
+        }
       }
     }
   },
@@ -134,19 +142,19 @@ export default {
     },
     async getSummary() {
       let params = {
-        version: Cookies.get('version'),
+        version: this.version,
         step: 'publish',
         task_type: 'compile',
         tag: this.tag,
         appid: Cookies.get('appid')
       };
-      const {code, data, msg} = await api.get(PublishProcessUrl, params);
+      const {code, data, message} = await api.get(PublishProcessUrl, params);
       if (parseInt(code, 10) === 200) {
         this.summary = data;
       } else {
         this.summary = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
@@ -155,7 +163,7 @@ export default {
     async getData() {
       // 根据需求实时获取; 后台根据version获取到计划tag
       let params = {
-        version: Cookies.get('version'),
+        version: this.version,
         step: 'publish',
         task_type: 'compile',
         release_source: this.childname,
@@ -163,13 +171,13 @@ export default {
         appid: Cookies.get('appid')
       };
       // console.log('requests data', params);
-      const {code, data, msg} = await api.get(PublishJobUrl, params);
+      const {code, data, message} = await api.get(PublishJobUrl, params);
       if (parseInt(code, 10) === 200) {
         this.integrationdata = data;
       } else {
         this.integrationdata = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

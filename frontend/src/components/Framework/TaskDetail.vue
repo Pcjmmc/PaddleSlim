@@ -158,14 +158,14 @@ export default {
       if (search_id) {
         params.id = search_id;
       }
-      const {code, data, msg, all_count} = await api.get(FrameWorkJobListUrl, params);
+      const {code, data, message, all_count} = await api.get(FrameWorkJobListUrl, params);
       if (parseInt(code, 10) === 200) {
         this.datas = data;
         this.total = all_count;
       } else {
         this.datas = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
