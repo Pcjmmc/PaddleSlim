@@ -7,7 +7,6 @@ import time
 
 from ce_web.settings.common import STORAGE
 from libs.mongo.db import Mongo
-from models.steps import CeSteps
 from models.details import CeCases
 
 from views.base_view import MABaseView

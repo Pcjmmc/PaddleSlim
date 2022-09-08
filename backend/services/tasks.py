@@ -11,7 +11,6 @@ import time
 from api.cache import BuildCacheBase
 from ce_web.settings.common import STORAGE
 from libs.mongo.db import Mongo
-from models.exempt import CeExempt
 from models.publish_task_builds import PubishTaskBuilds
 from models.task_builds import CeTaskBuilds
 from models.tasks import CeTasks
@@ -249,65 +248,6 @@ class CaseDetails(object):
         #  比如模型的需要按照模型和阶段将数据汇总起来；框架的需要根据api的名字汇总起来 TODO
         return result if result else {}
 
-
-class ExemptInfo(object):
-    """
-    负责豁免相关的操作
-    """
-    @classmethod
-    async def get_task_exempt_status_by_tid(cls, tid, version_id):
-        """
-        获取任务豁免的状态；所以放在任务栏，还需要一个豁免的表结构
-        """
-        result = await CeExempt().aio_filter_details(
-            **{
-                "tid": tid,
-                "version_id": version_id
-            }
-        )
-        # 返回json 字典形式的数据
-        return {tid: result[0]} if result else {} 
-
-    @classmethod
-    async def get_task_exempt_status_by_tids(cls, tids, version_id, batch=5):
-        # 获取统一版本下多个tid的豁免情况
-        tids = tids if type(tids) == list else [tids]
-        final_result = {tid: {} for tid in tids}
-        query_params = {
-            "version_id": version_id
-        }
-        job_list = []
-        while tids:
-            query_tids = tids[:batch]
-            tids = tids[batch:]
-            query_params["tid__in"] = query_tids
-            job_list.append(
-                CeExempt().aio_filter_details(
-                    need_all=True,
-                    **query_params
-                )
-            )
-        result = await asyncio.gather(*job_list)
-        for res in result:
-            for r in res:
-                tid = r["tid"]
-                # 这辆需要res转换成json
-                final_result[tid].update(r)
-        return final_result
-
-    @classmethod
-    async def set_task_exempt_status(cls, tid, version_id, status):
-        """
-        获取任务豁免的状态；所以放在任务栏，还需要一个豁免的表结构
-        """
-        pass
-
-    @classmethod
-    async def update_task_exempt_status(cls, tid, version_id, status):
-        """
-        获取任务豁免的状态；所以放在任务栏，还需要一个豁免的表结构
-        """
-        pass
 
 class PublishBuildInfo(object):
     @classmethod

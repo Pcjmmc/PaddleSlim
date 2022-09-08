@@ -10,7 +10,6 @@ from ce_web.settings.common import (
     STORAGE, TC_BASE_URL, XLY_BASE_URL, XLY_BASE_URL2
 )
 from models.release_version import CeReleaseVersion
-from models.steps import CeSteps
 from rpc.github import GetBranches, GetCommit, GetTags
 from services.summary import Summary
 from services.tasks import TaskBuildInfo, TasksInfo
