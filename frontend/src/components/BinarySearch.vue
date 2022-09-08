@@ -6,7 +6,15 @@
       :rules="addRules"
       :label-width="85"
     >
-      <h3>欢迎使用二分查找工具，请输入二分条件</h3>
+      <span>
+        <h3>欢迎使用二分查找工具，请输入二分条件!
+         <a
+          href="javascript:void(0)"
+          style="font-size:13px;margin-left:2%;"
+          @click="jumper('https://xly.bce.baidu.com/paddlepaddle/PR-Location/newipipe/builds/23574?module=github/PaddlePaddle/Paddle&pipeline=PR-Location&branch=branches')"
+        > 效率云任务入口 </a>
+      </h3>
+      </span>
       <Row style="margin-top:2%;">
         <Col span="4">
           <FormItem label="repo:" prop="repo_name">
@@ -74,6 +82,23 @@
         <Button type="primary" @click="handleSummit">确认并提交二分任务</Button>
       </Row>
     </Form>
+    <Modal
+      width="700px"
+      v-model="show"
+      title="任务链接"
+      v-on:on-cancel="handleClose"
+    >
+      <div>
+        <a
+          href="javascript:void(0)"
+          style="font-size:13px;margin-left:2%;"
+          @click="jumper(joburl)"
+        > {{ joburl }} </a>
+      </div>
+      <div slot="footer">
+        <Button type="primary" @click="handleClose">确定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -85,6 +110,8 @@ export default {
   name: 'binarySearch',
   data: function () {
     return {
+      joburl: '',
+      show: false,
       Repos: [
         'Paddle',
         'PaddleOCR',
@@ -163,6 +190,9 @@ export default {
         }
       });
     },
+    jumper(url) {
+      window.open(url, '_blank');
+    },
     initData() {
       this.addForm = {
         repo_name: '',
@@ -174,14 +204,20 @@ export default {
         threshold: '',
         email_add: ''
       };
+      this.joburl = '';
+      this.show = false;
+    },
+    handleClose() {
+      this.initData();
     },
     async createJob() {
-      const {code, msg} = await api.post(BinarySearchUrl, this.addForm);
+      const {code, data, message} = await api.post(BinarySearchUrl, this.addForm);
       if (parseInt(code, 10) === 200) {
-        console.log('创建任务成功！');
+        this.joburl = data.url;
+        this.show = true;
       } else {
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

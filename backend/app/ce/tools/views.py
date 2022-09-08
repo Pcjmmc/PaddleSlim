@@ -13,6 +13,7 @@ import time
 
 import requests
 import rsa
+from exception import HTTPDetailError
 
 from views.base_view import MABaseView
 
@@ -52,8 +53,18 @@ class BinarySearchManage(MABaseView):
         req.headers.update({'Authorization': sign})
         session =  requests.Session()
         res = session.send(req, timeout=15)
-
-
+        if res.status_code == 200:
+            content = json.loads(res.text)
+            url = "https://xly.bce.baidu.com/paddlepaddle/PR-Location/newipipe/detail/{buildId}"
+            url = url.format(buildId=content.get("pipelineBuildId"))
+            data = {"url": url}
+        else:
+            raise HTTPDetailError(
+                error_message="xly service error",
+                error_detail={"code": 500, "message": "xly service error"}
+            )
+        return data
+        
 
 def encrypt(pub, original_text):  # 用公钥加密
     """
