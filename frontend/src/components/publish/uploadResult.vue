@@ -9,7 +9,6 @@
   </div>
 </template>
 <script>
-import Cookies from 'js-cookie';
 import api from '../../api/index';
 import { PublishResult } from '../../api/url.js';
 
@@ -20,12 +19,12 @@ export default {
         {
           title: '发布源',
           key: 'source',
-          width: "100px",
-          align: "center"
+          width: '100px',
+          align: 'center'
         },
         {
           title: '发布内容',
-          align: "center",
+          align: 'center',
           key: 'content',
           render: (h, {row, index}) => {
             let edit;
@@ -60,7 +59,7 @@ export default {
                     }
                   }
                 })
-              ]
+              ];
             } else {
               edit = row.content;
               control = [h('Icon', {
@@ -77,7 +76,7 @@ export default {
                     this.editValue = row.content;
                   }
                 }
-              })]
+              })];
             }
             return h('Row', [
               h('Col', {
@@ -90,12 +89,12 @@ export default {
                   span: 2
                 }
               }, control)
-            ])
+            ]);
           }
         },
         {
           title: '地址',
-          align: "center",
+          align: 'center',
           key: 'url',
           render: (h, {row, index}) => {
             let edit;
@@ -130,7 +129,7 @@ export default {
                     }
                   }
                 })
-              ]
+              ];
             } else {
               edit = row.url;
               control = [h('Icon', {
@@ -147,7 +146,7 @@ export default {
                     this.editUrl = row.url;
                   }
                 }
-              })]
+              })];
             }
             return h('Row', [
               h('Col', {
@@ -160,7 +159,7 @@ export default {
                   span: 2
                 }
               }, control)
-            ])
+            ]);
           }
         }
       ],
@@ -169,7 +168,7 @@ export default {
       editValue: '',
       editUrlIndex: -1,
       editUrl: ''
-    }
+    };
   },
   computed: {
     version: {
@@ -189,7 +188,7 @@ export default {
       let params = {
         tag: this.version
       };
-      const {code, data, message, all_count} = await api.get(PublishResult, params);
+      const {code, data, message} = await api.get(PublishResult, params);
       if (parseInt(code, 10) === 200) {
         // 将data中的覆盖到tmpData
         this.data = data;
@@ -239,5 +238,5 @@ export default {
   mounted() {
     this.getData();
   }
-}
+};
 </script>
