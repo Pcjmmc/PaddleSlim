@@ -169,7 +169,7 @@ export default {
       if (Cookies.get('version')) {
         this.option = Cookies.get('version');
       } else {
-        this.option = this.verisonList[0].desc;
+        this.option = this.verisonList[1].desc;
         Cookies.set('version', this.option);
         this.$store.commit('changeVersion', this.option);
       }

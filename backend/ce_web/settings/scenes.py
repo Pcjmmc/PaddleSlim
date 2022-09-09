@@ -119,8 +119,12 @@ system_list = {
         'Linux_Gpu_Cuda10.2', 'Linux_Gpu_Cuda11.0',
         'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1',
         'Linux_Gpu_Cuda11.2', 'Linux_Gpu_Cuda11.3',
+        'Linux_Gpu_Cuda11.6',
         'Linux_Gpu(T4)_Cuda10.2', 'Linux_Gpu(T4)_Cuda11.1',
         'Linux_Gpu(T4)_Cuda11.2', 'Linux-Jetpack', 'Xpu',
+        'Windows_Gpu_Cuda10.1', 'Windows_Gpu_Cuda10.2',
+        'Windows_Gpu_Cuda11.2', 'Windows_Gpu_Cuda11.0',
+        'Windows_Gpu_Cuda11.1', 'Windows_Gpu_Cuda11.6',
         'Linux_ROCM', 'Linux_Cpu', 'Windows_GPU_2080',
         'Windows_GPU_3080', 'Npu', 'Windows_Cpu', 'Mac'],
     'model': [

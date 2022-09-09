@@ -89,7 +89,7 @@
             </div>
           </div>
         </Col>
-        <Col :xs="{ span: 3, offset: 3 }" align="center">
+        <Col :xs="{ span: 4, offset: 2 }" align="center">
           <div class="one-fifth-video-col">
             <div v-if="system.includes('Windows')">
               <Icon type="logo-windows" size="50"> </Icon>
