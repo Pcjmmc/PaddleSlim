@@ -5,7 +5,7 @@ import datetime
 import json
 import time
 
-from ce_web.settings.scenes import scenes_dict, system_list
+from ce_web.settings.scenes import ORDER, scenes_dict, system_list
 from libs.mongo.db import Mongo
 from models.details import CeCases
 from models.release_version import CeReleaseVersion
@@ -322,7 +322,8 @@ class TaskManage(MABaseView):
                     temp_item = copy.deepcopy(item)
                     temp_item['secondary_type'] = _type
                     integration_data[system][reponame][_type].append(temp_item)
-            data = [{"system": k, "data": dict(sorted(v.items(), key=lambda item:item[0]))} for k, v in integration_data.items()]
+            # 这里的排序按照套件指定的顺序排序下
+            data = [{"system": k, "data": dict(sorted(v.items(), key=lambda item:ORDER.get(item[0])))} for k, v in integration_data.items()]
         else:
             for item in temp_data:
                 system = item["system"]

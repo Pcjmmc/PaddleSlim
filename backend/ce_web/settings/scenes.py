@@ -98,7 +98,21 @@ secondary_type = {
     ]
 }
 
-# 环境列表
+# 套件顺序
+ORDER = {
+    "PaddleClas": 1,
+    "PaddleDetection": 2,
+    "PaddleGAN": 3,
+    "PaddleNLP": 4,
+    "PaddleOCR": 5,
+    "PaddleSeg": 6,
+    "PaddleSlim": 7,
+    "PaddleRec": 8,
+    "PaddleSpeech": 9,
+    "Paddle2ONNX": 10,
+    "PaddleHub": 11,
+    "other": 12
+}
 # compile是一个全量的，其他块自己按环境重要程度排序
 system_list = {
     'compile': [

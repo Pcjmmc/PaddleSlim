@@ -22,13 +22,13 @@
               ></Icon>
             </i-circle>
             <a
-              v-if="item.length > 1"
+              v-if="item.length > 1 && !isEmptyCheck(child.show_name)"
               href="javascript:void(0)"
               style="font-size:13px;"
               @click="jumper(child)"
             > {{ key + '_' + child.show_name }} </a>
             <a
-              v-else-if="child.show_name !== null && child.show_name !== ''"
+              v-else-if="!isEmptyCheck(child.show_name)"
               href="javascript:void(0)"
               style="font-size:13px;"
               @click="jumper(child)"
@@ -65,13 +65,13 @@
               ></Icon>
             </i-circle>
             <a
-              v-if="item.length > 1"
+              v-if="item.length > 1 && !isEmptyCheck(child.show_name)"
               href="javascript:void(0)"
               style="font-size:13px;"
               @click="jumper(child)"
             > {{ key + '_' + child.show_name }} </a>
             <a
-              v-else-if="child.show_name !== null && child.show_name !== ''"
+              v-else-if="!isEmptyCheck(child.show_name)"
               href="javascript:void(0)"
               style="font-size:13px;"
               @click="jumper(child)"
@@ -142,13 +142,13 @@
             <Tooltip placement="top" content="未执行">
               <Icon type="ios-alert-outline" size="17"/>
               <span
-                v-if="item.length > 1"
+                v-if="item.length > 1 && !isEmptyCheck(child.show_name)"
                 style="font-size:13px;"
               >
                 {{ key + '_' + child.show_name }}
               </span>
               <span
-                v-else-if="child.show_name !== null && child.show_name !== ''"
+                v-else-if="!isEmptyCheck(child.show_name)"
                 style="font-size:13px;"
               >
                 {{ key + '_' + child.show_name }}
@@ -228,6 +228,13 @@ export default {
   methods: {
     checkExpired(time1, time2) {
       return isExpired(time1, time2);
+    },
+    isEmptyCheck(item) {
+      if (item == null || item.toString().length === 0 || Object.keys(item).length === 0) {
+        return true;
+      } else {
+        return false;
+      }
     },
     jumper(item) {
       let _params = {
