@@ -27,6 +27,8 @@ export const ROUTES = [
     { // 主页
       path: '/:paddle?',
       component: Main,
+      // 默认跳到集测页
+      redirect: '/paddle/integration',
       children: [
         { // API 配置
           path: '/paddle/frame-api-detail',
@@ -38,16 +40,21 @@ export const ROUTES = [
           name: 'CommitDetails',
           component: CommitDetails
         },
+        // { // API 配置
+        //   path: '/paddle/integration/:tag/:version',
+        //   name: 'Content',
+        //   component: Content
+        // },
         { // API 配置
-          path: '/paddle/integration/:tag/:version',
+          path: '/paddle/integration',
           name: 'Content',
           component: Content
         },
-        { // API 配置
-          path: '/paddle/integration/:version?',
-          name: 'Content',
-          component: Content
-        },
+        // { // API 配置
+        //   path: '/paddle/integration/:version?',
+        //   name: 'Content',
+        //   component: Content
+        // },
         { // API 配置
           path: '/paddle/config/jobs',
           name: 'JobsManage',
