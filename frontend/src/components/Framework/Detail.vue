@@ -34,16 +34,16 @@
             <Button type="error" v-else-if="val.status==='error'">{{ val.status }}</Button>
             <Button type="info" v-else-if="val.status==='running'">{{ val.status }}</Button>
             <Button type="warning" v-else>{{ val.status }}</Button>
+            <span style="float:right" v-if="val.bos_url">
+              <Button type="primary" @click="generateReport(val)"> 生成报告 </Button>
+              <Button type="primary" v-if="val.allure_report" @click="openReport(val)"> 查看报告</Button>
+              <Button type="primary" disabled v-else> 查看报告</Button>
+            </span>
           </div>
           <div>
             <p>创建时间: {{ val.create_time }}</p>
             <p>更新时间: {{ val.update_time }}</p>
-            <p>执行结果:
-              <a
-                href="javascript:void(0)"
-                style="font-size:13px;"
-                @click="jumper(val.result)"
-              > {{ val.result }} </a></p>
+            <p>执行结果: {{ val.result }} </p>
           </div>
         </Card>
       </div>
@@ -52,7 +52,7 @@
 </template>
 <script>
 
-import { FrameWorkJobDetail } from '../../api/url.js';
+import { FrameWorkJobDetail, FrameReportUrl } from '../../api/url.js';
 import api from '../../api/index';
 
 export default {
@@ -105,6 +105,34 @@ export default {
           return 'success';
         default:
           return 'warning';
+      }
+    },
+    async generateReport(item) {
+      let params = {
+        bos_url: item.bos_url,
+        id: item.id
+      };
+      console.log(params);
+      const {code, data, message} = await api.post(FrameReportUrl, params);
+      if (parseInt(code, 10) === 200) {
+        item.allure_report = data.allure_report;
+      } else {
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
+    async openReport(item) {
+      if (item.allure_report) {
+        window.open(item.allure_report, '_blank');
+      } else {
+        this.$Message.error({
+          content: '没有可查询报告，请先生成报告！',
+          duration: 30,
+          closable: true
+        });
       }
     },
     async getDetails(id) {
