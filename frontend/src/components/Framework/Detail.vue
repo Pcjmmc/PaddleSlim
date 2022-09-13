@@ -36,8 +36,16 @@
             <Button type="warning" v-else>{{ val.status }}</Button>
             <span style="float:right" v-if="val.bos_url">
               <Button type="primary" @click="generateReport(val)"> 生成报告 </Button>
-              <Button type="primary" v-if="val.allure_report" @click="openReport(val)"> 查看报告</Button>
-              <Button type="primary" disabled v-else> 查看报告</Button>
+              <Button
+                type="primary"
+                v-if="val.allure_report"
+                @click="openReport(val)"
+              > 查看报告</Button>
+              <Button
+                type="primary"
+                disabled
+                v-else
+              > 查看报告</Button>
             </span>
           </div>
           <div>
