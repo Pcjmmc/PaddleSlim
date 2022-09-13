@@ -101,6 +101,8 @@ export default {
           return 'primary';
         case '测试中':
           return 'waring';
+        case '测试完成':
+          return 'success';
         default:
           return 'error';
       }

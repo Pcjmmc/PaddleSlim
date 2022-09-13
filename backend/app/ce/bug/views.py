@@ -41,13 +41,13 @@ class BugManage(MABaseView):
             # 根据方向查询
             # 将task_type 转化成查询条件
             task_type = back_dict.get(task_type)
-            query = 'plan_tag ~ {ptag} AND 类型 = Bug AND bug发现方式 = {task_type} AND repo = Paddle'.format(
+            query = '所属计划 = 飞桨项目集/Paddle/{ptag} AND 类型 = Bug AND bug发现方式 = {task_type}'.format(
             ptag=ptag, task_type=task_type)
             return await get_bugs_by_filter(query)
         else:
             # 查询全量
             condition = ",".join(selects)
-            query = 'repo = Paddle AND bug发现方式 in ({condition}) AND plan_tag ~ {ptag} AND 类型 = Bug'.format(
+            query = '所属计划 = 飞桨项目集/Paddle/{ptag} AND bug发现方式 in ({condition}) AND 类型 = Bug'.format(
                 condition=condition, ptag=ptag
             )
             return await get_bugs_by_filter(query)
