@@ -55,6 +55,7 @@ class ReleaseVersionManage(MABaseView):
         print("seach mysql get version info 1111", end_time, flush=True)
         if res:
             if res.activated:
+                # 如果是编译的不走缓存
                 open_cache = True
                 begin_time = int(time.time())
                 branch_info = await GetBranches().get_commit_info_by_branch(
@@ -216,7 +217,7 @@ class TaskManage(MABaseView):
             begin_time = today_time - 14 * 24 * 60 * 60
             end_time = None
             step = version
-            open_cache = True
+            open_cache = True if task_type != "compile" else False
         else:
             res = await CeReleaseVersion().aio_get_object(**{"name": version})
             version_id = res.get("id")
@@ -225,7 +226,7 @@ class TaskManage(MABaseView):
             end_time = res.get("end_time", None)
             step = "release"
             if res.activated:
-                open_cache = True
+                open_cache = True if task_type != "compile" else False
         # 根据release 的细化来查询,改接口是负责release的，故step=release
         all_release_task = await TasksInfo.get_all_task_info_by_filter(
             step=step, task_type=task_type, appid=appid

@@ -122,10 +122,10 @@ class TaskBuildInfo(object):
                 db_tids.append(key)
         print("从db查询", db_tids, flush=True)
         db_result = await cls.get_task_latest_build_from_db(db_tids, branch, begin_time, end_time)
-        # 同时将没命中缓存的数据，同步到缓存中
-        for key, val in db_result.items():
-            if val:
-                await BuildCacheBase.set_multi(key, branch_name, data=val)
+        # 同时将没命中缓存的数据，同步到缓存中; 编译除外
+        # for key, val in db_result.items():
+        #     if val:
+        #         await BuildCacheBase.set_multi(key, branch_name, data=val)
         final_result.update(db_result)
         return final_result
 
