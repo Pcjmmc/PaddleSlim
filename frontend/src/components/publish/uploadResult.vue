@@ -59,7 +59,7 @@ export default {
           render: (h, params) => {
             let ret = [];
             let content = params.row.content;
-            Object.keys(content).forEach(function(key) {
+            Object.keys(content).forEach(function (key) {
               let item = content[key];
               ret.push(
                 h(
@@ -94,10 +94,10 @@ export default {
                         marginLeft: '10px'
                       }
                     }, element.desc)
-                  )
+                  );
                 }
               });
-            })
+            });
             return h(
               'div',
               {
@@ -191,7 +191,7 @@ export default {
             // age合并
             if (data[j + k].systemAlready !== 1) { // 需要这个条件，避免数据重复
               if (k + 1 < data[j].mergeCol) {
-                data[j + k].mergeColSystem = 1
+                data[j + k].mergeColSystem = 1;
                 for (let b = k + 1; b < data[j].mergeCol; b++) {
                   if (data[j + k].system === data[j + b].system) {
                     data[j + k].mergeColSystem++;
