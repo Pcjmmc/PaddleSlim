@@ -24,28 +24,29 @@ class PublishResultManage(MABaseView):
         """
         返回发布结果
         """
-        data = {
-            'other': [],
-            'bos': []
-        }
+        data = []
         version = kwargs.get('version')
         appid = kwargs.get('appid', 1)
-        print(version)
-        # 将bos 以及其他的数据都返回
-        table_name_bos = 'publish_bos_{version}_{appid}'.format(
-            version=version, appid=appid
-        )
+        result = []
         table_name_other = 'publish_other_{version}_{appid}'.format(
             version=version, appid=appid
         )
         table_result = Mongo("paddle_quality", table_name_other)
-        result = await table_result.find_all()
+        other_result = await table_result.find_all()
+        result.extend(other_result)
+        # 将bos 以及其他的数据都返回
+        table_name_bos = 'publish_bos_{version}_{appid}'.format(
+            version=version, appid=appid
+        )
+        table_result_bos = Mongo("paddle_quality", table_name_bos)
+        bos_result = await table_result_bos.find_all()
+        result.extend(bos_result)
         for res in result:
             res.pop('_id')
             for k, v in res.items():
                 for k1, v1 in v.items():
                     for k2, v2 in v1.items():
                         tmp = {'source': k, 'system': k1, 'content': {k2: v2}}
-                        data['other'].append(tmp)
+                        data.append(tmp)
         return len(data), data
                 

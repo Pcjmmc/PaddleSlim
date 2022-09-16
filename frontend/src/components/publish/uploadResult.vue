@@ -9,6 +9,7 @@
   </div>
 </template>
 <script>
+import Clipboard from 'clipboard';
 import api from '../../api/index';
 import { PublishResult } from '../../api/url.js';
 
@@ -59,6 +60,7 @@ export default {
           render: (h, params) => {
             let ret = [];
             let content = params.row.content;
+            let _this = this; // this跟循环里面相冲突
             Object.keys(content).forEach(function (key) {
               let item = content[key];
               ret.push(
@@ -66,26 +68,67 @@ export default {
                   'span',
                   {
                     style: {
-                      marginRight: '5px'
+                      marginRight: '10px',
+                      fontWeight: 'bold'
                     }
                   },
                   key + ':'
                 )
               );
-              Array.from(item).forEach(element => {
-                if (element.url) {
+              item.forEach(element => {
+                let desc = element.desc;
+                let url = element.url;
+                if (url) {
                   ret.push(
                     h('a', {
                       href: 'javascript:void(0);',
-                      style: {
-                        marginLeft: '10px'
-                      },
                       on: {
                         click: () => {
-                          this.jumper(element.url);
+                          _this.jumper(url);
                         }
                       }
-                    }, element.desc)
+                    }, desc)
+                  );
+                  ret.push(
+                    h('Poptip', {
+                      props: {
+                        trigger: 'hover',
+                        placement: 'top',
+                        // 注意一定要添加该属性，否则表格会遮盖住气泡浮框
+                        transfer: true,
+                        content: '复制地址'
+                      },
+                      style: {
+                        marginRight: '10px'
+                      }
+                    },
+                    [
+                      h('Icon', {
+                        class: 'ivu-icon ivu-icon-ios-copy-outline copyBtn',
+                        props: {
+                            type: 'ios-copy-outline',
+                            size: '15',
+                            color: 'green'
+                        },
+                        on: {
+                          click: () => {
+                            let clipboard = new Clipboard('.copyBtn', {
+                                text: function (trigger) {
+                                  clipboard.destroy();
+                                  return url;
+                                }
+                            });
+                            clipboard.on('success', e => {
+                              _this.$Message.success('复制成功~');
+                              e.clearSelection();
+                            });
+                            clipboard.on('error', e => {
+                              _this.$Message.error('复制失败,请手动复制~');
+                            });
+                          }
+                        }
+                      })
+                    ])
                   );
                 } else {
                   ret.push(
@@ -93,7 +136,7 @@ export default {
                       style: {
                         marginLeft: '10px'
                       }
-                    }, element.desc)
+                    }, desc)
                   );
                 }
               });
@@ -216,7 +259,7 @@ export default {
       const {code, data, message} = await api.get(PublishResult, params);
       if (parseInt(code, 10) === 200) {
         // 将data中的覆盖到tmpData
-        this.data = this.formatData(data.other);
+        this.data = this.formatData(data);
       } else {
         this.data = [];
         this.$Message.error({

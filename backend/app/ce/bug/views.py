@@ -281,7 +281,7 @@ class ConclusionManage(MABaseView):
             query_param["tag"] = tag
         if branch:
             query_param["branch"] = branch
-        records = await CeConclusion.aio_filter_objects(**query_param)
+        records = await CeConclusion.aio_filter_objects(**query_param, need_all=True)
         # 将数据组装成1条
         result = {res.task_type: res.conclusion for res in records if res.task_type != "model"}
 
