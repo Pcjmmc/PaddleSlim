@@ -7,8 +7,8 @@ import asyncio
 import copy
 import json
 
-from ce_web.settings.common import STORAGE
 from exception import HTTP400Error
+from libs.mongo.db import Mongo
 from models.details import CeCases
 from models.publish_task_builds import PubishTaskBuilds
 from models.tasks import CeTasks
@@ -57,3 +57,37 @@ class PublishCacheView(MABaseView):
             await PubishTaskBuilds.create_or_update_build(
                 tid, build_id, **params
             )
+
+class UploadResultManage(MABaseView):
+    """
+    完成上传发布结果的result
+    """
+    async def post(self, **kwargs):
+        """
+        调用基类的get方法
+        """
+        return await super().post(**kwargs)
+
+    async def post_data(self, **kwargs):
+        """
+        接收到的数据原封不动的放到mongodb中
+        """
+        data_type = kwargs.get('data_type')
+        version = kwargs.get('version')
+        appid = kwargs.get('appid', 1)
+        data = kwargs.get('data')
+        if data and version:
+            if data_type == 'bos':
+                table_name = 'publish_bos_{version}_{appid}'.format(
+                    version=version, appid=appid
+                )
+            else:
+                table_name = 'publish_other_{version}_{appid}'.format(
+                    version=version, appid=appid
+                )
+            table_result = Mongo("paddle_quality", table_name)
+            # 整个过程都是直接删除，重新创建表
+            await table_result.delete_coll()
+            await table_result.insert(json.loads(data))
+        else:
+            raise HTTP400Error("请检查，data或version是否为空")
