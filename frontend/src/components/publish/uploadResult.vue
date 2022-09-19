@@ -253,6 +253,9 @@ export default {
     },
     async getData() {
       // 根据需求实时获取; 后台根据version获取到计划tag
+      if (!this.versionName) {
+        return;
+      }
       let params = {
         version: this.versionName
       };

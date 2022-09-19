@@ -60,7 +60,12 @@ export default {
     },
     computeLink: function (key) {
       if (this.fatherLink) {
-        return `${this.fatherLink}/${key}`;
+        if (key === 'publish' || key === 'integration') {
+          let branch = encodeURIComponent(this.$store.state.version);
+          return `${this.fatherLink}/${key}/${branch}`;
+        } else {
+          return `${this.fatherLink}/${key}`;
+        }
       } else {
         return `/${key}`;
       }

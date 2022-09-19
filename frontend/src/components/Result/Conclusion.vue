@@ -165,12 +165,6 @@ export default {
   watch: {
     versionName: function () {
       this.getData();
-    },
-    branch: function () {
-      this.getData();
-    },
-    tag: function () {
-      this.getData();
     }
   },
   components: {
@@ -179,7 +173,7 @@ export default {
   computed: {
     versionName: {
       get() {
-        return this.$store.state.version;
+        return this.$store.state.version ? this.$store.state.version : this.$route.params.version;
       }
     }
   },
@@ -191,7 +185,7 @@ export default {
     },
     async getIcafe(task_type) {
       // 根据发现方式去获取TODO
-      let _params = {'tag': this.tag, 'task_type': task_type};
+      let _params = {version: this.versionName, task_type: task_type};
       const {code, data, version} = await api.get(BugUrl, _params);
       if (parseInt(code, 10) === 200) {
         this.datas = data;
@@ -205,13 +199,16 @@ export default {
       }
     },
     async getData() {
+      this.resetData();
+      if (!this.versionName) {
+        return;
+      }
       let params = {
-        tag: this.tag,
-        branch: this.branch,
+        version: this.versionName,
         appid: Cookies.get('appid')
       };
       // 将数组用都好分割拼接
-      const {code, data, msg} = await api.get(TestConclusionUrl, params);
+      const {code, data, msg, all_count} = await api.get(TestConclusionUrl, params);
       if (parseInt(code, 10) !== 200) {
         this.$Message.error({
           content: '请求出错: ' + msg,
@@ -219,7 +216,9 @@ export default {
           closable: true
         });
       } else {
-        this.addForm = data;
+        if (all_count !== 0) {
+          this.addForm = data;
+        }
       }
     },
     exportToPDF() {
@@ -238,7 +237,7 @@ export default {
       this.datas = [];
       this.setBugTagModal = false;
     },
-    initData() {
+    resetData() {
       this.checkAllGroup = [];
       this.addForm = {
         compile: '',
@@ -263,6 +262,9 @@ export default {
         benchmark: '',
         doc: ''
       };
+    },
+    initData() {
+      this.resetData();
       this.getData();
     },
      handelUpdate(row) {

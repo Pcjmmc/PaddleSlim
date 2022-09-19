@@ -12,6 +12,7 @@ from ce_web.settings.scenes import back_dict, inner_dict, scenes_dict, selects
 from libs.mongo.db import Mongo
 from models.conclusion import CeConclusion
 from models.icafe import CeIcafe
+from models.release_version import CeReleaseVersion
 from models.tasks import CeTasks
 from rpc.icafe import CreateBug, GetBug
 
@@ -35,8 +36,10 @@ class BugManage(MABaseView):
         响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
         """
         # 获取所有的bug卡片, 根据plan tag 和 类型来查询
-        ptag = kwargs.get("tag")
         task_type = kwargs.get("task_type")
+        version = kwargs.get('version')
+        ret = await CeReleaseVersion().aio_get_object(**{"name": version})
+        ptag = ret.tag if ret else None
         if task_type:
             # 根据方向查询
             # 将task_type 转化成查询条件
@@ -275,13 +278,19 @@ class ConclusionManage(MABaseView):
         """
         result = {}
         query_param = {}
-        tag = kwargs.get("tag")
-        branch = kwargs.get("branch")
+        version = kwargs.get("version")
+        ret = await CeReleaseVersion().aio_get_object(**{"name": version})
+        tag = ret.tag if ret else None
+        branch = ret.branch if ret else None
+        if version == "develop":
+            branch = version
+        if not tag and not branch:
+            return 0, {}
         if tag:
             query_param["tag"] = tag
         if branch:
             query_param["branch"] = branch
-        records = await CeConclusion.aio_filter_objects(**query_param, need_all=True)
+        records = await CeConclusion.aio_filter_objects(need_all=True, **query_param)
         # 将数据组装成1条
         result = {res.task_type: res.conclusion for res in records if res.task_type != "model"}
 

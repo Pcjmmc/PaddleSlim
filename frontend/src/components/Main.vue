@@ -96,7 +96,7 @@ export default {
       userName: '',
       menuDesc: {},
       verisonList: [],
-      option: Cookies.get('version'),
+      option: '',
       currentPageMinHeight: '861px',
       currentPageMaxHeight: ''
     };
@@ -126,10 +126,20 @@ export default {
         'menu-item',
         this.isCollapsed ? 'collapsed-menu' : ''
       ]
+    },
+    versionName: {
+      get() {
+        return this.$store.state.version;
+      }
     }
   },
   components: {
     MenuNav
+  },
+  watch: {
+    versionName: function () {
+      this.option = this.versionName;
+    }
   },
   mounted: function () {
     this.appname = Cookies.get('appname');
@@ -144,7 +154,6 @@ export default {
   methods: {
     handleClickTag (item) {
       this.option = item.desc;
-      Cookies.set('version', this.option);
       this.$store.commit('changeVersion', this.option);
     },
      handleClickUser (name) {
@@ -166,8 +175,13 @@ export default {
       this.menuDesc = data;
       // 暂时定义menu
       this.verisonList = this.menuDesc["version"];
-      if (Cookies.get('version')) {
-        this.option = Cookies.get('version');
+      if (this.$route.params && this.$route.params.version) {
+        this.option = this.$route.params.version;
+        Cookies.set('version', this.option);
+        this.$store.commit('changeVersion', this.option);
+      } else if (this.$store.state.version) {
+        this.option = this.$store.state.version;
+        Cookies.set('version', this.option);
       } else {
         this.option = this.verisonList[1].desc;
         Cookies.set('version', this.option);
