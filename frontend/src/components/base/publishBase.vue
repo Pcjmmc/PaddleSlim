@@ -48,7 +48,7 @@
                 <span style="display:inline-block;width:60%;float:left;">
                 </span>
                 <span style="display:inline-block;width:40%;float:right;">
-                  <span style="float:left;width:70%;">
+                  <span style="float:left;width:69%;">
                     <span style="float:left;margin-left:8%;" v-if="item.log_url">
                       <Icon type="md-return-right"/>
                       <a
@@ -58,7 +58,7 @@
                       > 日志 </a>
                     </span>
                   </span>
-                  <span style="float:right;width:30%;" v-if="item.check_info && item.check_info.length > 0">
+                  <span style="float:right;width:31%;" v-if="item.check_info && item.check_info.length > 0">
                     <div v-for="(itm, idx) in item.check_info">
                       <Icon type="md-return-right"/>
                       <Icon
