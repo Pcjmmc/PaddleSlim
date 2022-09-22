@@ -75,6 +75,8 @@ class BugManage(MABaseView):
             file_list = []
         issues_url = fields.get("issues_url")
         plan_tag = fields.get("tag")
+        ret = await CeReleaseVersion().aio_get_object(**{"tag": plan_tag})
+        icafe_plan = ret.icafe_plan if ret else None
         tid = fields.get('tid')
         build_id = fields.get('build_id')
         secondary_type = fields.get('secondary_type')
@@ -116,7 +118,7 @@ class BugManage(MABaseView):
                     icafe_info["detail"] += "\n" + content
 
             icafe_info["fields"] = {
-                "所属计划": "飞桨项目集/Paddle/{tag}".format(tag=plan_tag),
+                "所属计划": "飞桨项目集/Paddle/{tag}".format(tag=icafe_plan),
                 "负责人": fields.get("rd_owner"),
                 "需求来源": "QA团队",
                 "负责人所属团队": "QA团队",
