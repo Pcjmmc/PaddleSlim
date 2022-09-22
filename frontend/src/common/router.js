@@ -28,7 +28,7 @@ export const ROUTES = [
       path: '/:paddle?',
       component: Main,
       // 默认跳到集测页
-      redirect: '/paddle/integration',
+      redirect: '/paddle/integration/',
       children: [
         { // API 配置
           path: '/paddle/frame-api-detail',
@@ -36,25 +36,20 @@ export const ROUTES = [
           component: ApiDetails
         },
         { // API 配置
-          path: '/paddle/commit-detail',
+          path: '/paddle/commit-detail/:version',
           name: 'CommitDetails',
           component: CommitDetails
         },
-        // { // API 配置
-        //   path: '/paddle/integration/:tag/:version',
-        //   name: 'Content',
-        //   component: Content
-        // },
         { // API 配置
-          path: '/paddle/integration',
+          path: '/paddle/integration/',
           name: 'Content',
           component: Content
         },
-        // { // API 配置
-        //   path: '/paddle/integration/:version?',
-        //   name: 'Content',
-        //   component: Content
-        // },
+        { // API 配置
+          path: '/paddle/integration/:version',
+          name: 'ContentVersion',
+          component: Content
+        },
         { // API 配置
           path: '/paddle/config/jobs',
           name: 'JobsManage',
@@ -96,8 +91,8 @@ export const ROUTES = [
           component: SingleReport
         },
         { // API 配置
-          path: '/paddle/publish',
-          name: 'publish',
+          path: '/paddle/publish/:version',
+          name: 'PublishVersion',
           component: Publish
         },
         { // API 配置

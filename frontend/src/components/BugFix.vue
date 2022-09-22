@@ -77,10 +77,6 @@ export default {
       default: function () {
         return [];
       }
-    },
-    tag: {
-      type: [String],
-      default: ''
     }
   },
   data: function () {
@@ -199,13 +195,20 @@ export default {
     datas: function () {
       this.getStatusFilters();
     },
-    tag: function () {
+    versionName: function () {
       this.getbugdata();
     }
   },
   mounted: function () {
     this.getbugdata();
     this.getStatusFilters();
+  },
+  computed: {
+    versionName: {
+      get() {
+        return this.$store.state.version ? this.$store.state.version : this.$route.params.version;
+      }
+    }
   },
   methods: {
     openNew(url) {
@@ -219,6 +222,8 @@ export default {
           return 'primary';
         case '测试中':
           return 'waring';
+        case '测试完成':
+          return 'success';
         default:
           return 'error';
       }
@@ -231,29 +236,36 @@ export default {
       this.getFilterData();
     },
     async getFilterData() {
-      let _params = {'tag': this.tag, 'task_type': this.childname};
-      const {code, data, version} = await api.get(BugUrl, _params);
+      let _params = {
+        task_type: this.childname,
+        version: this.versionName
+      };
+      const {code, data, message} = await api.get(BugUrl, _params);
       if (parseInt(code, 10) === 200) {
         this.datas = data;
       } else {
         this.datas = [];
         this.$Message.error({
-          content: '请求出错: ' + version,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
       }
     },
     async getbugdata() {
-      let _params = {'tag': this.tag};
-      const {code, data, version} = await api.get(BugUrl, _params);
+      if (!this.versionName) {
+        return;
+      }
+      this.datas = [];
+      let _params = {version: this.versionName};
+      const {code, data, message} = await api.get(BugUrl, _params);
       if (parseInt(code, 10) === 200) {
         this.datas = data;
         // this.dis_datas = data.dis_datas;
         // this.dis_count = data.dis_count;
         // this.sts_datas = data.sts_datas;
         // this.sts_column = data.sts_column;
-        this.getStatusFilters();
+        await this.getStatusFilters();
       } else {
         // this.dis_datas = [];
         // this.dis_count = [];
@@ -261,7 +273,7 @@ export default {
         // this.sts_column = [];
         this.datas = [];
         this.$Message.error({
-          content: '请求出错: ' + version,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

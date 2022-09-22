@@ -7,7 +7,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   // 初始化app实例
   state: {
-    'version': Cookies.get('version', ''),
+    'version': '',
     'appid': Cookies.get('appid', ''),
     'appname': Cookies.get('appname', '')
   },

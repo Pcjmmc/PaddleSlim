@@ -55,6 +55,7 @@ import publishTest from './publishTest.vue';
 import uploadResult from './uploadResult.vue';
 
 export default {
+  name: 'Publish',
   data: function () {
     return {
       tabName: '10001',
@@ -92,11 +93,27 @@ export default {
   },
   watch: {
     version: function () {
+      this.$router.push({
+        name: 'PublishVersion',
+        params: {
+          version: this.version
+        }
+      }).catch(error => {
+        if (error.name !== 'NavigationDuplicated') {
+          throw error;
+        }
+      });
       this.getData();
       this.getSummary();
+    },
+    $route() {
+      let _version = this.$route.params.version;
+      Cookies.set('version', _version);
+      this.$store.commit('changeVersion', _version);
     }
   },
   mounted: function () {
+    this.SyncSelected();
     this.getScenesList();
     this.getSummary();
     this.getData();
@@ -108,16 +125,26 @@ export default {
   computed: {
     version: {
       get() {
-        if (this.$route.query.version) {
-          // 将url中的版本优先
-          return this.$route.query.version;
-        } else {
-          return this.$store.state.version;
-        }
+        return this.$store.state.version;
       }
     }
   },
   methods: {
+    SyncSelected() {
+      let _version = this.$route.params.version ? this.$route.params.version : this.$store.state.version;
+      this.$store.commit('changeVersion', _version);
+      Cookies.set('version', _version);
+      this.$router.push({
+        name: 'PublishVersion',
+        params: {
+          version: _version
+        }
+      }).catch(error => {
+        if (error.name !== 'NavigationDuplicated') {
+          throw error;
+        }
+      });
+    },
     clickTab(name) {
       this.tabName = name;
       // console.log(this.tabName);
@@ -162,6 +189,9 @@ export default {
     },
     async getData() {
       // 根据需求实时获取; 后台根据version获取到计划tag
+      if (!this.version) {
+        return;
+      }
       let params = {
         version: this.version,
         step: 'publish',

@@ -233,6 +233,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import api from '../api/index';
 import { DetailUrl, BugUrl, ScenesUrl, AssociateBugUrl } from '../api/url.js';
 import { dateFmt, timestampToTime } from '../util/help.js';
@@ -341,7 +342,7 @@ export default {
     };
   },
   mounted: function () {
-    // console.log("$route.query", this.$route.query);
+    this.SyncSelected();
     this.getData();
     this.getScenesList();
     this.getBugList();
@@ -363,6 +364,10 @@ export default {
     }
   },
   methods: {
+    SyncSelected() {
+      let _version = Cookies.get('version');
+      this.$store.commit('changeVersion', _version);
+    },
     separateData() {
       let failedData = [];
       let succeedData = [];

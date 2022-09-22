@@ -112,7 +112,22 @@ export default {
   },
   watch: {
     version: function () {
+      this.$router.push({
+        name: 'CommitDetails',
+        params: {
+          version: this.version
+        }
+      }).catch(error => {
+        if (error.name !== 'NavigationDuplicated') {
+          throw error;
+        }
+      });
       this.getData();
+    },
+    $route() {
+      let _version = this.$route.params.version;
+      Cookies.set('version', _version);
+      this.$store.commit('changeVersion', _version);
     }
   },
   mounted: function () {
@@ -131,8 +146,12 @@ export default {
   },
   methods: {
     async getData() {
+      // 如果没有渲染出来version，则先不发送请求
+      if (!this.version) {
+        return;
+      }
       let params = {
-        version: Cookies.get('version'),
+        version: this.version,
         page: this.search.page,
         pagesize: this.search.pagesize
       }
@@ -163,7 +182,7 @@ export default {
     },
     async getCommitDetail() {
       let params = {
-        version: Cookies.get('version'),
+        version: this.version,
         commit: this.selectCommit
       }
       const {code, data, msg} = await api.get(CommitDetailUrl, params);

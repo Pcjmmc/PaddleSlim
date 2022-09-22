@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import api from '../api/index';
 import { DetailUrl } from '../api/url.js';
 import FuncBase from './Detail/FuncBase.vue';
@@ -22,6 +23,7 @@ export default {
     };
   },
   mounted: function () {
+    this.SyncSelected();
     this.getData();
   },
   components: {
@@ -30,6 +32,10 @@ export default {
   computed: {
   },
   methods: {
+    SyncSelected() {
+      let _version = Cookies.get('version');
+      this.$store.commit('changeVersion', _version);
+    },
     async getData() {
       let _params = {
         'tid': this.$route.query.tid,

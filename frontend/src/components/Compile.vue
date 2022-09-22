@@ -231,6 +231,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import Clipboard from 'clipboard';
 import api from '../api/index';
 import { dateFmt, timestampToTime } from '../util/help.js';
@@ -395,6 +396,7 @@ export default {
     };
   },
   mounted: function () {
+    this.SyncSelected();
     this.getData();
     this.getScenesList();
     this.getBugList();
@@ -405,6 +407,10 @@ export default {
   computed: {
   },
   methods: {
+    SyncSelected() {
+      let _version = Cookies.get('version');
+      this.$store.commit('changeVersion', _version);
+    },
     getErrorReason(exit_code) {
       switch (parseInt(exit_code, 10)) {
         case 0:

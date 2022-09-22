@@ -40,7 +40,7 @@
 <script>
 import Cookies from 'js-cookie';
 import api from '../api/index';
-import { ReleaseVersionUrl, BugUrl, DevelopVersionUrl } from '../api/url.js';
+import { ReleaseVersionUrl, DevelopVersionUrl } from '../api/url.js';
 import BaseInfo from './BaseInfo.vue';
 import { dateFmt } from '../util/help.js';
 import Intergration from './Intergration.vue';
@@ -65,12 +65,37 @@ export default {
     }
   },
   mounted: function () {
+    this.SyncSelected();
     this.initData();
     this.getData();
   },
   watch: {
     versionName: function () {
+      // 如果变化，选项变化则同步到路由中
+      let data = {
+        name: 'ContentVersion',
+        params: {
+          version: this.versionName
+        }
+      };
+      // 如果有query则最近进去
+      if (this.$route.query.tab) {
+        if (['progress', 'risk', 'conclusion'].includes(this.$route.query.tab)) {
+          let tmp = this.$route.query.tab;
+          data.query = {tab: tmp};
+        }
+      }
+      this.$router.push(data).catch(error => {
+        if (error.name !== 'NavigationDuplicated') {
+          throw error;
+        }
+      });
       this.getData();
+    },
+    $route() {
+      let _version = this.$route.params.version;
+      Cookies.set('version', _version);
+      this.$store.commit('changeVersion', _version);
     }
   },
   components: {
@@ -86,9 +111,31 @@ export default {
     }
   },
   methods: {
+    SyncSelected() {
+      let _version = this.$route.params.version ? this.$route.params.version : this.$store.state.version;
+      let data = {
+        name: 'ContentVersion',
+        params: {
+          version: _version
+        }
+      };
+      if (this.$route.query.tab) {
+        if (['progress', 'risk', 'conclusion'].includes(this.$route.query.tab)) {
+          let tmp = this.$route.query.tab;
+          data.query = {tab: tmp};
+        }
+      }
+      this.$store.commit('changeVersion', _version);
+      Cookies.set('version', _version);
+      this.$router.push(data).catch(error => {
+        if (error.name !== 'NavigationDuplicated') {
+          throw error;
+        }
+      });
+    },
     async getData() {
       // 判断参数如果参数中有tag，则name=version；如果没有，则name=release+version
-      let tmpVersion = Cookies.get('version');
+      let tmpVersion = this.versionName;
       let _params = {
         'version': tmpVersion,
         'appid': Cookies.get('appid')
@@ -141,7 +188,6 @@ export default {
       this.initData(auto);
     },
     async handleSubmit(auto) {
-      console.log('content of this tagForm is', this.tagForm);
       await this.getData();
       // 成功或失败，都需要关闭窗口
       this.initData(auto);

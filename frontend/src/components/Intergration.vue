@@ -72,6 +72,7 @@
         icon="md-document"
       >
         <conclusion
+          ref="mychild2"
           :tasktypelist="taskTypeList"
           :tag="repoinfo.tag"
           :branch="repoinfo.branch"
@@ -257,7 +258,7 @@ export default {
   computed: {
     version: {
       get() {
-        return this.$store.state.version;
+        return this.$route.params.version ? this.$route.params.version : this.$store.state.version;
       }
     },
     tabName() {
@@ -286,8 +287,12 @@ export default {
         });
       }
       this.$nextTick(function () {
-        this.$refs.mychild.getbugdata();
-        this.$refs.mychild.getStatusFilters();
+        if (name === 'conclusion') {
+          this.$refs.mychild2.getData();
+        } else {
+          this.$refs.mychild.getbugdata();
+          this.$refs.mychild.getStatusFilters();
+        }
       });
     },
     clickChildTab(item) {
@@ -314,8 +319,11 @@ export default {
     },
     async getData() {
       // 根据需求实时获取
+      if (!this.version) {
+        return;
+      }
       let params = {
-        'version': Cookies.get('version'),
+        'version': this.version,
         'task_type': this.childname,
         'appid': Cookies.get('appid')
       };

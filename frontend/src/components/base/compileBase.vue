@@ -328,7 +328,6 @@ export default {
     };
   },
   mounted: function () {
-    // console.log('data', this.data);
   },
   components: {
   },
