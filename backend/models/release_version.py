@@ -24,6 +24,7 @@ class CeReleaseVersion(BaseModel, BaseModelMixin):
     branch = Column(VARCHAR(50), comment="提交分支")
     tag = Column(VARCHAR(50), comment="tag名或计划名")
     pre_tag = Column(VARCHAR(50), comment="上一次的tag名")
+    icafe_plan = Column(VARCHAR(50), comment="对应的icafe所属计划，可能跟tag不一样")
     begin_time = Column(Integer, comment="commit的开始时间")
     end_time = Column(Integer, comment="commit的结束时间")
     begin_commit = Column(VARCHAR(100), comment= '即上一次打tag时的commit id,与begin_time照应')

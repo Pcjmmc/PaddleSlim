@@ -39,7 +39,7 @@ class BugManage(MABaseView):
         task_type = kwargs.get("task_type")
         version = kwargs.get('version')
         ret = await CeReleaseVersion().aio_get_object(**{"name": version})
-        ptag = ret.tag if ret else None
+        ptag = ret.icafe_plan if ret else None
         if task_type:
             # 根据方向查询
             # 将task_type 转化成查询条件

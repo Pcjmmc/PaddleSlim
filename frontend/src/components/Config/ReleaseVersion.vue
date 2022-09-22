@@ -7,12 +7,12 @@
     >
       <div v-if="jobsList.length > 0">
         <Button disabled>
-          开启集测
+          开启release监控
         </Button>
       </div>
       <div v-else>
         <Button type="primary" @click="activateCreateModal()">
-          开启集测
+          开启release监控
         </Button>
       </div>
     </Row>
@@ -50,12 +50,12 @@
       </div>
     </Modal>
     <Modal
-      v-model="updateModelFlag"
-      title="集测结束,更新tag"
+      v-model="showTag"
+      title="更新集测信息"
       width="700px"
       v-on:on-cancel="handleReset"
     >
-      <Form :model="selectedRow" :label-width="120">
+      <Form :model="selectedRow" :label-width="130">
         <FormItem label="分支:" prop="branch">
           <Input
             disabled
@@ -73,14 +73,37 @@
             placeholder="输入计划的版本"
         />
         </FormItem>
+         <FormItem
+          v-if="updateModelPlan"
+          label="开始commit:"
+          prop="begin_commit"
+          :rules="{ required: true, message: '请输入集测开始的commit', trigger: 'blur' }"
+        >
+          <Input
+            v-model="selectedRow.begin_commit"
+            placeholder="输入开始的commit"
+          />
+        </FormItem>
         <FormItem
+          v-if="updateModelPlan"
+          label="icafe所属计划"
+          prop="icafe_plan"
+          :rules="{ required: true, message: '请输入icafe所属计划空间名', trigger: 'blur' }"
+        >
+          <Input
+            v-model="selectedRow.icafe_plan"
+            placeholder="请输入icafe所属计划空间名"
+          />
+        </FormItem>
+        <FormItem
+          v-if="updateModelTag"
           label="结束commit:"
           prop="end_commit"
-          :rules="{ required: true, message: '请输入结束commit', trigger: 'blur' }"
+          :rules="{ required: true, message: '请输入集测结束commit', trigger: 'blur' }"
         >
           <Input
             v-model="selectedRow.end_commit"
-            placeholder="输入开始的commit"
+            placeholder="输入结束的commit"
           />
         </FormItem>
       </Form>
@@ -104,9 +127,12 @@ export default {
         branch: '',
         tag: '',
         begin_commit: '',
-        end_commit: ''
+        end_commit: '',
+        icafe_plan: ''
       },
-      updateModelFlag: false,
+      showTag: false,
+      updateModelTag: false,
+      updateModelPlan: false,
       setCreateModal: false,
       addForm: {
         branch: '',
@@ -126,6 +152,7 @@ export default {
         },
         {
           title: '开始commit',
+          width: 350,
           key: 'begin_commit'
         },
         {
@@ -139,10 +166,50 @@ export default {
         {
           title: '操作',
           align: 'center',
-          width: 150,
+          width: 250,
           fixed: 'right',
           render: (h, params) => {
             let ret = [];
+            ret.push(
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.handelUpdate(params.row, 'begin');
+                    }
+                  }
+                },
+                '开启集测'
+              )
+            );
+            ret.push(
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.handelUpdate(params.row, 'end');
+                    }
+                  }
+                },
+                '打tag'
+              )
+            );
             ret.push(
               h(
                 'Button',
@@ -161,26 +228,6 @@ export default {
                   }
                 },
                 '删除'
-              )
-            );
-            ret.push(
-              h(
-                'Button',
-                {
-                  props: {
-                    type: 'primary',
-                    size: 'small'
-                  },
-                  style: {
-                    marginRight: '5px'
-                  },
-                  on: {
-                    click: () => {
-                      this.handelUpdate(params.row);
-                    }
-                  }
-                },
-                '打tag'
               )
             );
             return h(
@@ -235,7 +282,9 @@ export default {
       }
     },
     initData() {
-      this.updateModelFlag = false;
+      this.showTag = false;
+      this.updateModelTag = false;
+      this.updateModelPlan = false;
       this.setCreateModal = false;
       this.addForm = {
         branch: '',
@@ -261,9 +310,14 @@ export default {
         return '';
       }
     },
-    handelUpdate(row) {
+    handelUpdate(row, step) {
+      this.showTag = true;
       this.selectedRow = row;
-      this.updateModelFlag = true;
+      if (step == 'begin') {
+        this.updateModelPlan = true;
+      } else {
+        this.updateModelTag = true;
+      }
     },
     handleSubmit() {
       this.$refs.addForm.validate((valid) => {
@@ -276,6 +330,7 @@ export default {
       });
     },
     async handelUpdateSubmit() {
+      console.log('this selectedRow', this.selectedRow);
       const {code, message} = await api.put(VersionUrl, this.selectedRow);
       if (parseInt(code, 10) !== 200) {
         this.$Message.error({

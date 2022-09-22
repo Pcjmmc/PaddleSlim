@@ -87,20 +87,31 @@ class CreateRVersion(MABaseView):
         end_time、 end_commit、updated、activated、 name等
         """
         _id = kwargs.get("id")
+        # 有可能更新的是begin_commit
         end_commit = kwargs.get("end_commit")
+        begin_commit = kwargs.get("begin_commit")
+        commit = end_commit if end_commit else begin_commit
         try:
-            commit_info = await GetCommit().get_commit_info(**{"commit": end_commit})
-            end_time = str(commit_info['date'])
-            end_time = stmp_by_date(end_time, fmt="%Y-%m-%dT%H:%M:%SZ")
+            commit_info = await GetCommit().get_commit_info(**{"commit": commit})
+            commit_time = str(commit_info['date'])
+            commit_time = stmp_by_date(commit_time, fmt="%Y-%m-%dT%H:%M:%SZ")
         except:
             raise HTTP400Error("commit is incorrect")
-        validated_data = {
-            "name": kwargs.get("tag"),
-            "end_commit": end_commit,
-            "end_time": end_time,
-            "activated": 0,
-            "updated": int(time.time())
-        }
+        if end_commit:
+            validated_data = {
+                "name": kwargs.get("tag"),
+                "end_commit": commit,
+                "end_time": commit_time,
+                "activated": 0,
+                "updated": int(time.time())
+            }
+        else:
+            validated_data = {
+                "begin_commit": commit,
+                "begin_time": commit_time,
+                "icafe_plan": kwargs.get("icafe_plan"),
+                "updated": int(time.time())
+            }
         await CeReleaseVersion.aio_update(
             validated_data=validated_data, params_data={"id": _id}
         )
