@@ -313,7 +313,7 @@ export default {
     handelUpdate(row, step) {
       this.showTag = true;
       this.selectedRow = row;
-      if (step == 'begin') {
+      if (step === 'begin') {
         this.updateModelPlan = true;
       } else {
         this.updateModelTag = true;
