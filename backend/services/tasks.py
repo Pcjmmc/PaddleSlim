@@ -270,7 +270,7 @@ class PublishBuildInfo(object):
             query_params["tid"] = tid
             job_list.append(
                 PubishTaskBuilds().aio_get_object(
-                    **query_params, order_by="-created"
+                    **query_params, order_by="-updated"
                 )
             )
             if len(job_list) >= 10:

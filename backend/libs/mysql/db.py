@@ -474,7 +474,9 @@ class BaseModelMixin(object):
         """
         engine, _params_data, model_class = cls.make_query_for_db(**params_data)
         validated_data = cls.make_perfect_update_data(**validated_data)
-
+        # 如果有updated则强制更新
+        if 'updated' in cls.__dict__:
+            validated_data['updated'] = int(time.time())
         queryset = sa.update(model_class)
         queryset = cls.get_query_filter(queryset, **_params_data)
         queryset = queryset.values(**validated_data)
