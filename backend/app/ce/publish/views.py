@@ -161,7 +161,7 @@ class PublishTaskManage(MABaseView):
                 item["check_info"] = [
                     {
                         "desc": itm[0],
-                        "test_url": get_log_url(platform, workspace, itm[2]), 
+                        "test_url": get_log_url(platform, itm[3], itm[2]), 
                         "status": itm[4]
                     } for itm in check_info
                 ]
