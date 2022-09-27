@@ -3,7 +3,7 @@
     <Tabs :value="tabName" v-on:on-click="clickTab">
       <TabPane
         label="编译"
-        name="10001"
+        name="progress"
         icon="md-sync"
       >
         <div style="margin-bottom:2%;">
@@ -37,7 +37,7 @@
       </TabPane>
       <TabPane
         label="发布"
-        name="10002"
+        name="publish"
         icon="md-cloud-done"
       >
       <upload-result> </upload-result>
@@ -58,7 +58,6 @@ export default {
   name: 'Publish',
   data: function () {
     return {
-      tabName: '10001',
       childname: 'pypi/bos',
       summary: [],
       integrationdata: [],
@@ -93,12 +92,20 @@ export default {
   },
   watch: {
     version: function () {
-      this.$router.push({
+      let data = {
         name: 'PublishVersion',
         params: {
           version: this.version
         }
-      }).catch(error => {
+      };
+      // 如果有query则最近进去
+      if (this.$route.query.tab) {
+        if (['progress', 'publish'].includes(this.$route.query.tab)) {
+          let tmp = this.$route.query.tab;
+          data.query = {tab: tmp};
+        }
+      }
+      this.$router.push(data).catch(error => {
         if (error.name !== 'NavigationDuplicated') {
           throw error;
         }
@@ -127,6 +134,20 @@ export default {
       get() {
         return this.$store.state.version;
       }
+    },
+    tabName() {
+      let tmp = 'progress';
+      if (this.$route.query.tab) {
+        if (['progress', 'publish'].includes(this.$route.query.tab)) {
+          tmp = this.$route.query.tab;
+        }
+        this.$router.replace({query: {tab: tmp}}).catch(error => {
+          if (error.name !== 'NavigationDuplicated') {
+            throw error;
+          }
+        });
+      }
+      return tmp;
     }
   },
   methods: {
@@ -134,20 +155,33 @@ export default {
       let _version = this.$route.params.version ? this.$route.params.version : this.$store.state.version;
       this.$store.commit('changeVersion', _version);
       Cookies.set('version', _version);
-      this.$router.push({
+      let data = {
         name: 'PublishVersion',
         params: {
           version: _version
         }
-      }).catch(error => {
+      };
+      if (this.$route.query.tab) {
+        if (['progress', 'publish'].includes(this.$route.query.tab)) {
+          let tmp = this.$route.query.tab;
+          data.query = {tab: tmp};
+        }
+      }
+      this.$router.push(data).catch(error => {
         if (error.name !== 'NavigationDuplicated') {
           throw error;
         }
       });
     },
     clickTab(name) {
-      this.tabName = name;
-      // console.log(this.tabName);
+      if (this.$route.query.tab) {
+        let query = {tab: name};
+        this.$router.replace({query: query}).catch(error => {
+          if (error.name !== 'NavigationDuplicated') {
+            throw error;
+          }
+        });
+      }
     },
     clickChildTab(item) {
       this.childname = item.name;

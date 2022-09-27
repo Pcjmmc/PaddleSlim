@@ -24,7 +24,12 @@ export const ROUTES = [
       name: 'AppStore',
       component: AppStore
     },
-    { // 主页
+    { // 其他应用主页
+      path: '/default',
+      name: 'Default',
+      component: Main
+    },
+    { // Paddle核心框架主页
       path: '/:paddle?',
       component: Main,
       // 默认跳到集测页

@@ -72,7 +72,15 @@ export default {
       Cookies.set("appname", item.name);
       this.$store.commit('changeAppid', item.id);
       this.$store.commit('changeAppName', item.name);
-      this.$router.push({path: '/paddle'});
+      // 这边根据产品跳转
+      switch (item.id) {
+        case 1:
+          this.$router.push({path: '/paddle'});
+          break
+        default:
+          this.$router.push({path: '/default'});
+          break
+      }
     },
     randomColor() {
       return this.colorList[Math.floor(Math.random() * this.colorList.length)];

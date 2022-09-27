@@ -12,7 +12,9 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   let hasAppId = Boolean(Cookies.get('appid'));
   if (to.name !== 'AppStore' && !hasAppId) {
-    next('/app_store')
+    Cookies.set('appid', 1);
+    Cookies.set('appname', '飞桨核心框架');
+    next()
   } else {
     next()
   }
