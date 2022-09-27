@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
   if (to.name !== 'AppStore' && !hasAppId) {
     Cookies.set('appid', 1);
     Cookies.set('appname', '飞桨核心框架');
-    next()
+    next();
   } else {
     next()
   }

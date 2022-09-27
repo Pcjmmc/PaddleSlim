@@ -76,10 +76,10 @@ export default {
       switch (item.id) {
         case 1:
           this.$router.push({path: '/paddle'});
-          break
+          break;
         default:
           this.$router.push({path: '/default'});
-          break
+          break;
       }
     },
     randomColor() {
