@@ -280,6 +280,7 @@ export default {
       let v = null;
       if (tmp.length === 2) {
         v = tmp[1];
+        v = v.replace('-', '');
       } else {
         return null;
       }
