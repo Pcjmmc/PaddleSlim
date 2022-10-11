@@ -39,6 +39,12 @@ class Compile(BaseModel, BaseModelMixin):
     status = Column(VARCHAR(256), comment='运行状态， running， error， done')
     env = Column(VARCHAR(512), comment='环境配置信息')
     wheel = Column(VARCHAR(256), comment='编译包地址')
+    os = Column(VARCHAR(512), comment='系统信息')
+    pd_type = Column(VARCHAR(512), comment='commit，pr，tag')
+    value = Column(VARCHAR(512), comment='值，可以是commit or pr or tag')
+    branch = Column(VARCHAR(512), comment='分支信息')
+    python = Column(VARCHAR(512), comment='python版本信息')
+    cuda = Column(VARCHAR(512), comment='cuda信息')
     create_time = Column(DateTime, comment="本记录创建的时间")
     update_time = Column(DateTime, comment="本记录更新的时间")
 

@@ -44,6 +44,13 @@ class JobInitView(MABaseView):
                        "cuda": cuda,
                        "os": os,
                        "branch": branch}))
+        data["pd_type"] = pd_type
+        data["value"] = value
+        data["python"] = python
+        data["cuda"] = cuda
+        data["os"] = os
+        data["branch"] = branch
+
         data["create_time"] = datetime.now()
         data["update_time"] = datetime.now()
         res = await Compile.aio_insert(data)
