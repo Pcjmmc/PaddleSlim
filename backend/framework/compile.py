@@ -87,39 +87,38 @@ class CompileInit(MABaseView):
             "branch": branch,
             "dist_type": dist_type,
         }
-        print(compile_info)
 
-        #
-        # RETRY_TIME = 5
-        # retry = 0
-        # while (retry < RETRY_TIME):
-        #     res = requests.post(COMPILE_SERVICE, json=data)
-        #     if res.status_code != 200:
-        #         print(res.text)
-        #         retry += 1
-        #         continue
-        #     else:
-        #         break
-        # if retry == RETRY_TIME:
-        #     query = dict()
-        #     query["jid"] = jid
-        #     data = dict()
-        #     data["status"] = "error"
-        #     data["update_time"] = datetime.now()
-        #     res = await Compile.aio_update(data, query)
-        #     if res == 0:
-        #         raise HTTP400Error("Compile 库更新结果失败")
-        #     res = await Job.aio_update({"status": "error"}, {"id": jid})
-        #     if res == 0:
-        #         raise HTTP400Error("Job 库更新结果失败")
-        # else:
-        #     query = dict()
-        #     query["jid"] = jid
-        #     data = dict()
-        #     data["status"] = "running"
-        #     data["update_time"] = datetime.now()
-        #     res = await Compile.aio_update(data, query)
-        #     if res == 0:
-        #         raise HTTP400Error("Compile 库更新编译状态失败")
+
+        RETRY_TIME = 5
+        retry = 0
+        while (retry < RETRY_TIME):
+            res = requests.post(COMPILE_SERVICE, json=data)
+            if res.status_code != 200:
+                print(res.text)
+                retry += 1
+                continue
+            else:
+                break
+        if retry == RETRY_TIME:
+            query = dict()
+            query["jid"] = jid
+            data = dict()
+            data["status"] = "error"
+            data["update_time"] = datetime.now()
+            res = await Compile.aio_update(data, query)
+            if res == 0:
+                raise HTTP400Error("Compile 库更新结果失败")
+            res = await Job.aio_update({"status": "error"}, {"id": jid})
+            if res == 0:
+                raise HTTP400Error("Job 库更新结果失败")
+        else:
+            query = dict()
+            query["jid"] = jid
+            data = dict()
+            data["status"] = "running"
+            data["update_time"] = datetime.now()
+            res = await Compile.aio_update(data, query)
+            if res == 0:
+                raise HTTP400Error("Compile 库更新编译状态失败")
 
 
