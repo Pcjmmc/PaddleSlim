@@ -143,5 +143,3 @@ class CompileInit(MABaseView):
                 res = await Compile.aio_update(data, query)
                 if res == 0:
                     raise HTTP400Error("Compile 库更新编译状态失败")
-
-
