@@ -42,10 +42,19 @@ class CompileInit(MABaseView):
         os = kwargs.get("os")
         branch = kwargs.get("branch")
         dist_type = kwargs.get("dist_type")
-        await self.wheel_cache(jid, pd_type, value, python, cuda, os, branch, dist_type)
+        cache = kwargs.get("cache", True)
+        await self.wheel_cache(jid, pd_type, value, python, cuda, os, branch, dist_type, cache)
         return {"jid": jid}
 
-    async def wheel_cache(self, jid, pd_type, value, python, cuda=None, os=None, branch=None, dist_type="wheel"):
+    async def cache(self, query):
+        """
+        历史缓存查询命中
+        """
+        query = dict({"status": "done"}, **query)
+        data = await Compile.aio_filter_details(need_all=False, **query)
+        return data
+
+    async def wheel_cache(self, jid, pd_type, value, python, cuda=None, os=None, branch=None, dist_type="wheel", cache=True):
         """
         编译查询器,后续替换成云燊的服务
         wheel, version, pr, commit 四个编译类型任务，后三个走编译服务
@@ -88,37 +97,51 @@ class CompileInit(MABaseView):
             "dist_type": dist_type,
         }
 
+        # 缓存命中
+        query = {"pd_type": pd_type,
+                       "value": value,
+                       "python": python,
+                       "cuda": cuda,
+                       "os": os,
+                       "branch": branch}
 
-        RETRY_TIME = 5
-        retry = 0
-        while (retry < RETRY_TIME):
-            res = requests.post(COMPILE_SERVICE, json=data)
-            if res.status_code != 200:
-                print(res.text)
-                retry += 1
-                continue
-            else:
-                break
-        if retry == RETRY_TIME:
-            query = dict()
-            query["jid"] = jid
-            data = dict()
-            data["status"] = "error"
-            data["update_time"] = datetime.now()
-            res = await Compile.aio_update(data, query)
-            if res == 0:
-                raise HTTP400Error("Compile 库更新结果失败")
-            res = await Job.aio_update({"status": "error"}, {"id": jid})
-            if res == 0:
-                raise HTTP400Error("Job 库更新结果失败")
+        res = await self.cache(query)
+        if len(res) != 0 and cache:
+            # 命中缓存 走缓存逻辑
+            wheel_path = res[0].get("wheel")
+            await Compile.aio_update({"status": "done", "wheel": wheel_path, "update_time": datetime.now()}, {"id": id})
+            await Job.aio_update({"status": "done", "update_time": datetime.now()}, {"id": jid})
         else:
-            query = dict()
-            query["jid"] = jid
-            data = dict()
-            data["status"] = "running"
-            data["update_time"] = datetime.now()
-            res = await Compile.aio_update(data, query)
-            if res == 0:
-                raise HTTP400Error("Compile 库更新编译状态失败")
+            RETRY_TIME = 5
+            retry = 0
+            while (retry < RETRY_TIME):
+                res = requests.post(COMPILE_SERVICE, json=data)
+                if res.status_code != 200:
+                    print(res.text)
+                    retry += 1
+                    continue
+                else:
+                    break
+            if retry == RETRY_TIME:
+                query = dict()
+                query["jid"] = jid
+                data = dict()
+                data["status"] = "error"
+                data["update_time"] = datetime.now()
+                res = await Compile.aio_update(data, query)
+                if res == 0:
+                    raise HTTP400Error("Compile 库更新结果失败")
+                res = await Job.aio_update({"status": "error"}, {"id": jid})
+                if res == 0:
+                    raise HTTP400Error("Job 库更新结果失败")
+            else:
+                query = dict()
+                query["jid"] = jid
+                data = dict()
+                data["status"] = "running"
+                data["update_time"] = datetime.now()
+                res = await Compile.aio_update(data, query)
+                if res == 0:
+                    raise HTTP400Error("Compile 库更新编译状态失败")
 
 
