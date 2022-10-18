@@ -21,27 +21,23 @@ class JobList(MABaseView):
         return await super().get(**kwargs)
 
     async def get_data(self, **kwargs):
-        id = kwargs.get("id")
-        description = kwargs.get("name")
-        if id is not None:
-            data = await Job.aio_filter_details(id=id)
-            for d in data:
-                d["create_time"] = str(d.get("create_time"))
-                d["update_time"] = str(d.get("update_time"))
-            return 1, data
-        elif description is not None:
-            data = await Job.aio_filter_details(description__contains=description)
-            for d in data:
-                d["create_time"] = str(d.get("create_time"))
-                d["update_time"] = str(d.get("update_time"))
-            return len(data), data
-        else:
-            # 只返回查询列表
-            page_index = kwargs.get("page_index")
-            limit = kwargs.get("limit")
-            data = await Job.aio_filter_details(page_index=page_index, limit=limit, order_by="-id")
-            total = await Job.aio_filter_count()
-            for d in data:
-                d["create_time"] = str(d.get("create_time"))
-                d["update_time"] = str(d.get("update_time"))
-            return total, data
+        query = self.get_query(kwargs)
+        data = await Job.aio_filter_details(**query)
+        for d in data:
+            d["create_time"] = str(d.get("create_time"))
+            d["update_time"] = str(d.get("update_time"))
+        return len(data), data
+
+
+    def get_query(self, kwargs, userid=None, level=80):
+        """
+        构造查询
+        """
+        query = {key: val for key, val in kwargs.items() if val}
+        if "description" in query.keys():
+            query["description__contains"] = query["description"]
+            del(query["description"])
+        if level < 90:
+            query = dict({"user_id": userid}, **query)
+        query = dict({"order_by": "-id"}, **query)
+        return query
