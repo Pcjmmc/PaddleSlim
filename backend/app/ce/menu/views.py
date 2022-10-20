@@ -7,10 +7,13 @@ import time
 from ce_web.settings.common import STORAGE
 from libs.mongo.db import Mongo
 
+from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
 
 class MenuManage(MABaseView):
+
+    auth_class = AuthCheck
 
     async def get(self, **kwargs):
         """

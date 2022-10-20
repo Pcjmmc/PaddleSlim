@@ -30,3 +30,5 @@ export const FrameWorkJobDetail = '/framework/jobdetails';
 export const FrameReportUrl = '/framework/reportgenerator';
 export const BinarySearchUrl = '/ce/tools/binarysearch';
 export const VersionUrl = '/ce/version';
+export const UserInfoUrl = '/ce/user';
+export const LogoutUrl = '/ce/logout';

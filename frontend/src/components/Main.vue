@@ -3,16 +3,31 @@
     <Layout>
       <Header style="height:50px">
         <Menu mode="horizontal" theme="dark" style="height:50px">
-          <div>
-            <MenuItem style="float: right;" name="1">
+          <div style="float: right;">
+            <MenuItem name="1">
               <div>
-                <Dropdown transfer trigger="click" @on-click="handleClickUser">
+                <Dropdown transfer trigger="click" @on-click="handleClickApp">
                   <a href="javascript:void(0)" class="fontsize">
                     <span class="main-user-name">{{ appname }}</span>
                     <Icon type="md-arrow-dropdown"></Icon>
                   </a>
                   <DropdownMenu slot="list">
                     <DropdownItem name="changeApp"> 更换产品 </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+            </MenuItem>
+            <MenuItem name="2" v-if="username">
+              <div>
+                <Dropdown transfer trigger="click" @on-click="handleClickUser">
+                  <a href="javascript:void(0)" class="fontsize">
+                    <img :src="avater" class="img-css">
+                      <span>{{ username }}</span>
+                    <img>
+                    <Icon type="md-arrow-dropdown"></Icon>
+                  </a>
+                  <DropdownMenu slot="list">
+                    <DropdownItem name="logout"> 退出 </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
               </div>
@@ -80,7 +95,7 @@
 
 <script>
 import Cookies from 'js-cookie';
-import { MenuInfoUrl } from '../api/url.js';
+import { MenuInfoUrl, UserInfoUrl, LogoutUrl } from '../api/url.js';
 import api from "../api/index";
 import MenuNav from './CommonUtil/MenuNav.vue';
 export default {
@@ -93,7 +108,6 @@ export default {
       },
       appid: Cookies.get("appid"),
       appname: Cookies.get("appname"),
-      userName: '',
       menuDesc: {},
       verisonList: [],
       option: '',
@@ -131,6 +145,16 @@ export default {
       get() {
         return this.$store.state.version;
       }
+    },
+    username: {
+      get() {
+        return this.$store.state.username;
+      }
+    },
+    avater: {
+      get() {
+        return this.$store.state.avater;
+      }
     }
   },
   components: {
@@ -143,11 +167,13 @@ export default {
   },
   mounted: function () {
     this.appname = Cookies.get('appname');
+    // this.username = Cookies.get('username');
     this.getMenu();
   },
   created() {
     this.$root.Hub.$on('update-user-name', () => {
       this.appname = Cookies.get('appname');
+      // this.username = Cookies.get('username');
     });
     this.getMenu();
   },
@@ -156,7 +182,14 @@ export default {
       this.option = item.desc;
       this.$store.commit('changeVersion', this.option);
     },
-     handleClickUser (name) {
+    async handleClickUser (item) {
+      // 清理cookie 跳转登出
+      Cookies.remove('username');
+      Cookies.remove('avater');
+      await api.get(LogoutUrl);
+      // 将cookie清理掉，并跳转到登出页面
+    },
+    handleClickApp (name) {
       Cookies.remove('appid');
       Cookies.remove('appname');
       this.$store.commit('removeCurrentApp');
@@ -164,6 +197,16 @@ export default {
     },
     collapsedSider () {
       this.$refs.side1.toggleCollapse();
+    },
+    async getUserInfo () {
+      // 发送请求去获取用户头像用户名等信息 todo
+      const { code, data } = await api.get(UserInfoUrl);
+      let username = data['username'];
+      let avater = data['imageUrl'];
+      Cookies.set('username', username);
+      Cookies.set('avater', avater);
+      this.$store.commit('changeUserName', username);
+      this.$store.commit('changeAvater', avater);
     },
     async getMenu () {
       // 根据appid实时获取menu菜单; 各自定义各自的菜单
@@ -188,6 +231,7 @@ export default {
         this.$store.commit('changeVersion', this.option);
       }
       this.$delete(this.menuDesc, 'version');
+      await this.getUserInfo();
     }
   }
 }
@@ -278,5 +322,17 @@ export default {
     /*margin-left: 198px;*/
 
     width: auto;
+  }
+  .img-css {
+    display: inline-block;
+    word-break: keep-all;
+    white-space: nowrap;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+    width: 24px;
+    height: 24px;
+    border-radius: 24px;
   }
 </style>

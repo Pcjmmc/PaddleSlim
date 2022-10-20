@@ -17,9 +17,12 @@ from services.tasks import TaskBuildInfo, TasksInfo
 from utils.change_time import stmp_by_date
 
 from views.base_view import MABaseView
+from views.auth_view import AuthCheck
 
 
 class ReleaseVersionManage(MABaseView):
+    
+    auth_class = AuthCheck
 
     async def get(self, **kwargs):
         """

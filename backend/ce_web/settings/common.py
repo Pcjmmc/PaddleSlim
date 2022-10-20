@@ -42,9 +42,21 @@ class DeploymentType(object):
 if 'DEPLOYMENT_TYPE' in os.environ:
     DEPLOYMENT = os.environ['DEPLOYMENT_TYPE'].upper()
     DEBUG = False
+    PTOKEN = 'UUAP_P_TOKEN'
+    EAC_HOST = 'https://uuap.baidu.com'
+    APP_KEY = 'uuapclient-791706269230583809-RjLwt-online'
+    UUAP_SECRET_KEY = '341cfaffceb646259b2999'
+    BASE_URL = 'http://paddletest.baidu-int.com:8999'
+    DEFAULT_URL = 'http://paddletest.baidu-int.com:8081'
 else:
-    DEPLOYMENT = DeploymentType.DEV
+    DEPLOYMENT = DeploymentType.PRODUCTION
     DEBUG = True
+    PTOKEN = 'UUAP_P_TOKEN_OFFLINE'
+    EAC_HOST = 'https://itebeta.baidu.com'
+    APP_KEY = 'uuapclient-787729053652488193-Ew7jl-beta'
+    UUAP_SECRET_KEY = 'bd7192c84f744fdeaea76e'
+    BASE_URL = 'http://liuhuanlung.baidu-int.com:8000'
+    DEFAULT_URL = 'http://liuhuanlung.baidu-int.com:8081'
 
 # ##########################
 # load storage config

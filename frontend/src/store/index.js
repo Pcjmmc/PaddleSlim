@@ -9,7 +9,9 @@ const store = new Vuex.Store({
   state: {
     'version': '',
     'appid': Cookies.get('appid', 1),
-    'appname': Cookies.get('appname', '飞桨核心框架')
+    'appname': Cookies.get('appname', '飞桨核心框架'),
+    'username': Cookies.get('username'),
+    'avater': Cookies.get('avater')
   },
   mutations: {
     changeVersion (state, version) {
@@ -20,6 +22,12 @@ const store = new Vuex.Store({
     },
     changeAppName (state, appname) {
       state.appname = appname;
+    },
+    changeUserName (state, username) {
+      state.username = username;
+    },
+    changeAvater (state, avater) {
+      state.avater = avater;
     },
     removeCurrentApp (state) {
       state.appname = '';

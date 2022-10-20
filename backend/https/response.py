@@ -30,9 +30,15 @@ HTTP_500_INTERNAL_SERVER_ERROR = {
     'message': 'Server Error Or Unlawful Request!'
 }
 
+HTTP_4001_INTERNAL_SERVER_ERROR = {
+    'code': 4001,
+    'message': 'Redirect To New Url!'
+}
+
 STATUS_LIST = (
     HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND,
-    HTTP_405_METHOD_NOT_ALLOWED, HTTP_500_INTERNAL_SERVER_ERROR
+    HTTP_405_METHOD_NOT_ALLOWED, HTTP_500_INTERNAL_SERVER_ERROR,
+    HTTP_4001_INTERNAL_SERVER_ERROR
 )
 
 
@@ -60,6 +66,20 @@ def return_error_response(tornado_request_handler, http_status, error_message=No
         response_error['message'] = error_message
     return response(tornado_request_handler, response_error, status=_status.HTTP_200_OK)
 
+def return_redirect_response(tornado_request_handler, http_status, new_url=None):
+    """
+    :param tornado_request_handler: tornado.web.requestHandler
+    :param http_status:
+    :param error_message:
+    :return:
+    """
+    if http_status not in STATUS_LIST:
+        return response(tornado_request_handler, HTTP_500_INTERNAL_SERVER_ERROR, status=_status.HTTP_200_OK)
+
+    response_error = copy.copy(http_status)
+    if new_url:
+        response_error['message'] = new_url
+    return response(tornado_request_handler, response_error, status=_status.HTTP_200_OK)
 
 def return_success_response(tornado_request_handler, data=None, **kwargs):
     """

@@ -34,9 +34,8 @@ class BaseRpc(object):
     proxy = None
     need_data = False
 
-    def __init__(self, params=empty, headers=empty):
+    def __init__(self, params=empty):
         self.params = params if (params is not empty) else {}
-        self.headers = headers if (headers is not empty) else {}
         self._response = None
         self._response_text = None
         self._called_is_valid = False

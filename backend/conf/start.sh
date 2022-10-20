@@ -1,4 +1,4 @@
-docker run -d --name=paddletest_nginx_server_test  --net=host \
+docker run -d --name=paddletest_nginx_server  --net=host \
     -v /paddletest/app/conf:/home/app/backend\
     -w /home/app/backend \
     ce_web_backend:backend_v1\

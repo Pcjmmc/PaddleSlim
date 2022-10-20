@@ -44,13 +44,13 @@ function checkStatus(response) {
 
 // 检查数据中自定义的数据状态
 function checkDataStatus(res) {
-  if (parseInt(res.status, 10) === 200) { // 200 正常返回数据
+  if (parseInt(res.code, 10) === 200) { // 200 正常返回数据
     return res;
-  } else if (parseInt(res.status, 10) === 300) { // 300 重定向到登录界面
+  } else if (parseInt(res.code, 10) === 4001) { // 300 重定向到登录界面
     Message.destroy();
-    Message.warning('请先登录');
-    router.push({path: '/paddle/login'});
-  } else if (parseInt(res.status, 10) === 403) { // 403 跳转到权限页面
+    let new_url = res.message;
+    window.location.href = new_url
+  } else if (parseInt(res.code, 10) === 403) { // 403 跳转到权限页面
     Message.destroy();
     Message.warning({
       content: '您没有此权限，请先开通权限',
@@ -72,7 +72,8 @@ export default {
       timeout: 30000,
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'originUrl': window.location.href
       }
     }).then(checkStatus).then(checkDataStatus);
   },
@@ -84,7 +85,8 @@ export default {
       timeout: 30000,
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'originUrl': window.location.href
       }
     }).then(checkStatus).then(checkDataStatus);
   },
@@ -96,7 +98,8 @@ export default {
       timeout: 30000,
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'originUrl': window.location.href
       }
     }).then(checkStatus).then(checkDataStatus);
   },
@@ -108,7 +111,8 @@ export default {
       params,
       timeout: 30000,
       headers: {
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        'originUrl': window.location.href
       }
     }).then(checkStatus).then(checkDataStatus);
   },
@@ -120,7 +124,8 @@ export default {
       timeout: 30000,
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'multipart/form-data;'
+        'Content-Type': 'multipart/form-data;',
+        'originUrl': window.location.href
       }
     }).then(checkStatus).then(checkDataStatus);
   }

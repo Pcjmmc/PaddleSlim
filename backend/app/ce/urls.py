@@ -16,6 +16,8 @@ from app.ce.publish.result_views import PublishResultManage
 from app.ce.publish.views import PublishSummaryManage, PublishTaskManage
 from app.ce.release.views import ReleaseVersionManage, TaskManage
 from app.ce.tools.views import BinarySearchManage
+from app.ce.user.views import UserInfoManage
+from app.ce.ValidateToken.views import LogoutManage, ValidateManage
 from app.ce.version.views import CreateRVersion
 
 from urls import url
@@ -40,4 +42,7 @@ urlpatterns = [
     url(r'associated/bugs', AssociatedBugManage),
     url(r'tools/binarysearch', BinarySearchManage),
     url(r'version/?$', CreateRVersion),
+    url(r'sTokenBackendValidate/?$', ValidateManage),
+    url(r'user/?$', UserInfoManage),
+    url(r'logout/?$', LogoutManage),
 ]

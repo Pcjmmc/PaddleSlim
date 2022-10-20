@@ -6,7 +6,7 @@ view基类，实现get、post、put等基础查询
 import asyncio
 import copy
 import json
-
+import urllib
 import tornado.web
 from exception import HTTP400Error, HTTP404Error, HTTPDetailError
 from https import response as resp
@@ -16,6 +16,11 @@ class BaseView(tornado.web.RequestHandler):
     """
     定义基类view
     """
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Credentials", "true")
+        self.set_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD")
+
     def initialize(self, controller=None):
         """
         初始化（请求开始）
@@ -37,6 +42,7 @@ class MABaseView(BaseView):
     delete: 删除数据
     post: 创建数据
     """
+    auth_class = None
     model_class = None
     post_form_class = None
 
@@ -73,13 +79,17 @@ class MABaseView(BaseView):
         return cache_cookies
     
     @property
+    def headers(self):
+        return self.request.headers
+
+    @property
     def _cookies(self):
         _cookies = {}
         cookies = {}
-        if hasattr(self.request, 'cache_cookies'):
+        if hasattr(self.request, 'cookies'):
             _cookies = self.request.cookies
         for name in _cookies:
-            cookies['_cookie_%s' % name] = _cookies[name]
+            cookies[name] = self.get_cookie(name)
         return cookies
     
     @property
@@ -88,7 +98,11 @@ class MABaseView(BaseView):
         body_data = self._body_data
         req_cookies = copy.deepcopy(self._cache_cookies)
         req_cookies.update(self._cookies)
-        request_data = dict(**body_data, **form_data, **req_cookies)
+        request_data = {}
+        request_data.update(req_cookies)
+        request_data_temp = dict(**body_data, **form_data)
+        # cookie和参数中的冲突，参数中优先级高
+        request_data.update(request_data_temp)
         return request_data
 
     def get_perfect_request_data(self):
@@ -101,6 +115,16 @@ class MABaseView(BaseView):
         """
         重写get方法
         """
+        # 如果校验没有登录则直接跳转
+        if self.auth_class:
+            need_redirect, sed_params = await self.auth_class.check_auth(self._cookies, self.headers)
+            if need_redirect:
+                # 返回正常，让前端重新location
+                return resp.return_redirect_response(self, resp.HTTP_4001_INTERNAL_SERVER_ERROR, new_url=sed_params)
+            else:
+                # 将user info种植到cookie中
+                username = sed_params.get("username")
+                self.set_cookie('username', username)
         kwargs = self.get_perfect_request_data()
         try:
             all_count, data = await self.get_data(**kwargs)
