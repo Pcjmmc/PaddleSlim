@@ -33,7 +33,7 @@ class UserInfoManage(MABaseView):
         # print("get menu data by appid", kwargs)
         data = {
             "username": self._cookies.get("username"),
-            "returnFields": "imageUrl,departmentName",
+            "returnFields": "imageUrl,departmentName,email",
             "timestamp": int(time.time()),
             "appKey": APP_KEY,
             "sRandom": str(uuid.uuid1())
