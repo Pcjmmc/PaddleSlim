@@ -49,7 +49,7 @@ if 'DEPLOYMENT_TYPE' in os.environ:
     BASE_URL = 'http://paddletest.baidu-int.com:8999'
     DEFAULT_URL = 'http://paddletest.baidu-int.com:8081'
 else:
-    DEPLOYMENT = DeploymentType.PRODUCTION
+    DEPLOYMENT = DeploymentType.DEV
     DEBUG = True
     PTOKEN = 'UUAP_P_TOKEN_OFFLINE'
     EAC_HOST = 'https://itebeta.baidu.com'

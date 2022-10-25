@@ -120,32 +120,34 @@ if __name__ == "__main__":
         "version": [
         ],
         "requirement": {
-            "desc": "需求",
-            "icon": "ios-star-outline"
+            "desc": "需求管理",
+            "icon": "md-briefcase"
         },
         "test": {
-            "desc": "测试",
-            "icon": "ios-bulb-outline",
+            "desc": "测试管理",
+            "icon": "md-grid",
             "sub": {
-                "history": {
-                    "desc": '历史记录'
+                "framework-service": {
+                    "icon": 'md-construct',
+                    "desc": '测试服务(PTS)'
                 },
                 "package": {
-                    "desc": '编包列表'
+                    "icon": 'md-albums',
+                    "desc": '编包管理'
                 },
             }
         },
         "integration": {
-            "desc": "集测",
-            "icon": "ios-analytics"
+            "desc": "集测管理",
+            "icon": "md-cube"
         },
         "publish": {
-            "desc": "发布",
-            "icon": "ios-cloud-upload-outline"
+            "desc": "发布管理",
+            "icon": "md-cloud-upload"
         },
         "config": {
             "desc": '测试能力管理',
-            "icon": 'ios-paper',
+            "icon": 'md-paper',
             "sub": {
                 "jobs": {
                     "desc": '任务注册',

@@ -49,11 +49,11 @@ class UserInfoManage(MABaseView):
             user_info["imageUrl"]="https://eefe.baidu-int.com/avatars/{}".format(username)
             email = user_info.get("email")
             departmentName = user_info.get("departmentName")
-            res = await User().aio_get_object(**{"username": username})
-            if res:
+            _res = await User().aio_get_object(**{"username": username})
+            if _res:
                 await User().aio_update(
                     validated_data={"username": username, "email": email, "departmentName": departmentName},
-                    params_data={"id": res.id}
+                    params_data={"id": _res.id}
                 )
             else:
                 await User().aio_insert(
