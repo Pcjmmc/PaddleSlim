@@ -49,7 +49,7 @@ function checkDataStatus(res) {
   } else if (parseInt(res.code, 10) === 4001) { // 300 重定向到登录界面
     Message.destroy();
     let new_url = res.message;
-    window.location.href = new_url
+    window.location.href = new_url;
   } else if (parseInt(res.code, 10) === 403) { // 403 跳转到权限页面
     Message.destroy();
     Message.warning({

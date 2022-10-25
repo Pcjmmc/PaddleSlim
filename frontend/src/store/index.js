@@ -14,22 +14,22 @@ const store = new Vuex.Store({
     'avater': Cookies.get('avater')
   },
   mutations: {
-    changeVersion (state, version) {
+    changeVersion(state, version) {
       state.version = version;
     },
-    changeAppid (state, appid) {
+    changeAppid(state, appid) {
       state.appid = appid;
     },
-    changeAppName (state, appname) {
+    changeAppName(state, appname) {
       state.appname = appname;
     },
-    changeUserName (state, username) {
+    changeUserName(state, username) {
       state.username = username;
     },
-    changeAvater (state, avater) {
+    changeAvater(state, avater) {
       state.avater = avater;
     },
-    removeCurrentApp (state) {
+    removeCurrentApp(state) {
       state.appname = '';
       state.appid = '';
     }

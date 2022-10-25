@@ -6,7 +6,11 @@
           <div style="float: right;">
             <MenuItem name="1">
               <div>
-                <Dropdown transfer trigger="click" @on-click="handleClickApp">
+                <Dropdown
+                  transfer
+                  trigger="click"
+                  v-on:on-click="handleClickApp"
+                >
                   <a href="javascript:void(0)" class="fontsize">
                     <span class="main-user-name">{{ appname }}</span>
                     <Icon type="md-arrow-dropdown"></Icon>
@@ -19,7 +23,11 @@
             </MenuItem>
             <MenuItem name="2" v-if="username">
               <div>
-                <Dropdown transfer trigger="click" @on-click="handleClickUser">
+                <Dropdown
+                  transfer
+                  trigger="click"
+                  v-on:on-click="handleClickUser"
+                >
                   <a href="javascript:void(0)" class="fontsize">
                     <img :src="avater" class="img-css">
                       <span>{{ username }}</span>
@@ -182,33 +190,41 @@ export default {
       this.option = item.desc;
       this.$store.commit('changeVersion', this.option);
     },
-    async handleClickUser (item) {
+    async handleClickUser(item) {
       // 清理cookie 跳转登出
       Cookies.remove('username');
       Cookies.remove('avater');
       await api.get(LogoutUrl);
       // 将cookie清理掉，并跳转到登出页面
     },
-    handleClickApp (name) {
+    handleClickApp(name) {
       Cookies.remove('appid');
       Cookies.remove('appname');
       this.$store.commit('removeCurrentApp');
       this.$router.push({path: '/app_store'});
     },
-    collapsedSider () {
+    collapsedSider() {
       this.$refs.side1.toggleCollapse();
     },
-    async getUserInfo () {
+    async getUserInfo() {
       // 发送请求去获取用户头像用户名等信息 todo
-      const { code, data } = await api.get(UserInfoUrl);
-      let username = data['username'];
-      let avater = data['imageUrl'];
-      Cookies.set('username', username);
-      Cookies.set('avater', avater);
-      this.$store.commit('changeUserName', username);
-      this.$store.commit('changeAvater', avater);
+      const { code, data, message } = await api.get(UserInfoUrl);
+      if (parseInt(code, 10) === 200) {
+        let username = data.username;
+        let avater = data.imageUrl;
+        Cookies.set('username', username);
+        Cookies.set('avater', avater);
+        this.$store.commit('changeUserName', username);
+        this.$store.commit('changeAvater', avater);
+      } else {
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
     },
-    async getMenu () {
+    async getMenu() {
       // 根据appid实时获取menu菜单; 各自定义各自的菜单
       let params = {
         appid: Cookies.get("appid"),

@@ -303,7 +303,7 @@ export default {
       this.getData();
     },
     async getScenesList() {
-      const {code, data, msg} = await api.get(ScenesUrl);
+      const {code, data, message} = await api.get(ScenesUrl);
       if (parseInt(code, 10) === 200) {
         this.taskTypeList = data.taskTypeList;
         // console.log("this.taskTypeList", this.taskTypeList);
@@ -311,7 +311,7 @@ export default {
       } else {
         this.taskTypeList = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
