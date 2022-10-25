@@ -1,7 +1,7 @@
+# !/usr/bin/env python3
 """
 负责user信息查出
 """
-# !/usr/bin/env python3
 # encoding=utf-8
 import asyncio
 import datetime
@@ -44,7 +44,9 @@ class UserInfoManage(MABaseView):
         if res.get("code") == 200:
             # 如果不存在则新增，存在则更新
             user_info = res.get('result') or {}
+            # 将user_info 的头像替换成hi头像
             username = user_info.get("username")
+            user_info["imageUrl"]="https://eefe.baidu-int.com/avatars/{}".format(username)
             email = user_info.get("email")
             departmentName = user_info.get("departmentName")
             res = await User().aio_get_object(**{"username": username})
