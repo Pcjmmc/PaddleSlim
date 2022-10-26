@@ -43,7 +43,9 @@ class CompileInit(MABaseView):
         branch = kwargs.get("branch")
         dist_type = kwargs.get("dist_type")
         cache = kwargs.get("cache", True)
-        await self.wheel_cache(jid, pd_type, value, python, cuda, os, branch, dist_type, cache)
+
+        userid = kwargs.get("userid", 0)
+        await self.wheel_cache(jid, userid, pd_type, value, python, cuda, os, branch, dist_type, cache)
         return {"jid": jid}
 
     async def cache(self, query):
@@ -54,7 +56,7 @@ class CompileInit(MABaseView):
         data = await Compile.aio_filter_details(need_all=False, **query)
         return data
 
-    async def wheel_cache(self, jid, pd_type, value, python, cuda=None, os=None, branch=None, dist_type="wheel", cache=True):
+    async def wheel_cache(self, jid, userid, pd_type, value, python, cuda=None, os=None, branch=None, dist_type="wheel", cache=True):
         """
         编译查询器,后续替换成云燊的服务
         wheel, version, pr, commit 四个编译类型任务，后三个走编译服务
@@ -74,6 +76,7 @@ class CompileInit(MABaseView):
         data["cuda"] = cuda
         data["os"] = os
         data["branch"] = branch
+        data["userid"] = userid
 
         data["create_time"] = datetime.now()
         data["update_time"] = datetime.now()
