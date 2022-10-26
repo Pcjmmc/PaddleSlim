@@ -96,13 +96,17 @@ class MABaseView(BaseView):
     def request_data(self):
         form_data = {name: self.get_argument(name) for name in self.request.arguments}
         body_data = self._body_data
-        req_cookies = copy.deepcopy(self._cache_cookies)
-        req_cookies.update(self._cookies)
         request_data = {}
-        request_data.update(req_cookies)
         request_data_temp = dict(**body_data, **form_data)
-        # cookie和参数中的冲突，参数中优先级高
         request_data.update(request_data_temp)
+        # 前端的bool是字符串
+        for key in request_data:
+            val = request_data[key]
+            if val and str(val) == 'true':
+                request_data[key] = True
+            elif val and str(val) == 'false':
+                request_data[key] = False
+
         return request_data
 
     def get_perfect_request_data(self):
