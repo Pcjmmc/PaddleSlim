@@ -14,6 +14,12 @@ from framework.mission_callback import MissionCallback
 from framework.compile_callback import CompileCallback
 from framework.report_generator import ReportGenerator
 from framework.mission_info import MissionInfo
+
+
+
+from framework.compile import CompileInit
+from framework.compile_search import CompileSearch
+
 from urls import url
 
 urlpatterns = [
@@ -30,4 +36,9 @@ urlpatterns = [
     url(r'compilecallback/?$', CompileCallback),
     url(r'reportgenerator/?$', ReportGenerator),
     url(r'missionreport/?$', MissionInfo),
+
+    # 编译相关
+    url(r'compile/?$', CompileInit),
+    url(r'compile_search/?$', CompileSearch),
+
 ]
