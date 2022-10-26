@@ -3,6 +3,9 @@
     <Layout>
       <Header style="height:50px">
         <Menu mode="horizontal" theme="dark" style="height:50px">
+          <div style="float:left;" class="fontsize">
+            <p><font>PaddleTurbo</font></p>
+          </div>
           <div style="float: right;">
             <MenuItem name="1">
               <div>
@@ -11,7 +14,7 @@
                   trigger="click"
                   v-on:on-click="handleClickApp"
                 >
-                  <a href="javascript:void(0)" class="fontsize">
+                  <a href="javascript:void(0)">
                     <span class="main-user-name">{{ appname }}</span>
                     <Icon type="md-arrow-dropdown"></Icon>
                   </a>
@@ -28,7 +31,7 @@
                   trigger="click"
                   v-on:on-click="handleClickUser"
                 >
-                  <a href="javascript:void(0)" class="fontsize">
+                  <a href="javascript:void(0)">
                     <img :src="avater" class="img-css">
                       <span>{{ username }}</span>
                     <img>
@@ -288,6 +291,15 @@ export default {
     white-space: nowrap;
     vertical-align: bottom;
     transition: width .2s ease .2s;
+  }
+  .fontsize {
+    font-size: 22px;
+    font-weight: bold;
+    font-family: "楷体";
+    /*background-image: linear-gradient(top, orange, purple);*/
+    background-image: -webkit-linear-gradient(right, green, yellow, red);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   .user-dropdown {
     &-menu-con {
