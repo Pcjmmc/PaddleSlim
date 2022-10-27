@@ -26,8 +26,9 @@ class CompileSearch(MABaseView):
 
     async def get_data(self, **kwargs):
         query = dict({"status": "done"}, **{key: val for key, val in kwargs.items() if val})
+        print(query)
         # 只返回查询列表
-        data = await Compile.aio_filter_details(need_all=True, **query)
+        data = await Compile.aio_filter_details(**query)
         total = len(data)
         for d in data:
             d["create_time"] = str(d.get("create_time"))
