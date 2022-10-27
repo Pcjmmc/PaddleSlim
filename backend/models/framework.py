@@ -36,6 +36,7 @@ class Compile(BaseModel, BaseModelMixin):
     __tablename__ = 'compile'
     id = Column(Integer, primary_key=True, autoincrement=True)
     jid = Column(Integer)
+    uid = Column(Integer)
     status = Column(VARCHAR(256), comment='运行状态， running， error， done')
     env = Column(VARCHAR(512), comment='环境配置信息')
     wheel = Column(VARCHAR(256), comment='编译包地址')
