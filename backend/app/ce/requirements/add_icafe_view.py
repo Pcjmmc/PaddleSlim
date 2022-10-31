@@ -61,6 +61,7 @@ class MangeIcafe(MABaseView):
         """
            # 新建卡片
         print("新建卡片")
+        fields = kwargs.get("fileds")
         repo = fields.get("repo")
         bug_type = fields.get("bug_type")
         icafe_info = {
