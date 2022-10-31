@@ -79,17 +79,6 @@ class MangeIcafe(MABaseView):
                 icafe_info["detail"] += "\n" + content
 
         icafe_info["fields"] = {
-            "所属计划": "飞桨项目集/Paddle/{tag}".format(tag=icafe_plan),
-            "负责人": fields.get("rd_owner"),
-            "需求来源": "QA团队",
-            "负责人所属团队": "QA团队",
-            "QA负责人" : fields.get("qa_owner"),
-            "RD负责人" : fields.get("rd_owner"),
-            "流程状态" : "新建",
-            "plan_tag" : plan_tag,
-            "repo": repo,
-            "bug发现方式": bug_type,
-            "优先级": fields.get("level")
         }
         data = {
             "username": PADDLE_ICAFE_USER,
@@ -156,37 +145,4 @@ async def get_cards_by_filter(query):
         result.append(tmp)
     return len(result), result
 
-async def get_result_by_sequence(sequence):
-    """
-    获取执行sequence 关联的任务
-    """
-    log_url = []
-    result = await CeIcafe.aio_filter_details(
-        need_all=True, **{"sequence": sequence}
-    )
-    for ret in result:
-        tid = ret.get('tid')
-        secondary_type = ret.get('secondary_type')
-        task_info = await CeTasks.aio_get_object(**{"id": tid})
-        if task_info:
-            platform = task_info.platform
-            workspace = task_info.workspace
-            if platform == "xly":
-                _url = XLY_BASE_URL.format(
-                        workspace=workspace,
-                        build_id=ret["build_id"],
-                        job_id=ret['job_id']
-                    )  if ret.get('job_id') else XLY_BASE_URL2.format(
-                        workspace=workspace,
-                        build_id=ret["build_id"]
-                    )
-            elif platform == 'teamcity':
-                _url = TC_BASE_URL.format(
-                    build_id=ret["build_id"],
-                    build_type_id=ret["build_type_id"]
-                )
-            log_url.append(
-                {"secondary_type": secondary_type, "url": _url}
-            )
-    return log_url
 
