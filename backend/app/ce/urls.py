@@ -45,4 +45,5 @@ urlpatterns = [
     url(r'sTokenBackendValidate/?$', ValidateManage),
     url(r'user/?$', UserInfoManage),
     url(r'logout/?$', LogoutManage),
+    url(r'requirments/?$', IcafeManage)
 ]
