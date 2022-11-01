@@ -4,7 +4,7 @@
       <Header style="height:50px">
         <Menu mode="horizontal" theme="dark" style="height:50px">
           <div style="float:left;" class="fontsize">
-            <p><font>PaddleTurbo</font></p>
+            <p><font>PaddleTest</font></p>
           </div>
           <div style="float: right;">
             <MenuItem name="1">
@@ -197,6 +197,7 @@ export default {
       // 清理cookie 跳转登出
       Cookies.remove('username');
       Cookies.remove('avater');
+      Cookies.remove('userid');
       await api.get(LogoutUrl);
       // 将cookie清理掉，并跳转到登出页面
     },
@@ -215,8 +216,10 @@ export default {
       if (parseInt(code, 10) === 200) {
         let username = data.username;
         let avater = data.imageUrl;
+        let userid = data.userid;
         Cookies.set('username', username);
         Cookies.set('avater', avater);
+        Cookies.set('userid', userid);
         this.$store.commit('changeUserName', username);
         this.$store.commit('changeAvater', avater);
       } else {
