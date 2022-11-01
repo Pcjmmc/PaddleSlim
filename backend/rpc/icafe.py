@@ -100,7 +100,7 @@ class CreateCard(BaseRpc):
             return self.response_json
         return {}
 
-class CreateBug(BaseRpc):
+class ModifyCardStatus(BaseRpc):
     """
     修改icafe状态
     """

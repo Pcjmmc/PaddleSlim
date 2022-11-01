@@ -19,6 +19,7 @@ from app.ce.tools.views import BinarySearchManage
 from app.ce.user.views import UserInfoManage
 from app.ce.ValidateToken.views import LogoutManage, ValidateManage
 from app.ce.version.views import CreateRVersion
+from app.ce.equirements.views import IcafeManage
 
 from urls import url
 
