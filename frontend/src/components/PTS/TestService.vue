@@ -136,6 +136,11 @@ export default {
           align: 'center'
         },
         {
+          title: '任务名',
+          key: 'description',
+          align: 'center'
+        },
+        {
           title: '任务状态',
           key: 'status',
           align: 'center',
@@ -288,6 +293,7 @@ export default {
       this.content = [
         {
           jid: '1',
+          description: '动转静提测',
           status: 'success',
           create_time: '2022-10-26 19:00:35',
           update_time: '2022-10-26 19:30:35'

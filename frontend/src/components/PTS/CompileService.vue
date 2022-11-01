@@ -12,7 +12,7 @@
           :label-width="75"
           style="width: 85%"
         >
-          <Row v-if="search.type == 'pr'">
+          <Row>
             <Col span="4">
              <FormItem label="系统:" prop="os">
                 <Select clearable v-model="search.os">
@@ -51,35 +51,6 @@
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="取值:" prop="value">
-                <Input v-model="search.value" placeholder="输入 pr、commit 或 包地址"/>
-              </FormItem>
-            </Col>
-          </Row>
-          <Row v-else>
-            <Col span="5">
-             <FormItem label="系统:" prop="os">
-                <Select clearable v-model="search.os">
-                  <Option
-                    :key="index"
-                    :value="item"
-                    v-for="(item, index) in os"
-                  >{{ item }}</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="5">
-              <FormItem label="类型:" prop="type">
-                <Select clearable v-model="search.type">
-                  <Option
-                    :key="index"
-                    :value="item"
-                    v-for="(item, index) in testType"
-                  >{{ item }}</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="10">
               <FormItem label="取值:" prop="value">
                 <Input v-model="search.value" placeholder="输入 pr、commit 或 包地址"/>
               </FormItem>
@@ -127,7 +98,11 @@
           </Row>
         </Form>
       </div>
-      <Row type="flex" justify="center">
+      <Row
+        type="flex"
+        justify="center"
+        style="margin-top: 2%;"
+      >
         <Col span="4">
           <Button type="primary" @click="handleSummit">创建编译任务</Button>
         </Col>
@@ -407,7 +382,7 @@ export default {
   width: 96%;
   margin-left: 2%;
   margin-right: 2%;
-  max-height: 600px;
+  min-height: 400px;
   overflow: auto;
   font-size: 15px;
   color:lightslategrey

@@ -1,145 +1,153 @@
 <template>
   <div>
     <Card class="center-card-s">
-      <div>
-        <p align="left"> 环境配置 </p>
-      </div>
-      <div style="margin-top: 1%;" v-if="os.length > 0">
-        <span>
-         系统:
-          <span v-for="item, index in os">
-            <span v-if="item.checked">
-              <Tag
-                :checked="item.checked"
-                color="primary"
-                v-on:on-change="changeTagStatus(item, 'os')"
-              >
-                <font size="3"> {{ item.desc }}</font>
-              </Tag>
-            </span>
-            <span v-else>
-              <Tag
-                checkable
-                :checked="item.checked"
-                color="primary"
-                v-on:on-change="changeTagStatus(item, 'os')"
-              >
-                <font size="3"> {{ item.desc }}</font>
-              </Tag>
-            </span>
-          </span>
-        </span>
-      </div>
-      <div style="margin-top: 1%;" v-if="search.type == 'pr' && branch.length > 0">
-        <span>
-         分支:
-          <span v-for="item, index in branch">
-            <span v-if="item.checked">
-              <Tag
-                :checked="item.checked"
-                color="primary"
-                v-on:on-change="changeTagStatus(item, 'branch')"
-              >
-                <font size="3"> {{ item.desc }}</font>
-              </Tag>
-            </span>
-            <span v-else>
-              <Tag
-                checkable
-                :checked="item.checked"
-                color="primary"
-                v-on:on-change="changeTagStatus(item, 'branch')"
-              >
-                <font size="3"> {{ item.desc }}</font>
-              </Tag>
-            </span>
-          </span>
-        </span>
-      </div>
-      <div style="margin-top: 1%;" v-if="cuda.length > 0">
-        <span>
-         CUDA:
-          <span v-for="item, index in cuda">
-            <span v-if="item.checked">
-              <Tag
-                :checked="item.checked"
-                color="primary"
-                v-on:on-change="changeTagStatus(item, 'cuda')"
-              >
-                <font size="3"> {{ item.desc }}</font>
-              </Tag>
-            </span>
-            <span v-else>
-              <Tag
-                checkable
-                :checked="item.checked"
-                color="primary"
-                v-on:on-change="changeTagStatus(item, 'cuda')"
-              >
-                <font size="3"> {{ item.desc }}</font>
-              </Tag>
-            </span>
-          </span>
-        </span>
-      </div>
-      <div style="margin-top: 1%;" v-if="python.length > 0">
-        <span>
-         python:
-          <span v-for="item, index in python">
-            <span v-if="item.checked">
-              <Tag
-                :checked="item.checked"
-                color="primary"
-                v-on:on-change="changeTagStatus(item, 'python')"
-              >
-                <font size="3"> {{ item.desc }}</font>
-              </Tag>
-            </span>
-            <span v-else>
-              <Tag
-                checkable
-                :checked="item.checked"
-                color="primary"
-                v-on:on-change="changeTagStatus(item, 'python')"
-              >
-                <font size="3"> {{ item.desc }}</font>
-              </Tag>
-            </span>
-          </span>
-        </span>
-      </div>
-      <div style="margin-top: 1%;" v-if="testType.length > 0">
-        <span>
-         类型:
-          <span v-for="item, index in testType">
-            <span v-if="item.checked">
-              <Tag
-                :checked="item.checked"
-                color="primary"
-                v-on:on-change="changeTagStatus(item, 'testType')"
-              >
-                <font size="3"> {{ item.desc }}</font>
-              </Tag>
-            </span>
-            <span v-else>
-              <Tag
-                checkable
-                :checked="item.checked"
-                color="primary"
-                v-on:on-change="changeTagStatus(item, 'testType')"
-              >
-                <font size="3"> {{ item.desc }}</font>
-              </Tag>
-            </span>
-          </span>
-        </span>
-      </div>
-      <div style="margin-top: 1%;" v-if="testType.length > 0">
-        <Form
-          ref="addForm"
-          :model="search"
-          :rules="addRules"
+      <p slot="title">环境配置</p>
+      <Form
+        ref="addForm"
+        :model="search"
+        :rules="addRules"
+      >
+        <FormItem
+          prop="name"
         >
+          任务名:
+          <Input
+            v-model="search.name"
+            placeholder="输入测试任务名"
+            style="width:40%"
+          ></Input>
+        </FormItem>
+        <div v-if="os.length > 0">
+          <span>
+          系统:
+            <span v-for="item, index in os">
+              <span v-if="item.checked">
+                <Tag
+                  :checked="item.checked"
+                  color="primary"
+                  v-on:on-change="changeTagStatus(item, 'os')"
+                >
+                  <font size="3"> {{ item.desc }}</font>
+                </Tag>
+              </span>
+              <span v-else>
+                <Tag
+                  checkable
+                  :checked="item.checked"
+                  color="primary"
+                  v-on:on-change="changeTagStatus(item, 'os')"
+                >
+                  <font size="3"> {{ item.desc }}</font>
+                </Tag>
+              </span>
+            </span>
+          </span>
+        </div>
+        <div style="margin-top: 1%;" v-if="branch.length > 0">
+          <span>
+          分支:
+            <span v-for="item, index in branch">
+              <span v-if="item.checked">
+                <Tag
+                  :checked="item.checked"
+                  color="primary"
+                  v-on:on-change="changeTagStatus(item, 'branch')"
+                >
+                  <font size="3"> {{ item.desc }}</font>
+                </Tag>
+              </span>
+              <span v-else>
+                <Tag
+                  checkable
+                  :checked="item.checked"
+                  color="primary"
+                  v-on:on-change="changeTagStatus(item, 'branch')"
+                >
+                  <font size="3"> {{ item.desc }}</font>
+                </Tag>
+              </span>
+            </span>
+          </span>
+        </div>
+        <div style="margin-top: 1%;" v-if="cuda.length > 0">
+          <span>
+          CUDA:
+            <span v-for="item, index in cuda">
+              <span v-if="item.checked">
+                <Tag
+                  :checked="item.checked"
+                  color="primary"
+                  v-on:on-change="changeTagStatus(item, 'cuda')"
+                >
+                  <font size="3"> {{ item.desc }}</font>
+                </Tag>
+              </span>
+              <span v-else>
+                <Tag
+                  checkable
+                  :checked="item.checked"
+                  color="primary"
+                  v-on:on-change="changeTagStatus(item, 'cuda')"
+                >
+                  <font size="3"> {{ item.desc }}</font>
+                </Tag>
+              </span>
+            </span>
+          </span>
+        </div>
+        <div style="margin-top: 1%;" v-if="python.length > 0">
+          <span>
+          python:
+            <span v-for="item, index in python">
+              <span v-if="item.checked">
+                <Tag
+                  :checked="item.checked"
+                  color="primary"
+                  v-on:on-change="changeTagStatus(item, 'python')"
+                >
+                  <font size="3"> {{ item.desc }}</font>
+                </Tag>
+              </span>
+              <span v-else>
+                <Tag
+                  checkable
+                  :checked="item.checked"
+                  color="primary"
+                  v-on:on-change="changeTagStatus(item, 'python')"
+                >
+                  <font size="3"> {{ item.desc }}</font>
+                </Tag>
+              </span>
+            </span>
+          </span>
+        </div>
+        <div style="margin-top: 1%;" v-if="testType.length > 0">
+          <span>
+          类型:
+            <span v-for="item, index in testType">
+              <span v-if="item.checked">
+                <Tag
+                  :checked="item.checked"
+                  color="primary"
+                  v-on:on-change="changeTagStatus(item, 'testType')"
+                >
+                  <font size="3"> {{ item.desc }}</font>
+                </Tag>
+              </span>
+              <span v-else>
+                <Tag
+                  checkable
+                  :checked="item.checked"
+                  color="primary"
+                  v-on:on-change="changeTagStatus(item, 'testType')"
+                >
+                  <font size="3"> {{ item.desc }}</font>
+                </Tag>
+              </span>
+            </span>
+          </span>
+        </div>
+        <div style="margin-top: 1%;" v-if="testType.length > 0">
           <FormItem
             prop="value"
           >
@@ -150,8 +158,8 @@
               style="width:40%"
             ></Input>
           </FormItem>
-        </Form>
-      </div>
+        </div>
+      </Form>
     </Card>
     <!--
     <div slot="right" class="main">
@@ -173,7 +181,7 @@
           :to_data="toData"
           :default-props="{label:'label'}"
           mode="transfer"
-          height="490px"
+          height="450px"
           width="90%"
           @add-btn="add"
           @remove-btn="remove"
@@ -202,6 +210,9 @@ export default {
       addRules: {
         value: [
           { required: true, message: '请输入pr、commit 或包地址', trigger: 'blur' }
+        ],
+        name: [
+          { required: true, message: '请输入任务名', trigger: 'blur' }
         ]
       },
       searchinit: {
@@ -212,6 +223,7 @@ export default {
       pythoninit: [],
       testTypeinit: [],
       search: {
+        name: '',
         type: '',
         value: '',
         branch: '',
@@ -404,6 +416,7 @@ export default {
     getSearchInit() {
       // 将初始化的选中
       this.searchinit = {
+        name: '',
         value: '',
         type: this.testTypeinit[0].desc,
         branch: this.branchinit[0].desc,
@@ -460,6 +473,7 @@ export default {
         }
       }
       let params = {
+        description: this.search.name,
         type: this.search.type,
         value: this.search.value,
         python: this.search.python,
@@ -508,6 +522,9 @@ export default {
   margin-bottom: 1%;
   font-size: 20px;
   align: center;
+}
+.ivu-form-item{
+  margin-bottom: 12px;
 }
 </style>
 
