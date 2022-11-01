@@ -51,7 +51,7 @@ class MangeIcafe(MABaseView):
            sub_iql = "AND 负责人 in ({})".format(rd)
            iql = iql + sub_iql
         if qa:
-           sub_iql = "AND qa 负责人 in ({})".format(qa)
+           sub_iql = "AND qa负责人 in ({})".format(qa)
            iql = iql + sub_iql
         return await get_cards_by_filter(page, page_num, iql)
 
@@ -63,27 +63,23 @@ class MangeIcafe(MABaseView):
 
     async def post_data(self, **kwargs):
         """
-        响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
+        响应请求, 实现创建icafe卡片
         """
-           # 新建卡片
+        # 新建卡片
         print("新建卡片")
         fields = kwargs.get("fileds")
+        # repo和产品保持一致（这里填充，减少后续卡片状态修改报错）
         repo = fields.get("repo")
-        bug_type = fields.get("bug_type")
         icafe_info = {
             "title": fields.get("title"),
-            "type": "Bug",
+            #TODO 创建卡片类型是否需要放开，暂时默认为Task
+            "type": "Task",
             "detail": fields.get("description"),
             "fields": {},
-            "creator": "liuhuanling"
+            "creator": fields.get("rd_owner")
+            #TODO 创建卡片是否需要指定qa？
+            "qa负责人": fields.get("qa_owner")
         }
-        content = ""
-        if file_list:
-            for item in file_list:
-                img_content = item["content"]
-                content +=  "<img src=\"{body}>".format(body=img_content)
-                icafe_info["detail"] += "\n" + content
-
         icafe_info["fields"] = {
         }
         data = {
@@ -91,22 +87,8 @@ class MangeIcafe(MABaseView):
             "password": PADDLE_ICAFE_PASSD,
             "issues": [icafe_info]
         }
-        result = await CreateBug(data).get_data()
-        #  将icafe存起来；做关联关系
-        issues = result.get("issues", [])
-        print('创建参数', issues)
-        if issues:
-            sequence = issues[0].get("sequence")
-            issues_url = issues[0].get("url")
-            await CeIcafe.aio_insert(
-                {'tid': tid,
-                 'build_id': build_id,
-                 'tag': plan_tag,
-                 'issues_url':issues_url,
-                 'sequence': sequence,
-                 'secondary_type': secondary_type
-                }
-            )
+        result = await CreateCard(data).get_data()
+        return result
 
 async def get_cards_by_filter(page=1, page_num=20, query):
     """
