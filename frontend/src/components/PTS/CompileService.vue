@@ -330,9 +330,6 @@ export default {
     },
     async createJob() {
       // 防止有人选了pr，选了分支，又修改了其他值
-      if (this.search.type !== 'pr') {
-        this.search.branch = null;
-      }
       let params = {
         type: this.search.type,
         value: this.search.value,

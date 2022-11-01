@@ -479,7 +479,7 @@ export default {
         python: this.search.python,
         cuda: this.search.cuda,
         os: this.search.os,
-        branch: this.search.type === 'pr' ? this.search.branch : null,
+        branch: this.search.branch,
         mission: JSON.stringify(this.content)
       };
       const {code, data, message} = await api.post(FrameWorkJobUrl, params);
