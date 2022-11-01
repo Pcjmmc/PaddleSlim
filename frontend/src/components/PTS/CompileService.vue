@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card class="center-card-s">
+    <Card class="card-s-new">
       <div class="main">
         <p align="left"> 编译选项 </p>
       </div>
@@ -116,7 +116,12 @@
         <Card class="center-card-s">
           <Row>
             <span style="display:inline-block;width:95%;margin-right:2%;">
-              <span style="float:left;">系统: {{ getValue(item.env, "os") }}
+
+              <span style="float:left;">
+                <tag color="error" v-if="item.status=='error'">状态: {{ item.status }}</tag>
+                <tag color="success" v-else-if="item.status=='done'">状态: {{ item.status }}</tag>
+                <tag color="warning" v-else="item.status=='error'">状态: {{ item.status }}</tag>
+                系统: {{ getValue(item.env, "os") }}
                 <span v-if="getValue(item.env, 'branch')">
                   | 分支: {{ getValue(item.env, "branch") }}
                 </span>
@@ -259,7 +264,7 @@ export default {
         }
       }
       content_list.push('Wheel安装包');
-      return content_list.join('|');
+      return content_list.join(' | ');
     },
     async getSelectDatas() {
       const {code, data, msg} = await api.get(FrameWorkConfigUrl);
@@ -343,6 +348,7 @@ export default {
       const {code, message} = await api.post(FrameCompileCreateUrl, params);
       if (parseInt(code, 10) === 200) {
         // 立马刷新
+        this.initData();
         await this.getData();
       } else {
         this.$Message.error({
@@ -379,10 +385,19 @@ export default {
   width: 96%;
   margin-left: 2%;
   margin-right: 2%;
-  min-height: 400px;
+  max-height: 600px;
   overflow: auto;
   font-size: 15px;
-  color:lightslategrey
+  color: lightslategrey
+}
+.card-s-new {
+  width: 96%;
+  margin-left: 2%;
+  margin-right: 2%;
+  min-height: 350px;
+  overflow: auto;
+  font-size: 15px;
+  color: lightslategrey
 }
 .main {
   color:lightslategrey;
