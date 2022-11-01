@@ -14,7 +14,7 @@ from models.conclusion import CeConclusion
 from models.icafe import CeIcafe
 from models.release_version import CeReleaseVersion
 from models.tasks import CeTasks
-from rpc.icafe import CreateBug, GetBug
+from rpc.icafe import CreateCard, GetCards
 
 from views.base_view import MABaseView
 
@@ -37,8 +37,8 @@ class MangeIcafe(MABaseView):
         """
         # 获取所有的处于新建、开发中、开发完成的卡片
         # 按照最后修改时间进行时间窗口筛选
-        # TODO 讨论分页逻辑，现在初步看每个rd不会超过100张卡片，不设置
-        # TODO 暂时不设置maxRecords和page
+        page = kwargs.get("page")
+        page_num = kwargs.get("page_num")
         begin_time = kwargs.get("begin_time")
         end_time = kwargs.get('end_time')
         if not begin_time or end_time:
@@ -46,8 +46,14 @@ class MangeIcafe(MABaseView):
         rd = kwargs.get('rd')
         qa = kwargs.get('qa')
         iql = "流程状态 in (新建,开发中,开发完成) AND 类型 \
-           in (Task,Bug,Story,任务) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
-        return await get_cards_by_filter(query)
+           in (Task,Bug,Story,任务) AND AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
+        if rd:
+           sub_iql = "AND 负责人 in ({})".format(rd)
+           iql = iql + sub_iql
+        if qa:
+           sub_iql = "AND qa 负责人 in ({})".format(qa)
+           iql = iql + sub_iql
+        return await get_cards_by_filter(page, page_num, iql)
 
     async def post(self, **kwargs):
         """
@@ -102,15 +108,18 @@ class MangeIcafe(MABaseView):
                 }
             )
 
-async def get_cards_by_filter(query):
+async def get_cards_by_filter(page=1, page_num=20, query):
     """
     返回指定类型的数据详情
     """
-    result = await GetBug({
+    result = await GetCards({
         'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
-        'iql': query
+        'page', page,
+        'maxRecords', page_num,
+        'iql': iql
     }).get_data()
+    pageSize = result.get('pageSize')
     icafeData = result.get('cards', [])
     # 按照前端展示过滤下要展示的字段1
     result = []
@@ -128,21 +137,19 @@ async def get_cards_by_filter(query):
                 qa_owner = arr.get("displayValue")
             elif arr.get("propertyName") == "RD负责人":
                 rd_owner = arr.get("displayValue")
-            elif arr.get("propertyName") == "bug发现方式":
-                task_type = arr.get("value")
-                displayValue = arr.get("displayValue")
         tmp = {
+            "sequence": item.get('sequence'),
             "title": item.get("title"),
-            "createdTime": item.get("createdTime"),
             "status": item.get("status"),
+            #TODO 明确用户信息返回邮箱还是中文名称
+            "createdUser": item.get("createdUser"),
             "url": baseUrl.format(space=space, sequence=sequence),
-            "level": level,
             "rd_owner": rd_owner,
             "qa_owner": qa_owner,
-            "task_type": inner_dict.get(task_type) or displayValue,
-            "log_url": await get_result_by_sequence(sequence)
+            #TODO 通过icafeid查询db获取测试中/测试完成的测试服务报告
         }
         result.append(tmp)
-    return len(result), result
+    #返回总页数，以及result list
+    return pageSize, len(result), result
 
 
