@@ -30,7 +30,7 @@ export default {
   data: function () {
     return {
       tabName: 'compile'
-    }
+    };
   },
   watch: {
   },
@@ -46,7 +46,7 @@ export default {
       console.log('click name is', name);
     }
   }
-}
+};
 </script>
 <style scoped>
 .bound{

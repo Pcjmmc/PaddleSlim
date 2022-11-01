@@ -7,9 +7,9 @@
             <span v-for="item, index in tags">
               <span v-if="item.checked">
                 <Tag
-                  :checked="item.checked" 
+                  :checked="item.checked"
                   color="primary"
-                  @on-change="changeTagStatus(item)"
+                  v-on:on-change="changeTagStatus(item)"
                 >
                   <font size="3"> {{ item.desc }}</font>
                 </Tag>
@@ -17,9 +17,9 @@
               <span v-else>
                 <Tag
                   checkable
-                  :checked="item.checked" 
+                  :checked="item.checked"
                   color="primary"
-                  @on-change="changeTagStatus(item)"
+                  v-on:on-change="changeTagStatus(item)"
                 >
                   <font size="3"> {{ item.desc }}</font>
                 </Tag>
@@ -29,7 +29,7 @@
       </div>
       <div style="margin-top: 2%;">
         <span>
-          创建时间: 
+          创建时间:
           <DatePicker
             type="daterange"
             placement="bottom-end"
@@ -48,7 +48,7 @@
             suffix="ios-search"
             placeholder="任务ID"
             style="width:300px;"
-            @on-search="searchByfilter"
+            v-on:on-search="searchByfilter"
           ></Input>
         </div>
         <div class="right">
@@ -61,13 +61,18 @@
       </div>
       <div style="margin-top: 2%;">
         <div class="left" style="margin-top: 2%;">
-          <Table border :columns="columns" :data="content"></Table>
-          <Page :total="total"
+          <Table
+            border
+            :columns="columns"
+            :data="content"
+          ></Table>
+          <Page
+            :total="total"
             :current="parseInt(search.page)"
             :page-size="parseInt(search.pagesize)"
-            @on-change="pageChange"
             size="small"
             style="text-align: center;"
+            v-on:on-change="pageChange"
             >
           </Page>
         </div>
@@ -75,9 +80,9 @@
     </Card>
     <Modal
       v-model="showModa"
-      title="创建测试任务" 
-      @on-cancel="handleReset"
+      title="创建测试任务"
       width="60%"
+      v-on:on-cancel="handleReset"
     >
       <test-job ref="child" @closeModal="closeModal"> </test-job>
       <div slot="footer">
@@ -89,10 +94,10 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie';
-import api from '../../api/index';
+// import Cookies from 'js-cookie';
+// import api from '../../api/index';
 import { dateFmt } from '../../util/help.js';
-import TestJob from './TestJob.vue'
+import TestJob from './TestJob.vue';
 
 export default {
   name: 'CompileService',
@@ -257,11 +262,11 @@ export default {
       };
     },
     async changeTagStatus(item) {
-      this.$set(item, 'checked', true)
+      this.$set(item, 'checked', true);
       // 将选中以外的设置成false
       for (let i = 0; i < this.tags.length; i++) {
         let id = this.tags[i].id;
-        if (parseInt(id) != parseInt(item.id)) {
+        if (parseInt(id, 10) !== parseInt(item.id, 10)) {
           this.tags[i].checked = false;
         } else {
           this.$set(this.tags[i], 'checked', true);
@@ -294,9 +299,9 @@ export default {
 </script>
 
 <style scoped>
-.left{ 
-float:left;
- }
+.left{
+  float:left;
+}
 .right{
 float:right;
 margin-right: 5%;

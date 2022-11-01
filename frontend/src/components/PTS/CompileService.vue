@@ -158,21 +158,22 @@
             <span>产物地址: <a :href="item.wheel">{{ item.wheel }}</a>
               <Icon
                 class="ivu-icon ivu-icon-ios-copy-outline copyBtn"
-                type='ios-copy-outline'
-                color='green'
-                size='15'
+                type="ios-copy-outline"
+                color="green"
+                size="15"
                 @click="copyData(item.wheel)"
               ></Icon>
             </span>
           </Row>
         </Card>
       </div>
-      <Page :total="total"
+      <Page
+        :total="total"
         :current="parseInt(page)"
         :page-size="parseInt(pagesize)"
-        @on-change="pageChange"
         size="small"
         style="text-align: center;"
+        v-on:on-change="pageChange"
         >
       </Page>
     </div>
@@ -265,7 +266,7 @@ export default {
     },
     getValue(env, key) {
       let tmp_env = JSON.parse(env);
-      return tmp_env[key]
+      return tmp_env[key];
     },
     getDisplay(item) {
       let env = JSON.parse(item);
@@ -275,15 +276,14 @@ export default {
         let key = key_list[i];
         if (env[key]) {
           if (key === 'value') {
-            let con = env['type'] + ':' + env[key];
-            console.log(con);
-            content_list.push(con)
+            let con = env.type + ':' + env[key];
+            content_list.push(con);
           } else {
-            content_list.push(env[key])
+            content_list.push(env[key]);
           }
         }
       }
-      content_list.push('Wheel安装包')
+      content_list.push('Wheel安装包');
       return content_list.join('|');
     },
     async getSelectDatas() {
@@ -355,7 +355,7 @@ export default {
     },
     async createJob() {
       // 防止有人选了pr，选了分支，又修改了其他值
-      if (this.search.type != 'pr') {
+      if (this.search.type !== 'pr') {
         this.search.branch = null;
       }
       let params = {
@@ -368,7 +368,7 @@ export default {
         dist_type: Boolean(this.search.OpenInfer),
         cache: Boolean(this.search.OpenCache)
       };
-      const {code, data, message} = await api.post(FrameCompileCreateUrl, params);
+      const {code, message} = await api.post(FrameCompileCreateUrl, params);
       if (parseInt(code, 10) === 200) {
         // 立马刷新
         await this.getData();

@@ -10,9 +10,9 @@
           <span v-for="item, index in os">
             <span v-if="item.checked">
               <Tag
-                :checked="item.checked" 
+                :checked="item.checked"
                 color="primary"
-                @on-change="changeTagStatus(item, 'os')"
+                v-on:on-change="changeTagStatus(item, 'os')"
               >
                 <font size="3"> {{ item.desc }}</font>
               </Tag>
@@ -20,7 +20,7 @@
             <span v-else>
               <Tag
                 checkable
-                :checked="item.checked" 
+                :checked="item.checked"
                 color="primary"
                 @on-change="changeTagStatus(item, 'os')"
               >
@@ -36,9 +36,9 @@
           <span v-for="item, index in branch">
             <span v-if="item.checked">
               <Tag
-                :checked="item.checked" 
+                :checked="item.checked"
                 color="primary"
-                @on-change="changeTagStatus(item, 'branch')"
+                v-on:on-change="changeTagStatus(item, 'branch')"
               >
                 <font size="3"> {{ item.desc }}</font>
               </Tag>
@@ -46,9 +46,9 @@
             <span v-else>
               <Tag
                 checkable
-                :checked="item.checked" 
+                :checked="item.checked"
                 color="primary"
-                @on-change="changeTagStatus(item, 'branch')"
+                v-on:on-change="changeTagStatus(item, 'branch')"
               >
                 <font size="3"> {{ item.desc }}</font>
               </Tag>
@@ -62,9 +62,9 @@
           <span v-for="item, index in cuda">
             <span v-if="item.checked">
               <Tag
-                :checked="item.checked" 
+                :checked="item.checked"
                 color="primary"
-                @on-change="changeTagStatus(item, 'cuda')"
+                v-on:on-change="changeTagStatus(item, 'cuda')"
               >
                 <font size="3"> {{ item.desc }}</font>
               </Tag>
@@ -72,7 +72,7 @@
             <span v-else>
               <Tag
                 checkable
-                :checked="item.checked" 
+                :checked="item.checked"
                 color="primary"
                 @on-change="changeTagStatus(item, 'cuda')"
               >
@@ -88,9 +88,9 @@
           <span v-for="item, index in python">
             <span v-if="item.checked">
               <Tag
-                :checked="item.checked" 
+                :checked="item.checked"
                 color="primary"
-                @on-change="changeTagStatus(item, 'python')"
+                v-on:on-change="changeTagStatus(item, 'python')"
               >
                 <font size="3"> {{ item.desc }}</font>
               </Tag>
@@ -98,9 +98,9 @@
             <span v-else>
               <Tag
                 checkable
-                :checked="item.checked" 
+                :checked="item.checked"
                 color="primary"
-                @on-change="changeTagStatus(item, 'python')"
+                v-on:on-change="changeTagStatus(item, 'python')"
               >
                 <font size="3"> {{ item.desc }}</font>
               </Tag>
@@ -114,9 +114,9 @@
           <span v-for="item, index in testType">
             <span v-if="item.checked">
               <Tag
-                :checked="item.checked" 
+                :checked="item.checked"
                 color="primary"
-                @on-change="changeTagStatus(item, 'testType')"
+                v-on:on-change="changeTagStatus(item, 'testType')"
               >
                 <font size="3"> {{ item.desc }}</font>
               </Tag>
@@ -124,9 +124,9 @@
             <span v-else>
               <Tag
                 checkable
-                :checked="item.checked" 
+                :checked="item.checked"
                 color="primary"
-                @on-change="changeTagStatus(item, 'testType')"
+                v-on:on-change="changeTagStatus(item, 'testType')"
               >
                 <font size="3"> {{ item.desc }}</font>
               </Tag>
@@ -135,8 +135,13 @@
         </span>
       </div>
       <div style="margin-top: 1%;" v-if="testType.length > 0">
-        <Form ref="addForm" :model="search" :rules="addRules">
-          <FormItem prop="value"
+        <Form
+          ref="addForm"
+          :model="search"
+          :rules="addRules"
+        >
+          <FormItem
+            prop="value"
           >
             取值:
             <Input
@@ -162,17 +167,17 @@
     <Card class="center-card-s">
       <div align="center" style="margin-top: 1%;">
         <tree-transfer
+          openAll
           ref="transfer"
           :title="title"
-          :from_data='data2'
-          :to_data='toData'
+          :from_data="data2"
+          :to_data="toData"
           :defaultProps="{label:'label'}"
-          @add-btn='add'
-          @remove-btn='remove'
-          mode='transfer'
-          height='490px'
-          width='90%'
-          openAll
+          mode="transfer"
+          height="490px"
+          width="90%"
+          @add-btn="add"
+          @remove-btn="remove"
         ></tree-transfer>
       </div>
     </Card>
@@ -363,8 +368,8 @@ export default {
       this.branch = JSON.parse(JSON.stringify(this.branchinit)); // 记录下初始状态
       this.cuda = JSON.parse(JSON.stringify(this.cudainit)); // 记录下初始状态
       this.os = JSON.parse(JSON.stringify(this.osinit)); // 记录下初始状态
-      this.python =  JSON.parse(JSON.stringify(this.pythoninit)); // 记录下初始状态
-      this.testType =  JSON.parse(JSON.stringify(this.testTypeinit)); // 记录下初始状态
+      this.python = JSON.parse(JSON.stringify(this.pythoninit)); // 记录下初始状态
+      this.testType = JSON.parse(JSON.stringify(this.testTypeinit)); // 记录下初始状态
       this.search = JSON.parse(JSON.stringify(this.searchinit));
       this.content = [];
     },
@@ -417,7 +422,7 @@ export default {
       // 将选中以外的设置成false
       for (let i = 0; i < this[key].length; i++) {
         let id = this[key][i].id;
-        if (parseInt(id) != parseInt(item.id)) {
+        if (parseInt(id, 10) !== parseInt(item.id, 10)) {
           this[key][i].checked = false;
         } else {
           this[key][i].checked = true;
@@ -428,7 +433,7 @@ export default {
     processData(originData) {
       let tmp = [];
       for (let i = 0; i < originData.length; i++) {
-        if (i == 0) {
+        if (i === 0) {
           tmp.push({
             id: i,
             checked: true,

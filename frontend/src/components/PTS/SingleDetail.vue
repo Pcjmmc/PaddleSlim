@@ -179,7 +179,7 @@ export default {
       console.log('desc', this.req);
     },
     handleDetail() {
-      console.log('查看allure 报告详情')
+      console.log('查看allure 报告详情');
     },
     getDetail(row) {
       let sucess_num = row.result.success;
@@ -195,14 +195,14 @@ export default {
         let key = key_list[i];
         if (env[key]) {
           if (key === 'value') {
-            let con = env['type'] + ':' + env[key];
-            content_list.push(con)
-          } else if (key == 'branch') {
+            let con = env.type + ':' + env[key];
+            content_list.push(con);
+          } else if (key === 'branch') {
             if (env[key]) {
-              content_list.push(env[key])
+              content_list.push(env[key]);
             }
           } else {
-            content_list.push(env[key])
+            content_list.push(env[key]);
           }
         }
       }
@@ -212,7 +212,7 @@ export default {
 };
 </script>
 <style scoped>
-.center-card-s { 
+.center-card-s {
   width: 95%;
   margin-left: 2%;
   margin-right: 2%;
