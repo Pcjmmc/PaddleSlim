@@ -143,7 +143,7 @@
             <span style="display:inline-block;width:95%;margin-right:2%;">
               <span style="float:left;">系统: {{ getValue(item.env, "os") }}
                 <span v-if="getValue(item.env, 'branch')">
-                  | 分支: {{ getValue(item.env, "branch") }} 
+                  | 分支: {{ getValue(item.env, "branch") }}
                 </span>
               </span>
               <span style="float:right;">创建时间: {{ item.create_time }}</span>

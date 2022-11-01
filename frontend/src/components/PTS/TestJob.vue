@@ -22,7 +22,7 @@
                 checkable
                 :checked="item.checked"
                 color="primary"
-                @on-change="changeTagStatus(item, 'os')"
+                v-on:on-change="changeTagStatus(item, 'os')"
               >
                 <font size="3"> {{ item.desc }}</font>
               </Tag>
@@ -74,7 +74,7 @@
                 checkable
                 :checked="item.checked"
                 color="primary"
-                @on-change="changeTagStatus(item, 'cuda')"
+                v-on:on-change="changeTagStatus(item, 'cuda')"
               >
                 <font size="3"> {{ item.desc }}</font>
               </Tag>
@@ -167,12 +167,11 @@
     <Card class="center-card-s">
       <div align="center" style="margin-top: 1%;">
         <tree-transfer
-          openAll
-          ref="transfer"
+          open-all
           :title="title"
           :from_data="data2"
           :to_data="toData"
-          :defaultProps="{label:'label'}"
+          :default-props="{label:'label'}"
           mode="transfer"
           height="490px"
           width="90%"
