@@ -25,7 +25,7 @@ class CompileSearch(MABaseView):
     #     return {key: val for key, val in kwargs.items() if val}
 
     async def get_data(self, **kwargs):
-        query = dict({"status": "done"}, **{key: val for key, val in kwargs.items() if val})
+        query = {key: val for key, val in kwargs.items() if val}
         # 只返回查询列表
         data = await Compile.aio_filter_details(**query)
         total = await Compile.aio_filter_count(**query)
