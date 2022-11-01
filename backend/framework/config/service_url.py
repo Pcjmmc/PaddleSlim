@@ -74,28 +74,28 @@ class Local(object):
     # Benchmark 知识库 https://ku.baidu-int.com/knowledge/HFVrC7hq1Q/t7n0qKWNJW/QMxJ7wiFu-/WPNAbgcfv0R4MK?source=1
     # V100 单机性能测试（分布式策略：DP，默认模型优先级：S_P0）
     MODELS_BENCHMARK_V100_SINGLE_DP = "http://10.21.226.183:8980/auto_test/", \
-                                      {"device_type": "V100","cards_type_list": "N1C1,N1C8","run_mode_list": "DP",
+                                      {"device_type": "V100", "cards_type_list": "N1C1,N1C8", "run_mode_list": "DP",
                                        "model_priority_list": "S_P0"}
     # V100 多机性能测试（分布式策略：DP，默认模型优先级：M_P0）
     MODELS_BENCHMARK_V100_MULTI_DP = "http://10.21.226.183:8980/auto_test/", \
-                                     {"device_type": "V100","cards_type_list": "N1C1,N1C8,N4C32","run_mode_list": "DP",
-                                      "model_priority_list": "M_P0"}
+                                     {"device_type": "V100", "cards_type_list": "N1C1,N1C8,N4C32",
+                                      "run_mode_list": "DP", "model_priority_list": "M_P0"}
     # V100 分布式Collective模式（分布式策略：Collective）（只看性能的模型）
     MODELS_BENCHMARK_V100_DIST_COLLECTIVE = "http://10.21.226.183:8980/auto_test/", \
-                                            {"device_type": "V100","cards_type_list": "N1C1,N1C8,N4C32",
-                                             "run_mode_list": "Collective","model_priority_list": "M_P5"}
+                                            {"device_type": "V100", "cards_type_list": "N1C1,N1C8,N4C32",
+                                             "run_mode_list": "Collective", "model_priority_list": "M_P5"}
     # A100 单机性能测试（分布式策略：DP，默认模型优先级：S_P0）
     MODELS_BENCHMARK_A100_SINGLE_DP = "http://10.21.226.183:8980/auto_test/", \
-                                      {"device_type": "A100","cards_type_list": "N1C1,N1C8",
-                                       "run_mode_list": "DP","model_priority_list": "S_P0"}
+                                      {"device_type": "A100", "cards_type_list": "N1C1,N1C8",
+                                       "run_mode_list": "DP", "model_priority_list": "S_P0"}
     # A100 多机性能测试（分布式策略：DP，默认模型优先级：M_P0）
     MODELS_BENCHMARK_A100_MULTI_DP = "http://10.21.226.183:8980/auto_test/", \
-                                     {"device_type": "A100","cards_type_list": "N1C1,N1C8,N4C32",
-                                      "run_mode_list": "DP","model_priority_list": "M_P0"}
+                                     {"device_type": "A100", "cards_type_list": "N1C1,N1C8,N4C32",
+                                      "run_mode_list": "DP", "model_priority_list": "M_P0"}
     # 分布式精度测试 V100 分布式Collective模式（分布式策略：Collective）
     DISTRIBUTION_V100_ACCURACY_COLLECTIVE = "http://10.21.226.183:8980/auto_test/", \
-                                            {"device_type": "V100","cards_type_list": "N1C1,N1C8,N4C32",
-                                             "run_mode_list": "Collective","model_priority_list": "D_P0",
+                                            {"device_type": "V100", "cards_type_list": "N1C1,N1C8,N4C32",
+                                             "run_mode_list": "Collective", "model_priority_list": "D_P0",
                                              "email_index": "ips,convergence"}
     ##########  WINDOWS  ##########
 
