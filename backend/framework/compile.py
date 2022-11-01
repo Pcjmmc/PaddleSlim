@@ -44,7 +44,7 @@ class CompileInit(MABaseView):
         dist_type = bool(kwargs.get("dist_type"))
         cache = kwargs.get("cache", True)
 
-        uid = kwargs.get("uid", 0)
+        uid = self._cookies.get("userid", 0)
         await self.wheel_cache(jid, uid, pd_type, value, python, cuda, os, branch, dist_type, cache)
         return {"jid": jid}
 
