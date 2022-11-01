@@ -23,7 +23,7 @@ PADDLE_ICAFE_PASSD = RPC_SETTINGS['paddle_icafe']['password']
 baseUrl = "https://console.cloud.baidu-int.com/devops/icafe/issue/{space}-{sequence}/show"
 
 
-class MangeIcafe(MABaseView):
+class ManageIcafe(MABaseView):
 
     async def get(self, **kwargs):
         """
@@ -76,7 +76,7 @@ class MangeIcafe(MABaseView):
             "type": "Task",
             "detail": fields.get("description"),
             "fields": {},
-            "creator": fields.get("rd_owner")
+            "creator": fields.get("rd_owner"),
             #TODO 创建卡片是否需要指定qa？
             "qa负责人": fields.get("qa_owner")
         }
@@ -88,17 +88,18 @@ class MangeIcafe(MABaseView):
             "issues": [icafe_info]
         }
         result = await CreateCard(data).get_data()
+        #TODO 异步刷新要支持卡片信息回传
         return result
 
-async def get_cards_by_filter(page=1, page_num=20, query):
+async def get_cards_by_filter(page=1, page_num=20, iql=None):
     """
     返回指定类型的数据详情
     """
     result = await GetCards({
         'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
-        'page', page,
-        'maxRecords', page_num,
+        'page': page,
+        'maxRecords': page_num,
         'iql': iql
     }).get_data()
     pageSize = result.get('pageSize')

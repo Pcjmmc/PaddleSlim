@@ -90,7 +90,8 @@ class CreateCard(BaseRpc):
     json_keys = [
         {'key': 'username', 'type': str},
         {'key': 'password', 'type': str},
-        {'key': 'issues', 'type': list}
+        {'key': 'issues', 'type': list},
+        {'key': 'creator', 'type': str}
     ]
 
     async def get_data(self, **kwargs):
