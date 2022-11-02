@@ -73,7 +73,7 @@ class GetCards(BaseRpc):
         {'key': 'maxRecords', 'type': str}
      ]
      async def get_data(self, **kwargs):
-         result = await self.is_vailid()
+         result = await self.is_valid()
          if result and str(self._status == '200'):
              return self.response_json
          return {}

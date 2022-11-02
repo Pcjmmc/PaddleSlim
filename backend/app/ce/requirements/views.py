@@ -38,21 +38,27 @@ class ManageIcafe(MABaseView):
         # 获取所有的处于新建、开发中、开发完成的卡片
         # 按照最后修改时间进行时间窗口筛选
         page = kwargs.get("page")
+        if not page:
+           page = 1
         page_num = kwargs.get("page_num")
+        if not page_num:
+           page_num = 20
         begin_time = kwargs.get("begin_time")
         end_time = kwargs.get('end_time')
         if not begin_time or end_time:
-            return None 
+            today = datetime.date.today()
+            end_time = str(today)
+            begin_time = str(today - datetime.timedelta(days=14))  
         rd = kwargs.get('rd')
         qa = kwargs.get('qa')
-        iql = "流程状态 in (新建,开发中,开发完成) AND 类型 \
-           in (Task,Bug,Story,任务) AND AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
+        iql = "流程状态 in (新建,开发中,开发完成) AND 类型 in (Task,Bug,Story,任务) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
         if rd:
-           sub_iql = "AND 负责人 in ({})".format(rd)
+           sub_iql = " AND 负责人 in ({})".format(rd)
            iql = iql + sub_iql
         if qa:
-           sub_iql = "AND qa负责人 in ({})".format(qa)
+           sub_iql = " AND qa负责人 in ({})".format(qa)
            iql = iql + sub_iql
+        print("page={}, page_num={}, iql={}".format(page, page_num, iql))
         return await get_cards_by_filter(page, page_num, iql)
 
     async def post(self, **kwargs):
@@ -132,7 +138,8 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
             #TODO 通过icafeid查询db获取测试中/测试完成的测试服务报告
         }
         result.append(tmp)
-    #返回总页数，以及result list
-    return pageSize, len(result), result
+    #TODO返回总页数，以及result list
+    print(result)
+    return len(result), result
 
 
