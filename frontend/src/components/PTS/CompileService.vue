@@ -13,7 +13,7 @@
           style="width: 85%"
         >
           <Row>
-            <Col span="4">
+            <Col span="6">
              <FormItem label="系统:" prop="os">
                 <Select clearable v-model="search.os">
                   <Option
@@ -24,18 +24,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="4">
-              <FormItem label="类型:" prop="type">
-                <Select clearable v-model="search.type">
-                  <Option
-                    :key="index"
-                    :value="item"
-                    v-for="(item, index) in testType"
-                  >{{ item }}</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="4">
+            <Col span="6">
               <FormItem
                 label="分支:"
                 prop="branch"
@@ -46,35 +35,6 @@
                     :key="index"
                     :value="item"
                     v-for="(item, index) in branch"
-                  >{{ item }}</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="8">
-              <FormItem label="取值:" prop="value">
-                <Input v-model="search.value" placeholder="输入 pr、commit 或 包地址"/>
-              </FormItem>
-            </Col>
-          </Row>
-          <Row>
-            <Col span="6">
-              <FormItem label="CUDA:" prop="cuda">
-                <Select clearable v-model="search.cuda">
-                  <Option
-                    :key="index"
-                    :value="item"
-                    v-for="(item, index) in cuda"
-                  >{{ item }}</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="6">
-              <FormItem label="Python:" prop="python">
-                <Select clearable v-model="search.python">
-                  <Option
-                    :key="index"
-                    :value="item"
-                    v-for="(item, index) in python"
                   >{{ item }}</Option>
                 </Select>
               </FormItem>
@@ -96,12 +56,54 @@
               </FormItem>
             </Col>
           </Row>
+          <Row>
+            <Col span="6">
+              <FormItem label="CUDA:" prop="cuda">
+                <Select clearable v-model="search.cuda">
+                  <Option
+                    :key="index"
+                    :value="item"
+                    v-for="(item, index) in cuda"
+                  >{{ item }}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="Python:" prop="python">
+                <Select clearable v-model="search.python">
+                  <Option
+                    :key="index"
+                    :value="item"
+                    v-for="(item, index) in python"
+                  >{{ item }}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col span="6">
+              <FormItem label="类型:" prop="type">
+                <Select clearable v-model="search.type">
+                  <Option
+                    :key="index"
+                    :value="item"
+                    v-for="(item, index) in testType"
+                  >{{ item }}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="取值:" prop="value">
+                <Input v-model="search.value" placeholder="输入 pr、commit 或 包地址"/>
+              </FormItem>
+            </Col>
+          </Row>
         </Form>
       </div>
       <Row
         type="flex"
         justify="center"
-        style="margin-top: 2%;"
+        style="margin-top: 1%;"
       >
         <Col span="4">
           <Button type="primary" @click="handleSummit">创建编译任务</Button>
@@ -118,9 +120,24 @@
             <span style="display:inline-block;width:95%;margin-right:2%;">
 
               <span style="float:left;">
-                <tag color="error" v-if="item.status=='error'">状态: {{ item.status }}</tag>
-                <tag color="success" v-else-if="item.status=='done'">状态: {{ item.status }}</tag>
-                <tag color="warning" v-else="item.status=='error'">状态: {{ item.status }}</tag>
+                  <Button
+                    type="error"
+                    v-if="item.status=='error'"
+                    style="width: 120px;"
+                  >状态: {{ item.status }}
+                  </Button>
+                  <Button
+                    type="success"
+                    v-else-if="item.status=='done'"
+                    style="width: 120px;"
+                  >状态: {{ item.status }}
+                  </Button>
+                  <Button
+                  type="warning"
+                  v-else="item.status=='error'"
+                  style="width: 120px;"
+                >状态: {{ item.status }}
+                </Button>
                 系统: {{ getValue(item.env, "os") }}
                 <span v-if="getValue(item.env, 'branch')">
                   | 分支: {{ getValue(item.env, "branch") }}
@@ -312,7 +329,6 @@ export default {
       }
     },
     initData() {
-      this.content = [];
       this.search = {
         type: '',
         value: '',
@@ -394,8 +410,6 @@ export default {
   width: 96%;
   margin-left: 2%;
   margin-right: 2%;
-  min-height: 350px;
-  overflow: auto;
   font-size: 15px;
   color: lightslategrey
 }
