@@ -131,7 +131,9 @@ class JobInitView(MABaseView):
         2. 初始化快照信息入库
         """
         data = dict()
-        mission = json.loads(kwargs.get("mission", ''))
+        # mission = json.loads(kwargs.get("mission", ''))
+        mission = kwargs.get("mission", '')
+
         data["mission"] = self.mission_analyse(mission)
         data["version"] = kwargs.get("value")
         data["status"] = "running"

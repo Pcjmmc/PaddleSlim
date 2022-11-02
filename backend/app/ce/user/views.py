@@ -51,15 +51,16 @@ class UserInfoManage(MABaseView):
             departmentName = user_info.get("departmentName")
             _res = await User().aio_get_object(**{"username": username})
             if _res:
+                userid = _res.id
                 await User().aio_update(
                     validated_data={"username": username, "email": email, "departmentName": departmentName},
-                    params_data={"id": _res.id}
+                    params_data={"id": userid}
                 )
             else:
-                await User().aio_insert(
+                _, userid = await User().aio_insert(
                     validated_data={"username": username, "email": email, "departmentName": departmentName}
                 )
-
+            user_info.update({"userid": userid})
             return 1, user_info
         
         return 0, {}
