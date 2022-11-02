@@ -14,9 +14,9 @@ PADDLE_ICAFE_GATEWAY = RPC_SETTINGS['paddle_icafe']['gateway']
 PADDLE_ICAFE_USER = RPC_SETTINGS['paddle_icafe']['username']
 PADDLE_ICAFE_PASSD = RPC_SETTINGS['paddle_icafe']['password']
 
-class CreateBug(BaseRpc):
+class CreateCard(BaseRpc):
     """
-    修改用户名
+    创建icafe卡片
     """
     method = 'post'
     gateway = PADDLE_ICAFE_GATEWAY
@@ -26,7 +26,8 @@ class CreateBug(BaseRpc):
     json_keys = [
         {'key': 'username', 'type': str},
         {'key': 'password', 'type': str},
-        {'key': 'issues', 'type': list}
+        {'key': 'issues', 'type': list},
+        {'key': 'creator', 'type': str}
     ]
 
     async def get_data(self, **kwargs):
@@ -55,6 +56,48 @@ class GetBug(BaseRpc):
     async def get_data(self, **kwargs):
         result = await self.is_valid()
         if result and str(self._status == '200'):
+            return self.response_json
+        return {}
+
+class GetCards(BaseRpc):
+     """
+     分页获取获取符合规则的icafe卡片
+     """
+     method = 'get'
+     gateway = PADDLE_ICAFE_GATEWAY
+     api = 'spaces/DLTP/cards'
+     params_keys = [
+        {'key': 'u', 'type': str},
+        {'key': 'pw', 'type': str},
+        {'key': 'iql', 'type': str},
+        {'key': 'page', 'type': int},
+        {'key': 'maxRecords', 'type': str}
+     ]
+     async def get_data(self, **kwargs):
+         result = await self.is_valid()
+         if result and str(self._status == '200'):
+             return self.response_json
+         return {}
+
+class ModifyCardStatus(BaseRpc):
+    """
+    修改icafe状态
+    """
+    method = 'post'
+    gateway = PADDLE_ICAFE_GATEWAY
+    api = 'v2/space/DLTP/issue/new'
+    headers ={"Content-type": "application/json"}
+
+    json_keys = [
+        {'key': 'username', 'type': str},
+        {'key': 'password', 'type': str},
+        {'key': 'issues', 'type': list}
+    ]
+
+    async def get_data(self, **kwargs):
+        result = await self.is_valid()
+        if result and str(self._status == '200'):
+            # print(self._response_text)
             return self.response_json
         return {}
 

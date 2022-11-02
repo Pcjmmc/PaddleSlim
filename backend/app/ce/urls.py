@@ -19,6 +19,7 @@ from app.ce.tools.views import BinarySearchManage
 from app.ce.user.views import UserInfoManage
 from app.ce.ValidateToken.views import LogoutManage, ValidateManage
 from app.ce.version.views import CreateRVersion
+from app.ce.requirements.views import ManageIcafe
 
 from urls import url
 
@@ -45,4 +46,5 @@ urlpatterns = [
     url(r'sTokenBackendValidate/?$', ValidateManage),
     url(r'user/?$', UserInfoManage),
     url(r'logout/?$', LogoutManage),
+    url(r'requirments/icafe/?$', ManageIcafe)
 ]
