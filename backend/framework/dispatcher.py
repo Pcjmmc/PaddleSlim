@@ -137,11 +137,11 @@ class Dispatcher(object):
             while(retry < retry_time):
                 res = self.request_mission(k, id, env, wheel)
                 if isinstance(res, dict):
-                    # todo:初始化任务
+                    # 初始化任务
                     await Mission.aio_update({"status": "running", "description": str(res)}, {"id":id})
                     break
                 else:
-                    await Mission.aio_update({"status": res}, {"id": id})
+                    await Mission.aio_update({"status": res, "description": "请求测试模块响应失败"}, {"id": id})
                     retry += 1
         await Job.aio_update({"mission": str(json.dumps(mission))}, {"id":job.get("id")})
 
