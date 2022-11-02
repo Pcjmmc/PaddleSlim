@@ -73,7 +73,6 @@ class ManageIcafe(MABaseView):
         # 新建卡片
         print("新建卡片")
         fields = kwargs.get("fields")
-        print
         # repo和产品保持一致（这里填充，减少后续卡片状态修改报错）
         repo = fields.get("repo")
         icafe_info = {
