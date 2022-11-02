@@ -25,7 +25,7 @@ LOCAL = "local"
 
 # PLACE 是首要判断条件，对接前端返回内容，并check执行环境
 PLACE = {
-    # api_function
+    ######## 框架基础
     "api_function": CLOUD,
     "op_function": CLOUD,
     "external_api_function": CLOUD,
@@ -33,6 +33,12 @@ PLACE = {
     # jit
     "jit_function": CLOUD,
     # api_benchmark
+
+    # infer:
+    "native_infer": CLOUD,
+    "trt_infer": CLOUD,
+    "mkldnn_infer": CLOUD,
+    
     # models
     "paddleclas": CLOUD,
     # model benchmark
@@ -58,6 +64,14 @@ class Cloud(object):
     API_BENCHMARK = ""
     PADDLE_CLAS = "23369"
     MODEL_BENCHMARK = "23601"
+
+    # 原生推理
+    NATIVE_INFER = "24293"
+    # TRT推理
+    TRT_INFER = "24296"
+    # MKLDNN推理
+    MKLDNN_INFER = "24297"
+
     ##########  WINDOWS  ##########
     WIN_OP_FUNCTION = ""
     ##########  DARWIN  ##########
@@ -113,6 +127,11 @@ class CloudMission(object):
         "distribution_api_function": Cloud.DISTRIBUTION_API_FUNCTION,
         "jit_function": Cloud.JIT_FUNCTION,
         "api_benchmark": [],
+
+        "native_infer": Cloud.NATIVE_INFER,
+        "trt_infer": Cloud.TRT_INFER,
+        "mkldnn_infer": Cloud.MKLDNN_INFER,
+
         "paddleclas": Cloud.PADDLE_CLAS,
         "models_benchmark": Cloud.MODEL_BENCHMARK,
     }
