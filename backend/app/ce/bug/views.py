@@ -14,7 +14,7 @@ from models.conclusion import CeConclusion
 from models.icafe import CeIcafe
 from models.release_version import CeReleaseVersion
 from models.tasks import CeTasks
-from rpc.icafe import CreateBug, GetBug
+from rpc.icafe import CreateCard, GetBug
 
 from views.base_view import MABaseView
 
@@ -133,9 +133,10 @@ class BugManage(MABaseView):
             data = {
                 "username": PADDLE_ICAFE_USER,
                 "password": PADDLE_ICAFE_PASSD,
-                "issues": [icafe_info]
+                "issues": [icafe_info],
+                "creator": fields.get("qa_owner")
             }
-            result = await CreateBug(data).get_data()
+            result = await CreateCard(data).get_data()
             #  将icafe存起来；做关联关系
             issues = result.get("issues", [])
             print('创建参数', issues)
