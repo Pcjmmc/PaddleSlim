@@ -50,7 +50,7 @@ class Dispatcher(object):
             url = "https://xly.bce.baidu.com/open-api/ipipe/rest/v3/pipeline-builds?pipelineId={}".format(pipelineid)
             res = xly_agent.post_method(url, data, param=url_param)
             if res.status_code != 200:
-                print(res.json())
+                print(res)
                 raise HTTP400Error
             else:
                 print(res.json())
