@@ -65,6 +65,11 @@ class CaseDetailView(MABaseView):
             tid = task_obj.id
             task_type = task_obj.task_type
             secondary_type = task_obj.secondary_type
+            cover_step = task_obj.step
+            check_branch = branch.strip().split("/")[0]
+            if cover_step != "shared":
+                if cover_step != check_branch:
+                    raise HTTP400Error("任务注册为{}，入库任务为{}".format(cover_step, check_branch))
             try:
                 details = json.loads(kwargs.get("case_detail"))
             except:
