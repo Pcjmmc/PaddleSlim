@@ -330,7 +330,6 @@ export default {
       if (parseInt(code, 10) === 200) {
         this.content = data;
         this.total = all_count;
-        console.log(this.total);
       } else {
         this.content = [];
         this.$Message.error({

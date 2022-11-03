@@ -10,153 +10,199 @@
         <FormItem
           prop="name"
         >
-          任务名:
-          <Input
-            v-model="search.name"
-            placeholder="输入测试任务名"
-            style="width:40%"
-          ></Input>
+          <Row type="flex" align="middle">
+            <Col span="2" align="center">
+              <label style="font-size:16px;">
+                任务名:
+              </label>
+            </Col>
+            <Col span="20">
+              <Input
+                v-model="search.name"
+                placeholder="输入测试任务名"
+                style="width:40%"
+              ></Input>
+            </Col>
+          </Row>
         </FormItem>
         <div v-if="os.length > 0">
-          <span>
-          系统:
-            <span v-for="item, index in os">
-              <span v-if="item.checked">
-                <Tag
-                  :checked="item.checked"
-                  color="primary"
-                  v-on:on-change="changeTagStatus(item, 'os')"
-                >
-                  <font size="3"> {{ item.desc }}</font>
-                </Tag>
+          <Row type="flex" align="middle">
+            <Col span="2" align="center">
+              <label style="font-size:16px;">
+                系统:
+              </label>
+            </Col>
+            <Col span="20">
+              <span v-for="item, index in os">
+                <span v-if="item.checked">
+                  <Tag
+                    :checked="item.checked"
+                    color="primary"
+                    v-on:on-change="changeTagStatus(item, 'os')"
+                  >
+                    <font size="3"> {{ item.desc }}</font>
+                  </Tag>
+                </span>
+                <span v-else>
+                  <Tag
+                    checkable
+                    :checked="item.checked"
+                    color="primary"
+                    v-on:on-change="changeTagStatus(item, 'os')"
+                  >
+                    <font size="3"> {{ item.desc }}</font>
+                  </Tag>
+                </span>
               </span>
-              <span v-else>
-                <Tag
-                  checkable
-                  :checked="item.checked"
-                  color="primary"
-                  v-on:on-change="changeTagStatus(item, 'os')"
-                >
-                  <font size="3"> {{ item.desc }}</font>
-                </Tag>
-              </span>
-            </span>
-          </span>
+            </Col>
+          </Row>
         </div>
         <div style="margin-top: 1%;" v-if="branch.length > 0">
-          <span>
-          分支:
-            <span v-for="item, index in branch">
-              <span v-if="item.checked">
-                <Tag
-                  :checked="item.checked"
-                  color="primary"
-                  v-on:on-change="changeTagStatus(item, 'branch')"
-                >
-                  <font size="3"> {{ item.desc }}</font>
-                </Tag>
+          <Row type="flex" align="middle">
+            <Col span="2" align="center">
+              <label style="font-size:16px;">
+                分支:
+              </label>
+            </Col>
+            <Col span="20">
+              <span v-for="item, index in branch">
+                <span v-if="item.checked">
+                  <Tag
+                    :checked="item.checked"
+                    color="primary"
+                    v-on:on-change="changeTagStatus(item, 'branch')"
+                  >
+                    <font size="3"> {{ item.desc }}</font>
+                  </Tag>
+                </span>
+                <span v-else>
+                  <Tag
+                    checkable
+                    :checked="item.checked"
+                    color="primary"
+                    v-on:on-change="changeTagStatus(item, 'branch')"
+                  >
+                    <font size="3"> {{ item.desc }}</font>
+                  </Tag>
+                </span>
               </span>
-              <span v-else>
-                <Tag
-                  checkable
-                  :checked="item.checked"
-                  color="primary"
-                  v-on:on-change="changeTagStatus(item, 'branch')"
-                >
-                  <font size="3"> {{ item.desc }}</font>
-                </Tag>
-              </span>
-            </span>
-          </span>
+            </Col>
+          </Row>
         </div>
         <div style="margin-top: 1%;" v-if="cuda.length > 0">
-          <span>
-          CUDA:
-            <span v-for="item, index in cuda">
-              <span v-if="item.checked">
-                <Tag
-                  :checked="item.checked"
-                  color="primary"
-                  v-on:on-change="changeTagStatus(item, 'cuda')"
-                >
-                  <font size="3"> {{ item.desc }}</font>
-                </Tag>
+          <Row type="flex" align="middle">
+            <Col span="2" align="center">
+              <label style="font-size:16px;">
+                cuda:
+              </label>
+            </Col>
+            <Col span="20">
+              <span v-for="item, index in cuda">
+                <span v-if="item.checked">
+                  <Tag
+                    :checked="item.checked"
+                    color="primary"
+                    v-on:on-change="changeTagStatus(item, 'cuda')"
+                  >
+                    <font size="3"> {{ item.desc }}</font>
+                  </Tag>
+                </span>
+                <span v-else>
+                  <Tag
+                    checkable
+                    :checked="item.checked"
+                    color="primary"
+                    v-on:on-change="changeTagStatus(item, 'cuda')"
+                  >
+                    <font size="3"> {{ item.desc }}</font>
+                  </Tag>
+                </span>
               </span>
-              <span v-else>
-                <Tag
-                  checkable
-                  :checked="item.checked"
-                  color="primary"
-                  v-on:on-change="changeTagStatus(item, 'cuda')"
-                >
-                  <font size="3"> {{ item.desc }}</font>
-                </Tag>
-              </span>
-            </span>
-          </span>
+            </Col>
+          </Row>
         </div>
         <div style="margin-top: 1%;" v-if="python.length > 0">
-          <span>
-          python:
-            <span v-for="item, index in python">
-              <span v-if="item.checked">
-                <Tag
-                  :checked="item.checked"
-                  color="primary"
-                  v-on:on-change="changeTagStatus(item, 'python')"
-                >
-                  <font size="3"> {{ item.desc }}</font>
-                </Tag>
+          <Row type="flex" align="middle">
+            <Col span="2" align="center">
+              <label style="font-size:16px;">
+                python:
+              </label>
+            </Col>
+            <Col span="20">
+              <span v-for="item, index in python">
+                <span v-if="item.checked">
+                  <Tag
+                    :checked="item.checked"
+                    color="primary"
+                    v-on:on-change="changeTagStatus(item, 'python')"
+                  >
+                    <font size="3"> {{ item.desc }}</font>
+                  </Tag>
+                </span>
+                <span v-else>
+                  <Tag
+                    checkable
+                    :checked="item.checked"
+                    color="primary"
+                    v-on:on-change="changeTagStatus(item, 'python')"
+                  >
+                    <font size="3"> {{ item.desc }}</font>
+                  </Tag>
+                </span>
               </span>
-              <span v-else>
-                <Tag
-                  checkable
-                  :checked="item.checked"
-                  color="primary"
-                  v-on:on-change="changeTagStatus(item, 'python')"
-                >
-                  <font size="3"> {{ item.desc }}</font>
-                </Tag>
-              </span>
-            </span>
-          </span>
+            </Col>
+          </Row>
         </div>
         <div style="margin-top: 1%;" v-if="testType.length > 0">
-          <span>
-          类型:
-            <span v-for="item, index in testType">
-              <span v-if="item.checked">
-                <Tag
-                  :checked="item.checked"
-                  color="primary"
-                  v-on:on-change="changeTagStatus(item, 'testType')"
-                >
-                  <font size="3"> {{ item.desc }}</font>
-                </Tag>
+          <Row type="flex" align="middle">
+            <Col span="2" align="center">
+              <label style="font-size:16px;">
+                类型:
+              </label>
+            </Col>
+            <Col span="20">
+              <span v-for="item, index in testType">
+                <span v-if="item.checked">
+                  <Tag
+                    :checked="item.checked"
+                    color="primary"
+                    v-on:on-change="changeTagStatus(item, 'testType')"
+                  >
+                    <font size="3"> {{ item.desc }}</font>
+                  </Tag>
+                </span>
+                <span v-else>
+                  <Tag
+                    checkable
+                    :checked="item.checked"
+                    color="primary"
+                    v-on:on-change="changeTagStatus(item, 'testType')"
+                  >
+                    <font size="3"> {{ item.desc }}</font>
+                  </Tag>
+                </span>
               </span>
-              <span v-else>
-                <Tag
-                  checkable
-                  :checked="item.checked"
-                  color="primary"
-                  v-on:on-change="changeTagStatus(item, 'testType')"
-                >
-                  <font size="3"> {{ item.desc }}</font>
-                </Tag>
-              </span>
-            </span>
-          </span>
+            </Col>
+          </Row>
         </div>
         <div style="margin-top: 1%;" v-if="testType.length > 0">
           <FormItem
             prop="value"
           >
-            取值:
-            <Input
-              v-model="search.value"
-              placeholder="输入pr、commit、version或者wheel包"
-              style="width:40%"
-            ></Input>
+            <Row type="flex" align="middle">
+              <Col span="2" align="center">
+                <label style="font-size:16px;">
+                  取值:
+                </label>
+              </Col>
+              <Col span="20">
+                <Input
+                  v-model="search.value"
+                  placeholder="输入pr、commit、version或者wheel包"
+                  style="width:40%"
+                ></Input>
+              </Col>
+            </Row>
           </FormItem>
         </div>
       </Form>
