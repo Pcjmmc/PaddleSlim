@@ -161,18 +161,7 @@
         </div>
       </Form>
     </Card>
-    <!--
-    <div slot="right" class="main">
-      <Tree
-        ref="tree"
-        :data="data2"
-        show-checkbox multiple
-        :render="renderContent"
-        v-on:on-check-change="SelectChange"
-      ></Tree>
-    </div>
-    -->
-    <Card class="center-card-s">
+    <Card class="new-card-s">
       <div align="center" style="margin-top: 1%;">
         <tree-transfer
           open-all
@@ -181,8 +170,8 @@
           :to_data="toData"
           :default-props="{label:'label'}"
           mode="transfer"
-          height="450px"
-          width="90%"
+          height="600px"
+          width="100%"
           @add-btn="add"
           @remove-btn="remove"
         ></tree-transfer>
@@ -261,12 +250,12 @@ export default {
               label: '功能性API测试',
               key: 'external_api_function'
             },
-            {
-              pid: '1',
-              id: '1-3',
-              label: 'IO相关测试',
-              key: 'io_function'
-            },
+            // {
+            //   pid: '1',
+            //   id: '1-3',
+            //   label: 'IO相关测试',
+            //   key: 'io_function'
+            // },
             {
               pid: '1',
               id: '1-4',
@@ -283,45 +272,119 @@ export default {
             {
               pid: '2',
               id: '2-1',
-              label: '动转静API单独组网测试',
-              key: 'jit_api_function'
+              label: 'JIT API单独组网测试',
+              key: 'jit_function'
             },
             {
               pid: '2',
               id: '2-2',
-              label: '动转静模型子结构测试',
+              label: 'JIT 模型子结构测试',
               key: 'jit_models_function'
             }
           ]
         },
         {
           id: '3',
-          label: 'API性能测试',
-          key: 'api_benchmark'
-        },
-        {
-          id: '4',
-          label: '模型测试',
-          key: 'models',
+          label: '预测部署',
+          key: 'infer',
           children: [
             {
-              pid: '4',
-              id: '4-1',
-              label: '图像识别',
-              key: 'paddleclas'
+              pid: '3',
+              id: '3-1',
+              label: '原生推理',
+              key: 'native_infer'
+            },
+            {
+              pid: '3',
+              id: '3-2',
+              label: 'TensorRT推理',
+              key: 'trt_infer'
+            },
+            {
+              pid: '3',
+              id: '3-3',
+              label: 'MKLDNN推理',
+              key: 'mkldnn_infer'
             }
           ]
         },
+        // {
+        //   id: '4',
+        //   label: '模型测试',
+        //   key: 'models',
+        //   children: [
+        //     {
+        //       pid: '4',
+        //       id: '4-1',
+        //       label: '图像识别',
+        //       key: 'paddleclas'
+        //     }
+        //   ]
+        // },
         {
           id: '5',
           label: '模型性能测试',
-          key: 'models_benchmark'
-        },
-        {
-          id: '6',
-          label: '预测部署',
-          key: 'infer'
+          key: 'models_benchmark',
+          children: [
+            {
+              pid: '5',
+              id: '5-1',
+              label: 'V100',
+              key: 'V100',
+              children: [
+                {
+                  pid: '5-1',
+                  id: '5-1-1',
+                  label: '单机性能测试',
+                  key: 'models_benchmark_v100_single_dp'
+                },
+                {
+                  pid: '5-1',
+                  id: '5-1-2',
+                  label: '多机性能测试',
+                  key: 'models_benchmark_v100_multi_dp'
+                },
+                {
+                  pid: '5-1',
+                  id: '5-1-3',
+                  label: '分布式Collective模式性能测试',
+                  key: 'models_benchmark_v100_dist_collective'
+                },
+                {
+                  pid: '5-1',
+                  id: '5-1-4',
+                  label: '分布式Collective模式精度测试',
+                  key: 'distribution_v100_accuracy_collective'
+                }
+              ]
+            },
+            {
+              pid: '5',
+              id: '5-2',
+              label: 'A100',
+              key: 'A100',
+              children: [
+                {
+                  pid: '5-2',
+                  id: '5-2-1',
+                  label: '单机性能测试',
+                  key: 'models_benchmark_a100_single_dp'
+                },
+                {
+                  pid: '5-2',
+                  id: '5-2-2',
+                  label: '多机性能测试',
+                  key: 'models_benchmark_a100_multi_dp'
+                }
+              ]
+            }
+          ]
         }
+        // {
+        //   id: '6',
+        //   label: 'API性能测试',
+        //   key: 'api_benchmark'
+        // },
       ]
     };
   },
@@ -341,14 +404,12 @@ export default {
       this.initData();
     },
     SelectChange(data) {
-      this.selectData = [];
-      this.content = [];
       for (let idx = 0; idx < data.length; idx++) {
         let item = data[idx];
         if (item.children && item.children.length > 0) {
-          continue;
+          // 递归遍历
+          this.SelectChange(item.children);
         } else {
-          this.selectData.push(item);
           this.content.push(item.key);
         }
       }
@@ -365,6 +426,7 @@ export default {
           this.createJob();
           // 调用父组件
           this.$emit('closeModal', false);
+          this.$emit('searchByfilter');
           // 重置窗口
           this.initData();
         } else {
@@ -464,16 +526,10 @@ export default {
       return tmp;
     },
     async createJob() {
-      for (let idx = 0; idx < this.toData.length; idx++) {
-        let item = this.toData[idx];
-        if (item.children && item.children.length > 0) {
-          item.children.forEach(element => this.content.push(element.key));
-        } else {
-          this.content.push(item.key);
-        }
-      }
+      this.content = []; // 初始化一下
+      this.SelectChange(this.toData);
       let params = {
-        description: this.search.name,
+        name: this.search.name,
         type: this.search.type,
         value: this.search.value,
         python: this.search.python,
@@ -484,7 +540,7 @@ export default {
       };
       const {code, data, message} = await api.post(FrameWorkJobUrl, params);
       if (parseInt(code, 10) === 200) {
-        this.jobid = data.jid;
+        // 通知父组件更新视图
       } else {
         this.$Message.error({
           content: '请求出错: ' + message,
@@ -507,10 +563,19 @@ export default {
   line-height: 2;
 }
 .center-card-s {
-  width: 96%;
+  width: 98%;
   margin-left: 2%;
   margin-right: 2%;
   max-height: 600px;
+  overflow: auto;
+  font-size: 15px;
+  color:lightslategrey
+}
+.new-card-s {
+  width: 98%;
+  margin-left: 2%;
+  margin-right: 2%;
+  max-height: 800px;
   overflow: auto;
   font-size: 15px;
   color:lightslategrey

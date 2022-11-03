@@ -63,3 +63,19 @@ export const ColorList = ['#EDE234', '#F78436',
     '#F06E00', '#F700AF', '#0113E0',
     '#00F7AB', '#B2F000'
 ];
+
+export const TestServerMap = {
+    op_function: '计算OP精度测试',
+    external_api_function: '功能性API测试',
+    distribution_api_function: '分布式API功能测试',
+    jit_function: 'JIT API单独组网测试',
+    native_infer: '原生推理',
+    trt_infer: 'TensorRT推理',
+    mkldnn_infer: 'MKLDNN推理',
+    models_benchmark_v100_single_dp: 'V100_单机性能测试',
+    models_benchmark_v100_multi_dp: 'V100_多机性能测试',
+    models_benchmark_v100_dist_collective: 'V100_分布式性能测试',
+    distribution_v100_accuracy_collective: 'V100_分布式精度测试',
+    models_benchmark_a100_single_dp: 'A100_单机性能测试',
+    models_benchmark_a100_multi_dp: 'A100_多机性能测试'
+};

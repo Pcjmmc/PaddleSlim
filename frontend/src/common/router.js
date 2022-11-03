@@ -18,6 +18,7 @@ import BinarySearch from '../components/BinarySearch.vue';
 import ReleaseVersion from '../components/Config/ReleaseVersion.vue';
 import PaddleService from '../components/PTS/PaddleService.vue';
 import SingleDetail from '../components/PTS/SingleDetail.vue';
+import Demand from '../components/Requirement/Demand.vue';
 
 // Vue.use(VueRouter);
 export const ROUTES = [
@@ -91,6 +92,11 @@ export const ROUTES = [
           path: '/paddle/op-benchmark',
           name: 'Benchmark',
           component: Benchmark
+        },
+        { // API 配置
+          path: '/paddle/requirement',
+          name: 'PaddleDemand',
+          component: Demand
         },
         { // API 配置
           path: '/paddle/test/framework-service',

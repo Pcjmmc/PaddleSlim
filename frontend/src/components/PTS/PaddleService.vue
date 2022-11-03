@@ -1,5 +1,5 @@
 <template>
-  <div style="">
+  <div>
     <Tabs
       :value="tabName"
       v-on:on-click="clickTab"
@@ -48,10 +48,6 @@ export default {
   }
 };
 </script>
-<style scoped>
-.bound{
-}
-</style>
 <style>
 .ivu-tabs-nav-container{
   font-size:18px;

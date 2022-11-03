@@ -42,14 +42,24 @@
       </div>
       <div style="margin-top: 2%;">
         <div class="left">
+          任务ID:
           <Input
-            v-model="search.jid"
-            search
-            suffix="ios-search"
+            v-model="search.id"
             placeholder="任务ID"
-            style="width:300px;"
-            v-on:on-search="searchByfilter"
+            style="width:150px;"
           ></Input>
+          任务名:
+          <Input
+            v-model="search.name"
+            placeholder="任务名"
+            style="width:300px;"
+          ></Input>
+          <Button
+            type="primary"
+            shape="circle"
+            icon="ios-search"
+            @click="searchByfilter"
+          >Search</Button>
         </div>
         <div class="right">
           <Button
@@ -84,7 +94,7 @@
       width="60%"
       v-on:on-cancel="handleReset"
     >
-      <test-job ref="child" @closeModal="closeModal"> </test-job>
+      <test-job ref="child" @closeModal="closeModal" @searchByfilter="searchByfilter"> </test-job>
       <div slot="footer">
         <Button type="text" @click="handleReset">重置</Button>
         <Button type="primary" @click="handleSubmit">提交</Button>
@@ -95,8 +105,9 @@
 
 <script>
 // import Cookies from 'js-cookie';
-// import api from '../../api/index';
+import api from '../../api/index';
 import { dateFmt } from '../../util/help.js';
+import { FrameWorkJobListUrl } from '../../api/url.js';
 import TestJob from './TestJob.vue';
 
 export default {
@@ -106,22 +117,22 @@ export default {
       showModa: false,
       tags: [
         {
-          id: '1',
+          id: 'all',
           desc: '全部',
           checked: true
         },
         {
-          id: '2',
+          id: 'running',
           desc: '测试中',
           checked: false
         },
         {
-          id: '3',
+          id: 'done',
           desc: '测试通过',
           checked: false
         },
         {
-          id: '4',
+          id: 'error',
           desc: '测试失败',
           checked: false
         }
@@ -132,7 +143,7 @@ export default {
       columns: [
         {
           title: '任务ID',
-          key: 'jid',
+          key: 'id',
           align: 'center'
         },
         {
@@ -190,8 +201,9 @@ export default {
       ],
       dt: [new Date(), new Date()],
       search: {
-        jid: null,
-        status: '全部',
+        name: '',
+        id: null,
+        status: 'all',
         begin_time: null,
         end_time: null,
         page: 1,
@@ -221,6 +233,8 @@ export default {
           return 'green';
         case 'pass':
           return 'green';
+        case 'running':
+          return 'blue';
         case 'warning':
           return 'yellow';
         case 'error':
@@ -235,7 +249,7 @@ export default {
     },
     handleDetail(row) {
       let _params = {
-        jid: row.jid
+        jid: row.id
       };
       // 根据branch获取commit列表
       const { href } = this.$router.resolve({name: 'SingleDetail', params: _params});
@@ -248,8 +262,8 @@ export default {
       await this.$refs.child.handleSubmit();
     },
     async pageChange(pageNum) {
-      this.page = pageNum;
-      await this.searchByfilter();
+      this.search.page = pageNum;
+      await this.searchData();
     },
     closeModal(params) {
       // 关闭弹窗
@@ -258,10 +272,11 @@ export default {
     initData() {
       this.content = [];
       this.search = {
-        jid: null,
+        name: '',
+        id: null,
         begin_time: null,
         end_time: null,
-        status: '全部',
+        status: 'all',
         page: 1,
         pagesize: 10
       };
@@ -271,12 +286,12 @@ export default {
       // 将选中以外的设置成false
       for (let i = 0; i < this.tags.length; i++) {
         let id = this.tags[i].id;
-        if (parseInt(id, 10) !== parseInt(item.id, 10)) {
+        if (id !== item.id) {
           this.tags[i].checked = false;
         } else {
           this.$set(this.tags[i], 'checked', true);
           this.tags[i].checked = true;
-          this.search.status = this.tags[i].desc;
+          this.search.status = this.tags[i].id;
         }
       }
       await this.searchByfilter();
@@ -285,20 +300,41 @@ export default {
       this.showModa = true;
     },
     async searchByfilter() {
+      this.search.page = 1;
+      await this.searchData();
+    },
+    async searchData() {
       // 根据条件查询
+      this.content = [];
       this.search.begin_time = dateFmt(this.dt[0], 'yyyy-MM-dd');
-      this.search.end_time = dateFmt(this.dt[1], 'yyyy-MM-dd');
-      console.log('this search params', this.search);
-      // TODO调用接口
-      this.content = [
-        {
-          jid: '1',
-          description: '动转静提测',
-          status: 'success',
-          create_time: '2022-10-26 19:00:35',
-          update_time: '2022-10-26 19:30:35'
-        }
-      ];
+      // 在end_time的基础上+1， 因为end_time代表的今天0点0分0秒的时间
+      let end_time = new Date(this.dt[1]);
+      end_time = end_time.setDate(end_time.getDate() + 1);
+      end_time = new Date(end_time);
+      this.search.end_time = dateFmt(end_time, 'yyyy-MM-dd');
+      let params = {
+        page_index: this.search.page,
+        limit: this.search.pagesize,
+        begin_time: this.search.begin_time,
+        end_time: this.search.end_time,
+        id: this.search.id ? this.search.id : null,
+        description: this.search.name ? this.search.name : null,
+        status: this.search.status === 'all' ? null : this.search.status
+      };
+      // 如果根据任务id或者任务名检索的话，就不需要加其他条件？？？
+      const {code, data, message, all_count} = await api.get(FrameWorkJobListUrl, params);
+      if (parseInt(code, 10) === 200) {
+        this.content = data;
+        this.total = all_count;
+        console.log(this.total);
+      } else {
+        this.content = [];
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
     }
   }
 };

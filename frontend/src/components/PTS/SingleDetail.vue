@@ -2,13 +2,20 @@
   <div>
     <div class="center-card-s">
       <Row style="margin-top: 1%;">
-        <span style="display:inline-block;width:95%;margin-right:2%;">
-          <span> 环境配置: </span>
-          <span> {{ getDisplay(env) }}</span>
-        </span>
+        <span> 任务ID: {{ jobinfo.id }}</span>
+      </Row>
+      <Row style="margin-top: 1%;" v-if="jobinfo.name">
+        <span> 任务名: {{ jobinfo.name }} </span>
+      </Row>
+      <Row style="margin-top: 1%;">
+        <span style="display:inline-block;width:95%;margin-bottom:1%;"> 环境配置: </span>
+        <span
+          style="display:inline-block;width:95%;margin-bottom:1%;"
+        > {{ getDisplay(env) }}</span>
+        <span style="display:inline-block;"> {{ env.type + ':' + env.value}}</span>
       </Row>
       <Row style="margin-top: 1%;" v-if="req">
-        <span style="display:inline-block;width:95%;margin-right:2%;">
+        <span style="display:inline-block;width:95%;margin-bottom:1%;">
           <span> 关联需求: </span>
           <a href="javascript:void(0)" @click="jumper()">
             {{ req.desc }}
@@ -19,8 +26,7 @@
         <Table
           border
           :columns="columns"
-          :data="data"
-          style="background-color:green;"
+          :data="datas"
         ></Table>
       </Row>
     </div>
@@ -28,6 +34,9 @@
 </template>
 
 <script>
+import { FrameWorkJobDetail, FrameReportUrl } from '../../api/url.js';
+import api from '../../api/index';
+import { TestServerMap } from '../../util/common.js';
 
 export default {
   name: 'SingleDetail',
@@ -38,13 +47,18 @@ export default {
         id: 3,
         desc: 'xxxx'
       },
+      jobinfo: {
+        id: this.$route.params.jid,
+        name: ''
+      },
       env: {},
-      data: [],
+      datas: [],
       columns: [
         {
           title: '测试项',
-          key: 'content',
-          align: 'center'
+          key: 'mission',
+          align: 'center',
+          fixed: 'left'
         },
         {
           title: '状态',
@@ -65,6 +79,7 @@ export default {
           title: '结果',
           key: 'result',
           align: 'center',
+          width: '350px',
           render: (h, params) => {
             return h('div', [
               h('p', {
@@ -84,73 +99,223 @@ export default {
           title: '详细报告',
           key: 'report',
           align: 'center',
+          fixed: 'right',
+          width: '200px',
           render: (h, params) => {
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'info'
-                },
+            let bos_url = params.row.bos_url;
+            let allure_report = params.row.allure_report;
+            let ret = [];
+            if (bos_url) {
+              ret.push(
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: 'primary',
+                      size: 'small'
+                    },
+                    style: {
+                      marginRight: '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.generateReport(params.row);
+                      }
+                    }
+                  },
+                  '生成报告'
+                )
+              );
+            } else {
+              ret.push(
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: 'primary',
+                      size: 'small',
+                      disabled: true
+                    },
+                    style: {
+                      marginRight: '5px'
+                    }
+                  },
+                  '生成报告'
+                )
+              );
+            }
+            if (allure_report) {
+              ret.push(
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: 'primary',
+                      size: 'small'
+                    },
+                    style: {
+                      marginRight: '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.openReport(params.row);
+                      }
+                    }
+                  },
+                  '查看报告'
+                )
+              );
+            } else {
+              ret.push(
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: 'primary',
+                      size: 'small',
+                      disabled: true
+                    },
+                    style: {
+                      marginRight: '5px'
+                    }
+                  },
+                  '查看报告'
+                )
+              );
+            }
+            return h(
+              'div',
+              {
                 style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.handleDetail(params.row);
-                  }
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-start'
                 }
-              }, '查看')
-            ]);
+              },
+              ret
+            );
           }
         }
       ]
     };
   },
   mounted: function () {
-    this.getData();
+    this.getDetails();
   },
   components: {
   },
   methods: {
-    async getData() {
+    async getDetails() {
       let jid = this.$route.params.jid;
       let params = {
-        jid: jid
+        id: jid
       };
-      this.env = {
-        os: 'linux',
-        python: 'python3.7',
-        value: '23344',
-        type: 'pr',
-        branch: 'develop',
-        cuda: 'cuda10.2'
-      };
-      this.data = [
-        {
-          content: 'API测试',
-          status: 'error',
-          result: {
-            success: 10,
-            error: 5,
-            skip: 3
-          },
-          create_time: '2022-10-26 19:00:35'
-        },
-        {
-          content: '动转静测试',
-          status: 'success',
-          result: {
-            success: 10,
-            error: 0,
-            skip: 0
-          },
-          create_time: '2022-10-27 18:31:35'
+      const {code, data, msg} = await api.get(FrameWorkJobDetail, params);
+      if (parseInt(code, 10) === 200) {
+        // 塞到datas的detais 字段里面
+        if (typeof data.compile === 'object') {
+          let compile = data.compile;
+          this.env = JSON.parse(compile.env);
+        } else {
+          this.env = {};
         }
-      ];
-      console.log('search detail by jid', params);
+        let mission = typeof data.mission === 'object' ? data.mission : {};
+        this.jobinfo.name = data.descrption;
+        this.jobinfo.id = data.id;
+        // 将mission转换成想要的数据格式
+        this.datas = this.getData(mission);
+        // 构造一个假数据
+        // this.datas = [
+        //   {
+        //     mission: this.getMissionName('external_api_function'),
+        //     allure_report: 'http://paddletest.baidu-int.com:8333/211666182177_id_154',
+        //     bos_url: 'https://paddle-qa.bj.bcebos.com/PTS/mission_result/mission_154/custom_op.tar',
+        //     create_time: '2022-10-11 20:49:16',
+        //     id: 154,
+        //     result: '{"total": 12, "success": 12, "skip": 0, "failed": 0}',
+        //     status: 'done'
+        //   },
+        //   {
+        //     mission: this.getMissionName('op_function'),
+        //     allure_report: 'http://paddletest.baidu-int.com:8333/211666182177_id_154',
+        //     bos_url: 'https://paddle-qa.bj.bcebos.com/PTS/mission_result/mission_154/custom_op.tar',
+        //     create_time: '2022-10-11 20:49:16',
+        //     id: 155,
+        //     result: '{"total": 10, "success": 10, "skip": 0, "failed": 0}',
+        //     status: 'done'
+        //   }
+        // ];
+      } else {
+        this.jobinfo = {
+          id: this.$route.params.jid,
+          name: ''
+        };
+        this.env = {};
+        this.datas = [];
+        this.$Message.error({
+          content: '请求出错: ' + msg,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
+    getData(dt) {
+      let tmpData = [];
+      for (let key in dt) {
+        if (dt[key]) {
+          let temp = {
+            mission: this.getMissionName(key),
+            status: dt[key].status,
+            result: dt[key].result ? dt[key].result : {},
+            create_time: dt[key].create_time,
+            bos_url: dt[key].bos_url,
+            allure_report: dt[key].allure_report,
+            id: dt[key].id
+          };
+          tmpData.push(temp);
+        }
+      }
+      return tmpData;
     },
     initData() {
+      this.jobinfo = {
+        id: this.$route.params.jid,
+        name: ''
+      };
       this.env = {};
-      this.data = [];
+      this.datas = [];
+    },
+    getMissionName(key) {
+      return TestServerMap[key];
+    },
+    async generateReport(item) {
+      let params = {
+        bos_url: item.bos_url,
+        id: item.id
+      };
+      console.log(params);
+      const {code, data, message} = await api.post(FrameReportUrl, params);
+      if (parseInt(code, 10) === 200) {
+        item.allure_report = data.allure_report;
+      } else {
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
+    async openReport(item) {
+      if (item.allure_report) {
+        window.open(item.allure_report, '_blank');
+      } else {
+        this.$Message.error({
+          content: '没有可查询报告，请先生成报告！',
+          duration: 30,
+          closable: true
+        });
+      }
     },
     setColor(status) {
       switch (status.toLowerCase()) {
@@ -182,28 +347,21 @@ export default {
       console.log('查看allure 报告详情');
     },
     getDetail(row) {
-      let sucess_num = row.result.success;
-      let error_num = row.result.error;
-      let skip_num = row.result.skip;
-      let detail = `成功${sucess_num}个,失败${error_num}个,跳过${skip_num}`;
+      let result = row.result ? JSON.parse(row.result) : null;
+      let total_num = result.total ? result.total : 0;
+      let sucess_num = result.success ? result.success : 0;
+      let error_num = result.failed ? result.failed : 0;
+      let skip_num = result.skip ? result.skip : 0;
+      let detail = `总共${total_num},其中: 成功${sucess_num}个,失败${error_num}个,跳过${skip_num}`;
       return detail;
     },
     getDisplay(env) {
       let content_list = [];
-      let key_list = ['os', 'branch', 'value', 'python', 'cuda'];
+      let key_list = ['os', 'branch', 'python', 'cuda'];
       for (let i = 0; i <= key_list.length; i++) {
         let key = key_list[i];
         if (env[key]) {
-          if (key === 'value') {
-            let con = env.type + ':' + env[key];
-            content_list.push(con);
-          } else if (key === 'branch') {
-            if (env[key]) {
-              content_list.push(env[key]);
-            }
-          } else {
-            content_list.push(env[key]);
-          }
+          content_list.push(env[key]);
         }
       }
       return content_list.join(' | ');
