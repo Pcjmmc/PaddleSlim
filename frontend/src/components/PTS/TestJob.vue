@@ -467,7 +467,7 @@ export default {
     remove(data2, toData, obj) {
     },
     async handleSubmit() {
-      this.$refs.addForm.validate(async(valid) => {
+      this.$refs.addForm.validate(async (valid) => {
         if (valid) {
           await this.createJob();
           // 调用父组件
