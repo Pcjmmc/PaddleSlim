@@ -135,6 +135,7 @@ class JobInitView(MABaseView):
         # mission = kwargs.get("mission", '')
 
         data["mission"] = self.mission_analyse(mission)
+        data["uid"] = self._cookies.get("userid", 0)
         data["version"] = kwargs.get("value")
         data["status"] = "running"
         data["description"] = kwargs.get("name")
