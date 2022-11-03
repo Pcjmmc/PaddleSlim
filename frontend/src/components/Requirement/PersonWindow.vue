@@ -37,7 +37,11 @@
               </FormItem>
             </Col>
             <Col span="2" offset="1">
-              <Button type="primary" shape="circle" icon="ios-search">Search</Button>
+              <Button
+                type="primary"
+                shape="circle"
+                icon="ios-search"
+              >Search</Button>
             </Col>
           </Row>
         </Form>

@@ -12,7 +12,7 @@
         <span
           style="display:inline-block;width:95%;margin-bottom:1%;"
         > {{ getDisplay(env) }}</span>
-        <span style="display:inline-block;"> {{ env.type + ':' + env.value}}</span>
+        <span style="display:inline-block;"> {{ env.type + ':' + env.value }}</span>
       </Row>
       <Row style="margin-top: 1%;" v-if="req">
         <span style="display:inline-block;width:95%;margin-bottom:1%;">

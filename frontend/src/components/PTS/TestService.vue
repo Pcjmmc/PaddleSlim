@@ -94,7 +94,11 @@
       width="60%"
       v-on:on-cancel="handleReset"
     >
-      <test-job ref="child" @closeModal="closeModal" @searchByfilter="searchByfilter"> </test-job>
+      <test-job
+        ref="child"
+        @closeModal="closeModal"
+        @searchByfilter="searchByfilter"
+      ></test-job>
       <div slot="footer">
         <Button type="text" @click="handleReset">重置</Button>
         <Button type="primary" @click="handleSubmit">提交</Button>
