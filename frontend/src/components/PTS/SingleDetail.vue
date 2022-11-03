@@ -327,6 +327,8 @@ export default {
           return 'green';
         case 'pass':
           return 'green';
+        case 'running':
+          return 'blue';
         case 'warning':
           return 'yellow';
         case 'error':

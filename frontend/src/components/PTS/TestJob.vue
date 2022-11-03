@@ -467,9 +467,9 @@ export default {
     remove(data2, toData, obj) {
     },
     async handleSubmit() {
-      this.$refs.addForm.validate((valid) => {
+      this.$refs.addForm.validate(async(valid) => {
         if (valid) {
-          this.createJob();
+          await this.createJob();
           // 调用父组件
           this.$emit('closeModal', false);
           this.$emit('searchByfilter');
