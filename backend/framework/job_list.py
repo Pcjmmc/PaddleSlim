@@ -23,10 +23,11 @@ class JobList(MABaseView):
     async def get_data(self, **kwargs):
         query = self.get_query(kwargs, self._cookies.get("userid", 0))
         data = await Job.aio_filter_details(**query)
+        count = await Job.aio_filter_count(**query)
         for d in data:
             d["create_time"] = str(d.get("create_time"))
             d["update_time"] = str(d.get("update_time"))
-        return len(data), data
+        return count, data
 
     def get_query(self, kwargs, userid=None, level=80):
         """

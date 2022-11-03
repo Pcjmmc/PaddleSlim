@@ -51,7 +51,8 @@ class Dispatcher(object):
             res = xly_agent.post_method(url, data, param=url_param)
             if res.status_code != 200:
                 print(res)
-                raise HTTP400Error
+                print(res.content.decode('utf-8'))
+                return STATUS.ERROR_800
             else:
                 print(res.json())
                 return res.json()
@@ -87,8 +88,7 @@ class Dispatcher(object):
                 total_param = dict(spec_param, **params)
                 res = requests.post(service_url, data=total_param)
                 if res.status_code != 200:
-                    print(res.json())
-                    raise HTTP400Error
+                    return STATUS.ERROR_800
                 else:
                     print(res.json())
                     return res.json()
@@ -141,7 +141,7 @@ class Dispatcher(object):
                     await Mission.aio_update({"status": "running", "description": str(res)}, {"id":id})
                     break
                 else:
-                    await Mission.aio_update({"status": res, "description": "请求测试模块响应失败"}, {"id": id})
+                    await Mission.aio_update({"status": "error", "description": res}, {"id": id})
                     retry += 1
         await Job.aio_update({"mission": str(json.dumps(mission))}, {"id":job.get("id")})
 
