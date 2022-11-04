@@ -64,7 +64,7 @@ class AuthCheck(object):
                 username = user_info.get("username")
                 user_res = await User().aio_get_object(**{"username": username})
                 # 前提是库里已有信息
-                if user_res and (str(user_res.id) != cookies.get("userid", "")):
+                if user_res and cookies.get("userid") and (str(user_res.id) != cookies.get("userid", "")):
                     raise HTTP401Error
                 return False, user_info
 
