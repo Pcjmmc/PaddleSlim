@@ -12,6 +12,7 @@ from datetime import datetime
 from framework.dispatcher import Dispatcher
 from framework.config.service_url import COMPILE_SERVICE
 import requests
+from views.auth_view import AuthCheck
 
 # DELETE when Release
 SuperUser = ["1", "2"]
@@ -21,6 +22,9 @@ class JobList(MABaseView):
     """
     任务初始化
     """
+
+    auth_class = AuthCheck
+
     async def get(self, **kwargs):
         return await super().get(**kwargs)
 
