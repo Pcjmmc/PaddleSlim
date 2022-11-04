@@ -52,7 +52,7 @@ class Dispatcher(object):
             if res.status_code != 200:
                 print(res)
                 print(res.content.decode('utf-8'))
-                return STATUS.ERROR_800
+                return STATUS.ERROR_800 + "错误码：" + str(res.status_code) + res.content.decode('utf-8')
             else:
                 print(res.json())
                 return res.json()
