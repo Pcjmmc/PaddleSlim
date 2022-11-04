@@ -9,11 +9,8 @@ from ce_web.settings.common import (
     RPC_SETTINGS, TC_BASE_URL, XLY_BASE_URL, XLY_BASE_URL2
 )
 from ce_web.settings.scenes import back_dict, inner_dict, scenes_dict, selects
-from libs.mongo.db import Mongo
-from models.conclusion import CeConclusion
 from models.icafe import CeIcafe
-from models.release_version import CeReleaseVersion
-from models.tasks import CeTasks
+from models.project import Project
 from rpc.icafe import CreateCard, GetCards
 
 from views.base_view import MABaseView
@@ -148,4 +145,84 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
     #TODO返回总页数，以及result list
     return len(result), result
 
+class ProjectManage(MABaseView):
 
+    async def get(self, **kwargs):
+        """
+        调用基类的get方法
+        """
+        return await super().get(**kwargs)
+
+    async def get_data(self, **kwargs):
+        """
+        响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
+        """
+        query_params = {}
+        page = kwargs.get("page", 1)
+        pagesize = kwargs.get("pagesize", 20)
+        #优先支持RD查询所有卡片，并分页
+        #其它字段可以按需支持比如卡片号
+        rd = kwargs.get("rd")
+        if rd:
+            query_params["rd"] = rd
+        qa = kwargs.get("qa")
+        if qa:
+            query_params["qa"] = qa
+        #TOTO 使用aio_filter_details_with_total_count获取总数和分页结果	
+        count, data = await Project.aio_filter_details_with_total_count(
+            page_index=page, limit=pagesize, **query_params, need_all=False
+        )
+        print("gzx in progject view", "count=", count, "data=", data) 
+        return count, data
+
+    async def post(self, **kwargs):
+        """
+        调用基类的post方法
+        """
+        return await super().post(**kwargs)
+
+    async def post_data(self, **kwargs):
+        """
+        响应请求, 实现数据插入
+        """
+        #TODO icafe已经存在，新建一条，测试id保证不重复
+        #还是icafe历史测试id不保留
+        await Progject.aio_insert(validated_data=kwargs)
+
+    async def put(self, **kwargs):
+        """
+        调用基类的put方法
+        """
+        return await super().put(**kwargs)
+
+    async def put_data(self, **kwargs):
+        """
+        响应请求，实现数据更新，主要是更新测试任务状态
+        """
+        test_id = kwargs.get("test_id")
+        kwargs.pop("test_id")
+        await Project.aio_update(
+            validated_data=kwargs, params_data={"test_id": test_id}
+        )
+        status = kwargs.get("test_status")
+        await update_icafe(**kwargs)
+ 
+async def update_icafe(**kwargs):
+    #TOTO 更新对应icafe卡片
+    pass
+    test_status = kwargs.get("test_status")
+    test_id = kwargs.get("test_id")
+    icafe_id = kwargs.get("icafe_id")
+    if not icafe_id and test_id:
+       #TODO查询DB获取所有id
+       print("查db获取card_id")
+    await ModifyCardStatus({
+        'u': PADDLE_ICAFE_USER,
+        'pw': PADDLE_ICAFE_PASSD,
+        'page': page,
+        'maxRecords': page_num,
+        'iql': iql
+    }).get_data()
+ 
+ 
+      
