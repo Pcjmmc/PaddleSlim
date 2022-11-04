@@ -16,6 +16,11 @@ HTTP_400_BAD_REQUEST = {
     'message': 'Bad Request!'
 }
 
+HTTP_401_BAD_REQUEST = {
+    'code': 401,
+    'message': 'Authenticate error: Permission verification failed!'
+}
+
 HTTP_404_NOT_FOUND = {
     'code': 404,
     'message': 'Message Not Found!'
@@ -38,7 +43,7 @@ HTTP_4001_INTERNAL_SERVER_ERROR = {
 STATUS_LIST = (
     HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND,
     HTTP_405_METHOD_NOT_ALLOWED, HTTP_500_INTERNAL_SERVER_ERROR,
-    HTTP_4001_INTERNAL_SERVER_ERROR
+    HTTP_4001_INTERNAL_SERVER_ERROR, HTTP_401_BAD_REQUEST
 )
 
 

@@ -493,7 +493,7 @@ export default {
       this.content = [];
     },
     async getSelectDatas() {
-      const {code, data, msg} = await api.get(FrameWorkConfigUrl);
+      const {code, data, message} = await api.get(FrameWorkConfigUrl);
       if (parseInt(code, 10) === 200) {
         this.branch = this.processData(data.branch);
         this.branchinit = JSON.parse(JSON.stringify(this.branch)); // 记录下初始状态
@@ -515,7 +515,7 @@ export default {
         this.python = [];
         this.testType = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

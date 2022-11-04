@@ -14,6 +14,8 @@ from ce_web.settings.common import (
     PTOKEN, UUAP_SECRET_KEY
 )
 from rpc.eac import AECValiad
+from exception import HTTP401Error
+from models.user import User
 
 
 class AuthCheck(object):
@@ -58,6 +60,12 @@ class AuthCheck(object):
             res = await AECValiad(data).get_data()
             if res.get("code") == 200:
                 user_info = res.get('result') or {}
+                # 去查库，比对id,
+                username = user_info.get("username")
+                user_res = await User().aio_get_object(**{"username": username})
+                # 前提是库里已有信息
+                if user_res and (str(user_res.id) != cookies.get("userid", "")):
+                    raise HTTP401Error
                 return False, user_info
 
         return True, url

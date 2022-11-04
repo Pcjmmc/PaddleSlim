@@ -129,22 +129,17 @@ export default {
         },
         {
           id: 'running',
-          desc: '测试中',
+          desc: '运行中',
           checked: false
         },
         {
           id: 'done',
-          desc: '测试通过',
-          checked: false
-        },
-        {
-          id: 'fail',
-          desc: '测试失败',
+          desc: '已完成',
           checked: false
         },
         {
           id: 'error',
-          desc: '运行异常',
+          desc: '失败',
           checked: false
         }
       ],
@@ -175,7 +170,7 @@ export default {
                 style: {
                   width: '100px'
                 }
-              }, params.row.status)
+              }, this.getStatus(params.row.status))
             ]);
           }
         },
@@ -236,6 +231,15 @@ export default {
   computed: {
   },
   methods: {
+    getStatus(status) {
+      for (let i = 0; i <= this.tags.length; i++) {
+        let item = this.tags[i];
+        if (item.id === status) {
+          return item.desc;
+        }
+      }
+      return status;
+    },
     setColor(status) {
       switch (status.toLowerCase()) {
         case 'done':
@@ -251,7 +255,7 @@ export default {
         case 'warning':
           return 'warning';
         case 'error':
-          return 'warning';
+          return 'error';
         case 'fail':
           return 'error';
         case 'failed':

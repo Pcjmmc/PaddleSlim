@@ -8,7 +8,7 @@ import copy
 import json
 import urllib
 import tornado.web
-from exception import HTTP400Error, HTTP404Error, HTTPDetailError
+from exception import HTTP400Error, HTTP404Error, HTTPDetailError, HTTP401Error
 from https import response as resp
 
 
@@ -120,20 +120,22 @@ class MABaseView(BaseView):
         重写get方法
         """
         # 如果校验没有登录则直接跳转
-        if self.auth_class:
-            need_redirect, sed_params = await self.auth_class.check_auth(self._cookies, self.headers)
-            if need_redirect:
-                # 返回正常，让前端重新location
-                return resp.return_redirect_response(self, resp.HTTP_4001_INTERNAL_SERVER_ERROR, new_url=sed_params)
-            else:
-                # 将user info种植到cookie中
-                username = sed_params.get("username")
-                self.set_cookie('username', username)
-        kwargs = self.get_perfect_request_data()
         try:
+            if self.auth_class:
+                need_redirect, sed_params = await self.auth_class.check_auth(self._cookies, self.headers)
+                if need_redirect:
+                    # 返回正常，让前端重新location
+                    return resp.return_redirect_response(self, resp.HTTP_4001_INTERNAL_SERVER_ERROR, new_url=sed_params)
+                else:
+                    # 将user info种植到cookie中
+                    username = sed_params.get("username")
+                    self.set_cookie('username', username)
+            kwargs = self.get_perfect_request_data()
             all_count, data = await self.get_data(**kwargs)
         except HTTP400Error as e:
             return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, e.error_message)
+        except HTTP401Error as e:
+            return resp.return_error_response(self, resp.HTTP_401_BAD_REQUEST, e.error_message)
         except HTTP404Error as e:
             return resp.return_error_response(self, resp.HTTP_404_NOT_FOUND, e.error_message)
         return resp.return_success_response(self, data=data, all_count=all_count)
@@ -148,15 +150,26 @@ class MABaseView(BaseView):
         """
         父类post调用子类的post_data, 实现真正的逻辑
         """
-        kwargs = self.get_perfect_request_data()
-        if self.post_form_class:
-            status, msg = self.post_form_class.check_request_data(**kwargs)
-        if self.post_form_class and not status:
-            return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, msg)
         try:
+            if self.auth_class:
+                need_redirect, sed_params = await self.auth_class.check_auth(self._cookies, self.headers)
+                if need_redirect:
+                    # 返回正常，让前端重新location
+                    return resp.return_redirect_response(self, resp.HTTP_4001_INTERNAL_SERVER_ERROR, new_url=sed_params)
+                else:
+                    # 将user info种植到cookie中
+                    username = sed_params.get("username")
+                    self.set_cookie('username', username)
+            kwargs = self.get_perfect_request_data()
+            if self.post_form_class:
+                status, msg = self.post_form_class.check_request_data(**kwargs)
+            if self.post_form_class and not status:
+                return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, msg)
             data = await self.post_data(**kwargs)
         except HTTP400Error as e:
             return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, e.error_message)
+        except HTTP401Error as e:
+            return resp.return_error_response(self, resp.HTTP_401_BAD_REQUEST, e.error_message)
         except HTTPDetailError as e:
             return resp.response(self, e.error_detail)
         
@@ -166,12 +179,23 @@ class MABaseView(BaseView):
         return self.model_class.get_object(**kwargs)
 
     async def put(self, **kwargs):
-        kwargs = self.get_perfect_request_data()
         # 在数据处理之前可以嵌入django form表单的参数校验
         try:
+            if self.auth_class:
+                need_redirect, sed_params = await self.auth_class.check_auth(self._cookies, self.headers)
+                if need_redirect:
+                    # 返回正常，让前端重新location
+                    return resp.return_redirect_response(self, resp.HTTP_4001_INTERNAL_SERVER_ERROR, new_url=sed_params)
+                else:
+                    # 将user info种植到cookie中
+                    username = sed_params.get("username")
+                    self.set_cookie('username', username)
+            kwargs = self.get_perfect_request_data()
             data = await self.put_data(**kwargs)
         except HTTP400Error as e:
             return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, e.error_message)
+        except HTTP401Error as e:
+            return resp.return_error_response(self, resp.HTTP_401_BAD_REQUEST, e.error_message)
         except HTTPDetailError as e:
             return resp.response(self, e.error_detail)
         
@@ -181,11 +205,22 @@ class MABaseView(BaseView):
         return self.model_class.get_object(**kwargs)
 
     async def delete(self, **kwargs):
-        kwargs = self.get_perfect_request_data()
         try:
+            if self.auth_class:
+                need_redirect, sed_params = await self.auth_class.check_auth(self._cookies, self.headers)
+                if need_redirect:
+                    # 返回正常，让前端重新location
+                    return resp.return_redirect_response(self, resp.HTTP_4001_INTERNAL_SERVER_ERROR, new_url=sed_params)
+                else:
+                    # 将user info种植到cookie中
+                    username = sed_params.get("username")
+                    self.set_cookie('username', username)
+            kwargs = self.get_perfect_request_data()
             data = await self.delete_data(**kwargs)
         except HTTP400Error as e:
             return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, e.error_message)
+        except HTTP401Error as e:
+            return resp.return_error_response(self, resp.HTTP_401_BAD_REQUEST, e.error_message)
         except HTTPDetailError as e:
             return resp.response(self, e.error_detail)
         

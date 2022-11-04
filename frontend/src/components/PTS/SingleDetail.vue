@@ -73,7 +73,7 @@ export default {
                 style: {
                   width: '100px'
                 }
-              }, params.row.status)
+              }, this.getStatus(params.row.status))
             ]);
           }
         },
@@ -213,7 +213,7 @@ export default {
       let params = {
         id: jid
       };
-      const {code, data, msg} = await api.get(FrameWorkJobDetail, params);
+      const {code, data, message} = await api.get(FrameWorkJobDetail, params);
       if (parseInt(code, 10) === 200) {
         // 塞到datas的detais 字段里面
         if (typeof data.compile === 'object') {
@@ -256,7 +256,7 @@ export default {
         this.env = {};
         this.datas = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
@@ -319,6 +319,16 @@ export default {
         });
       }
     },
+    getStatus(status) {
+      switch (status.toLowerCase()) {
+        case 'success':
+          return '成功';
+        case 'fail':
+          return '失败';
+        default:
+          return status;
+      }
+    },
     setColor(status) {
       switch (status.toLowerCase()) {
         case 'done':
@@ -334,7 +344,7 @@ export default {
         case 'warning':
           return 'warning';
         case 'error':
-          return 'warning';
+          return 'error';
         case 'fail':
           return 'error';
         case 'failed':
