@@ -13,6 +13,10 @@ from framework.dispatcher import Dispatcher
 from framework.config.service_url import COMPILE_SERVICE
 import requests
 
+# DELETE when Release
+SuperUser = ["1", "2"]
+
+
 class JobList(MABaseView):
     """
     任务初始化
@@ -47,7 +51,7 @@ class JobList(MABaseView):
         if level < 90:
             query = dict({"uid": userid}, **query)
         # 调试用代码
-        if userid == 2:
+        if userid in SuperUser:
             del(query["uid"])
         query = dict({"order_by": "-id"}, **query)
         print(query)
