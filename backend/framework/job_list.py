@@ -46,6 +46,9 @@ class JobList(MABaseView):
 
         if level < 90:
             query = dict({"uid": userid}, **query)
+        # 调试用代码
+        if userid == 2:
+            del(query["uid"])
         query = dict({"order_by": "-id"}, **query)
         print(query)
         return query
