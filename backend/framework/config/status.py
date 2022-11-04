@@ -18,6 +18,9 @@ ERROR_800 = "效率云触发任务失败，请检查效率云接口"
 
 
 class MissonStatus(object):
+    """
+    常量
+    """
     ERROR = "error"
     RUNNING = "running"
     DONE = "done"
