@@ -66,10 +66,12 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('p', {
-                style: {
-                  marginRight: '5px',
+              h('Tag', {
+                props: {
                   color: this.setColor(params.row.status)
+                },
+                style: {
+                  width: '100px'
                 }
               }, params.row.status)
             ]);
@@ -320,25 +322,25 @@ export default {
     setColor(status) {
       switch (status.toLowerCase()) {
         case 'done':
-          return 'green';
+          return 'success';
         case 'success':
-          return 'green';
+          return 'success';
         case 'passed':
-          return 'green';
+          return 'success';
         case 'pass':
-          return 'green';
+          return 'success';
         case 'running':
-          return 'blue';
+          return 'primary';
         case 'warning':
-          return 'yellow';
+          return 'warning';
         case 'error':
-          return 'red';
+          return 'warning';
         case 'fail':
-          return 'red';
+          return 'error';
         case 'failed':
-          return 'red';
+          return 'error';
         default:
-          return 'red';
+          return 'error';
       }
     },
     jumper() {

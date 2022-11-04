@@ -25,7 +25,7 @@
             </Col>
           </Row>
         </FormItem>
-        <div v-if="os.length > 0">
+        <div v-if="os.length > 0" style="cursor:pointer;">
           <Row type="flex" align="middle">
             <Col span="2" align="center">
               <label style="font-size:16px;">
@@ -57,7 +57,7 @@
             </Col>
           </Row>
         </div>
-        <div style="margin-top: 1%;" v-if="branch.length > 0">
+        <div style="margin-top: 1%;cursor:pointer;" v-if="branch.length > 0">
           <Row type="flex" align="middle">
             <Col span="2" align="center">
               <label style="font-size:16px;">
@@ -89,7 +89,7 @@
             </Col>
           </Row>
         </div>
-        <div style="margin-top: 1%;" v-if="cuda.length > 0">
+        <div style="margin-top: 1%;cursor:pointer;" v-if="cuda.length > 0">
           <Row type="flex" align="middle">
             <Col span="2" align="center">
               <label style="font-size:16px;">
@@ -121,7 +121,7 @@
             </Col>
           </Row>
         </div>
-        <div style="margin-top: 1%;" v-if="python.length > 0">
+        <div style="margin-top: 1%;cursor:pointer;" v-if="python.length > 0">
           <Row type="flex" align="middle">
             <Col span="2" align="center">
               <label style="font-size:16px;">
@@ -153,7 +153,7 @@
             </Col>
           </Row>
         </div>
-        <div style="margin-top: 1%;" v-if="testType.length > 0">
+        <div style="margin-top: 1%;cursor:pointer;" v-if="testType.length > 0">
           <Row type="flex" align="middle">
             <Col span="2" align="center">
               <label style="font-size:16px;">

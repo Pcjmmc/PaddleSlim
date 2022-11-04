@@ -2,11 +2,12 @@
   <div>
     <Card class="center-card-s">
       <div style="margin-top: 1%;">
-        <span>
+        <div style="cursor:pointer;">
           任务状态:
             <span v-for="item, index in tags">
               <span v-if="item.checked">
                 <Tag
+                  border
                   :checked="item.checked"
                   color="primary"
                   v-on:on-change="changeTagStatus(item)"
@@ -16,6 +17,7 @@
               </span>
               <span v-else>
                 <Tag
+                  border
                   checkable
                   :checked="item.checked"
                   color="primary"
@@ -25,7 +27,7 @@
                 </Tag>
               </span>
             </span>
-        </span>
+        </div>
       </div>
       <div style="margin-top: 2%;">
         <span>
@@ -136,8 +138,13 @@ export default {
           checked: false
         },
         {
-          id: 'error',
+          id: 'fail',
           desc: '测试失败',
+          checked: false
+        },
+        {
+          id: 'error',
+          desc: '运行异常',
           checked: false
         }
       ],
@@ -161,10 +168,12 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('p', {
-                style: {
-                  marginRight: '5px',
+              h('Tag', {
+                props: {
                   color: this.setColor(params.row.status)
+                },
+                style: {
+                  width: '100px'
                 }
               }, params.row.status)
             ]);
@@ -230,25 +239,25 @@ export default {
     setColor(status) {
       switch (status.toLowerCase()) {
         case 'done':
-          return 'green';
+          return 'success';
         case 'success':
-          return 'green';
+          return 'success';
         case 'passed':
-          return 'green';
+          return 'success';
         case 'pass':
-          return 'green';
+          return 'success';
         case 'running':
-          return 'blue';
+          return 'primary';
         case 'warning':
-          return 'yellow';
+          return 'warning';
         case 'error':
-          return 'red';
+          return 'warning';
         case 'fail':
-          return 'red';
+          return 'error';
         case 'failed':
-          return 'red';
+          return 'error';
         default:
-          return 'red';
+          return 'error';
       }
     },
     handleDetail(row) {
