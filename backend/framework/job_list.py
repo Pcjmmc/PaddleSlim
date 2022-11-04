@@ -29,7 +29,7 @@ class JobList(MABaseView):
         return await super().get(**kwargs)
 
     async def get_data(self, **kwargs):
-        query = self.get_query(kwargs, self._cookies.get("userid", 0))
+        query = self.get_query(kwargs, self._cookies.get("userid", 2))
         data = await Job.aio_filter_details(**query)
         count = await Job.aio_filter_count(**query)
         for d in data:
@@ -45,12 +45,13 @@ class JobList(MABaseView):
         if "description" in query.keys():
             query["description__contains"] = query["description"]
             del(query["description"])
-        if "begin_time" in query.keys():
-            query["create_time__gte"] = query["begin_time"]
-            del (query["begin_time"])
-        if "end_time" in query.keys():
-            query["create_time__lte"] = query["end_time"]
-            del (query["end_time"])
+        else:
+            if "begin_time" in query.keys():
+                query["create_time__gte"] = query["begin_time"]
+                del (query["begin_time"])
+            if "end_time" in query.keys():
+                query["create_time__lte"] = query["end_time"]
+                del (query["end_time"])
 
         if level < 90:
             query = dict({"uid": userid}, **query)
@@ -58,5 +59,5 @@ class JobList(MABaseView):
         if userid in SuperUser:
             del(query["uid"])
         query = dict({"order_by": "-id"}, **query)
-        print(query)
+        # print(query)
         return query
