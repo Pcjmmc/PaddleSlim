@@ -11,7 +11,7 @@ from ce_web.settings.common import (
 from ce_web.settings.scenes import back_dict, inner_dict, scenes_dict, selects
 from models.icafe import CeIcafe
 from models.project import Project
-from rpc.icafe import CreateCard, GetCards
+from rpc.icafe import CreateCard, GetCards, ModifyCardStatus
 
 from views.base_view import MABaseView
 
@@ -219,9 +219,6 @@ async def update_icafe(**kwargs):
     await ModifyCardStatus({
         'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
-        'page': page,
-        'maxRecords': page_num,
-        'iql': iql
     }).get_data()
  
  
