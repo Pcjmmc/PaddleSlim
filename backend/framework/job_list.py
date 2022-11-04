@@ -42,7 +42,9 @@ class JobList(MABaseView):
         构造查询
         """
         query = {key: val for key, val in kwargs.items() if val}
-        if "description" in query.keys():
+        if "id" in query.keys():
+            pass
+        elif "description" in query.keys():
             query["description__contains"] = query["description"]
             del(query["description"])
         else:
