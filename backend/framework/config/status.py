@@ -14,3 +14,14 @@ ERROR_233 = "mission name error, check mission code"
 ERROR_600 = "下载报告解压出错"
 ERROR_601 = "allure报告生成失败"
 ERROR_602 = "数据库写入失败"
+ERROR_800 = "效率云触发任务失败，请检查效率云接口"
+
+
+class MissonStatus(object):
+    """
+    常量
+    """
+    ERROR = "error"
+    RUNNING = "running"
+    DONE = "done"
+    FAIL = "fail"
