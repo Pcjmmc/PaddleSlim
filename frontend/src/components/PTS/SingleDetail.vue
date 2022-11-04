@@ -84,7 +84,7 @@ export default {
             return h('div', [
               h('p', {
                 style: {
-                  color: 'blue'
+                  color: '#9F35FF'
                 }
               }, this.getDetail(params.row))
             ]);
@@ -349,13 +349,9 @@ export default {
       console.log('查看allure 报告详情');
     },
     getDetail(row) {
-      let result = row.result ? JSON.parse(row.result) : null;
-      let total_num = result.total ? result.total : 0;
-      let sucess_num = result.success ? result.success : 0;
-      let error_num = result.failed ? result.failed : 0;
-      let skip_num = result.skip ? result.skip : 0;
-      let detail = `总共${total_num},其中: 成功${sucess_num}个,失败${error_num}个,跳过${skip_num}`;
-      return detail;
+      let result = row.result ? row.result.trim() : '';
+      result = result.substr(1, result.length - 2);
+      return result;
     },
     getDisplay(env) {
       let content_list = [];
