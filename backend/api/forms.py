@@ -9,7 +9,7 @@ class AddCaseForm(object):
     实现参数名和类型的检测
     """
     post_data_params = {
-        "build_type_id": [str],
+        "build_type_id": [int, str],
         "build_id": [int, str],
         "repo": [str],
         "branch": [str],
