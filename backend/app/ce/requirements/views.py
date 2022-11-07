@@ -42,12 +42,20 @@ class ManageIcafe(MABaseView):
            page_num = 20
         begin_time = kwargs.get("begin_time")
         end_time = kwargs.get('end_time')
-        if not begin_time or not end_time:
+        if not begin_time and not end_time:
             today = datetime.date.today()
             end_time = str(today)
             begin_time = str(today - datetime.timedelta(days=14))  
+        if begin_time and not end_time:
+            today = datetime.date.today()
+            end_time = str(today)
+        if not begin_time and end_time:
+            end_time_date = datetime.datetime.strptime(end_time, '%Y-%m-%d') 
+            begin_time = str(end_time_date - datetime.timedelta(days=14))
+        print("begin_time =", begin_time, "end_time=", end_time)
         rd = kwargs.get('rd')
         qa = kwargs.get('qa')
+        #story和任务后续去掉，只保留Task和bug
         iql = "流程状态 in (新建,开发中,开发完成) AND 类型 in (Task,Bug,Story,任务) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
         if rd:
            sub_iql = " AND 负责人 in ({})".format(rd)
@@ -55,7 +63,6 @@ class ManageIcafe(MABaseView):
         if qa:
            sub_iql = " AND qa负责人 in ({})".format(qa)
            iql = iql + sub_iql
-        print("gzx test iql=",iql)
         return await get_cards_by_filter(page, page_num, iql)
 
     async def post(self, **kwargs):
