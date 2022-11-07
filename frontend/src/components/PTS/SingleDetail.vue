@@ -361,8 +361,8 @@ export default {
       console.log('查看allure 报告详情');
     },
     getDetail(row) {
-      let result = row.result ? row.result.trim() : '';
-      result = result.substr(1, result.length - 2);
+      let result = row.result ? row.result : '';
+      // result = result.substr(1, result.length - 2);
       return result;
     },
     getDisplay(env) {
