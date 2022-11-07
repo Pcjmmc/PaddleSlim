@@ -42,7 +42,7 @@ class ManageIcafe(MABaseView):
            page_num = 20
         begin_time = kwargs.get("begin_time")
         end_time = kwargs.get('end_time')
-        if not begin_time or end_time:
+        if not begin_time or not end_time:
             today = datetime.date.today()
             end_time = str(today)
             begin_time = str(today - datetime.timedelta(days=14))  
@@ -55,6 +55,7 @@ class ManageIcafe(MABaseView):
         if qa:
            sub_iql = " AND qa负责人 in ({})".format(qa)
            iql = iql + sub_iql
+        print("gzx test iql=",iql)
         return await get_cards_by_filter(page, page_num, iql)
 
     async def post(self, **kwargs):
@@ -212,6 +213,7 @@ async def update_icafe(**kwargs):
     #验证，如果缺少required字段,更新卡片状态会失败
     pass
     test_status = kwargs.get("test_status")
+    rd = kwargs.get("rd")
     test_id = kwargs.get("test_id")
     icafe_id = kwargs.get("icafe_id")
     status_str_format = "流程状态={}"
@@ -228,6 +230,7 @@ async def update_icafe(**kwargs):
     await ModifyCardStatus({
         'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
+        'operator' : rd,
         'fields': [status_str]
     }).get_data(**{"card_id":icafe_id})
  
