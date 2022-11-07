@@ -24,74 +24,27 @@ class JobDetails(MABaseView):
         id = kwargs.get("id")
         data =  await Job.aio_get_object(order_by=None, group_by=None, id=id)
         compile = await Compile.aio_get_object(id=data["compile"])
-        # 编译失败
-        if compile["status"] not in ["done", "running"]:
-            await Job.aio_update({"status": "error", "update_time": datetime.now()}, {"id": id})
-            data = await Job.aio_get_object(order_by=None, group_by=None, id=id)
-            res_data = {
-                "id": data["id"],
-                "status": data["status"],
-                "compile": {
-                    "status": compile["status"],
-                    "wheel": compile["wheel"],
-                    "env": compile["env"],
-                    "create_time": str(compile["create_time"]),
-                    "update_time": str(compile["update_time"]),
-                },
-                "mission": data["mission"],
-            }
-            return 1, res_data
-        elif compile["status"] == "running":
-            data = await Job.aio_get_object(order_by=None, group_by=None, id=id)
-            res_data = {
-                "id": data["id"],
-                "status": data["status"],
-                "compile": {
-                    "status": compile["status"],
-                    "wheel": compile["wheel"],
-                    "env": compile["env"],
-                    "create_time": str(compile["create_time"]),
-                    "update_time": str(compile["update_time"]),
-                },
-                "mission": data["mission"],
-            }
-            return 1, res_data
-        else:
-            check_complete = True
-            check_error = True
-            mission = dict()
-            for k,v in json.loads(data["mission"]).items():
-                if v is None:
-                    check_complete = False
-                    check_error = False
-                    mission[k] = v
-                    continue
-                res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
-                mission[k] = {"id": v, "status": res["status"], "result": res["result"],
-                              "bos_url": res["bos_url"], "allure_report": res["allure_report"],
-                              "description": res["description"], "create_time": str(res["create_time"]),
-                              "update_time": str(res["update_time"]),}
-                if res["status"] != "done":
-                    check_complete = False
-                if res["status"] in ["done", "init", "running"]:
-                    check_error = False
-            if check_complete and data["status"] == "running":
-                await Job.aio_update({"status": "done", "update_time": datetime.now()}, {"id": id})
-                data = await Job.aio_get_object(order_by=None, group_by=None, id=id)
-            elif check_error and not check_complete and data["status"] == "running":
-                await Job.aio_update({"status": "error", "update_time": datetime.now()}, {"id": id})
-                data = await Job.aio_get_object(order_by=None, group_by=None, id=id)
-            res_data = {
-                "id": data["id"],
-                "status": data["status"],
-                "compile": {
-                    "status": compile["status"],
-                    "wheel": compile["wheel"],
-                    "env": compile["env"],
-                    "create_time": str(compile["create_time"]),
-                    "update_time": str(compile["update_time"]),
-                },
-                "mission": mission,
-            }
-            return 1, res_data
+        mission = dict()
+        for k, v in json.loads(data["mission"]).items():
+            if v is None:
+                mission[k] = v
+                continue
+            res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
+            mission[k] = {"id": v, "status": res["status"], "result": res["result"],
+                          "bos_url": res["bos_url"], "allure_report": res["allure_report"],
+                          "description": res["description"], "create_time": str(res["create_time"]),
+                          "update_time": str(res["update_time"]), }
+        res_data = {
+            "id": data["id"],
+            "status": data["status"],
+            "compile": {
+                "status": compile["status"],
+                "wheel": compile["wheel"],
+                "env": compile["env"],
+                "create_time": str(compile["create_time"]),
+                "update_time": str(compile["update_time"]),
+            },
+            "mission": mission,
+        }
+        return 1, res_data
 
