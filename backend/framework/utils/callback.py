@@ -37,3 +37,4 @@ async def get_job_status(jid, missions: dict):
             res = await Job.aio_update({"status": MissonStatus.DONE}, {"id": jid})
         if res == 0:
             raise HTTP400Error
+        return res
