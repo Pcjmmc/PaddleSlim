@@ -216,10 +216,10 @@ async def update_icafe(**kwargs):
     icafe_id = kwargs.get("icafe_id")
     status_str_format = "流程状态={}"
     if test_status == 1:
-        status_str = status_str_formt.fromat("测试中")
+        status_str = status_str_format.fromat("测试中")
     elif test_status == 2:
         #测试未通过不需要修改卡片状态
-        status_str = status_str_formt.fromat("测试完成")
+        status_str = status_str_format.fromat("测试完成")
     else:
         return {}
     if not icafe_id and test_id:
