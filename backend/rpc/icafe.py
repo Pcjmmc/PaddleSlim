@@ -85,18 +85,20 @@ class ModifyCardStatus(BaseRpc):
     """
     method = 'post'
     gateway = PADDLE_ICAFE_GATEWAY
-    api = 'DLTP/cards/'
-    #TODO 更新卡片状态icafe url和cardid绑定，待实现
-    #api = 'DLTP/cards/' + card_id
-    headers ={"Content-type": "application/json"}
+   
+    api = "spaces/DLTP/cards/{card_id}"
 
+    headers ={"Content-type": "application/x-www-form-urlencoded"}
     params_keys = [
-        {'key': 'username', 'type': str},
-        {'key': 'password', 'type': str},
-        {'key': 'issues', 'type': list}
+        {'key': 'u', 'type': str},
+        {'key': 'pw', 'type': str},
+        {'key': 'fields', 'type': list}
     ]
-
+    #icafe用get形式实现post请求，需要额外设置header和api
+    def set_api(self, **kwargs):
+        self.api = self.api.format(**kwargs)
     async def get_data(self, **kwargs):
+        self.set_api(**kwargs)
         result = await self.is_valid()
         if result and str(self._status == '200'):
             # print(self._response_text)
@@ -107,6 +109,7 @@ class ModifyCardStatus(BaseRpc):
 if __name__ == "__main__":
     # 给自己的卡片建设
     loop = asyncio.get_event_loop()
+    """
     query = '所属计划 = 飞桨项目集/Paddle/{plan} AND auto_tag = auto_issue'.format(plan='v2.3.0-RC')
     print("query", query)
     commits = loop.run_until_complete(GetBug(
@@ -116,4 +119,11 @@ if __name__ == "__main__":
         }).get_data()
     )
     print("branches  latest commit info is", commits)
-       
+    """
+    field_str = "流程状态=开发完成"
+    result = loop.run_until_complete(ModifyCardStatus(
+        {'u': PADDLE_ICAFE_USER,
+        'pw': PADDLE_ICAFE_PASSD,
+        'fields': [field_str] 
+        }).get_data(**{"card_id":47442}))      
+    print("result=", result)

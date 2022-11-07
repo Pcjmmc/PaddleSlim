@@ -208,18 +208,28 @@ class ProjectManage(MABaseView):
         await update_icafe(**kwargs)
  
 async def update_icafe(**kwargs):
-    #TOTO 更新对应icafe卡片
+    #TOTO 梳理卡片required字段更新对应icafe卡片
+    #验证，如果缺少required字段,更新卡片状态会失败
     pass
     test_status = kwargs.get("test_status")
     test_id = kwargs.get("test_id")
     icafe_id = kwargs.get("icafe_id")
+    status_str_format = "流程状态={}"
+    if test_status == 1:
+        status_str = status_str_format.fromat("测试中")
+    elif test_status == 2:
+        #测试未通过不需要修改卡片状态
+        status_str = status_str_format.fromat("测试完成")
+    else:
+        return {}
     if not icafe_id and test_id:
        #TODO查询DB获取所有id
        print("查db获取card_id")
     await ModifyCardStatus({
         'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
-    }).get_data()
+        'fields': [status_str]
+    }).get_data(**{"card_id":icafe_id})
  
  
       
