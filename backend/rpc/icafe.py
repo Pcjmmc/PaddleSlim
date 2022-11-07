@@ -85,10 +85,12 @@ class ModifyCardStatus(BaseRpc):
     """
     method = 'post'
     gateway = PADDLE_ICAFE_GATEWAY
-    api = 'v2/space/DLTP/issue/new'
+    api = 'DLTP/cards/'
+    #TODO 更新卡片状态icafe url和cardid绑定，待实现
+    #api = 'DLTP/cards/' + card_id
     headers ={"Content-type": "application/json"}
 
-    json_keys = [
+    params_keys = [
         {'key': 'username', 'type': str},
         {'key': 'password', 'type': str},
         {'key': 'issues', 'type': list}
