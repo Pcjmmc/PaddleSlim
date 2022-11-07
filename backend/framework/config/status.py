@@ -21,7 +21,10 @@ class MissonStatus(object):
     """
     常量
     """
+    # 测试任务状态
     ERROR = "error"
     RUNNING = "running"
     DONE = "done"
+    # 测试结果状态
     FAIL = "fail"
+    SUCCESS = "success"

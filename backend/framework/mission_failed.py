@@ -1,4 +1,8 @@
-#!/bin/env python
+#!/bin/env python3
+# -*- coding: utf-8 -*-
+# @author DDDivano
+# encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
+#!/bin/env python3
 # -*- coding: utf-8 -*-
 # @author DDDivano
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
@@ -9,47 +13,33 @@ from views.base_view import MABaseView
 from models.framework import Job, Mission, Compile
 from exception import HTTP400Error
 from datetime import datetime
-from framework.config.status import MissonStatus
 from framework.dispatcher import Dispatcher
-from framework.utils.callback import get_job_status
+from framework.config.service_url import COMPILE_SERVICE
 import requests
+from framework.config.status import MissonStatus
+from framework.utils.callback import get_job_status
 
-
-class MissionCallback(MABaseView):
+class MissionFailed(MABaseView):
     """
-    mission 回调函数
+    手动标记任务失败
     """
     async def post(self, **kwargs):
         return await super().post(**kwargs)
 
     async def post_data(self, **kwargs):
         """
-        mission 回调函数
+        快速失败
         """
-        id = kwargs.get("id")
-        status = kwargs.get("status")
-        result = kwargs.get("result")
-        bos_url = kwargs.get("bos_url")
-        allure_report = kwargs.get("report")
+        mission_id = kwargs.get("id")
         data = {
-            "id": id,
-            "status": status,
-            "result": result,
-            "bos_url": bos_url,
-            "allure_report": allure_report,
+            "status": "error",
             "update_time": datetime.now()
         }
-        res = await Mission.aio_update(data, {"id": id})
+        res = await Mission.aio_update(data, {"id": mission_id})
         if res == 0:
             raise HTTP400Error
         # get jid
-        mission = await Mission.aio_get_object(id=id)
+        mission = await Mission.aio_get_object(id=mission_id)
         job = await Job.aio_get_object(id=mission["jid"])
         await get_job_status(job["id"], json.loads(job["mission"]))
-        # jid = jid["jid"]
-
-
-
-
-
 
