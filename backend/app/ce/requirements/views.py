@@ -100,7 +100,6 @@ class ManageIcafe(MABaseView):
             "creator" : fields.get("rd_owner"),
             "issues": [icafe_info]
         }
-        print("data=%s", data)
         result = await CreateCard(data).get_data()
         #print("guozhengxin test, result=%s" %result)
         #TODO 异步刷新要支持卡片信息回传
