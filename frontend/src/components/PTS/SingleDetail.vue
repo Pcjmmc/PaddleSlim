@@ -52,7 +52,7 @@
         </span>
       </Row>
       <Row style="margin-top: 2%;">
-        测试项表: 
+        测试项表:
         <div v-for="(item, index) in selectedItems" style="margin-left: 1%;">
           {{ item }}
         </div>
