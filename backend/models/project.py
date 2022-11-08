@@ -22,6 +22,9 @@ class Project(BaseModel, BaseModelMixin):
     icafe_id = Column(Integer, comment="icafe卡片序列id")
     rd = Column(VARCHAR(60), comment="rd邮箱前缀")
     qa = Column(VARCHAR(60), comment="qa邮箱前缀")
+    repo = Column(VARCHAR(60), comment="github repo")
+    branch = Column(VARCHAR(30), comment="github repo branch")
+    pr = Column(VARCHAR(60), comment="github repo pr info") 
     test_id = Column(Integer, comment="创建的测试服务对应的测试id")
     # 待测试、测试中、 通过、未通过 非别对应0，1，2，3
     test_status = Column(Integer, comment="测试服务对应的测试状态")
