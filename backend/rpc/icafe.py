@@ -92,7 +92,9 @@ class ModifyCardStatus(BaseRpc):
     params_keys = [
         {'key': 'u', 'type': str},
         {'key': 'pw', 'type': str},
+        {'key': 'operator', 'type': str},
         {'key': 'fields', 'type': list}
+       
     ]
     #icafe用get形式实现post请求，需要额外设置header和api
     def set_api(self, **kwargs):
@@ -104,7 +106,6 @@ class ModifyCardStatus(BaseRpc):
             # print(self._response_text)
             return self.response_json
         return {}
-
 
 if __name__ == "__main__":
     # 给自己的卡片建设
@@ -124,6 +125,7 @@ if __name__ == "__main__":
     result = loop.run_until_complete(ModifyCardStatus(
         {'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
+        'operator': "guozhengxin",
         'fields': [field_str] 
         }).get_data(**{"card_id":47442}))      
     print("result=", result)

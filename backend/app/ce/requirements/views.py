@@ -42,12 +42,20 @@ class ManageIcafe(MABaseView):
            page_num = 20
         begin_time = kwargs.get("begin_time")
         end_time = kwargs.get('end_time')
-        if not begin_time or end_time:
+        if not begin_time and not end_time:
             today = datetime.date.today()
             end_time = str(today)
             begin_time = str(today - datetime.timedelta(days=14))  
+        if begin_time and not end_time:
+            today = datetime.date.today()
+            end_time = str(today)
+        if not begin_time and end_time:
+            end_time_date = datetime.datetime.strptime(end_time, '%Y-%m-%d') 
+            begin_time = str(end_time_date - datetime.timedelta(days=14))
+        print("begin_time =", begin_time, "end_time=", end_time)
         rd = kwargs.get('rd')
         qa = kwargs.get('qa')
+        #story和任务后续去掉，只保留Task和bug
         iql = "流程状态 in (新建,开发中,开发完成) AND 类型 in (Task,Bug,Story,任务) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
         if rd:
            sub_iql = " AND 负责人 in ({})".format(rd)
@@ -212,6 +220,7 @@ async def update_icafe(**kwargs):
     #验证，如果缺少required字段,更新卡片状态会失败
     pass
     test_status = kwargs.get("test_status")
+    rd = kwargs.get("rd")
     test_id = kwargs.get("test_id")
     icafe_id = kwargs.get("icafe_id")
     status_str_format = "流程状态={}"
@@ -228,6 +237,7 @@ async def update_icafe(**kwargs):
     await ModifyCardStatus({
         'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
+        'operator' : rd,
         'fields': [status_str]
     }).get_data(**{"card_id":icafe_id})
  
