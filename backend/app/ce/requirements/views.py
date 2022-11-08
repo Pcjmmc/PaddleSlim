@@ -84,12 +84,13 @@ class ManageIcafe(MABaseView):
             "title": fields.get("title"),
             #TODO 创建卡片类型是否需要放开，暂时默认为Task
             "type": "Task",
-            "detail": fields.get("description"),
+            "detail": fields.get("detail"),
             "fields": {},
             "负责人": fields.get("rd_owner"),
             "RD负责人": fields.get("rd_owner"),
             #TODO 创建卡片是否需要指定qa？
-            "qa负责人": fields.get("qa_owner")
+            "qa负责人": fields.get("qa_owner"),
+            "creator" : fields.get("rd_owner")
         }
         icafe_info["fields"] = {
         }
@@ -99,6 +100,7 @@ class ManageIcafe(MABaseView):
             "creator" : fields.get("rd_owner"),
             "issues": [icafe_info]
         }
+        print("data=%s", data)
         result = await CreateCard(data).get_data()
         #print("guozhengxin test, result=%s" %result)
         #TODO 异步刷新要支持卡片信息回传
