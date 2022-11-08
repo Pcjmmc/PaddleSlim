@@ -12,6 +12,8 @@
         <span
           style="display:inline-block;width:95%;margin-bottom:1%;"
         > {{ getDisplay(env) }}</span>
+      </Row>
+      <Row style="margin-top: 1%;">
         <span style="display:inline-block;"> {{ env.type + ':' + env.value }}</span>
       </Row>
       <Row style="margin-top: 1%;" v-if="req">
@@ -22,7 +24,38 @@
           </a>
         </span>
       </Row>
+      <Row style="margin-top: 1%;">
+        <span style="float:left;width:60%;">
+          <span style="float:left;margin-right: 1%;">
+            进度:
+          </span>
+          <span style="float:left;width:60%;">
+            <Steps
+              :current="current"
+              :status="stepStatus"
+            >
+              <Step title="编译"></Step>
+              <Step title="测试任务"></Step>
+            </Steps>
+          </span>
+        </span>
+      </Row>
+      <Row style="margin-top: 1%;" v-if="wheel">
+        <span>编译产物: <a :href="wheel">{{ wheel }}</a>
+          <Icon
+            class="ivu-icon ivu-icon-ios-copy-outline copyBtn"
+            type="ios-copy-outline"
+            color="green"
+            size="15"
+            @click="copyData(wheel)"
+          ></Icon>
+        </span>
+      </Row>
       <Row style="margin-top: 2%;">
+        测试项表: 
+        <div v-for="(item, index) in selectedItems" style="margin-left: 1%;">
+          {{ item }}
+        </div>
         <Table
           border
           :columns="columns"
@@ -36,6 +69,7 @@
 <script>
 import { FrameWorkJobDetail, FrameReportUrl } from '../../api/url.js';
 import api from '../../api/index';
+import Clipboard from 'clipboard';
 import { TestServerMap } from '../../util/common.js';
 
 export default {
@@ -51,6 +85,10 @@ export default {
         id: this.$route.params.jid,
         name: ''
       },
+      wheel: null,
+      current: -1,
+      stepStatus: null,
+      selectedItems: [],
       env: {},
       datas: [],
       columns: [
@@ -216,8 +254,12 @@ export default {
       const {code, data, message} = await api.get(FrameWorkJobDetail, params);
       if (parseInt(code, 10) === 200) {
         // 塞到datas的detais 字段里面
+        let status1 = data.compile.status;
+        let status2 = data.status;
+        this.getStepStatus(status1, status2);
         if (typeof data.compile === 'object') {
           let compile = data.compile;
+          this.wheel = compile.wheel;
           this.env = JSON.parse(compile.env);
         } else {
           this.env = {};
@@ -255,6 +297,10 @@ export default {
         };
         this.env = {};
         this.datas = [];
+        this.selectedItems = [];
+        this.current = -1;
+        this.stepStatus = null;
+        this.wheel = null;
         this.$Message.error({
           content: '请求出错: ' + message,
           duration: 30,
@@ -265,6 +311,7 @@ export default {
     getData(dt) {
       let tmpData = [];
       for (let key in dt) {
+        this.selectedItems.push(key);
         if (dt[key]) {
           let temp = {
             mission: this.getMissionName(key),
@@ -280,6 +327,23 @@ export default {
       }
       return tmpData;
     },
+    getStepStatus(status1, status2) {
+      if (status1 === 'running') {
+        this.current = 0;
+      } else if (status1 === 'done') {
+        if (status2 === 'error') {
+          this.current = 1;
+          this.stepStatus = 'error';
+        } else if (status2 === 'done') {
+          this.current = 2;
+        } else {
+          this.current = 1;
+        }
+      } else if (status1 === 'error') {
+        this.current = 0;
+        this.stepStatus = 'error';
+      }
+    },
     initData() {
       this.jobinfo = {
         id: this.$route.params.jid,
@@ -287,9 +351,28 @@ export default {
       };
       this.env = {};
       this.datas = [];
+      this.selectedItems = [];
+      this.current = -1;
+      this.stepStatus = null;
+      this.wheel = null;
     },
     getMissionName(key) {
       return TestServerMap[key];
+    },
+    copyData(url) {
+      let clipboard = new Clipboard('.copyBtn', {
+          text: function (trigger) {
+            clipboard.destroy();
+            return url;
+          }
+      });
+      clipboard.on('success', e => {
+        this.$Message.success('复制成功~');
+        e.clearSelection();
+      });
+      clipboard.on('error', e => {
+        this.$Message.error('复制失败,请手动复制~');
+      });
     },
     async generateReport(item) {
       let params = {

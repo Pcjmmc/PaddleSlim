@@ -470,11 +470,6 @@ export default {
       this.$refs.addForm.validate(async (valid) => {
         if (valid) {
           await this.createJob();
-          // 调用父组件
-          this.$emit('closeModal', false);
-          this.$emit('searchByfilter');
-          // 重置窗口
-          this.initData();
         } else {
           this.$Message.error('请完善信息');
           // 调用父组件
@@ -574,25 +569,36 @@ export default {
     async createJob() {
       this.content = []; // 初始化一下
       this.SelectChange(this.toData);
-      let params = {
-        name: this.search.name,
-        type: this.search.type,
-        value: this.search.value,
-        python: this.search.python,
-        cuda: this.search.cuda,
-        os: this.search.os,
-        branch: this.search.branch,
-        mission: JSON.stringify(this.content)
-      };
-      const {code, data, message} = await api.post(FrameWorkJobUrl, params);
-      if (parseInt(code, 10) === 200) {
-        // 通知父组件更新视图
-      } else {
+      if (this.content.length === 0) {
         this.$Message.error({
-          content: '请求出错: ' + message,
+          content: '至少选择一个测试项目！',
           duration: 30,
           closable: true
         });
+      } else {
+        let params = {
+          name: this.search.name,
+          type: this.search.type,
+          value: this.search.value,
+          python: this.search.python,
+          cuda: this.search.cuda,
+          os: this.search.os,
+          branch: this.search.branch,
+          mission: JSON.stringify(this.content)
+        };
+        const {code, data, message} = await api.post(FrameWorkJobUrl, params);
+        if (parseInt(code, 10) === 200) {
+          // 通知父组件更新视图, 父组件这里需要统一这些函数，可以什么也不做
+          this.$emit('closeModal', false);
+          this.$emit('searchByfilter');
+          this.initData();
+        } else {
+          this.$Message.error({
+            content: '请求出错: ' + message,
+            duration: 30,
+            closable: true
+          });
+        }
       }
     }
   }
