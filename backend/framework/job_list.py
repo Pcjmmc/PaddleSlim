@@ -23,13 +23,13 @@ class JobList(MABaseView):
     任务初始化
     """
 
-    auth_class = AuthCheck
+    # auth_class = AuthCheck
 
     async def get(self, **kwargs):
         return await super().get(**kwargs)
 
     async def get_data(self, **kwargs):
-        query = self.get_query(kwargs, self._cookies.get("userid", 2))
+        query = self.get_query(kwargs, self._cookies.get("userid", 0))
         data = await Job.aio_filter_details(**query)
         count = await Job.aio_filter_count(**query)
         for d in data:
@@ -57,9 +57,14 @@ class JobList(MABaseView):
 
         if level < 90:
             query = dict({"uid": userid}, **query)
+
         # 调试用代码
         if userid in SuperUser:
             del(query["uid"])
+
+        # 屏蔽编译任务
+        query = dict({"mission__ne": None}, **query)
+
         query = dict({"order_by": "-id"}, **query)
         # print(query)
         return query
