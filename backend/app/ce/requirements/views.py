@@ -195,7 +195,9 @@ class ProjectManage(MABaseView):
         """
         #TODO icafe已经存在，新建一条，测试id保证不重复
         #还是icafe历史测试id不保留
-        await Progject.aio_insert(validated_data=kwargs)
+        count, project_id = await Project.aio_insert(validated_data=kwargs)
+        print("project_id=", project_id)
+        return {"id" : project_id}
 
     async def put(self, **kwargs):
         """
