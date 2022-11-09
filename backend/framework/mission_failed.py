@@ -16,7 +16,6 @@ from datetime import datetime
 from framework.dispatcher import Dispatcher
 from framework.config.service_url import COMPILE_SERVICE
 import requests
-from framework.config.status import MissonStatus
 from framework.utils.callback import get_job_status
 
 class MissionFailed(MABaseView):
@@ -33,6 +32,7 @@ class MissionFailed(MABaseView):
         mission_id = kwargs.get("id")
         data = {
             "status": "error",
+            "result": "手动标记失败",
             "update_time": datetime.now()
         }
         res = await Mission.aio_update(data, {"id": mission_id})

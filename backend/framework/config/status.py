@@ -17,7 +17,7 @@ ERROR_602 = "数据库写入失败"
 ERROR_800 = "效率云触发任务失败，请检查效率云接口"
 
 
-class MissonStatus(object):
+class MissionStatus(object):
     """
     常量
     """

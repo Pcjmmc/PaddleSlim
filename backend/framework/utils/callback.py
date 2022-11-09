@@ -13,7 +13,7 @@ from datetime import datetime
 from framework.dispatcher import Dispatcher
 from framework.config.service_url import COMPILE_SERVICE
 import requests
-from framework.config.status import MissonStatus
+from framework.config.status import MissionStatus
 
 
 
@@ -27,14 +27,18 @@ async def get_job_status(jid, missions: dict):
         result_list.append(mission["status"])
     # print(result_list)
     # 如果 有 running 在里面，不修改状态。
-    if MissonStatus.RUNNING in result_list:
+    if MissionStatus.RUNNING in result_list:
         pass
     # 如果没有running在里面，如果有error，修改状态为error
     else:
-        if MissonStatus.ERROR in result_list:
-            res = await Job.aio_update({"status": MissonStatus.ERROR, "update_time": datetime.now()}, {"id": jid})
+        if MissionStatus.ERROR in result_list:
+            res = await Job.aio_update({"status": MissionStatus.ERROR, "update_time": datetime.now()}, {"id": jid})
+        elif MissionStatus.FAIL in result_list:
+            res = await Job.aio_update({"status": MissionStatus.FAIL, "update_time": datetime.now()}, {"id": jid})
+        # elif MissionStatus.DONE in result_list:
+        #     res = await Job.aio_update({"status": MissionStatus.DONE, "update_time": datetime.now()}, {"id": jid})
         else:
-            res = await Job.aio_update({"status": MissonStatus.DONE, "update_time": datetime.now()}, {"id": jid})
+            res = await Job.aio_update({"status": MissionStatus.DONE, "update_time": datetime.now()}, {"id": jid})
         if res == 0:
             raise HTTP400Error
         return res

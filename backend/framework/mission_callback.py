@@ -9,7 +9,7 @@ from views.base_view import MABaseView
 from models.framework import Job, Mission, Compile
 from exception import HTTP400Error
 from datetime import datetime
-from framework.config.status import MissonStatus
+from framework.config.status import MissionStatus
 from framework.dispatcher import Dispatcher
 from framework.utils.callback import get_job_status
 import requests
