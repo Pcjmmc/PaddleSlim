@@ -36,7 +36,10 @@ class JobDetails(MABaseView):
                           "update_time": str(res["update_time"]), }
         res_data = {
             "id": data["id"],
+            "uid": data["uid"],
             "status": data["status"],
+            "description": data["description"],
+            "compile_id": data["compile"],
             "compile": {
                 "status": compile["status"],
                 "wheel": compile["wheel"],
@@ -45,6 +48,8 @@ class JobDetails(MABaseView):
                 "update_time": str(compile["update_time"]),
             },
             "mission": mission,
+            "create_time": str(data["create_time"]),
+            "update_time": str(data["update_time"]),
         }
         return 1, res_data
 
