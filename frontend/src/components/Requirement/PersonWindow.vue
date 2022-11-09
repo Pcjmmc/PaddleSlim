@@ -67,7 +67,7 @@
         justify="end"
         style="margin-top: 1%;"
       >
-        <Col span="4"  offset="20">
+        <Col span="4" offset="20">
           <Button type="primary" @click="showCreateModa">创建需求</Button>
         </Col>
       </Row>
@@ -123,7 +123,8 @@
           <Input
             disabled
             v-model="reqDetail.icafe_id"
-            placeholder="icafeId"/>
+            placeholder="icafeId"
+          />
         </FormItem>
         <FormItem label="RD:" prop="rd">
           <Input
@@ -154,7 +155,7 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import { dateFmt } from '../../util/help.js';
 import { RequirementSearchUrl, UserInfoUrl, StartTestUrl } from '../../api/url.js';
 import api from '../../api/index';
@@ -376,7 +377,7 @@ export default {
       let begin_time = new Date();
       begin_time = begin_time.setDate(begin_time.getDate() - 14);
       begin_time = new Date(begin_time);
-      return begin_time
+      return begin_time;
     },
     async getUserInfo() {
       const { code, data, message } = await api.get(UserInfoUrl);
@@ -418,6 +419,7 @@ export default {
       };
       const {code, data, message, all_count} = await api.get(RequirementSearchUrl, params);
       if (parseInt(code, 10) === 200) {
+        this.total = all_count;
         this.content = data;
       } else {
         this.$Message.error({
@@ -447,7 +449,7 @@ export default {
     },
     async confirmResult(item) {
       // QA 将测试结果分发成测试成功和失败详情
-      console.log('认为确认测试结果')
+      console.log('认为确认测试结果');
     },
     // 创建需求相关接口
     handleCreateReq() {
