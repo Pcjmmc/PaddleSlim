@@ -33,6 +33,7 @@ class MissionFailed(MABaseView):
         mission_id = kwargs.get("id")
         data = {
             "status": "error",
+            "result": "手动标记失败",
             "update_time": datetime.now()
         }
         res = await Mission.aio_update(data, {"id": mission_id})
