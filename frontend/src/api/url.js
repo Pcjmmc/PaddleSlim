@@ -34,3 +34,5 @@ export const BinarySearchUrl = '/ce/tools/binarysearch';
 export const VersionUrl = '/ce/version';
 export const UserInfoUrl = '/ce/user';
 export const LogoutUrl = '/ce/logout';
+export const RequirementSearchUrl = '/ce/requirments/icafe';
+export const StartTestUrl = '/ce/requirments/manage';

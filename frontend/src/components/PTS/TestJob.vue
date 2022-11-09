@@ -589,7 +589,7 @@ export default {
         const {code, data, message} = await api.post(FrameWorkJobUrl, params);
         if (parseInt(code, 10) === 200) {
           // 通知父组件更新视图, 父组件这里需要统一这些函数，可以什么也不做
-          console.log('return data', data); // 之后需要将id发给父组件
+          this.$emit('SubmitRequirement', data.jid);
           this.$emit('closeModal', false);
           this.$emit('searchByfilter');
           this.initData();

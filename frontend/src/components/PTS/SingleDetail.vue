@@ -3,6 +3,17 @@
     <div class="center-card-s">
       <Row style="margin-top: 1%;">
         <span> 任务ID: {{ jobinfo.id }}</span>
+        <span style="float:left;width:60%;margin-left: 1%;">
+          <span style="float:left;width:60%;">
+            <Steps
+              :current="current"
+              :status="stepStatus"
+            >
+              <Step title="编译"></Step>
+              <Step title="测试任务"></Step>
+            </Steps>
+          </span>
+        </span>
       </Row>
       <Row style="margin-top: 1%;" v-if="jobinfo.name">
         <span> 任务名: {{ jobinfo.name }} </span>
@@ -24,6 +35,7 @@
           </a>
         </span>
       </Row>
+      <!--
       <Row style="margin-top: 1%;">
         <span style="float:left;width:60%;">
           <span style="float:left;margin-right: 1%;">
@@ -40,6 +52,7 @@
           </span>
         </span>
       </Row>
+      -->
       <Row style="margin-top: 1%;" v-if="wheel">
         <span>编译产物: <a :href="wheel">{{ wheel }}</a>
           <Icon
@@ -51,17 +64,23 @@
           ></Icon>
         </span>
       </Row>
-      <Row style="margin-top: 2%;">
-        测试项表:
-        <div v-for="(item, index) in selectedItems" style="margin-left: 1%;">
-          {{ item }}
+      <div style="margin-top: 2%;">
+        <div>
+          <span>
+            <span>测试项表:</span>
+            <span v-for="(item, index) in selectedItems" style="margin-left: 0.5%;">
+              {{ getMissionName(item) }}
+            </span>
+          </span>
         </div>
-        <Table
-          border
-          :columns="columns"
-          :data="datas"
-        ></Table>
-      </Row>
+        <div>
+          <Table
+            border
+            :columns="columns"
+            :data="datas"
+          ></Table>
+        </div>
+      </div>
     </div>
   </div>
 </template>

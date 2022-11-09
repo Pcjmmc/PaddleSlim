@@ -100,6 +100,7 @@
         ref="child"
         @closeModal="closeModal"
         @searchByfilter="searchByfilter"
+        @SubmitRequirement="SubmitRequirement"
       ></test-job>
       <div slot="footer">
         <Button type="text" @click="handleReset">重置</Button>
@@ -319,6 +320,10 @@ export default {
     async searchByfilter() {
       this.search.page = 1;
       await this.searchData();
+    },
+    async SubmitRequirement(jid) {
+      // 什么也无需做，只是保持格式统一
+      console.log('return jid is', jid);
     },
     async searchData() {
       // 根据条件查询
