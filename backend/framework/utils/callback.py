@@ -32,9 +32,9 @@ async def get_job_status(jid, missions: dict):
     # 如果没有running在里面，如果有error，修改状态为error
     else:
         if MissonStatus.ERROR in result_list:
-            res = await Job.aio_update({"status": MissonStatus.ERROR}, {"id": jid})
+            res = await Job.aio_update({"status": MissonStatus.ERROR, "update_time": datetime.now()}, {"id": jid})
         else:
-            res = await Job.aio_update({"status": MissonStatus.DONE}, {"id": jid})
+            res = await Job.aio_update({"status": MissonStatus.DONE, "update_time": datetime.now()}, {"id": jid})
         if res == 0:
             raise HTTP400Error
         return res
