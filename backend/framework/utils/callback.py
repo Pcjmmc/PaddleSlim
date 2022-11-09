@@ -35,10 +35,10 @@ async def get_job_status(jid, missions: dict):
             res = await Job.aio_update({"status": MissionStatus.ERROR, "update_time": datetime.now()}, {"id": jid})
         elif MissionStatus.FAIL in result_list:
             res = await Job.aio_update({"status": MissionStatus.FAIL, "update_time": datetime.now()}, {"id": jid})
-        elif MissionStatus.DONE in result_list:
-            res = await Job.aio_update({"status": MissionStatus.DONE, "update_time": datetime.now()}, {"id": jid})
+        # elif MissionStatus.DONE in result_list:
+        #     res = await Job.aio_update({"status": MissionStatus.DONE, "update_time": datetime.now()}, {"id": jid})
         else:
-            res = await Job.aio_update({"status": MissionStatus.SUCCESS, "update_time": datetime.now()}, {"id": jid})
+            res = await Job.aio_update({"status": MissionStatus.DONE, "update_time": datetime.now()}, {"id": jid})
         if res == 0:
             raise HTTP400Error
         return res
