@@ -34,7 +34,7 @@ class ManageIcafe(MABaseView):
         """
         # 获取所有的处于新建、开发中、开发完成的卡片
         # 按照最后修改时间进行时间窗口筛选
-        need_status = kwargs.get("need_status") if kwargs.get("need_status") else "1"
+        need_status = kwargs.get("status") if kwargs.get("status") else "待提测"
         #1,2,3,4,5 分别对应【待提测】【待测试】【测试中】【待确认测试结果】【测试完成】 
         page = kwargs.get("page") if kwargs.get("page") else "1"
         print(type(page))
@@ -55,20 +55,20 @@ class ManageIcafe(MABaseView):
         rd = kwargs.get('rd')
         qa = kwargs.get('qa')
         iql = ""
-        if need_status == "1":
+        if need_status == "待提测":
         # 待提测
             #保留Task和bug
             iql = "流程状态 in (新建,开发中,开发完成) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
-        if need_status == "2":
+        if need_status == "待测试":
         # 待测试
             iql = "流程状态 in (开发完成) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
-        if need_status == "3":
+        if need_status == "测试中":
         # 测试中
             iql = "流程状态 in (测试中) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
-        if need_status == "4":
+        if need_status == "待确认":
         # 待确认测试结果
             return 
-        if need_status == "5": 
+        if need_status == "测试完成": 
         #测试完成
             iql = "流程状态 in (测试完成) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
         if rd:
