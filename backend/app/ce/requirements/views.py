@@ -36,10 +36,11 @@ class ManageIcafe(MABaseView):
         # 按照最后修改时间进行时间窗口筛选
         need_status = kwargs.get("need_status") if kwargs.get("need_status") else "1"
       
-        print(type(need_status), "need_status=", need_status) 
+       
         #1,2,3,4,5 分别对应【待提测】【待测试】【测试中】【待确认测试结果】【测试完成】 
-        page = kwargs.get("page") if kwargs.get("page") else 1
-        page_num = kwargs.get("page_num") if kwargs.get("page_num") else 20 
+        page = kwargs.get("page") if kwargs.get("page") else "1"
+        print(type(page))
+        page_num = kwargs.get("page_num") if kwargs.get("page_num") else "20" 
         begin_time = kwargs.get("begin_time")
         end_time = kwargs.get('end_time')
         if not begin_time and not end_time:
