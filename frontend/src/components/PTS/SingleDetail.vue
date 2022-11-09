@@ -68,7 +68,7 @@
             <span>测试项:</span>
             <Button
               disabled
-              v-for="(item, index) in selectedItems" 
+              v-for="(item, index) in selectedItems"
               style="width:150px;margin-left: 0.5%;"
             >
               {{ getMissionName(item) }}
@@ -166,7 +166,7 @@ export default {
                   wordBreak: 'break-all'
                 }
               }, params.row.value)
-            ])
+            ]);
           }
         }
       ],
