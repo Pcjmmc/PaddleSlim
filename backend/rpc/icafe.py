@@ -93,6 +93,7 @@ class ModifyCardStatus(BaseRpc):
         {'key': 'u', 'type': str},
         {'key': 'pw', 'type': str},
         {'key': 'operator', 'type': str},
+        {'key' : 'isCheckStatus', 'type':bool}, 
         {'key': 'fields', 'type': list}
        
     ]
@@ -121,11 +122,12 @@ if __name__ == "__main__":
     )
     print("branches  latest commit info is", commits)
     """
-    field_str = "流程状态=开发完成"
+    field_str = "流程状态=测试完成"
     result = loop.run_until_complete(ModifyCardStatus(
         {'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
+        'isCheckStatus': False,
         'operator': "guozhengxin",
         'fields': [field_str] 
-        }).get_data(**{"card_id":47442}))      
+        }).get_data(**{"card_id":61676}))      
     print("result=", result)
