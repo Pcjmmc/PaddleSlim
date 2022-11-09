@@ -14,6 +14,7 @@ from framework.mission_callback import MissionCallback
 from framework.compile_callback import CompileCallback
 from framework.report_generator import ReportGenerator
 from framework.mission_info import MissionInfo
+from framework.mission_failed import MissionFailed
 
 
 
@@ -32,10 +33,12 @@ urlpatterns = [
     url(r'getsettings/?$', SettingsView),
     url(r'runner/?$', RunnerView),
     url(r'runnerxly/?$', RunnerXLY),
-    url(r'missioncallback/?$', MissionCallback),
     url(r'compilecallback/?$', CompileCallback),
     url(r'reportgenerator/?$', ReportGenerator),
+    # 任务相关
     url(r'missionreport/?$', MissionInfo),
+    url(r'missioncallback/?$', MissionCallback),
+    url(r'missionfailed/?$', MissionFailed),
 
     # 编译相关
     url(r'compile/?$', CompileInit),
