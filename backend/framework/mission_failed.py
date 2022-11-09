@@ -16,7 +16,6 @@ from datetime import datetime
 from framework.dispatcher import Dispatcher
 from framework.config.service_url import COMPILE_SERVICE
 import requests
-from framework.config.status import MissonStatus
 from framework.utils.callback import get_job_status
 
 class MissionFailed(MABaseView):
