@@ -157,13 +157,6 @@ if __name__ == "__main__":
                 }
             }
         },
-        "framework": {
-            "desc": '框架测试服务(PTS)',
-            "sub": {
-              "service": {"desc": '创建任务'},
-              "detail": {"desc": '任务查询'}
-            }
-        },
         "detail": {
             "sub": {
                 "function": {"desc": '功能详情'},

@@ -140,7 +140,7 @@ export default {
         },
         {
           id: 'error',
-          desc: '失败',
+          desc: '异常',
           checked: false
         }
       ],
@@ -256,7 +256,7 @@ export default {
         case 'warning':
           return 'warning';
         case 'error':
-          return 'error';
+          return 'warning';
         case 'fail':
           return 'error';
         case 'failed':

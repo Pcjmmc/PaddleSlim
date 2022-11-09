@@ -187,6 +187,7 @@ export default {
           title: '状态',
           key: 'status',
           align: 'center',
+          width: '150px',
           render: (h, params) => {
             return h('div', [
               h('Tag', {
@@ -218,6 +219,7 @@ export default {
         {
           title: '时间',
           key: 'create_time',
+          width: '170px',
           align: 'center'
         },
         {
@@ -333,7 +335,7 @@ export default {
                 'Button',
                 {
                   props: {
-                    type: 'primary',
+                    type: 'error',
                     size: 'small'
                   },
                   style: {
@@ -536,6 +538,10 @@ export default {
           return '成功';
         case 'fail':
           return '失败';
+        case 'running':
+          return '运行中';
+        case 'error':
+          return '异常';
         default:
           return status;
       }
@@ -555,7 +561,7 @@ export default {
         case 'warning':
           return 'warning';
         case 'error':
-          return 'error';
+          return 'warning';
         case 'fail':
           return 'error';
         case 'failed':

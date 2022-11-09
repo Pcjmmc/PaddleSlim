@@ -288,11 +288,31 @@ export default {
           key: 'operation',
           align: 'center',
           fixed: 'right',
-          width: '150px',
+          width: '200px',
           render: (h, params) => {
             let ret = [];
             if (this.userInfo.departmentName === 'TPG质量效能部') {
               // 如果是QA，则推入操作
+              ret.push(
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: 'primary',
+                      size: 'small'
+                    },
+                    style: {
+                      marginRight: '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.setTestModa(params.row);
+                      }
+                    }
+                  },
+                  '提测'
+                )
+              );
               ret.push(
                 h(
                   'Button',
