@@ -34,12 +34,12 @@ class ManageIcafe(MABaseView):
         """
         # 获取所有的处于新建、开发中、开发完成的卡片
         # 按照最后修改时间进行时间窗口筛选
-        page = kwargs.get("page")
-        if not page:
-           page = 1
-        page_num = kwargs.get("page_num")
-        if not page_num:
-           page_num = 20
+        need_status = kwargs.get("need_status") if kwargs.get("need_status") else "1"
+      
+        print(type(need_status), "need_status=", need_status) 
+        #1,2,3,4,5 分别对应【待提测】【待测试】【测试中】【待确认测试结果】【测试完成】 
+        page = kwargs.get("page") if kwargs.get("page") else 1
+        page_num = kwargs.get("page_num") if kwargs.get("page_num") else 20 
         begin_time = kwargs.get("begin_time")
         end_time = kwargs.get('end_time')
         if not begin_time and not end_time:
@@ -55,14 +55,30 @@ class ManageIcafe(MABaseView):
         print("begin_time =", begin_time, "end_time=", end_time)
         rd = kwargs.get('rd')
         qa = kwargs.get('qa')
-        #story和任务后续去掉，只保留Task和bug
-        iql = "流程状态 in (新建,开发中,开发完成) AND 类型 in (Task,Bug,Story,任务) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
+        iql = ""
+        if need_status == "1":
+        # 待提测
+            #保留Task和bug
+            iql = "流程状态 in (新建,开发中,开发完成) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
+        if need_status == "2":
+        # 待测试
+            iql = "流程状态 in (开发完成) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
+        if need_status == "3":
+        # 测试中
+            iql = "流程状态 in (测试中) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
+        if need_status == "4":
+        # 待确认测试结果
+            return 
+        if need_status == "5": 
+        #测试完成
+            iql = "流程状态 in (测试完成) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
         if rd:
-           sub_iql = " AND 负责人 in ({})".format(rd)
-           iql = iql + sub_iql
+            sub_iql = " AND 负责人 in ({})".format(rd)
+            iql = iql + sub_iql
         if qa:
-           sub_iql = " AND qa负责人 in ({})".format(qa)
-           iql = iql + sub_iql
+            sub_iql = " AND qa负责人 in ({})".format(qa)
+            iql = iql + sub_iql
+        print("iql=", iql)
         return await get_cards_by_filter(page, page_num, iql)
 
     async def post(self, **kwargs):
@@ -77,27 +93,27 @@ class ManageIcafe(MABaseView):
         """
         # 新建卡片
         print("新建卡片")
-        fields = kwargs.get("fields")
+        type = kwargs.get("type") if kwargs.get("type") else "Task"
         # repo和产品保持一致（这里填充，减少后续卡片状态修改报错）
-        repo = fields.get("repo")
+        repo = kwargs.get("repo") if kwargs.get("repo") else "Paddle"
         icafe_info = {
-            "title": fields.get("title"),
+            "title": kwargs.get("title"),
             #TODO 创建卡片类型是否需要放开，暂时默认为Task
-            "type": "Task",
-            "detail": fields.get("detail"),
-            "fields": {},
-            "负责人": fields.get("rd_owner"),
-            "RD负责人": fields.get("rd_owner"),
-            #TODO 创建卡片是否需要指定qa？
-            "qa负责人": fields.get("qa_owner"),
-            "creator" : fields.get("rd_owner")
+            "type": type,
+            "detail": kwargs.get("detail"),
+            "creator" : kwargs.get("rd_owner"),
+            "fields" : {}
         }
         icafe_info["fields"] = {
+            "repo" : repo,
+            "负责人" : kwargs.get("rd_owner"),
+            "RD负责人": kwargs.get("rd_owner"),
+            "QA负责人": kwargs.get("qa_owner")
         }
         data = {
             "username": PADDLE_ICAFE_USER,
             "password": PADDLE_ICAFE_PASSD,
-            "creator" : fields.get("rd_owner"),
+            "creator" : kwargs.get("rd_owner"),
             "issues": [icafe_info]
         }
         result = await CreateCard(data).get_data()
@@ -116,6 +132,8 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         'maxRecords': page_num,
         'iql': iql
     }).get_data()
+    total = result.get("total")
+    print(total)
     #总共页数
     page_size = result.get('pageSize')
     #当前所在页
@@ -151,8 +169,9 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
             #TODO 通过icafeid查询db获取测试中/测试完成的测试服务报告
         }
         result.append(tmp)
+    print("icafe cards num=", len(result))
     #TODO返回总页数，以及result list
-    return len(result), result
+    return total, result
 
 class ProjectManage(MABaseView):
 
@@ -237,12 +256,21 @@ async def update_icafe(**kwargs):
         status_str = status_str_format.fromat("测试完成")
     else:
         return {}
+    fields_list = []
+    fields_list.append(status_str)
+    repo = kwargs.get("repo")
+    pr = kwargs.get("pr")
+    if repo:
+        fields_list.append("repo={}".format(repo))
+    if pr:
+        fields_list.append("PR链接={}".format(pr))
     if not icafe_id and test_id:
        #TODO查询DB获取所有id
        print("查db获取card_id")
     await ModifyCardStatus({
         'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
+        'isCheckStatus': False,
         'operator' : rd,
         'fields': [status_str]
     }).get_data(**{"card_id":icafe_id})
