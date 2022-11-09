@@ -41,7 +41,7 @@ class UserInfoManage(MABaseView):
         sign = AuthCheck.get_sign(data)
         data["sign"] = sign
         res = await GetUserInfo(data).get_data()
-        if res.get("code") == 200:
+        if type(res) == dict and res.get("code") == 200:
             # 如果不存在则新增，存在则更新
             user_info = res.get('result') or {}
             # 将user_info 的头像替换成hi头像

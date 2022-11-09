@@ -2,8 +2,8 @@
   <div>
     <div class="center-card-s">
       <Row style="margin-top: 1%;">
-        <span> 任务ID: {{ jobinfo.id }}</span>
-        <span style="float:left;width:60%;margin-left: 1%;">
+        <span> 任务名: {{ jobinfo.name }} </span>
+        <span style="float:left;width:60%;margin-left: 2%;">
           <span style="float:left;width:60%;">
             <Steps
               :current="current"
@@ -15,18 +15,16 @@
           </span>
         </span>
       </Row>
-      <Row style="margin-top: 1%;" v-if="jobinfo.name">
-        <span> 任务名: {{ jobinfo.name }} </span>
-      </Row>
-      <Row style="margin-top: 1%;">
-        <span style="display:inline-block;width:95%;margin-bottom:1%;"> 环境配置: </span>
-        <span
-          style="display:inline-block;width:95%;margin-bottom:1%;"
-        > {{ getDisplay(env) }}</span>
-      </Row>
-      <Row style="margin-top: 1%;">
-        <span style="display:inline-block;"> {{ env.type + ':' + env.value }}</span>
-      </Row>
+      <div style="margin-top: 1%;">
+        <div> 环境配置: </div>
+        <div>
+          <Table
+            border
+            :columns="envcolumns"
+            :data="envInfo"
+          ></Table>
+        </div>
+      </div>
       <Row style="margin-top: 1%;" v-if="req">
         <span style="display:inline-block;width:95%;margin-bottom:1%;">
           <span> 关联需求: </span>
@@ -65,15 +63,19 @@
         </span>
       </Row>
       <div style="margin-top: 2%;">
-        <div>
+        <div v-if="datas.length === 0">
           <span>
-            <span>测试项表:</span>
-            <span v-for="(item, index) in selectedItems" style="margin-left: 0.5%;">
+            <span>测试项:</span>
+            <Button
+              disabled
+              v-for="(item, index) in selectedItems" 
+              style="width:150px;margin-left: 0.5%;"
+            >
               {{ getMissionName(item) }}
-            </span>
+            </Button>
           </span>
         </div>
-        <div>
+        <div v-else>
           <Table
             border
             :columns="columns"
@@ -110,6 +112,64 @@ export default {
       selectedItems: [],
       env: {},
       datas: [],
+      envcolumns: [
+        {
+          title: '系统',
+          key: 'os',
+          align: 'center',
+          fixed: 'left'
+        },
+        {
+          title: 'CUDA',
+          key: 'cuda',
+          align: 'center'
+        },
+        {
+          title: '分支',
+          key: 'branch',
+          align: 'center'
+        },
+        {
+          title: 'python版本',
+          key: 'python',
+          align: 'center'
+        },
+        {
+          title: '类型',
+          key: 'type',
+          align: 'center'
+        },
+        {
+          title: '取值',
+          key: 'value',
+          align: 'center',
+          fixed: 'right',
+          render: (h, params) => {
+            return h('Tooltip', {
+              props: {
+                placement: 'right',
+                transfer: true
+              }
+            }, [
+              h('div', {
+                style: {
+                  width: '100px',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis'
+                }
+              }, params.row.value),
+              h('span', {
+                slot: 'content',
+                style: {
+                  whiteSpace: 'normal',
+                  wordBreak: 'break-all'
+                }
+              }, params.row.value)
+            ])
+          }
+        }
+      ],
       columns: [
         {
           title: '测试项',
@@ -262,6 +322,15 @@ export default {
   mounted: function () {
     this.getDetails();
   },
+  computed: {
+    envInfo: {
+      get() {
+        let info = [];
+        info.push(this.env);
+        return info;
+      }
+    }
+  },
   components: {
   },
   methods: {
@@ -284,31 +353,10 @@ export default {
           this.env = {};
         }
         let mission = typeof data.mission === 'object' ? data.mission : {};
-        this.jobinfo.name = data.descrption;
+        this.jobinfo.name = data.description;
         this.jobinfo.id = data.id;
         // 将mission转换成想要的数据格式
         this.datas = this.getData(mission);
-        // 构造一个假数据
-        // this.datas = [
-        //   {
-        //     mission: this.getMissionName('external_api_function'),
-        //     allure_report: 'http://paddletest.baidu-int.com:8333/211666182177_id_154',
-        //     bos_url: 'https://paddle-qa.bj.bcebos.com/PTS/mission_result/mission_154/custom_op.tar',
-        //     create_time: '2022-10-11 20:49:16',
-        //     id: 154,
-        //     result: '{"total": 12, "success": 12, "skip": 0, "failed": 0}',
-        //     status: 'done'
-        //   },
-        //   {
-        //     mission: this.getMissionName('op_function'),
-        //     allure_report: 'http://paddletest.baidu-int.com:8333/211666182177_id_154',
-        //     bos_url: 'https://paddle-qa.bj.bcebos.com/PTS/mission_result/mission_154/custom_op.tar',
-        //     create_time: '2022-10-11 20:49:16',
-        //     id: 155,
-        //     result: '{"total": 10, "success": 10, "skip": 0, "failed": 0}',
-        //     status: 'done'
-        //   }
-        // ];
       } else {
         this.jobinfo = {
           id: this.$route.params.jid,
