@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="center-card-s">
+    <Card class="center-card-s">
       <Row style="margin-top: 1%;">
         <span> 任务名: {{ jobinfo.name }} </span>
         <span style="float:left;width:60%;margin-left: 2%;">
@@ -25,14 +25,27 @@
           ></Table>
         </div>
       </div>
-      <Row style="margin-top: 1%;" v-if="req">
-        <span style="display:inline-block;width:95%;margin-bottom:1%;">
-          <span> 关联需求: </span>
-          <a href="javascript:void(0)" @click="jumper()">
-            {{ req.desc }}
-          </a>
-        </span>
-      </Row>
+      <Card>
+        <Row style="margin-top: 1%;" v-if="wheel">
+          <span>编译产物: <a :href="wheel">{{ wheel }}</a>
+            <Icon
+              class="ivu-icon ivu-icon-ios-copy-outline copyBtn"
+              type="ios-copy-outline"
+              color="green"
+              size="15"
+              @click="copyData(wheel)"
+            ></Icon>
+          </span>
+        </Row>
+        <Row style="margin-top: 1%;" v-if="req">
+          <span style="display:inline-block;width:95%;margin-bottom:1%;">
+            <span> 关联需求: </span>
+            <a href="javascript:void(0)" @click="jumper()">
+              {{ req.desc }}
+            </a>
+          </span>
+        </Row>
+      </Card>
       <!--
       <Row style="margin-top: 1%;">
         <span style="float:left;width:60%;">
@@ -51,18 +64,9 @@
         </span>
       </Row>
       -->
-      <Row style="margin-top: 1%;" v-if="wheel">
-        <span>编译产物: <a :href="wheel">{{ wheel }}</a>
-          <Icon
-            class="ivu-icon ivu-icon-ios-copy-outline copyBtn"
-            type="ios-copy-outline"
-            color="green"
-            size="15"
-            @click="copyData(wheel)"
-          ></Icon>
-        </span>
-      </Row>
-      <div style="margin-top: 2%;">
+    </Card>
+    <div class="center-card-s">
+      <div style="margin-top: 1%;">
         <div v-if="datas.length === 0">
           <span>
             <span>测试项:</span>
@@ -76,6 +80,7 @@
           </span>
         </div>
         <div v-else>
+          测试模块详情:
           <Table
             border
             :columns="columns"
@@ -116,8 +121,7 @@ export default {
         {
           title: '系统',
           key: 'os',
-          align: 'center',
-          fixed: 'left'
+          align: 'center'
         },
         {
           title: 'CUDA',
@@ -143,7 +147,6 @@ export default {
           title: '取值',
           key: 'value',
           align: 'center',
-          fixed: 'right',
           render: (h, params) => {
             return h('Tooltip', {
               props: {
