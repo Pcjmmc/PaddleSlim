@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { FrameWorkJobDetail, FrameReportUrl } from '../../api/url.js';
+import { FrameWorkJobDetail, FrameReportUrl, FrameMissionFailedUrl } from '../../api/url.js';
 import api from '../../api/index';
 import Clipboard from 'clipboard';
 import { TestServerMap } from '../../util/common.js';
@@ -172,6 +172,12 @@ export default {
       ],
       columns: [
         {
+          title: 'ID',
+          key: 'id',
+          align: 'center',
+          fixed: 'left'
+        },
+        {
           title: '测试项',
           key: 'mission',
           align: 'center',
@@ -218,7 +224,6 @@ export default {
           title: '详细报告',
           key: 'report',
           align: 'center',
-          fixed: 'right',
           width: '200px',
           render: (h, params) => {
             let bos_url = params.row.bos_url;
@@ -302,6 +307,47 @@ export default {
                 )
               );
             }
+            return h(
+              'div',
+              {
+                style: {
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-start'
+                }
+              },
+              ret
+            );
+          }
+        },
+        {
+          title: '操作',
+          key: 'operation',
+          align: 'center',
+          fixed: 'right',
+          render: (h, params) => {
+            let ret = [];
+            ret.push(
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.setFailedStatus(params.row.id);
+                    }
+                  }
+                },
+                '标记失败'
+              )
+            );
             return h(
               'div',
               {
@@ -464,6 +510,21 @@ export default {
       } else {
         this.$Message.error({
           content: '没有可查询报告，请先生成报告！',
+          duration: 30,
+          closable: true
+        });
+      }
+    },
+    async setFailedStatus(id) {
+      let params = {
+        id: id
+      };
+      const {code, message} = await api.post(FrameMissionFailedUrl, params);
+      if (parseInt(code, 10) === 200) {
+        await this.getDetails();
+      } else {
+        this.$Message.error({
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
