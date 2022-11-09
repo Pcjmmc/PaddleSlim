@@ -33,8 +33,8 @@ async def get_job_status(jid, missions: dict):
     else:
         if MissionStatus.ERROR in result_list:
             res = await Job.aio_update({"status": MissionStatus.ERROR, "update_time": datetime.now()}, {"id": jid})
-        elif MissionStatus.FAIL in result_list:
-            res = await Job.aio_update({"status": MissionStatus.FAIL, "update_time": datetime.now()}, {"id": jid})
+        # elif MissionStatus.FAIL in result_list:
+        #     res = await Job.aio_update({"status": MissionStatus.FAIL, "update_time": datetime.now()}, {"id": jid})
         # elif MissionStatus.DONE in result_list:
         #     res = await Job.aio_update({"status": MissionStatus.DONE, "update_time": datetime.now()}, {"id": jid})
         else:
