@@ -113,7 +113,6 @@
       v-on:on-cancel="handleResetTest"
     >
       <Form
-        ref="reqDetail"
         :model="reqDetail"
         :label-width="75"
         style="width: 90%"
