@@ -35,8 +35,6 @@ class ManageIcafe(MABaseView):
         # 获取所有的处于新建、开发中、开发完成的卡片
         # 按照最后修改时间进行时间窗口筛选
         need_status = kwargs.get("need_status") if kwargs.get("need_status") else "1"
-      
-       
         #1,2,3,4,5 分别对应【待提测】【待测试】【测试中】【待确认测试结果】【测试完成】 
         page = kwargs.get("page") if kwargs.get("page") else "1"
         print(type(page))
@@ -134,7 +132,7 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         'iql': iql
     }).get_data()
     total = result.get("total")
-    print(total)
+    #print(total)
     #总共页数
     page_size = result.get('pageSize')
     #当前所在页
