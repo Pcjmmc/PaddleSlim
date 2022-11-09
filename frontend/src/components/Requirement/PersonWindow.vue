@@ -420,6 +420,7 @@ export default {
         icafe_id: this.selectRow.sequence
       };
       console.log('params is, 更新需求信息，将jid写进去 todo', params);
+      await this.getData();
     },
     closeModal(params) {
       // 关闭弹窗
@@ -577,6 +578,7 @@ export default {
       const { code, message } = await api.post(StartTestUrl, this.reqDetail);
       if (parseInt(code, 10) === 200) {
         this.initTestData();
+        await this.getData();
       } else {
         this.$Message.error({
           content: '请求出错: ' + message,
