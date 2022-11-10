@@ -7,7 +7,6 @@ from framework.job_view import JobInitView
 from framework.job_list import JobList
 from framework.job_details import JobDetails
 from framework.dispatcher_view import DispatcherView
-from framework.settings import SettingsView
 from framework.runner import RunnerView
 from framework.runner_xly import RunnerXLY
 from framework.mission_callback import MissionCallback
@@ -20,6 +19,11 @@ from framework.mission_failed import MissionFailed
 
 from framework.compile import CompileInit
 from framework.compile_search import CompileSearch
+from framework.compile_database import CompileDatabase
+
+from framework.module_settings import ModuleSettingsView
+from framework.settings import SettingsView
+
 
 from urls import url
 
@@ -30,7 +34,6 @@ urlpatterns = [
     url(r'joblist/?$', JobList),
     url(r'jobdetails/?$', JobDetails),
     url(r'dispatcher/?$', DispatcherView),
-    url(r'getsettings/?$', SettingsView),
     url(r'runner/?$', RunnerView),
     url(r'runnerxly/?$', RunnerXLY),
     url(r'compilecallback/?$', CompileCallback),
@@ -43,5 +46,10 @@ urlpatterns = [
     # 编译相关
     url(r'compile/?$', CompileInit),
     url(r'compile_search/?$', CompileSearch),
+    url(r'compile_database/?$', CompileDatabase),
+
+    # 配置相关
+    url(r'getmodulesettings/?$', ModuleSettingsView),
+    url(r'getsettings/?$', SettingsView),
 
 ]
