@@ -181,7 +181,7 @@ export default {
           align: 'center'
         },
         {
-          title: '完成时间',
+          title: '更新时间',
           key: 'update_time',
           align: 'center'
         },

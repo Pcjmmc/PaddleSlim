@@ -183,13 +183,14 @@ export default {
           title: 'ID',
           key: 'id',
           align: 'center',
-          fixed: 'left'
+          fixed: 'left',
+          width: '100px'
         },
         {
           title: '测试项',
           key: 'mission',
           align: 'center',
-          fixed: 'left'
+          width: '140px'
         },
         {
           title: '状态',
@@ -213,7 +214,6 @@ export default {
           title: '结果',
           key: 'result',
           align: 'center',
-          width: '350px',
           render: (h, params) => {
             return h('div', [
               h('p', {
@@ -225,7 +225,7 @@ export default {
           }
         },
         {
-          title: '时间',
+          title: '创建时间',
           key: 'create_time',
           width: '170px',
           align: 'center'
