@@ -93,3 +93,18 @@ class Settings(BaseModel, BaseModelMixin):
         定义model属于那个库
         """
         app_label = 'framework'
+
+
+class ModuleSettings(BaseModel, BaseModelMixin):
+    """
+    定义tasks任务的表结构
+    """
+    __tablename__ = 'module_settings'
+    option = Column(VARCHAR(256), primary_key=True)
+    value = Column(Text(2048))
+
+    class Meta:
+        """
+        定义model属于那个库
+        """
+        app_label = 'framework'
