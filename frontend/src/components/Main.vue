@@ -176,17 +176,17 @@ export default {
       this.option = this.versionName;
     }
   },
-  mounted: function () {
+  mounted: async function () {
     this.appname = Cookies.get('appname');
     // this.username = Cookies.get('username');
-    this.getMenu();
+    await this.getMenu();
   },
-  created() {
+  async created() {
     this.$root.Hub.$on('update-user-name', () => {
       this.appname = Cookies.get('appname');
       // this.username = Cookies.get('username');
     });
-    this.getMenu();
+    await this.getMenu();
   },
   methods: {
     handleClickTag (item) {

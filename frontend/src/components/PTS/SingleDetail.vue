@@ -54,7 +54,7 @@
                 v-for="(item, index) in selectedItems"
                 style="width:150px;margin-left: 0.5%;"
               >
-                {{ getMissionName(item) }}
+                {{ serverMap[item] }}
               </Button>
             </span>
           </div>
@@ -98,16 +98,17 @@
 </template>
 
 <script>
-import { FrameWorkJobDetail, FrameReportUrl, FrameMissionFailedUrl } from '../../api/url.js';
+import { FrameWorkJobDetail, FrameReportUrl, FrameMissionFailedUrl, FrameModuleConfigUrl } from '../../api/url.js';
 import api from '../../api/index';
 import Clipboard from 'clipboard';
-import { TestServerMap } from '../../util/common.js';
+import Modal from '../ModalSimple/Modal.vue';
 
 export default {
   name: 'SingleDetail',
   props: {},
   data: function () {
     return {
+      serverMap: {},
       req: {
         id: 3,
         desc: 'xxxx'
@@ -376,8 +377,9 @@ export default {
       ]
     };
   },
-  mounted: function () {
-    this.getDetails();
+  mounted: async function () {
+    await this.getModuleConfig();
+    await this.getDetails();
   },
   computed: {
     envInfo: {
@@ -389,8 +391,22 @@ export default {
     }
   },
   components: {
+    Modal
   },
   methods: {
+    async getModuleConfig() {
+      const {code, data, message} = await api.get(FrameModuleConfigUrl);
+      if (parseInt(code, 10) === 200) {
+        this.serverMap = JSON.parse(data.module_mapping);
+      } else {
+        this.serverMap = {};
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
     async getDetails() {
       let jid = this.$route.params.jid;
       let params = {
@@ -438,7 +454,7 @@ export default {
         this.selectedItems.push(key);
         if (dt[key]) {
           let temp = {
-            mission: this.getMissionName(key),
+            mission: this.serverMap[key],
             status: dt[key].status,
             result: dt[key].result ? dt[key].result : {},
             create_time: dt[key].create_time,
@@ -479,9 +495,6 @@ export default {
       this.current = -1;
       this.stepStatus = null;
       this.wheel = null;
-    },
-    getMissionName(key) {
-      return TestServerMap[key];
     },
     copyData(url) {
       let clipboard = new Clipboard('.copyBtn', {
@@ -527,19 +540,24 @@ export default {
       }
     },
     async setFailedStatus(id) {
-      let params = {
-        id: id
-      };
-      const {code, message} = await api.post(FrameMissionFailedUrl, params);
-      if (parseInt(code, 10) === 200) {
-        await this.getDetails();
-      } else {
-        this.$Message.error({
-          content: '请求出错: ' + message,
-          duration: 30,
-          closable: true
-        });
-      }
+      Modal.confirm({
+        title: "确认标记失败？",
+        onOk: async () => {
+          let params = {
+            id: id
+          };
+          const {code, message} = await api.post(FrameMissionFailedUrl, params);
+          if (parseInt(code, 10) === 200) {
+            await this.getDetails();
+          } else {
+            this.$Message.error({
+              content: '请求出错: ' + message,
+              duration: 30,
+              closable: true
+            });
+          }
+        }
+      });
     },
     getStatus(status) {
       switch (status.toLowerCase()) {

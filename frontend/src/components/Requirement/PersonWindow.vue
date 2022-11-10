@@ -39,9 +39,14 @@
                   <Input v-model="search.qaname" placeholder="输入QA邮箱前缀"/>
                 </FormItem>
               </Col>
-              <Col span="4">
+              <Col span="6">
                 <FormItem label="状态:" prop="staus">
-                  <Select clearable v-model="search.status">
+                  <Select
+                    clearable
+                    filterable
+                    v-model="search.status"
+                    @on-change="searchByfilter"
+                  >
                     <Option
                       :key="index"
                       :value="item"
@@ -238,7 +243,7 @@ export default {
         '待提测',
         '待测试',
         '测试中',
-        '待确认',
+        '待确认测试结果',
         '测试完成'
       ],
       content: [

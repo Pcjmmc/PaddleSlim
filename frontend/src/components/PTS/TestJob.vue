@@ -229,7 +229,7 @@
 <script>
 import api from '../../api/index';
 import treeTransfer from 'el-tree-transfer';
-import { FrameWorkConfigUrl, FrameWorkJobUrl } from '../../api/url.js';
+import { FrameWorkConfigUrl, FrameWorkJobUrl, FrameModuleConfigUrl } from '../../api/url.js';
 
 export default {
   name: 'TestJob',
@@ -278,167 +278,15 @@ export default {
       testType: [
       ],
       data2: [],
-      originData: [
-        {
-          id: '1',
-          label: 'API功能测试',
-          key: 'api_function',
-          children: [
-            {
-              pid: '1',
-              id: '1-1',
-              label: '计算op精度测试',
-              key: 'op_function'
-            },
-            {
-              pid: '1',
-              id: '1-2',
-              label: '功能性API测试',
-              key: 'external_api_function'
-            },
-            // {
-            //   pid: '1',
-            //   id: '1-3',
-            //   label: 'IO相关测试',
-            //   key: 'io_function'
-            // },
-            {
-              pid: '1',
-              id: '1-4',
-              label: '分布式API测试',
-              key: 'distribution_api_function'
-            }
-          ]
-        },
-        {
-          id: '2',
-          label: '动转静测试',
-          key: 'jit_function',
-          children: [
-            {
-              pid: '2',
-              id: '2-1',
-              label: 'JIT API单独组网测试',
-              key: 'jit_function'
-            },
-            {
-              pid: '2',
-              id: '2-2',
-              label: 'JIT 模型子结构测试',
-              key: 'jit_models_function'
-            }
-          ]
-        },
-        {
-          id: '3',
-          label: '预测部署',
-          key: 'infer',
-          children: [
-            {
-              pid: '3',
-              id: '3-1',
-              label: '原生推理',
-              key: 'native_infer'
-            },
-            {
-              pid: '3',
-              id: '3-2',
-              label: 'TensorRT推理',
-              key: 'trt_infer'
-            },
-            {
-              pid: '3',
-              id: '3-3',
-              label: 'MKLDNN推理',
-              key: 'mkldnn_infer'
-            }
-          ]
-        },
-        // {
-        //   id: '4',
-        //   label: '模型测试',
-        //   key: 'models',
-        //   children: [
-        //     {
-        //       pid: '4',
-        //       id: '4-1',
-        //       label: '图像识别',
-        //       key: 'paddleclas'
-        //     }
-        //   ]
-        // },
-        {
-          id: '5',
-          label: '模型性能测试',
-          key: 'models_benchmark',
-          children: [
-            {
-              pid: '5',
-              id: '5-1',
-              label: 'V100',
-              key: 'V100',
-              children: [
-                {
-                  pid: '5-1',
-                  id: '5-1-1',
-                  label: '单机性能测试',
-                  key: 'models_benchmark_v100_single_dp'
-                },
-                {
-                  pid: '5-1',
-                  id: '5-1-2',
-                  label: '多机性能测试',
-                  key: 'models_benchmark_v100_multi_dp'
-                },
-                {
-                  pid: '5-1',
-                  id: '5-1-3',
-                  label: '分布式Collective模式性能测试',
-                  key: 'models_benchmark_v100_dist_collective'
-                },
-                {
-                  pid: '5-1',
-                  id: '5-1-4',
-                  label: '分布式Collective模式精度测试',
-                  key: 'distribution_v100_accuracy_collective'
-                }
-              ]
-            },
-            {
-              pid: '5',
-              id: '5-2',
-              label: 'A100',
-              key: 'A100',
-              children: [
-                {
-                  pid: '5-2',
-                  id: '5-2-1',
-                  label: '单机性能测试',
-                  key: 'models_benchmark_a100_single_dp'
-                },
-                {
-                  pid: '5-2',
-                  id: '5-2-2',
-                  label: '多机性能测试',
-                  key: 'models_benchmark_a100_multi_dp'
-                }
-              ]
-            }
-          ]
-        }
-        // {
-        //   id: '6',
-        //   label: 'API性能测试',
-        //   key: 'api_benchmark'
-        // },
-      ]
+      originData: []
     };
   },
   watch: {
   },
-  mounted: function () {
+  mounted: async function () {
+    await this.getModuleConfig();
     this.initData();
-    this.getSelectDatas();
+    await this.getSelectDatas();
   },
   components: {
     treeTransfer
@@ -486,6 +334,19 @@ export default {
       this.testType = JSON.parse(JSON.stringify(this.testTypeinit)); // 记录下初始状态
       this.search = JSON.parse(JSON.stringify(this.searchinit));
       this.content = [];
+    },
+    async getModuleConfig() {
+      const {code, data, message} = await api.get(FrameModuleConfigUrl);
+      if (parseInt(code, 10) === 200) {
+        this.originData = JSON.parse(data.module_list);
+      } else {
+        this.originData = [];
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
     },
     async getSelectDatas() {
       const {code, data, message} = await api.get(FrameWorkConfigUrl);
@@ -628,7 +489,7 @@ export default {
   width: 98%;
   margin-left: 2%;
   margin-right: 2%;
-  max-height: 800px;
+  max-height: 1000px;
   overflow: auto;
   font-size: 15px;
   color:lightslategrey
