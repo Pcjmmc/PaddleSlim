@@ -45,6 +45,20 @@
             </a>
           </span>
         </Row>
+        <div style="margin-top: 1%;">
+          <div v-if="datas.length === 0">
+            <span>
+              <span>测试项:</span>
+              <Button
+                disabled
+                v-for="(item, index) in selectedItems"
+                style="width:150px;margin-left: 0.5%;"
+              >
+                {{ getMissionName(item) }}
+              </Button>
+            </span>
+          </div>
+        </div>
       </Card>
       <!--
       <Row style="margin-top: 1%;">
@@ -65,21 +79,12 @@
       </Row>
       -->
     </Card>
-    <div class="center-card-s">
-      <div style="margin-top: 1%;">
-        <div v-if="datas.length === 0">
-          <span>
-            <span>测试项:</span>
-            <Button
-              disabled
-              v-for="(item, index) in selectedItems"
-              style="width:150px;margin-left: 0.5%;"
-            >
-              {{ getMissionName(item) }}
-            </Button>
-          </span>
-        </div>
-        <div v-else>
+    <Card
+      class="center-card-s"
+      v-if="datas.length > 0"
+    >
+      <div>
+        <div>
           测试模块详情:
           <Table
             border
@@ -88,7 +93,7 @@
           ></Table>
         </div>
       </div>
-    </div>
+    </Card>
   </div>
 </template>
 
@@ -190,7 +195,7 @@ export default {
           title: '状态',
           key: 'status',
           align: 'center',
-          width: '150px',
+          width: '130px',
           render: (h, params) => {
             return h('div', [
               h('Tag', {
@@ -330,6 +335,7 @@ export default {
           title: '操作',
           key: 'operation',
           align: 'center',
+          width: '100px',
           fixed: 'right',
           render: (h, params) => {
             let ret = [];
@@ -539,6 +545,8 @@ export default {
       switch (status.toLowerCase()) {
         case 'success':
           return '成功';
+        case 'done':
+          return '已完成';
         case 'fail':
           return '失败';
         case 'running':
