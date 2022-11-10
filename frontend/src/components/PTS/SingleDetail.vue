@@ -391,7 +391,6 @@ export default {
     }
   },
   components: {
-    Modal
   },
   methods: {
     async getModuleConfig() {
@@ -541,7 +540,7 @@ export default {
     },
     async setFailedStatus(id) {
       Modal.confirm({
-        title: "确认标记失败？",
+        title: '确认标记失败？',
         onOk: async () => {
           let params = {
             id: id

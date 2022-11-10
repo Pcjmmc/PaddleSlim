@@ -45,7 +45,7 @@
                     clearable
                     filterable
                     v-model="search.status"
-                    @on-change="searchByfilter"
+                    v-on:on-change="searchByfilter"
                   >
                     <Option
                       :key="index"
