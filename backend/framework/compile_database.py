@@ -36,7 +36,7 @@ class CompileDatabase(MABaseView):
         data = dict()
         data["jid"] = 0
         data["uid"] = 0
-        data["status"] = 0
+        data["status"] = "done"
         data["env"] = str(env)
         data["create_time"] = datetime.now()
         data["update_time"] = datetime.now()

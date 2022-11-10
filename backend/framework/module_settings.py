@@ -23,7 +23,6 @@ class ModuleSettingsView(MABaseView):
 
     async def get_data(self, **kwargs):
         settings =  await ModuleSettings.aio_filter_details(need_all=True)
-        print(settings)
         res = {}
         for i in settings:
             res[i["option"]] = i["value"]
