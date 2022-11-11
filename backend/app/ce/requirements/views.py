@@ -54,6 +54,7 @@ class ManageIcafe(MABaseView):
         print("begin_time =", begin_time, "end_time=", end_time)
         rd = kwargs.get('rd')
         qa = kwargs.get('qa')
+        keyword = kwargs.get('keyword')
         iql = ""
         if need_status == "待提测":
         # 待提测
@@ -76,6 +77,9 @@ class ManageIcafe(MABaseView):
             iql = iql + sub_iql
         if qa:
             sub_iql = " AND qa负责人 in ({})".format(qa)
+            iql = iql + sub_iql
+        if keyword:
+            sub_iql = " AND 关键字 ~ {}".format(keyword)
             iql = iql + sub_iql
         print("iql=", iql)
         return await get_cards_by_filter(page, page_num, iql)
