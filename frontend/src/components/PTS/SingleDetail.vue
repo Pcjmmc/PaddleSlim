@@ -357,7 +357,7 @@ export default {
                     }
                   }
                 },
-                '标记失败'
+                '标记异常'
               )
             );
             return h(
@@ -540,7 +540,7 @@ export default {
     },
     async setFailedStatus(id) {
       Modal.confirm({
-        title: '确认标记失败？',
+        title: '确认标记异常？',
         onOk: async () => {
           let params = {
             id: id

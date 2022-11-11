@@ -23,7 +23,7 @@ router.beforeEach((to, from, next) => {
         Cookies.set('appname', '飞桨核心框架');
         next();
       } else {
-        next()
+        next();
       }
     })
     .catch(function (error) {
