@@ -210,15 +210,20 @@ class ProjectManage(MABaseView):
 
     async def post_data(self, **kwargs):
         """
-        响应请求, 实现数据插入
+        响应请求, 实现数据插入, 支持提测
         """
         #TODO icafe已经存在，新建一条，测试id保证不重复
-        #还是icafe历史测试id不保留
+        #TODO 重复提测的卡片，需要梳理方案，防止出现多次重复提测
         icafe_id = kwargs.get("icafe_id")
+        method = kwargs.get("method") if kwargs.get("method") else "提测"
+        if "method" in kwargs.keys():
+            kwargs.pop("method")
         if not icafe_id:
            return {}
         count, project_id = await Project.aio_insert(validated_data=kwargs)
         print("project_id=", project_id)
+        kwargs["method"] = method
+        await update_icafe(**kwargs)
         return {"id" : project_id}
 
     async def put(self, **kwargs):
@@ -229,30 +234,51 @@ class ProjectManage(MABaseView):
 
     async def put_data(self, **kwargs):
         """
-        响应请求，实现数据更新，主要是更新测试任务状态
+        响应请求，实现数据更新，支持qa触发测试将测试服务id写回
         """
+        icafe_id = kwargs.get("icafe_id")
         test_id = kwargs.get("test_id")
-        kwargs.pop("test_id")
+        #kwargs.pop("icafe_id")
         await Project.aio_update(
-            validated_data=kwargs, params_data={"test_id": test_id}
+            validated_data=kwargs, params_data={"icafe_id": icafe_id, "test_id" : None}
         )
         status = kwargs.get("test_status")
         await update_icafe(**kwargs)
- 
+
+async def update_pts_status(**kwargs):
+    """
+    支持pts写回db时，同步写回需求测试服务关联表状态
+    """
+    test_id = kwargs.get("test_id")
+    origin_status = kwargs.get("test_status")
+    validated_data["test_id"] = test_id
+    #和pts沟通pts原始状态，并做映射入库
+    validated_data['test_status'] = origin_status
+    await Project.aio_update(
+            validated_data=kwargs, params_data={"test_id" : test_id}
+        )
+    #TODO如流周知rd/qa关注
 async def update_icafe(**kwargs):
     #TOTO 梳理卡片required字段更新对应icafe卡片
     #验证，如果缺少required字段,更新卡片状态会失败
-    pass
-    test_status = kwargs.get("test_status")
     rd = kwargs.get("rd")
     test_id = kwargs.get("test_id")
     icafe_id = kwargs.get("icafe_id")
+    test_status = kwargs.get("test_status")
+    method = kwargs.get("method")
+    target = None
+    if method == "提测":
+        target = "开发完成"
+    elif method == "测试":
+        target = "测试中"
+    elif method == "确认":
+        target = "测试完成"
+    else:
+        return 
+    print("in update_icafe", "target =", target) 
     status_str_format = "流程状态={}"
-    if test_status == 1:
-        status_str = status_str_format.fromat("测试中")
-    elif test_status == 2:
-        #测试未通过不需要修改卡片状态
-        status_str = status_str_format.fromat("测试完成")
+    if target:
+        status_str = status_str_format.format(target)
     else:
         return {}
     fields_list = []
@@ -262,17 +288,19 @@ async def update_icafe(**kwargs):
     if repo:
         fields_list.append("repo={}".format(repo))
     if pr:
+        if repo and  "pull" not in pr:
+             pr = "github.com/PaddlePaddle/Paddle/pull/" + pr 
         fields_list.append("PR链接={}".format(pr))
     if not icafe_id and test_id:
        #TODO查询DB获取所有id
        print("查db获取card_id")
+       return 
     await ModifyCardStatus({
         'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
         'isCheckStatus': False,
         'operator' : rd,
-        'fields': [status_str]
+        'fields': fields_list
     }).get_data(**{"card_id":icafe_id})
- 
  
       
