@@ -214,23 +214,31 @@ export default {
         appid: Cookies.get("appid"),
         appname: Cookies.get("appname")
       };
-      const { code, data } = await api.get(MenuInfoUrl, params);
-      this.menuDesc = data;
-      // 暂时定义menu
-      this.verisonList = this.menuDesc["version"];
-      if (this.$route.params && this.$route.params.version) {
-        this.option = this.$route.params.version;
-        Cookies.set('version', this.option);
-        this.$store.commit('changeVersion', this.option);
-      } else if (this.$store.state.version) {
-        this.option = this.$store.state.version;
-        Cookies.set('version', this.option);
+      const { code, data, message } = await api.get(MenuInfoUrl, params);
+      if (parseInt(code, 10) === 200) {
+        this.menuDesc = data;
+        // 暂时定义menu
+        this.verisonList = this.menuDesc["version"];
+        if (this.$route.params && this.$route.params.version) {
+          this.option = this.$route.params.version;
+          Cookies.set('version', this.option);
+          this.$store.commit('changeVersion', this.option);
+        } else if (this.$store.state.version) {
+          this.option = this.$store.state.version;
+          Cookies.set('version', this.option);
+        } else {
+          this.option = this.verisonList[1].desc;
+          Cookies.set('version', this.option);
+          this.$store.commit('changeVersion', this.option);
+        }
+        this.$delete(this.menuDesc, 'version');
       } else {
-        this.option = this.verisonList[1].desc;
-        Cookies.set('version', this.option);
-        this.$store.commit('changeVersion', this.option);
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
       }
-      this.$delete(this.menuDesc, 'version');
     }
   }
 }

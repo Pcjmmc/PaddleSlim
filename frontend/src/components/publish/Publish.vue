@@ -189,13 +189,13 @@ export default {
       this.getData();
     },
     async getScenesList() {
-      const {code, data, msg} = await api.get(ScenesUrl);
+      const {code, data, message} = await api.get(ScenesUrl);
       if (parseInt(code, 10) === 200) {
         this.publishOriginList = data.publishOriginList;
       } else {
         this.publishOriginList = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

@@ -682,21 +682,21 @@ export default {
         build_id: this.$route.query.build_id,
         secondary_type: this.secondarytype
       };
-      const {code, data, msg} = await api.get(AssociateBugUrl, params);
+      const {code, data, message} = await api.get(AssociateBugUrl, params);
       if (parseInt(code, 10) === 200) {
         this.bugList = data;
         // console.log('this.bugTypeList', this.bugTypeList);
       } else {
         this.bugList = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
       }
     },
     async getScenesList() {
-      const {code, data, msg} = await api.get(ScenesUrl);
+      const {code, data, message} = await api.get(ScenesUrl);
       if (parseInt(code, 10) === 200) {
         this.bugTypeList = data.bugTypeList;
         this.initData();
@@ -704,7 +704,7 @@ export default {
       } else {
         this.bugTypeList = {};
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

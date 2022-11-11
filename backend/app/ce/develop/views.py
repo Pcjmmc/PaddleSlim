@@ -14,12 +14,14 @@ from rpc.github import GetBranches, GetCommit, GetTags
 from services.summary import Summary
 from services.tasks import TaskBuildInfo, TasksInfo
 from utils.change_time import stmp_by_date
-
+from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
 
 class DevelopVersionManage(MABaseView):
 
+    auth_class = AuthCheck
+    
     async def get(self, **kwargs):
         """
         调用基类的get方法

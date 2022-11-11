@@ -323,7 +323,7 @@ export default {
     },
     async SubmitRequirement(jid) {
       // 什么也无需做，只是保持格式统一
-      console.log('return jid is', jid);
+      // console.log('return jid is', jid);
     },
     async searchData() {
       // 根据条件查询

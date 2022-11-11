@@ -9,12 +9,14 @@ from ce_web.settings.scenes import (
     scenes_dict, secondary_type, system_list
 )
 from libs.mongo.db import Mongo
-
+from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
 
 class ScenesManage(MABaseView):
 
+    auth_class = AuthCheck
+    
     async def get(self, **kwargs):
         """
         调用基类的get方法

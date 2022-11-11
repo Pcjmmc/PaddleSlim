@@ -261,12 +261,12 @@ export default {
             version_id: this.versionid,
             status: 1
           }
-          const {code, msg} = await api.post(ExemptUrl, params);
+          const {code, message} = await api.post(ExemptUrl, params);
           if (parseInt(code) == 200) {
             this.$set(this.data[index], 'exempt_status', true)
           } else {
             this.$Message.error({
-              content: '请求出错: ' + msg,
+              content: '请求出错: ' + message,
               duration: 30,
               closable: true
             })
@@ -287,13 +287,13 @@ export default {
             version_id: this.versionid,
             status: 0
           }
-          const {code, msg} = await api.put(ExemptUrl, params);
+          const {code, message} = await api.put(ExemptUrl, params);
           if (parseInt(code) == 200) {
             // 修改页面
             this.$set(this.data[index], 'exempt_status', false)
           } else {
             this.$Message.error({
-              content: '请求出错: ' + msg,
+              content: '请求出错: ' + message,
               duration: 30,
               closable: true
             })

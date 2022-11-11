@@ -8,12 +8,14 @@ import time
 
 from libs.mongo.db import Mongo
 from models.publish_result import PubishResult
-
+from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
 
 class PublishResultManage(MABaseView):
 
+    auth_class = AuthCheck
+    
     async def get(self, **kwargs):
         """
         调用基类的get方法

@@ -9,12 +9,13 @@ import time
 from models.release_version import CeReleaseVersion
 from services.log_url import get_log_url
 from services.tasks import PublishBuildInfo, TasksInfo
-from utils.change_time import stmp_by_date
-
+from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
 
 class PublishSummaryManage(MABaseView):
+
+    auth_class = AuthCheck
 
     async def get(self, **kwargs):
         """

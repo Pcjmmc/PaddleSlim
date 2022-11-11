@@ -19,6 +19,8 @@ from views.base_view import MABaseView
 
 class UserInfoManage(MABaseView):
 
+    auth_class = AuthCheck
+
     async def get(self, **kwargs):
         """
         调用基类的get方法
@@ -47,6 +49,8 @@ class UserInfoManage(MABaseView):
 
 class UserIdentifyCheck(MABaseView):
 
+    auth_class = AuthCheck
+    
     async def get(self, **kwargs):
         """
         调用基类的get方法

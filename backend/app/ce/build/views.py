@@ -12,6 +12,7 @@ from ce_web.settings.common import STORAGE
 from models.task_builds import CeTaskBuilds
 from utils.change_time import get_begin_and_time
 
+from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
 
@@ -20,6 +21,7 @@ class BuildManage(MABaseView):
     根据时间查询任务的编译历史
     """
     get_summary = '获取所有任务'
+    auth_class = AuthCheck
 
     async def get(self, **kwargs):
         """

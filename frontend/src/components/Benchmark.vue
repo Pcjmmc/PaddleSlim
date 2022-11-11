@@ -226,7 +226,7 @@ export default {
       let params = {
         jid: this.jid
       };
-      const { code, data } = await api.get(OpBenchmarkUrl, params);
+      const { code, data, message } = await api.get(OpBenchmarkUrl, params);
       if (parseInt(code, 10) === 200) {
         this.job = data.job;
         this.details = data.case_detail;
@@ -234,7 +234,7 @@ export default {
       } else {
         this.details = [];
         this.$Message.error({
-          content: '请求出错: ',
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

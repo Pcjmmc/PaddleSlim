@@ -186,13 +186,13 @@ export default {
     async getIcafe(task_type) {
       // 根据发现方式去获取TODO
       let _params = {version: this.versionName, task_type: task_type};
-      const {code, data, version} = await api.get(BugUrl, _params);
+      const {code, data, message} = await api.get(BugUrl, _params);
       if (parseInt(code, 10) === 200) {
         this.datas = data;
       } else {
         this.datas = [];
         this.$Message.error({
-          content: '请求出错: ' + version,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
@@ -208,10 +208,10 @@ export default {
         appid: Cookies.get('appid')
       };
       // 将数组用都好分割拼接
-      const {code, data, msg, all_count} = await api.get(TestConclusionUrl, params);
+      const {code, data, message, all_count} = await api.get(TestConclusionUrl, params);
       if (parseInt(code, 10) !== 200) {
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
@@ -310,10 +310,10 @@ export default {
         data: JSON.stringify(data)
       };
       // 将数组用都好分割拼接
-      const {code, msg} = await api.post(TestConclusionUrl, params);
+      const {code, message} = await api.post(TestConclusionUrl, params);
       if (parseInt(code, 10) !== 200) {
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

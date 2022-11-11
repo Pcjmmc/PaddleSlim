@@ -8,7 +8,7 @@ import time
 from ce_web.settings.common import STORAGE
 from libs.mongo.db import Mongo
 from models.details import CeCases
-
+from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
 
@@ -18,6 +18,7 @@ class DetailManage(MABaseView):
     """
     get_summary = "获取case的详情"
     # 需要从mongodb中查询
+    auth_class = AuthCheck
 
     async def get(self, **kwargs):
         """

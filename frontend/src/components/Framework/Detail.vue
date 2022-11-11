@@ -147,7 +147,7 @@ export default {
       let params = {
         id: id
       };
-      const {code, data, msg} = await api.get(FrameWorkJobDetail, params);
+      const {code, data, message} = await api.get(FrameWorkJobDetail, params);
       if (parseInt(code, 10) === 200) {
         // 塞到datas的detais 字段里面
         this.id = data.id;
@@ -161,7 +161,7 @@ export default {
         this.mission = typeof data.mission === 'object' ? data.mission : {};
       } else {
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

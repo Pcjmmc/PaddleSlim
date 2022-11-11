@@ -489,13 +489,13 @@ export default {
         tag: this.$route.query.tag,
         secondary_type: this.$route.query.secondary_type
       };
-      const {code, data, msg} = await api.get(AssociateBugUrl, params);
+      const {code, data, message} = await api.get(AssociateBugUrl, params);
       if (parseInt(code, 10) === 200) {
         this.bugList = data;
       } else {
         this.bugList = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
@@ -535,7 +535,7 @@ export default {
       this.associatedBugTag = true;
     },
     async getScenesList() {
-      const {code, data, msg} = await api.get(ScenesUrl);
+      const {code, data, message} = await api.get(ScenesUrl);
       if (parseInt(code, 10) === 200) {
         this.bugTypeList = data.bugTypeList;
         this.initData();
@@ -543,7 +543,7 @@ export default {
       } else {
         this.bugTypeList = {};
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

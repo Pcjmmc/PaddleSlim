@@ -13,10 +13,13 @@ from models.release_version import CeReleaseVersion
 from rpc.github import GetCommits
 from services.tasks import TaskBuildInfo, TasksInfo
 
+from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
 
 class CommitsManage(MABaseView):
+
+    auth_class = AuthCheck
 
     async def get(self, **kwargs):
         """
@@ -71,6 +74,8 @@ class CommitsManage(MABaseView):
 
 class CommitDetailManage(MABaseView):
 
+    auth_class = AuthCheck
+    
     async def get(self, **kwargs):
         """
         调用基类的get方法

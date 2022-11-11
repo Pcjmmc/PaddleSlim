@@ -15,7 +15,7 @@ from models.icafe import CeIcafe
 from models.release_version import CeReleaseVersion
 from models.tasks import CeTasks
 from rpc.icafe import CreateCard, GetBug
-
+from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
 PADDLE_ICAFE_USER = RPC_SETTINGS['paddle_icafe']['username']
@@ -24,6 +24,8 @@ baseUrl = "https://console.cloud.baidu-int.com/devops/icafe/issue/{space}-{seque
 
 
 class BugManage(MABaseView):
+
+    auth_class = AuthCheck
 
     async def get(self, **kwargs):
         """
@@ -269,6 +271,8 @@ async def get_all_bugs(query):
 
 class ConclusionManage(MABaseView):
 
+    auth_class = AuthCheck
+    
     async def get(self, **kwargs):
         """
         调用基类的get方法

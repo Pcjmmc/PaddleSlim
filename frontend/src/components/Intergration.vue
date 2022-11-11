@@ -327,7 +327,7 @@ export default {
         'task_type': this.childname,
         'appid': Cookies.get('appid')
       };
-      const {code, data, msg} = await api.get(ReleaseJobUrl, params);
+      const {code, data, message} = await api.get(ReleaseJobUrl, params);
       if (parseInt(code, 10) === 200) {
         if (JSON.stringify(data) === '{}') {
           this.integrationdata = [];
@@ -339,7 +339,7 @@ export default {
       } else {
         this.integrationdata = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });

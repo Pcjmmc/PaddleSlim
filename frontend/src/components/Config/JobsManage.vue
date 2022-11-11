@@ -553,7 +553,7 @@ export default {
         build_type_id: this.search.build_type_id,
         appid: Cookies.get('appid')
       };
-      const {code, all_count, data, msg} = await api.get(JobUrl, params);
+      const {code, all_count, data, message} = await api.get(JobUrl, params);
       if (parseInt(code) == 200) {
         this.total = all_count;
         this.jobsList = data;
@@ -562,7 +562,7 @@ export default {
         this.total = 0;
         this.jobsList = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         })
@@ -585,10 +585,10 @@ export default {
       let params = {
         id: row.id
       }
-      const {code, msg} = await api.delete(JobUrl, params);
+      const {code, message} = await api.delete(JobUrl, params);
       if (parseInt(code) != 200) {
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         })
@@ -624,10 +624,10 @@ export default {
       }
       // 将数组用都好分割拼接
       // console.log('up data job params is', this.selectedRow.secondary_type);
-      const {code, msg} = await api.put(JobUrl, params);
+      const {code, message} = await api.put(JobUrl, params);
       if (parseInt(code) != 200) {
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         })
@@ -651,7 +651,7 @@ export default {
       if (params.secondary_type instanceof Array) {
         params.secondary_type = params.secondary_type.join(',');
       }
-      const {code, msg} = await api.post(JobUrl, params);
+      const {code, message} = await api.post(JobUrl, params);
       this.initData();
     },
     resetSendType1() {
@@ -662,7 +662,7 @@ export default {
       this.sendType2 = this.sendTypeList[this.selectedRow.task_type];
     },
     async getScenesList() {
-      const {code, data, msg} = await api.get(ScenesUrl);
+      const {code, data, message} = await api.get(ScenesUrl);
       if (parseInt(code) == 200) {
         this.taskTypeList = data.taskTypeList;
         this.sendTypeList = data.sendTypeList;
@@ -671,7 +671,7 @@ export default {
       } else {
         this.taskTypeList = []
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         })

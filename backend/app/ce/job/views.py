@@ -6,11 +6,13 @@ import time
 
 from ce_web.settings.common import STORAGE
 from models.tasks import CeTasks
-
+from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
 
 class JobManage(MABaseView):
+
+    auth_class = AuthCheck
 
     async def get(self, **kwargs):
         """

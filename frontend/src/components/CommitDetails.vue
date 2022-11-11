@@ -155,7 +155,7 @@ export default {
         page: this.search.page,
         pagesize: this.search.pagesize
       }
-      const {code, data, msg} = await api.get(CommitsUrl, params);
+      const {code, data, message} = await api.get(CommitsUrl, params);
       if (parseInt(code, 10) === 200) {
         this.commitList = data;
         this.selectCommit = this.commitList[0].commit;
@@ -163,7 +163,7 @@ export default {
       } else {
         this.commitList = [];
         this.$Message.error({
-          content: '请求出错: ' + msg,
+          content: '请求出错: ' + message,
           duration: 30,
           closable: true
         });
@@ -185,13 +185,13 @@ export default {
         version: this.version,
         commit: this.selectCommit
       }
-      const {code, data, msg} = await api.get(CommitDetailUrl, params);
+      const {code, data, message} = await api.get(CommitDetailUrl, params);
       if (parseInt(code, 10) === 200) {
         this.commitData = data;
       } else {
         this.commitData = [];
         this.$Message.error({
-          content: '请求commit详情出错: ' + msg,
+          content: '请求commit详情出错: ' + message,
           duration: 30,
           closable: true
         });

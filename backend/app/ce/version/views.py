@@ -11,9 +11,12 @@ from services.menu import update_menu
 from utils.change_time import stmp_by_date
 from exception import HTTP400Error
 from views.base_view import MABaseView
+from views.auth_view import AuthCheck
 
 
 class CreateRVersion(MABaseView):
+
+    auth_class = AuthCheck
 
     async def get(self, **kwargs):
         """
