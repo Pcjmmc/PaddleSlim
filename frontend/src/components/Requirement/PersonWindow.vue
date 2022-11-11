@@ -29,7 +29,7 @@
                   <Input v-model="search.icafeid" placeholder="输入icafeID"/>
                 </FormItem>
               </Col>
-              <Col span="6" v-if="userInfo.departmentName=='TPG质量效能部'">
+              <Col span="6" v-if="userInfo.identifyQA">
                 <FormItem label="RD:" prop="rdname">
                   <Input v-model="search.rdname" placeholder="输入RD邮箱前缀"/>
                 </FormItem>
@@ -195,9 +195,9 @@
 </template>
 
 <script>
-// import Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 import { dateFmt } from '../../util/help.js';
-import { RequirementSearchUrl, UserInfoUrl, StartTestUrl, CreateReqUrl } from '../../api/url.js';
+import { RequirementSearchUrl, UserCheckUrl, StartTestUrl, CreateReqUrl } from '../../api/url.js';
 import api from '../../api/index';
 import TestJob from '../PTS/TestJob.vue';
 
@@ -238,6 +238,8 @@ export default {
       page: 1,
       pagesize: 10,
       userInfo: {
+        identifyQA: false,
+        username: Cookies.get('username')
       },
       statusList: [
         '待提测',
@@ -296,7 +298,7 @@ export default {
           width: '200px',
           render: (h, params) => {
             let ret = [];
-            if (this.userInfo.departmentName === 'TPG质量效能部') {
+            if (this.userInfo.identifyQA) {
               // 如果是QA，则推入操作
               ret.push(
                 h(
@@ -423,7 +425,7 @@ export default {
   },
   mounted: async function () {
     this.initData();
-    await this.getUserInfo();
+    await this.CheckUserInfo();
     await this.getData();
   },
   components: {
@@ -458,11 +460,11 @@ export default {
       begin_time = new Date(begin_time);
       return begin_time;
     },
-    async getUserInfo() {
-      const { code, data, message } = await api.get(UserInfoUrl);
+    async CheckUserInfo() {
+      const { code, data, message } = await api.get(UserCheckUrl);
       if (parseInt(code, 10) === 200) {
-        this.userInfo = data;
-        this.search.status = this.userInfo.departmentName === 'TPG质量效能部' ? '待测试' : '待提测';// rd默认看见的是
+        this.userInfo.identifyQA = data.identifyQA;
+        this.search.status = this.userInfo.identifyQA ? '待测试' : '待提测';// rd默认看见的是
       } else {
         this.$Message.error({
           content: '请求出错: ' + message,
@@ -482,7 +484,7 @@ export default {
     async getData() {
       this.content = [];
       // 如果是是rd则rd参数是自己；如果是QA则QA选项是自己
-      if (this.userInfo.departmentName === 'TPG质量效能部') {
+      if (this.userInfo.identifyQA) {
         this.search.qaname = this.userInfo.username;
       } else {
         this.search.rdname = this.userInfo.username;

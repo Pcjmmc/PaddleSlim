@@ -15,12 +15,11 @@ from app.ce.menu.views import MenuManage
 from app.ce.publish.result_views import PublishResultManage
 from app.ce.publish.views import PublishSummaryManage, PublishTaskManage
 from app.ce.release.views import ReleaseVersionManage, TaskManage
+from app.ce.requirements.views import ManageIcafe, ProjectManage
 from app.ce.tools.views import BinarySearchManage
-from app.ce.user.views import UserInfoManage
-from app.ce.ValidateToken.views import LogoutManage, ValidateManage
+from app.ce.user.views import UserIdentifyCheck
+from app.ce.ValidateToken.views import CheckManage, LogoutManage, ValidateManage
 from app.ce.version.views import CreateRVersion
-from app.ce.requirements.views import ManageIcafe
-from app.ce.requirements.views import ProjectManage
 
 from urls import url
 
@@ -45,8 +44,9 @@ urlpatterns = [
     url(r'tools/binarysearch', BinarySearchManage),
     url(r'version/?$', CreateRVersion),
     url(r'sTokenBackendValidate/?$', ValidateManage),
-    url(r'user/?$', UserInfoManage),
+    url(r'user/check/?$', UserIdentifyCheck),
     url(r'logout/?$', LogoutManage),
     url(r'requirments/icafe/?$', ManageIcafe),
-    url(r'requirments/manage/?$', ProjectManage)
+    url(r'requirments/manage/?$', ProjectManage),
+    url(r'check/?$', CheckManage)
 ]

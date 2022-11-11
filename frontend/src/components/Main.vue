@@ -106,7 +106,7 @@
 
 <script>
 import Cookies from 'js-cookie';
-import { MenuInfoUrl, UserInfoUrl, LogoutUrl } from '../api/url.js';
+import { MenuInfoUrl, LogoutUrl } from '../api/url.js';
 import api from "../api/index";
 import MenuNav from './CommonUtil/MenuNav.vue';
 export default {
@@ -117,7 +117,9 @@ export default {
         page: 1,
         size: 50
       },
-      appid: Cookies.get("appid"),
+      username: Cookies.get('username'),
+      avater: Cookies.get('avater'),
+      appid: Cookies.get('appid'),
       appname: Cookies.get("appname"),
       menuDesc: {},
       verisonList: [],
@@ -156,16 +158,6 @@ export default {
       get() {
         return this.$store.state.version;
       }
-    },
-    username: {
-      get() {
-        return this.$store.state.username;
-      }
-    },
-    avater: {
-      get() {
-        return this.$store.state.avater;
-      }
     }
   },
   components: {
@@ -178,7 +170,9 @@ export default {
   },
   mounted: async function () {
     this.appname = Cookies.get('appname');
-    // this.username = Cookies.get('username');
+    this.username = Cookies.get('username');
+    this.avater = Cookies.get('avater');
+    this.setUserInfo();
     await this.getMenu();
   },
   async created() {
@@ -210,25 +204,9 @@ export default {
     collapsedSider() {
       this.$refs.side1.toggleCollapse();
     },
-    async getUserInfo() {
-      // 发送请求去获取用户头像用户名等信息 todo
-      const { code, data, message } = await api.get(UserInfoUrl);
-      if (parseInt(code, 10) === 200) {
-        let username = data.username;
-        let avater = data.imageUrl;
-        let userid = data.userid;
-        Cookies.set('username', username);
-        Cookies.set('avater', avater);
-        Cookies.set('userid', userid);
-        this.$store.commit('changeUserName', username);
-        this.$store.commit('changeAvater', avater);
-      } else {
-        this.$Message.error({
-          content: '请求出错: ' + message,
-          duration: 30,
-          closable: true
-        });
-      }
+    setUserInfo() {
+      this.$store.commit('changeUserName', this.username);
+      this.$store.commit('changeAvater', this.avater);
     },
     async getMenu() {
       // 根据appid实时获取menu菜单; 各自定义各自的菜单
@@ -253,7 +231,6 @@ export default {
         this.$store.commit('changeVersion', this.option);
       }
       this.$delete(this.menuDesc, 'version');
-      await this.getUserInfo();
     }
   }
 }

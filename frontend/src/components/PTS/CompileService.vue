@@ -233,10 +233,10 @@ export default {
   },
   watch: {
   },
-  mounted: function () {
+  mounted: async function () {
     this.initData();
-    this.getSelectDatas();
-    this.getData();
+    await this.getSelectDatas();
+    await this.getData();
   },
   components: {
   },

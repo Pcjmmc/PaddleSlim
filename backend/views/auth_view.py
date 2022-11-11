@@ -66,6 +66,8 @@ class AuthCheck(object):
                 # 前提是库里已有信息
                 if user_res and cookies.get("userid") and (str(user_res.id) != cookies.get("userid", "")):
                     raise HTTP401Error
+                elif cookies.get("username") and username != cookies.get("username"):
+                    raise HTTP401Error
                 return False, user_info
 
         return True, url
