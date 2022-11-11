@@ -3,7 +3,9 @@
 # @author DDDivano
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 
-
+"""
+module 配置原始数据
+"""
 
 module_list = {
     "op_function":"计算OP精度测试",
