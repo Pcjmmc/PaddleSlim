@@ -24,6 +24,8 @@ from framework.compile_database import CompileDatabase
 from framework.module_settings import ModuleSettingsView
 from framework.settings import SettingsView
 
+from framework.feedback.feedback import FeedBackView
+
 
 from urls import url
 
@@ -51,5 +53,8 @@ urlpatterns = [
     # 配置相关
     url(r'getmodulesettings/?$', ModuleSettingsView),
     url(r'getsettings/?$', SettingsView),
+
+    # 用户相关
+    url(r'feedback/?$', FeedBackView),
 
 ]

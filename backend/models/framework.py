@@ -108,3 +108,23 @@ class ModuleSettings(BaseModel, BaseModelMixin):
         定义model属于那个库
         """
         app_label = 'framework'
+
+
+class FeedBack(BaseModel, BaseModelMixin):
+    """
+    定义tasks任务的表结构
+    """
+    __tablename__ = 'feedback'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    uid = Column(Integer)
+    star = Column(Integer)
+    content = Column(Text(2048), comment='反馈内容')
+    username = Column(VARCHAR(256), comment='用户名')
+    create_time = Column(DateTime, comment="本记录创建的时间")
+    update_time = Column(DateTime, comment="本记录更新的时间")
+
+    class Meta:
+        """
+        定义model属于那个库
+        """
+        app_label = 'framework'
