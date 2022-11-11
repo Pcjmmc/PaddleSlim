@@ -199,7 +199,7 @@ class ProjectManage(MABaseView):
         count, data = await Project.aio_filter_details_with_total_count(
             page_index=page, limit=pagesize, **query_params, need_all=False
         )
-        print("gzx in progject view", "count=", count, "data=", data) 
+        #print("gzx in progject view", "count=", count, "data=", data) 
         return count, data
 
     async def post(self, **kwargs):
