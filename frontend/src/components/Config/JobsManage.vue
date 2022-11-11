@@ -651,7 +651,7 @@ export default {
       if (params.secondary_type instanceof Array) {
         params.secondary_type = params.secondary_type.join(',');
       }
-      const {code, message} = await api.post(JobUrl, params);
+      await api.post(JobUrl, params);
       this.initData();
     },
     resetSendType1() {

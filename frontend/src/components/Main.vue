@@ -218,7 +218,7 @@ export default {
       if (parseInt(code, 10) === 200) {
         this.menuDesc = data;
         // 暂时定义menu
-        this.verisonList = this.menuDesc["version"];
+        this.verisonList = this.menuDesc.version;
         if (this.$route.params && this.$route.params.version) {
           this.option = this.$route.params.version;
           Cookies.set('version', this.option);
