@@ -251,6 +251,7 @@ async def update_pts_status(**kwargs):
     """
     test_id = kwargs.get("test_id")
     origin_status = kwargs.get("test_status")
+    validated_data = {} 
     validated_data["test_id"] = test_id
     #和pts沟通pts原始状态，并做映射入库
     validated_data['test_status'] = origin_status
@@ -258,6 +259,7 @@ async def update_pts_status(**kwargs):
             validated_data=kwargs, params_data={"test_id" : test_id}
         )
     #TODO如流周知rd/qa关注
+
 async def update_icafe(**kwargs):
     #TOTO 梳理卡片required字段更新对应icafe卡片
     #验证，如果缺少required字段,更新卡片状态会失败
