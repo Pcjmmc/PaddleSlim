@@ -25,8 +25,8 @@
           <div style="margin-top: 1%;">
             <Row>
               <Col span="6">
-                <FormItem label="IcafeID:" prop="icafeid">
-                  <Input v-model="search.icafeid" placeholder="输入icafeID"/>
+                <FormItem label="需求:" prop="keyword">
+                  <Input v-model="search.keyword" placeholder="输入需求关键字"/>
                 </FormItem>
               </Col>
               <Col span="6" v-if="userInfo.identifyQA">
@@ -167,6 +167,19 @@
         :rules="addRules"
         style="width: 90%"
       >
+        <FormItem label="类型:" prop="type">
+          <Select
+            clearable
+            filterable
+            v-model="addReqForm.type"
+          >
+            <Option
+              :key="index"
+              :value="item"
+              v-for="(item, index) in bugType"
+            >{{ item }}</Option>
+          </Select>
+        </FormItem>
         <FormItem label="标题:" prop="title">
           <Input v-model="addReqForm.title" placeholder="输入需求标题"/>
         </FormItem>
@@ -206,6 +219,7 @@ export default {
   data: function () {
     return {
       addReqForm: {
+        type: 'Task',
         rd_owner: '',
         qa_owner: '',
         title: '',
@@ -241,6 +255,10 @@ export default {
         identifyQA: false,
         username: Cookies.get('username')
       },
+      bugType: [
+        'Task',
+        'Bug'
+      ],
       statusList: [
         '待提测',
         '待测试',
@@ -251,7 +269,7 @@ export default {
       content: [
       ],
       search: {
-        icafeid: '',
+        keyword: '',
         qaname: '',
         rdname: '',
         status: '',
@@ -492,6 +510,7 @@ export default {
       let params = {
         rd: this.search.rdname,
         qa: this.search.qaname,
+        keyword: this.search.keyword,
         page: this.page,
         status: this.search.status,
         page_num: this.pagesize,
@@ -513,7 +532,7 @@ export default {
     initData() {
       this.selectRow = null;
       this.search = {
-        icafeid: '',
+        keyword: '',
         qaname: '',
         rdname: '',
         status: '',
@@ -548,6 +567,7 @@ export default {
     initReqData() {
       this.createReqModa = false;
       this.addReqForm = {
+        type: 'Task',
         rd_owner: '',
         qa_owner: '',
         title: '',

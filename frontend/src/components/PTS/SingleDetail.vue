@@ -51,6 +51,7 @@
               <span>测试项:</span>
               <Button
                 disabled
+                :key="index"
                 v-for="(item, index) in selectedItems"
                 style="width:150px;margin-left: 0.5%;"
               >
