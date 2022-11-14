@@ -67,8 +67,29 @@ class ManageIcafe(MABaseView):
         # 测试中
             iql = "流程状态 in (测试中) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
         if need_status == "待确认":
+            query_params = {}
+            if rd:
+                query_params["rd"] = rd
+            if qa:
+                query_params["qa"] = qa
+            query_params["test_id__ne"] = None       
+            query_params["test_status__ne"] = None
+            query_params["approve"] = None
+            count, data = await Project.aio_filter_details_with_total_count(
+            page_index=page, limit=page_num, **query_params, need_all=False) 
+            url_pattern="https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-{}/show"
+            result_list = []
+            for item in data:
+                tmp_item = {}
+                tmp_item["sequence"] = item.get("icafe_id")
+                tmp_item["rd_owner"] = item.get("rd")
+                tmp_item["qa_owner"] = item.get("qa")
+                tmp_item["status"] = "待确认"
+                tmp_item["url"] = url_pattern.format(item.get("icafe_id")) if item.get("icafe_id") else None
+                result_list.append(tmp_item)
+                print("result_list=", result_list)
         # 待确认测试结果
-            return 
+            return count, result_list
         if need_status == "测试完成": 
         #测试完成
             iql = "流程状态 in (测试完成) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
