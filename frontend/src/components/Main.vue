@@ -76,7 +76,7 @@
               </el-dropdown-menu>
             </el-dropdown>
             <menu-nav :data="menuDesc" father-link="/paddle"></menu-nav>
-            <div style="position:absolute;bottom:0px;right:0px">
+            <div style="position:absolute;bottom:50px;right:0px">
               <div v-if="isCollapsed">
                 <el-button type="text" icon="el-icon-s-unfold" @click="collapsedSider"></el-button>
               </div>

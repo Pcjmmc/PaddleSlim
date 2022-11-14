@@ -313,11 +313,11 @@ export default {
           key: 'operation',
           align: 'center',
           fixed: 'right',
-          width: '200px',
+          width: '100px',
           render: (h, params) => {
             let ret = [];
-            if (this.userInfo.identifyQA) {
-              // 如果是QA，则推入操作
+            // 每一个状态要管理好操作
+            if (this.search.status === '待提测') {
               ret.push(
                 h(
                   'Button',
@@ -325,9 +325,6 @@ export default {
                     props: {
                       type: 'primary',
                       size: 'small'
-                    },
-                    style: {
-                      marginRight: '5px'
                     },
                     on: {
                       click: () => {
@@ -338,69 +335,77 @@ export default {
                   '提测'
                 )
               );
-              ret.push(
-                h(
-                  'Button',
-                  {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-                        this.createTestJob(params.row);
+            } else if (this.search.status === '待测试') {
+              if (this.userInfo.identifyQA) {
+                // 如果是QA，则推入操作
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small'
+                      },
+                      on: {
+                        click: () => {
+                          this.createTestJob(params.row);
+                        }
                       }
-                    }
-                  },
-                  '测试'
-                )
-              );
-              ret.push(
-                h(
-                  'Button',
-                  {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
                     },
-                    style: {
-                      marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-                        this.confirmResult(params.row);
+                    '测试'
+                  )
+                );
+              } else {
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small',
+                        disabled: true
                       }
-                    }
-                  },
-                  '确认'
-                )
-              );
-            } else {
-              ret.push(
-                h(
-                  'Button',
-                  {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
                     },
-                    style: {
-                      marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-                        this.setTestModa(params.row);
+                    '测试'
+                  )
+                );
+              }
+            } else if (this.search.status === '待确认测试结果') {
+              if (this.userInfo.identifyQA) {
+                // 如果是QA，则推入操作
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small'
+                      },
+                      on: {
+                        click: () => {
+                          this.createTestJob(params.row);
+                        }
                       }
-                    }
-                  },
-                  '提测'
-                )
-              );
-            }
-            if (params.row.status === '测试完成') {
+                    },
+                    '确认'
+                  )
+                );
+              } else {
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small',
+                        disabled: true
+                      }
+                    },
+                    '确认'
+                  )
+                );
+              }
+            } else if (this.search.status === '测试完成') {
               ret.push(
                 h(
                   'Button',
@@ -408,9 +413,6 @@ export default {
                     props: {
                       type: 'primary',
                       size: 'small'
-                    },
-                    style: {
-                      marginRight: '5px'
                     },
                     on: {
                       click: () => {

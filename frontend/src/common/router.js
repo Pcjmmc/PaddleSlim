@@ -12,8 +12,6 @@ import Compile from '../components/Compile.vue';
 import Benchmark from '../components/Benchmark.vue';
 import SingleReport from '../components/SingleReport.vue';
 import Publish from '../components/publish/Publish.vue';
-import TestService from '../components/Framework/testService.vue';
-import TaskDetail from '../components/Framework/TaskDetail.vue';
 import BinarySearch from '../components/BinarySearch.vue';
 import ReleaseVersion from '../components/Config/ReleaseVersion.vue';
 import PaddleService from '../components/PTS/PaddleService.vue';
@@ -117,16 +115,6 @@ export const ROUTES = [
           path: '/paddle/publish/:version',
           name: 'PublishVersion',
           component: Publish
-        },
-        { // API 配置
-          path: '/paddle/framework/service',
-          name: 'PaddleService',
-          component: TestService
-        },
-        { // API 配置
-          path: '/paddle/framework/detail',
-          name: 'PaddleDetail',
-          component: TaskDetail
         }
       ]
     }
