@@ -114,6 +114,8 @@ class Dispatcher(object):
         任务分发器
         """
         # todo: 并行触发服务，初始化对应的服务数据
+        if job.get("mission") is None:
+            return "ok"
         mission = json.loads(job.get("mission"))
         res = await Compile.aio_get_object(order_by=None, group_by=None, id=job.get("compile"))
         wheel = res["wheel"]
