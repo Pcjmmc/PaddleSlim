@@ -326,11 +326,3 @@ async def update_icafe(**kwargs):
         'fields': fields_list
     }).get_data(**{"card_id":icafe_id})
  
-
-if __name__ == '__main__':
-     loop = asyncio.get_event_loop()
-     kwargs = {}
-     kwargs['test_id'] = 1
-     kwargs['test_status'] = 1
-     loop.run_until_complete(update_pts_status(kwargs))
-      
