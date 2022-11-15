@@ -5,18 +5,18 @@ from models.project import Project
 
 async def update_pts_status(**kwargs):
     """
-    Ö§³ÖptsĞ´»ØdbÊ±£¬Í¬²½Ğ´»ØĞèÇó²âÊÔ·şÎñ¹ØÁª±í×´Ì¬
+    æ”¯æŒptså†™å›dbæ—¶ï¼ŒåŒæ­¥å†™å›éœ€æ±‚æµ‹è¯•æœåŠ¡å…³è”è¡¨çŠ¶æ€
     """
     test_id = kwargs.get("test_id")
     origin_status = kwargs.get("test_status")
     validated_data = {}
     validated_data["test_id"] = test_id
-    #ºÍpts¹µÍ¨ptsÔ­Ê¼×´Ì¬£¬²¢×öÓ³ÉäÈë¿â
-    #ÁÙÊ±ÉèÖÃ³É2£¬×÷Îª²âÊÔ
+    #å’Œptsæ²Ÿé€šptsåŸå§‹çŠ¶æ€ï¼Œå¹¶åšæ˜ å°„å…¥åº“
+    #ä¸´æ—¶è®¾ç½®æˆ2ï¼Œä½œä¸ºæµ‹è¯•
     validated_data['test_status'] = 2
     #validated_data['test_status'] = origin_status
     await Project.aio_update(
             validated_data=kwargs, params_data={"test_id" : test_id}
         )
-    #TODOÈçÁ÷ÖÜÖªrd/qa¹Ø×¢
+    #TODOå¦‚æµå‘¨çŸ¥rd/qaå…³æ³¨
 
