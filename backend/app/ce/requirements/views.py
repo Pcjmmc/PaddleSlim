@@ -85,9 +85,9 @@ class ManageIcafe(MABaseView):
                 tmp_item["rd_owner"] = item.get("rd")
                 tmp_item["qa_owner"] = item.get("qa")
                 tmp_item["status"] = "待确认"
+                tmp_item["test_id"] = item.get("test_id")
                 tmp_item["url"] = url_pattern.format(item.get("icafe_id")) if item.get("icafe_id") else None
                 result_list.append(tmp_item)
-                print("result_list=", result_list)
         # 待确认测试结果
             return count, result_list
         if need_status == "测试完成": 
@@ -261,29 +261,25 @@ class ProjectManage(MABaseView):
         """
         响应请求，实现数据更新，支持qa触发测试将测试服务id写回
         """
-        icafe_id = kwargs.get("icafe_id")
-        test_id = kwargs.get("test_id")
-        #kwargs.pop("icafe_id")
-        await Project.aio_update(
-            validated_data=kwargs, params_data={"icafe_id": icafe_id, "test_id" : None}
-        )
-        status = kwargs.get("test_status")
+        method = kwargs.get("method") if kwargs.get("method") else "测试"
+        #操作卡片需要rd信息，否则会为api user操作
+        query_params = {}
+        if method == "测试":
+            query_params["icafe_id"] = kwargs.get("icafe_id")
+            query_params["test_id"] = None
+        elif method == "确认":
+            query_params["approve"]  = None
+            query_params["icafe_id"] = kwargs.get("icafe_id")
+            #明确确认时是否能拿到test_id
+            test_id = kwargs.get("test_id")
+            if test_id:
+                query_params["test_id"] = kwargs.get("test_id")
+            else:
+                query_params["test_id__ne"] = None
+        else:
+            return {}
+        await Project.aio_update(validated_data=kwargs, params_data=query_params)
         await update_icafe(**kwargs)
-
-async def update_pts_status(**kwargs):
-    """
-    支持pts写回db时，同步写回需求测试服务关联表状态
-    """
-    test_id = kwargs.get("test_id")
-    origin_status = kwargs.get("test_status")
-    validated_data = {} 
-    validated_data["test_id"] = test_id
-    #和pts沟通pts原始状态，并做映射入库
-    validated_data['test_status'] = origin_status
-    await Project.aio_update(
-            validated_data=kwargs, params_data={"test_id" : test_id}
-        )
-    #TODO如流周知rd/qa关注
 
 async def update_icafe(**kwargs):
     #TOTO 梳理卡片required字段更新对应icafe卡片
@@ -330,4 +326,3 @@ async def update_icafe(**kwargs):
         'fields': fields_list
     }).get_data(**{"card_id":icafe_id})
  
-      
