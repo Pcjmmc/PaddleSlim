@@ -47,7 +47,6 @@ class ManageIcafe(MABaseView):
         if not begin_time and end_time:
             end_time_date = datetime.datetime.strptime(end_time, '%Y-%m-%d') 
             begin_time = str(end_time_date - datetime.timedelta(days=14))
-        print("begin_time =", begin_time, "end_time=", end_time)
         rd = kwargs.get('rd')
         qa = kwargs.get('qa')
         keyword = kwargs.get('keyword')
@@ -154,7 +153,6 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
                  pr_link = arr.get("value") 
                  if pr_link:
                      pr = pr_link.split("/")[-1]
-        print(item.get('sequence'), "pr=", pr, "repo=", repo)         
         #获取提测信息，order by updated time
         query_params = {}
         query_params["icafe_id"] = item.get('sequence')
@@ -162,7 +160,6 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         test_info = {}
         if test_info_list:
             test_info = test_info_list[0]
-        print("test_id type is", type(test_info.get('test_id')))
         tmp = {
             "sequence": item.get('sequence'),
             "title": item.get("title"),
@@ -182,7 +179,6 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
             #TODO 通过icafeid查询db获取测试中/测试完成的测试服务报告
         }
         result.append(tmp)
-    print("icafe cards num=", len(result))
     #TODO返回总页数，以及result list
     return total, result
 
@@ -297,7 +293,6 @@ async def update_icafe(**kwargs):
         target = "测试完成"
     else:
         return 
-    print("in update_icafe", "target =", target) 
     status_str_format = "流程状态={}"
     if target:
         status_str = status_str_format.format(target)
