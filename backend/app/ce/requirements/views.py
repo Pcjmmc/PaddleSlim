@@ -137,6 +137,8 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         rd_owner = {}
         qa_owner = {}
         properties = item.get("properties", [])
+        repo = ""
+        pr = ""
         for arr in properties:
             if arr.get("propertyName") == "QA负责人":
                 qa_owner["name"] = arr.get("displayValue")
@@ -144,6 +146,13 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
             elif arr.get("propertyName") == "RD负责人":
                 rd_owner["name"] = arr.get("displayValue")
                 rd_owner["username"] = arr.get("value")
+            elif arr.get("propertyName") == "repo":
+                 repo = arr.get("displayValue") if arr.get("displayValue") else ""
+            elif arr.get("propertyName") == "PR链接":
+                 pr_link = arr.get("value") 
+                 if pr_link:
+                     pr = pr_link.split("/")[-1]
+        print(item.get('sequence'), "pr=", pr, "repo=", repo)         
         #获取提测信息，order by updated time
         query_params = {}
         query_params["icafe_id"] = item.get('sequence')
@@ -151,6 +160,7 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         test_info = {}
         if test_info_list:
             test_info = test_info_list[0]
+        print("test_id type is", type(test_info.get('test_id')))
         tmp = {
             "sequence": item.get('sequence'),
             "title": item.get("title"),
@@ -161,6 +171,8 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
             "rd_owner": rd_owner,
             "qa_owner": qa_owner,
             "page_size": page_size,
+            "repo": repo,
+            "pr": pr,
             "currnet_page": current_page,
             "test_id":  test_info.get("test_id") if test_info.get("test_id") else "",
             "test_status" : test_info.get("test_status") if test_info.get("test_status") else "",
@@ -210,21 +222,24 @@ class ProjectManage(MABaseView):
 
     async def post_data(self, **kwargs):
         """
-        响应请求, 实现数据插入, 支持提测
+        响应请求, 实现数据插入, 支持测试
         """
         #TODO icafe已经存在，新建一条，测试id保证不重复
         #TODO 重复提测的卡片，需要梳理方案，防止出现多次重复提测
         icafe_id = kwargs.get("icafe_id")
-        method = kwargs.get("method") if kwargs.get("method") else "提测"
+        method = kwargs.get("method") if kwargs.get("method") else "测试"
         if "method" in kwargs.keys():
             kwargs.pop("method")
         if not icafe_id:
            return {}
-        count, project_id = await Project.aio_insert(validated_data=kwargs)
-        print("project_id=", project_id)
-        kwargs["method"] = method
-        await update_icafe(**kwargs)
-        return {"id" : project_id}
+        if method == "测试":
+            count, project_id = await Project.aio_insert(validated_data=kwargs)
+            kwargs["method"] = method
+            await update_icafe(**kwargs)
+            return {"id" : project_id}
+        elif method == "提测":
+            kwargs["method"] = method
+            await update_icafe(**kwargs)
 
     async def put(self, **kwargs):
         """
@@ -234,15 +249,12 @@ class ProjectManage(MABaseView):
 
     async def put_data(self, **kwargs):
         """
-        响应请求，实现数据更新，支持qa触发测试将测试服务id写回
+        响应请求，实现数据更新，支持rd提测和qa确认，更新卡片状态
         """
-        method = kwargs.get("method") if kwargs.get("method") else "测试"
+        method = kwargs.get("method") if kwargs.get("method") else "确认"
         #操作卡片需要rd信息，否则会为api user操作
         query_params = {}
-        if method == "测试":
-            query_params["icafe_id"] = kwargs.get("icafe_id")
-            query_params["test_id"] = None
-        elif method == "确认":
+        if method == "确认":
             query_params["approve"]  = None
             query_params["icafe_id"] = kwargs.get("icafe_id")
             #明确确认时是否能拿到test_id
@@ -260,16 +272,26 @@ async def update_icafe(**kwargs):
     #TOTO 梳理卡片required字段更新对应icafe卡片
     #验证，如果缺少required字段,更新卡片状态会失败
     rd = kwargs.get("rd")
+    qa = kwargs.get("qa")
     test_id = kwargs.get("test_id")
     icafe_id = kwargs.get("icafe_id")
     test_status = kwargs.get("test_status")
     method = kwargs.get("method")
+    operator = ""
     target = None
+    fields_list = []
     if method == "提测":
         target = "测试中"
+        operator = rd
+        if rd:
+            fields_list.append("RD负责人={}".format(rd))
+        if qa:
+            fields_list.append("QA负责人={}".format(qa))
     elif method == "测试":
         target = "测试中"
+        operator = qa
     elif method == "确认":
+        operator = qa
         target = "测试完成"
     else:
         return 
@@ -279,15 +301,14 @@ async def update_icafe(**kwargs):
         status_str = status_str_format.format(target)
     else:
         return {}
-    fields_list = []
     fields_list.append(status_str)
     repo = kwargs.get("repo")
     pr = kwargs.get("pr")
     if repo:
         fields_list.append("repo={}".format(repo))
     if pr:
-        if repo and  "pull" not in pr:
-             pr = "github.com/PaddlePaddle/Paddle/pull/" + pr 
+        if repo and  "pull" not in str(pr):
+             pr = "github.com/PaddlePaddle/{}/pull/{}".format(repo, pr) 
         fields_list.append("PR链接={}".format(pr))
     if not icafe_id and test_id:
        #TODO查询DB获取所有id
@@ -297,7 +318,7 @@ async def update_icafe(**kwargs):
         'u': PADDLE_ICAFE_USER,
         'pw': PADDLE_ICAFE_PASSD,
         'isCheckStatus': False,
-        'operator' : rd,
+        'operator' : operator,
         'fields': fields_list
     }).get_data(**{"card_id":icafe_id})
  
