@@ -234,11 +234,12 @@ class ProjectManage(MABaseView):
            return {}
         if method == "测试":
             count, project_id = await Project.aio_insert(validated_data=kwargs)
+            kwargs["method"] = method
             await update_icafe(**kwargs)
-            print("project_id=", project_id)
             return {"id" : project_id}
-        kwargs["method"] = method
-        await update_icafe(**kwargs)
+        elif method == "提测":
+            kwargs["method"] = method
+            await update_icafe(**kwargs)
 
     async def put(self, **kwargs):
         """
@@ -250,12 +251,10 @@ class ProjectManage(MABaseView):
         """
         响应请求，实现数据更新，支持rd提测和qa确认，更新卡片状态
         """
-        method = kwargs.get("method") if kwargs.get("method") else "提测"
+        method = kwargs.get("method") if kwargs.get("method") else "确认"
         #操作卡片需要rd信息，否则会为api user操作
         query_params = {}
-        if method == "提测":
-             return await update_icafe(**kwargs)
-        elif method == "确认":
+        if method == "确认":
             query_params["approve"]  = None
             query_params["icafe_id"] = kwargs.get("icafe_id")
             #明确确认时是否能拿到test_id
@@ -308,7 +307,7 @@ async def update_icafe(**kwargs):
     if repo:
         fields_list.append("repo={}".format(repo))
     if pr:
-        if repo and  "pull" not in pr:
+        if repo and  "pull" not in str(pr):
              pr = "github.com/PaddlePaddle/{}/pull/{}".format(repo, pr) 
         fields_list.append("PR链接={}".format(pr))
     if not icafe_id and test_id:
