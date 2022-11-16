@@ -280,9 +280,14 @@ async def update_icafe(**kwargs):
     method = kwargs.get("method")
     operator = ""
     target = None
+    fields_list = []
     if method == "提测":
         target = "测试中"
         operator = rd
+        if rd:
+            fields_list.append("RD负责人={}".format(rd))
+        if qa:
+            fields_list.append("QA负责人={}".format(qa))
     elif method == "测试":
         target = "测试中"
         operator = qa
@@ -297,7 +302,6 @@ async def update_icafe(**kwargs):
         status_str = status_str_format.format(target)
     else:
         return {}
-    fields_list = []
     fields_list.append(status_str)
     repo = kwargs.get("repo")
     pr = kwargs.get("pr")
