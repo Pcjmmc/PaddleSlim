@@ -160,6 +160,7 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         test_info = {}
         if test_info_list:
             test_info = test_info_list[0]
+        print("test_id type is", type(test_info.get('test_id')))
         tmp = {
             "sequence": item.get('sequence'),
             "title": item.get("title"),
@@ -221,19 +222,21 @@ class ProjectManage(MABaseView):
 
     async def post_data(self, **kwargs):
         """
-        响应请求, 实现数据插入, 支持提测
+        响应请求, 实现数据插入, 支持测试
         """
         #TODO icafe已经存在，新建一条，测试id保证不重复
         #TODO 重复提测的卡片，需要梳理方案，防止出现多次重复提测
         icafe_id = kwargs.get("icafe_id")
-        method = kwargs.get("method") if kwargs.get("method") else "提测"
+        method = kwargs.get("method") if kwargs.get("method") else "测试"
         if "method" in kwargs.keys():
             kwargs.pop("method")
         if not icafe_id:
            return {}
         if method == "测试":
             count, project_id = await Project.aio_insert(validated_data=kwargs)
+            await update_icafe(**kwargs)
             print("project_id=", project_id)
+            return {"id" : project_id}
         kwargs["method"] = method
         await update_icafe(**kwargs)
 
@@ -245,14 +248,13 @@ class ProjectManage(MABaseView):
 
     async def put_data(self, **kwargs):
         """
-        响应请求，实现数据更新，支持qa触发测试将测试服务id写回
+        响应请求，实现数据更新，支持rd提测和qa确认，更新卡片状态
         """
-        method = kwargs.get("method") if kwargs.get("method") else "测试"
+        method = kwargs.get("method") if kwargs.get("method") else "提测"
         #操作卡片需要rd信息，否则会为api user操作
         query_params = {}
-        if method == "测试":
-            query_params["icafe_id"] = kwargs.get("icafe_id")
-            query_params["test_id"] = None
+        if method == "提测":
+             return await update_icafe(**kwargs)
         elif method == "确认":
             query_params["approve"]  = None
             query_params["icafe_id"] = kwargs.get("icafe_id")
