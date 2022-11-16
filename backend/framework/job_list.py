@@ -15,7 +15,7 @@ import requests
 from views.auth_view import AuthCheck
 
 # DELETE when Release
-SuperUser = ["1", "2"]
+SuperUser = ["1", "2", "7", "28"]
 
 
 class JobList(MABaseView):
