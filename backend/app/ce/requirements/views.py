@@ -32,12 +32,8 @@ class ManageIcafe(MABaseView):
         """
         响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
         """
-        # 获取所有的处于新建、开发中、开发完成的卡片
-        # 按照最后修改时间进行时间窗口筛选
-        need_status = kwargs.get("status") if kwargs.get("status") else "待提测"
-        #1,2,3,4,5 分别对应【待提测】【待测试】【测试中】【待确认测试结果】【测试完成】 
+        need_status = kwargs.get("status")
         page = kwargs.get("page") if kwargs.get("page") else "1"
-        print(type(page))
         page_num = kwargs.get("page_num") if kwargs.get("page_num") else "20" 
         begin_time = kwargs.get("begin_time")
         end_time = kwargs.get('end_time')
@@ -56,45 +52,14 @@ class ManageIcafe(MABaseView):
         qa = kwargs.get('qa')
         keyword = kwargs.get('keyword')
         iql = ""
-        if need_status == "待提测":
+        if need_status:
         # 待提测
             #保留Task和bug
-            iql = "流程状态 in (新建,开发中,开发完成) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
-        if need_status == "待测试":
-        # 待测试
-            iql = "流程状态 in (开发完成) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
-        if need_status == "测试中":
-        # 测试中
-            iql = "流程状态 in (测试中) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
-        if need_status == "待确认":
-            query_params = {}
-            if rd:
-                query_params["rd"] = rd
-            if qa:
-                query_params["qa"] = qa
-            query_params["test_id__ne"] = None       
-            query_params["test_status__ne"] = None
-            query_params["approve"] = None
-            count, data = await Project.aio_filter_details_with_total_count(
-            page_index=page, limit=page_num, **query_params, need_all=False) 
-            url_pattern="https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-{}/show"
-            result_list = []
-            for item in data:
-                tmp_item = {}
-                tmp_item["sequence"] = item.get("icafe_id")
-                tmp_item["rd_owner"] = item.get("rd")
-                tmp_item["qa_owner"] = item.get("qa")
-                tmp_item["status"] = "待确认"
-                tmp_item["test_id"] = item.get("test_id")
-                tmp_item["url"] = url_pattern.format(item.get("icafe_id")) if item.get("icafe_id") else None
-                result_list.append(tmp_item)
-        # 待确认测试结果
-            return count, result_list
-        if need_status == "测试完成": 
-        #测试完成
-            iql = "流程状态 in (测试完成) AND 类型 in (Task,Bug) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
+            iql = "流程状态 in ({}) AND 类型 in (Task) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(need_status, begin_time, end_time)
+        else:
+            iql = "类型 in (Task) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
         if rd:
-            sub_iql = " AND 负责人 in ({})".format(rd)
+            sub_iql = " AND (负责人 in ({}) OR RD负责人 in ({}))".format(rd, rd)
             iql = iql + sub_iql
         if qa:
             sub_iql = " AND qa负责人 in ({})".format(qa)
@@ -169,16 +134,23 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         space = item.get('spacePrefixCode')
         sequence = item.get('sequence')
         level = ""
-        rd_owner = ""
-        qa_owner = ""
+        rd_owner = {}
+        qa_owner = {}
         properties = item.get("properties", [])
         for arr in properties:
-            if arr.get("propertyName") == "优先级":
-                level = arr.get("displayValue")
-            elif arr.get("propertyName") == "QA负责人":
-                qa_owner = arr.get("displayValue")
+            if arr.get("propertyName") == "QA负责人":
+                qa_owner["name"] = arr.get("displayValue")
+                qa_owner['username'] = arr.get("value")
             elif arr.get("propertyName") == "RD负责人":
-                rd_owner = arr.get("displayValue")
+                rd_owner["name"] = arr.get("displayValue")
+                rd_owner["username"] = arr.get("value")
+        #获取提测信息，order by updated time
+        query_params = {}
+        query_params["icafe_id"] = item.get('sequence')
+        test_info_list = await Project().aio_filter_details(need_all=True, order_by="-created", group_by=None, **query_params)
+        test_info = {}
+        if test_info_list:
+            test_info = test_info_list[0]
         tmp = {
             "sequence": item.get('sequence'),
             "title": item.get("title"),
@@ -189,7 +161,10 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
             "rd_owner": rd_owner,
             "qa_owner": qa_owner,
             "page_size": page_size,
-            "currnet_page": current_page
+            "currnet_page": current_page,
+            "test_id": test_info.get("test_id"),
+            "test_status" : test_info.get("test_status"),
+            "approve": test_info.get("approve"),
             #TODO 通过icafeid查询db获取测试中/测试完成的测试服务报告
         }
         result.append(tmp)
@@ -291,7 +266,7 @@ async def update_icafe(**kwargs):
     method = kwargs.get("method")
     target = None
     if method == "提测":
-        target = "开发完成"
+        target = "测试中"
     elif method == "测试":
         target = "测试中"
     elif method == "确认":
