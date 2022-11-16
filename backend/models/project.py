@@ -27,7 +27,7 @@ class Project(BaseModel, BaseModelMixin):
     pr = Column(VARCHAR(60), comment="github repo pr info") 
     test_id = Column(Integer, comment="创建的测试服务对应的测试id")
     # 待测试、测试中、 通过、未通过 非别对应0，1，2，3
-    test_status = Column(Integer, comment="测试服务对应的测试状态")
+    test_status = Column(VARCHAR(40), comment="测试服务对应的测试状态")
     #TODO 明确是否需要保留测试任务链接，是否可以通过test_id拼接出来
     test_url = Column(VARCHAR(100), comment="任务的类型") 
     created = Column(Integer, comment="本记录创建的时间")

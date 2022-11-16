@@ -13,7 +13,7 @@ async def update_pts_status(**kwargs):
     validated_data["test_id"] = test_id
     #和pts沟通pts原始状态，并做映射入库
     #临时设置成2，作为测试
-    validated_data['test_status'] = 2
+    validated_data['test_status'] = origin_status
     #validated_data['test_status'] = origin_status
     await Project.aio_update(
             validated_data=kwargs, params_data={"test_id" : test_id}
