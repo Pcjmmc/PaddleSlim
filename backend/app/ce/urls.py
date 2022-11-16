@@ -16,6 +16,7 @@ from app.ce.publish.result_views import PublishResultManage
 from app.ce.publish.views import PublishSummaryManage, PublishTaskManage
 from app.ce.release.views import ReleaseVersionManage, TaskManage
 from app.ce.requirements.views import ManageIcafe, ProjectManage
+from app.ce.requirements.history_views import ProjectHistory
 from app.ce.tools.views import BinarySearchManage
 from app.ce.user.views import UserIdentifyCheck
 from app.ce.ValidateToken.views import CheckManage, LogoutManage, ValidateManage
@@ -48,5 +49,6 @@ urlpatterns = [
     url(r'logout/?$', LogoutManage),
     url(r'requirments/icafe/?$', ManageIcafe),
     url(r'requirments/manage/?$', ProjectManage),
+    url(r'requirments/history/?$', ProjectHistory),
     url(r'check/?$', CheckManage)
 ]
