@@ -162,9 +162,9 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
             "qa_owner": qa_owner,
             "page_size": page_size,
             "currnet_page": current_page,
-            "test_id": test_info.get("test_id"),
-            "test_status" : test_info.get("test_status"),
-            "approve": test_info.get("approve"),
+            "test_id":  test_info.get("test_id") if test_info.get("test_id") else "",
+            "test_status" : test_info.get("test_status") if test_info.get("test_status") else "",
+            "approve": test_info.get("approve") if test_info.get("approve") else "",
             #TODO 通过icafeid查询db获取测试中/测试完成的测试服务报告
         }
         result.append(tmp)
