@@ -14,6 +14,7 @@ from framework.dispatcher import Dispatcher
 from framework.config.service_url import COMPILE_SERVICE
 import requests
 from framework.config.status import MissionStatus
+from framework.callback import update_pts_status
 
 
 
@@ -33,12 +34,16 @@ async def get_job_status(jid, missions: dict):
     else:
         if MissionStatus.ERROR in result_list:
             res = await Job.aio_update({"status": MissionStatus.ERROR, "update_time": datetime.now()}, {"id": jid})
+            # for requirement
+            update_pts_status(test_id=jid, test_status=MissionStatus.ERROR)
         # elif MissionStatus.FAIL in result_list:
         #     res = await Job.aio_update({"status": MissionStatus.FAIL, "update_time": datetime.now()}, {"id": jid})
         # elif MissionStatus.DONE in result_list:
         #     res = await Job.aio_update({"status": MissionStatus.DONE, "update_time": datetime.now()}, {"id": jid})
         else:
             res = await Job.aio_update({"status": MissionStatus.DONE, "update_time": datetime.now()}, {"id": jid})
+            # for requirement
+            update_pts_status(test_id=jid, test_status=MissionStatus.DONE)
         if res == 0:
             raise HTTP400Error
         return res
