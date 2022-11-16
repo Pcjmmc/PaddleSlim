@@ -386,7 +386,7 @@ export default {
                   )
                 );
               }
-              if (params.row.test_status != 'running') {
+              if (params.row.test_status !== 'running') {
                 // 如果没有在运行中的任务，则可以首次或者重新发起测试
                 if (this.userInfo.identifyQA) {
                   ret.push(
