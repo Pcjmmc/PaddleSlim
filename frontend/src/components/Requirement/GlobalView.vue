@@ -3,7 +3,6 @@
     <Card class="center-card-s">
       <div>
         <Form
-          ref="addForm"
           :model="search"
           :label-width="75"
           style="width: 85%"
@@ -148,7 +147,6 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie';
 import { dateFmt } from '../../util/help.js';
 import { RequirementSearchUrl, CreateReqUrl } from '../../api/url.js';
 import api from '../../api/index';
