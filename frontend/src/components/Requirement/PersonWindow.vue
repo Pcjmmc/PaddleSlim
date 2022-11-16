@@ -465,7 +465,7 @@ export default {
                         props: {
                           type: 'primary',
                           size: 'small',
-                          disabled: false
+                          disabled: true
                         },
                         style: {
                           marginTop: '5px',
@@ -543,6 +543,7 @@ export default {
       let params = {
         method: '测试',
         test_id: jid,
+        test_status: 'running',
         icafe_id: this.selectRow.sequence,
         rd: this.selectRow.rd_owner.username,
         qa: this.selectRow.qa_owner.username,
