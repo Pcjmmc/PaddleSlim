@@ -11,7 +11,7 @@
       <person-window></person-window>
       </TabPane>
       <TabPane
-        label="项目空间"
+        label="团队空间"
         name="project"
       >
       <global-view></global-view>

@@ -17,7 +17,7 @@
                   placeholder=" 开始时间 ～ 结束时间 "
                   v-model="search.dt"
                   style="width:80%"
-                  v-on:on-change="searchByfilter"
+                  v-on:on-change="searchByfilters"
                 ></DatePicker>
               </FormItem>
             </Col>
@@ -45,7 +45,7 @@
                     clearable
                     filterable
                     v-model="search.status"
-                    v-on:on-change="searchByfilter"
+                    v-on:on-change="searchByfilters"
                   >
                     <Option
                       :key="index"
@@ -60,7 +60,7 @@
                   type="primary"
                   shape="circle"
                   icon="ios-search"
-                  @click="searchByfilter"
+                  @click="searchByfilters"
                 >Search</Button>
               </Col>
             </Row>
@@ -283,7 +283,22 @@ export default {
           title: 'IcafeID',
           key: 'sequence',
           align: 'center',
-          fixed: 'left'
+          fixed: 'left',
+          render: (h, params) => {
+            return h('div', [
+              h('a', {
+                href: 'javascript:void(0);',
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.jumper(params.row.url);
+                  }
+                }
+              }, params.row.sequence)
+            ]);
+          }
         },
         {
           title: '需求描述',
@@ -589,6 +604,9 @@ export default {
       await this.getData();
     },
     async searchByfilter() {
+      // 保持一致，啥也不做
+    },
+    async searchByfilters() {
       this.page = 1;
       await this.getData();
     },
@@ -643,9 +661,24 @@ export default {
       const { href } = this.$router.resolve({name: 'SingleDetail', params: _params});
       window.open(href, '_blank');
     },
+    jumper(url) {
+      window.open(url, '_blank');
+    },
     async getReqDetail(item) {
       // 获取需求的整个测试详情，包括历史记录
-      console.log('根据需求查看，如果已经提测');
+      let _params = {
+        reqid: item.sequence
+      };
+      let _query = {
+        title: item.title,
+        rd: item.rd_owner.username,
+        qa: item.qa_owner.username,
+        repo: item.repo,
+        pr: item.pr
+      };
+      // 根据branch获取commit列表
+      const { href } = this.$router.resolve({name: 'ReqDetails', params: _params, query: _query});
+      window.open(href, '_blank');
     },
     async createTestJob(item) {
       this.selectRow = item;
@@ -656,7 +689,7 @@ export default {
       this.$refs.addReqForm.validate(async (valid) => {
         if (valid) {
           await this.createJob();
-          await this.searchByfilter();
+          await this.searchByfilters();
         } else {
           this.$Message.error('请完善信息!');
         }

@@ -17,6 +17,7 @@ import ReleaseVersion from '../components/Config/ReleaseVersion.vue';
 import PaddleService from '../components/PTS/PaddleService.vue';
 import SingleDetail from '../components/PTS/SingleDetail.vue';
 import Demand from '../components/Requirement/Demand.vue';
+import ReqirementDetail from '../components/Requirement/ReqirementDetail.vue';
 
 // Vue.use(VueRouter);
 export const ROUTES = [
@@ -105,6 +106,11 @@ export const ROUTES = [
           path: '/paddle/test/SingleDetail/:jid',
           name: 'SingleDetail',
           component: SingleDetail
+        },
+        { // API 配置
+          path: '/paddle/requirement/ReqDetail/:reqid',
+          name: 'ReqDetails',
+          component: ReqirementDetail
         },
         { // API 配置
           path: '/paddle/test/history',

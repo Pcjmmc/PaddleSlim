@@ -202,7 +202,22 @@ export default {
           title: 'IcafeID',
           key: 'sequence',
           align: 'center',
-          fixed: 'left'
+          fixed: 'left',
+          render: (h, params) => {
+            return h('div', [
+              h('a', {
+                href: 'javascript:void(0);',
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.jumper(params.row.url);
+                  }
+                }
+              }, params.row.sequence)
+            ]);
+          }
         },
         {
           title: '需求描述',
@@ -349,6 +364,9 @@ export default {
       this.page = 1;
       await this.getData();
     },
+    jumper(url) {
+      window.open(url, '_blank');
+    },
     async getData() {
       this.content = [];
       let params = {
@@ -436,7 +454,19 @@ export default {
     },
     async getReqDetail(item) {
       // 获取需求的整个测试详情，包括历史记录
-      console.log('根据需求查看，如果已经提测');
+      let _params = {
+        reqid: item.sequence
+      };
+      let _query = {
+        title: item.title,
+        rd: item.rd_owner.username,
+        qa: item.qa_owner.username,
+        repo: item.repo,
+        pr: item.pr
+      };
+      // 根据branch获取commit列表
+      const { href } = this.$router.resolve({name: 'ReqDetails', params: _params, query: _query});
+      window.open(href, '_blank');
     }
   }
 };
