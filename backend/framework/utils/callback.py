@@ -35,7 +35,7 @@ async def get_job_status(jid, missions: dict):
         if MissionStatus.ERROR in result_list:
             res = await Job.aio_update({"status": MissionStatus.ERROR, "update_time": datetime.now()}, {"id": jid})
             # for requirement
-            update_pts_status(test_id=jid, test_status=MissionStatus.ERROR)
+            await update_pts_status(test_id=jid, test_status=MissionStatus.ERROR)
         # elif MissionStatus.FAIL in result_list:
         #     res = await Job.aio_update({"status": MissionStatus.FAIL, "update_time": datetime.now()}, {"id": jid})
         # elif MissionStatus.DONE in result_list:
@@ -43,7 +43,7 @@ async def get_job_status(jid, missions: dict):
         else:
             res = await Job.aio_update({"status": MissionStatus.DONE, "update_time": datetime.now()}, {"id": jid})
             # for requirement
-            update_pts_status(test_id=jid, test_status=MissionStatus.DONE)
+            await update_pts_status(test_id=jid, test_status=MissionStatus.DONE)
         if res == 0:
             raise HTTP400Error
         return res
