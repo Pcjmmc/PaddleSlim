@@ -142,9 +142,11 @@
         <FormItem label="repo:" prop="repo">
           <Input v-model="reqDetail.repo" placeholder="输入repo名"/>
         </FormItem>
+        <!--
         <FormItem label="分支:" prop="branch">
           <Input v-model="reqDetail.branch" placeholder="输入分支"/>
         </FormItem>
+        -->
         <FormItem label="pr:" prop="pr">
           <Input v-model="reqDetail.pr" placeholder="输入pr号"/>
         </FormItem>
@@ -237,6 +239,7 @@ export default {
         ]
       },
       reqDetail: {
+        method: '提测',
         rd: '',
         qa: '',
         pr: '',
@@ -256,14 +259,14 @@ export default {
         username: Cookies.get('username')
       },
       bugType: [
-        'Task',
-        'Bug'
+        'Task'
       ],
       statusList: [
-        '待提测',
-        '待测试',
+        '全部',
+        '新建',
+        '开发中',
+        '开发完成',
         '测试中',
-        '待确认测试结果',
         '测试完成'
       ],
       content: [
@@ -272,7 +275,7 @@ export default {
         keyword: '',
         qaname: '',
         rdname: '',
-        status: '',
+        status: '全部',
         dt: [this.getBeginData(), new Date()]
       },
       columns: [
@@ -301,11 +304,28 @@ export default {
         {
           title: 'RD',
           key: 'rd_owner',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [
+              h('p', {
+              }, params.row.rd_owner.name)
+            ]);
+          }
         },
         {
           title: 'QA',
           key: 'qa_owner',
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [
+              h('p', {
+              }, params.row.qa_owner.name)
+            ]);
+          }
+        },
+        {
+          title: '状态',
+          key: 'status',
           align: 'center'
         },
         {
@@ -313,11 +333,11 @@ export default {
           key: 'operation',
           align: 'center',
           fixed: 'right',
-          width: '100px',
+          width: '200px',
           render: (h, params) => {
             let ret = [];
             // 每一个状态要管理好操作
-            if (this.search.status === '待提测') {
+            if (['新建', '开发完成', '开发中'].indexOf(params.row.status) >= 0) {
               ret.push(
                 h(
                   'Button',
@@ -325,6 +345,11 @@ export default {
                     props: {
                       type: 'primary',
                       size: 'small'
+                    },
+                    style: {
+                      marginTop: '5px',
+                      marginBottom: '5px',
+                      marginRight: '5px'
                     },
                     on: {
                       click: () => {
@@ -335,9 +360,9 @@ export default {
                   '提测'
                 )
               );
-            } else if (this.search.status === '待测试') {
-              if (this.userInfo.identifyQA) {
-                // 如果是QA，则推入操作
+            } else if (params.row.status === '测试中') {
+              if (params.row.test_id) {
+                // 如果有最新的任务创建，则可以查看具体进度
                 ret.push(
                   h(
                     'Button',
@@ -346,66 +371,114 @@ export default {
                         type: 'primary',
                         size: 'small'
                       },
-                      on: {
-                        click: () => {
-                          this.createTestJob(params.row);
-                        }
-                      }
-                    },
-                    '测试'
-                  )
-                );
-              } else {
-                ret.push(
-                  h(
-                    'Button',
-                    {
-                      props: {
-                        type: 'primary',
-                        size: 'small',
-                        disabled: true
-                      }
-                    },
-                    '测试'
-                  )
-                );
-              }
-            } else if (this.search.status === '待确认测试结果') {
-              if (this.userInfo.identifyQA) {
-                // 如果是QA，则推入操作
-                ret.push(
-                  h(
-                    'Button',
-                    {
-                      props: {
-                        type: 'primary',
-                        size: 'small'
+                      style: {
+                        marginTop: '5px',
+                        marginBottom: '5px',
+                        marginRight: '5px'
                       },
                       on: {
                         click: () => {
-                          this.createTestJob(params.row);
+                          this.getTestJobDetail(params.row);
                         }
                       }
                     },
-                    '确认'
-                  )
-                );
-              } else {
-                ret.push(
-                  h(
-                    'Button',
-                    {
-                      props: {
-                        type: 'primary',
-                        size: 'small',
-                        disabled: true
-                      }
-                    },
-                    '确认'
+                    '查看进度'
                   )
                 );
               }
-            } else if (this.search.status === '测试完成') {
+              if (params.row.test_status != 'running') {
+                // 如果没有在运行中的任务，则可以首次或者重新发起测试
+                if (this.userInfo.identifyQA) {
+                  ret.push(
+                    h(
+                      'Button',
+                      {
+                        props: {
+                          type: 'primary',
+                          size: 'small'
+                        },
+                        style: {
+                          marginTop: '5px',
+                          marginBottom: '5px',
+                          marginRight: '5px'
+                        },
+                        on: {
+                          click: () => {
+                            this.createTestJob(params.row);
+                          }
+                        }
+                      },
+                      '发起测试'
+                    )
+                  );
+                } else {
+                  ret.push(
+                    h(
+                      'Button',
+                      {
+                        props: {
+                          type: 'primary',
+                          size: 'small',
+                          disabled: true
+                        },
+                        style: {
+                          marginTop: '5px',
+                          marginBottom: '5px',
+                          marginRight: '5px'
+                        }
+                      },
+                      '发起测试'
+                    )
+                  );
+                }
+              }
+              if (params.row.test_status === 'done') {
+                // 如果最新的一次测试完成，则可以修改状态标记成已完成
+                if (this.userInfo.identifyQA) {
+                  ret.push(
+                    h(
+                      'Button',
+                      {
+                        props: {
+                          type: 'primary',
+                          size: 'small'
+                        },
+                        style: {
+                          marginTop: '5px',
+                          marginBottom: '5px',
+                          marginRight: '5px'
+                        },
+                        on: {
+                          click: () => {
+                            this.TestJobDone(params.row);
+                          }
+                        }
+                      },
+                      '标记完成'
+                    )
+                  );
+                } else {
+                  ret.push(
+                    h(
+                      'Button',
+                      {
+                        props: {
+                          type: 'primary',
+                          size: 'small',
+                          disabled: false
+                        },
+                        style: {
+                          marginTop: '5px',
+                          marginBottom: '5px',
+                          marginRight: '5px'
+                        }
+                      },
+                      '标记完成'
+                    )
+                  );
+                }
+              }
+            } else if (params.row.status === '测试完成') {
               ret.push(
                 h(
                   'Button',
@@ -414,13 +487,18 @@ export default {
                       type: 'primary',
                       size: 'small'
                     },
+                    style: {
+                      marginTop: '5px',
+                      marginBottom: '5px',
+                      marginRight: '5px'
+                    },
                     on: {
                       click: () => {
-                        this.getDetail(params.row);
+                        this.getReqDetail(params.row);
                       }
                     }
                   },
-                  '结果'
+                  '查看结果'
                 )
               );
             }
@@ -463,11 +541,24 @@ export default {
     async SubmitRequirement(jid) {
       // 子组件调用将jid返给父组件，同事父组件，将icafeid和jid通过接口传递给后端
       let params = {
+        method: '测试',
         test_id: jid,
-        icafe_id: this.selectRow.sequence
+        icafe_id: this.selectRow.sequence,
+        rd: this.selectRow.rd_owner.username,
+        qa: this.selectRow.qa_owner.username,
+        repo: this.selectRow.repo,
+        pr: this.selectRow.pr
       };
-      console.log('params is, 更新需求信息，将jid写进去 todo', params);
-      await this.getData();
+      const { code, message } = await api.post(StartTestUrl, params);
+      if (parseInt(code, 10) === 200) {
+        await this.getData();
+      } else {
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
     },
     closeModal(params) {
       // 关闭弹窗
@@ -484,7 +575,6 @@ export default {
       const { code, data, message } = await api.get(UserCheckUrl);
       if (parseInt(code, 10) === 200) {
         this.userInfo.identifyQA = data.identifyQA;
-        this.search.status = this.userInfo.identifyQA ? '待测试' : '待提测';// rd默认看见的是
       } else {
         this.$Message.error({
           content: '请求出错: ' + message,
@@ -514,7 +604,7 @@ export default {
         qa: this.search.qaname,
         keyword: this.search.keyword,
         page: this.page,
-        status: this.search.status,
+        status: this.search.status === '全部' ? null : this.search.status,
         page_num: this.pagesize,
         begin_time: dateFmt(this.search.dt[0], 'yyyy-MM-dd'),
         end_time: dateFmt(this.search.dt[1], 'yyyy-MM-dd')
@@ -537,23 +627,28 @@ export default {
         keyword: '',
         qaname: '',
         rdname: '',
-        status: '',
+        status: '全部',
         dt: [this.getBeginData(), new Date()]
       };
       this.initReqData();
       this.initTestData();
     },
-    async getDetail(item) {
-      // 如果改icafe已经在测试中，则可以根据绑定的jid来查看任务详情
+    async getTestJobDetail(item) {
+      // 获取最新一次任务的进度
+      let _params = {
+        jid: item.test_id
+      };
+      // 根据branch获取commit列表
+      const { href } = this.$router.resolve({name: 'SingleDetail', params: _params});
+      window.open(href, '_blank');
+    },
+    async getReqDetail(item) {
+      // 获取需求的整个测试详情，包括历史记录
       console.log('根据需求查看，如果已经提测');
     },
     async createTestJob(item) {
       this.selectRow = item;
       this.showModa = true;
-    },
-    async confirmResult(item) {
-      // QA 将测试结果分发成测试成功和失败详情
-      console.log('认为确认测试结果');
     },
     // 创建需求相关接口
     async handleCreateReq() {
@@ -586,7 +681,6 @@ export default {
     },
     async createJob() {
       // 创建需求的API
-      console.log('创建需求', this.addReqForm);
       const { code, message } = await api.post(CreateReqUrl, this.addReqForm);
       if (parseInt(code, 10) === 200) {
         this.initReqData();
@@ -611,6 +705,7 @@ export default {
       this.createTestModa = false;
       this.selectRow = null;
       this.reqDetail = {
+        method: '提测',
         rd: '',
         qa: '',
         pr: '',
@@ -623,7 +718,6 @@ export default {
       this.initTestData();
     },
     async handleCreateTest() {
-      console.log('提测，', this.reqDetail);
       const { code, message } = await api.post(StartTestUrl, this.reqDetail);
       if (parseInt(code, 10) === 200) {
         this.initTestData();
@@ -635,6 +729,27 @@ export default {
           closable: true
         });
         this.initTestData();
+      }
+    },
+    // 标记icafe测试完成
+    async TestJobDone(row) {
+      let params = {
+        method: '确认',
+        icafe_id: row.sequence,
+        rd: row.rd_owner.username,
+        qa: row.qa_owner.username,
+        test_id: row.test_id,
+        approve: 'pass'
+      };
+      const { code, message } = await api.put(StartTestUrl, params);
+      if (parseInt(code, 10) === 200) {
+        await this.getData();
+      } else {
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
       }
     }
   }

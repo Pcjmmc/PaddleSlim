@@ -1,6 +1,21 @@
 <template>
-  <div style="margin-top: 1%;">
-    <person-window></person-window>
+  <div>
+    <Tabs
+      :value="tabName"
+      v-on:on-click="clickTab"
+    >
+      <TabPane
+        label="个人空间"
+        name="personal"
+      >
+      <person-window></person-window>
+      </TabPane>
+      <TabPane
+        label="项目空间"
+        name="project"
+      >
+      </TabPane>
+    </Tabs>
   </div>
 </template>
 <script>
@@ -11,7 +26,7 @@ export default {
 name: 'PaddleDemand',
   data: function () {
     return {
-      tabName: 'persion'
+      tabName: 'personal'
     };
   },
   watch: {

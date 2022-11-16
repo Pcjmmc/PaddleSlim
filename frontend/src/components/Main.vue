@@ -38,6 +38,12 @@
                     <Icon type="md-arrow-dropdown"></Icon>
                   </a>
                   <DropdownMenu slot="list">
+                    <DropdownItem name="feedback"> 用户反馈 </DropdownItem>
+                  </DropdownMenu>
+                  <DropdownMenu slot="list">
+                    <DropdownItem name="usertips"> 使用手册 </DropdownItem>
+                  </DropdownMenu>
+                  <DropdownMenu slot="list">
                     <DropdownItem name="logout"> 退出 </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
@@ -189,11 +195,16 @@ export default {
     },
     async handleClickUser(item) {
       // 清理cookie 跳转登出
-      Cookies.remove('username');
-      Cookies.remove('avater');
-      Cookies.remove('userid');
-      await api.get(LogoutUrl);
-      // 将cookie清理掉，并跳转到登出页面
+      if (item === 'logout') {
+        Cookies.remove('username');
+        Cookies.remove('avater');
+        Cookies.remove('userid');
+        await api.get(LogoutUrl);
+      } else if (item === 'feedback') {
+        // 打开用户反馈页面 todo
+      } else if (item === 'usertips') {
+        // 跳转到用户手册知识库
+      }
     },
     handleClickApp(name) {
       Cookies.remove('appid');
