@@ -59,7 +59,7 @@ class ManageIcafe(MABaseView):
         else:
             iql = "类型 in (Task) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
         if rd:
-            sub_iql = " AND 负责人 in ({})".format(rd)
+            sub_iql = " AND (负责人 in ({}) OR RD负责人 in ({}))".format(rd, rd)
             iql = iql + sub_iql
         if qa:
             sub_iql = " AND qa负责人 in ({})".format(qa)
@@ -134,14 +134,16 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         space = item.get('spacePrefixCode')
         sequence = item.get('sequence')
         level = ""
-        rd_owner = ""
-        qa_owner = ""
+        rd_owner = {}
+        qa_owner = {}
         properties = item.get("properties", [])
         for arr in properties:
             if arr.get("propertyName") == "QA负责人":
-                qa_owner = arr.get("value")
+                qa_owner["name"] = arr.get("displayValue")
+                qa_owner['username'] = arr.get("value")
             elif arr.get("propertyName") == "RD负责人":
-                rd_owner = arr.get("value")
+                rd_owner["name"] = arr.get("displayValue")
+                rd_owner["username"] = arr.get("value")
         #获取提测信息，order by updated time
         query_params = {}
         query_params["icafe_id"] = item.get('sequence')
@@ -264,7 +266,7 @@ async def update_icafe(**kwargs):
     method = kwargs.get("method")
     target = None
     if method == "提测":
-        target = "开发完成"
+        target = "测试中"
     elif method == "测试":
         target = "测试中"
     elif method == "确认":
