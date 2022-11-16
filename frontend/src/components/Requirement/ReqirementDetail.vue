@@ -7,19 +7,19 @@
       <div>
         <Row style="margin-top: 1%;">
           <Col>
-            需求title: {{ this.$route.query.title }}
+            需求title: {{ $route.query.title }}
           </Col>
           <Col offset="1">
-            RD: {{ this.$route.query.rd }}
+            RD: {{ $route.query.rd }}
           </Col>
           <Col offset="1">
-            QA: {{ this.$route.query.qa }}
+            QA: {{ $route.query.qa }}
           </Col>
           <Col offset="1">
-          Repo: {{ this.$route.query.repo }}
+          Repo: {{ $route.query.repo }}
           </Col>
           <Col offset="1">
-          pr: {{ this.$route.query.pr }}
+          pr: {{ $route.query.pr }}
           </Col>
         </Row>
       </div>
