@@ -14,6 +14,7 @@
         label="项目空间"
         name="project"
       >
+      <global-view></global-view>
       </TabPane>
     </Tabs>
   </div>
@@ -21,6 +22,7 @@
 <script>
 
 import PersonWindow from './PersonWindow.vue';
+import GlobalView from './GlobalView.vue';
 
 export default {
 name: 'PaddleDemand',
@@ -34,7 +36,8 @@ name: 'PaddleDemand',
   mounted: function () {
   },
   components: {
-    PersonWindow
+    PersonWindow,
+    GlobalView
   },
   computed: {},
   methods: {
