@@ -5,18 +5,15 @@
       v-on:on-click="clickTab"
     >
       <TabPane
-        label="编译服务"
-        name="compile"
-        icon="md-build"
+        label="个人空间"
+        name="personal"
       >
       <compile-service></compile-service>
       </TabPane>
       <TabPane
-        label="测试服务"
-        name="test"
-        icon="md-hammer"
+        label="全局视图"
+        name="globle"
       >
-      <test-service></test-service>
       </TabPane>
     </Tabs>
   </div>
@@ -24,12 +21,11 @@
 <script>
 
 import CompileService from './CompileService.vue';
-import TestService from './TestService.vue';
 
 export default {
   data: function () {
     return {
-      tabName: 'compile'
+      tabName: 'personal'
     };
   },
   watch: {
@@ -37,8 +33,7 @@ export default {
   mounted: function () {
   },
   components: {
-    CompileService,
-    TestService
+    CompileService
   },
   computed: {},
   methods: {

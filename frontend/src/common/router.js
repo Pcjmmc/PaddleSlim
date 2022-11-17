@@ -15,6 +15,7 @@ import Publish from '../components/publish/Publish.vue';
 import BinarySearch from '../components/BinarySearch.vue';
 import ReleaseVersion from '../components/Config/ReleaseVersion.vue';
 import PaddleService from '../components/PTS/PaddleService.vue';
+import TestService from '../components/PTS/TestService.vue';
 import SingleDetail from '../components/PTS/SingleDetail.vue';
 import Demand from '../components/Requirement/Demand.vue';
 import ReqirementDetail from '../components/Requirement/ReqirementDetail.vue';
@@ -99,6 +100,11 @@ export const ROUTES = [
         },
         { // API 配置
           path: '/paddle/test/framework-service',
+          name: 'TestService',
+          component: TestService
+        },
+        { // API 配置
+          path: '/paddle/test/compile-service',
           name: 'PaddleService',
           component: PaddleService
         },

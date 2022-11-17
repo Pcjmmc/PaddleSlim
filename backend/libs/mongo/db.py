@@ -125,15 +125,15 @@ if __name__ == "__main__":
         },
         "test": {
             "desc": "测试管理",
-            "icon": "md-grid",
+            "icon": "md-construct",
             "sub": {
-                "framework-service": {
-                    "icon": 'md-construct',
-                    "desc": '测试服务(PTS)'
+                "compile-service": {
+                    "icon": 'md-build',
+                    "desc": '编译服务'
                 },
-                "package": {
-                    "icon": 'md-albums',
-                    "desc": '编包管理'
+                "framework-service": {
+                    "icon": 'md-hammer',
+                    "desc": '测试服务(PTS)'
                 },
             }
         },
