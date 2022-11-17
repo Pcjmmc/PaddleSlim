@@ -28,8 +28,8 @@ class Project(BaseModel, BaseModelMixin):
     test_id = Column(Integer, comment="创建的测试服务对应的测试id")
     # 待测试、测试中、 通过、未通过 非别对应0，1，2，3
     test_status = Column(VARCHAR(40), comment="测试服务对应的测试状态")
+    approve = Column(VARCHAR(10), comment="qa确认测试结果")
     #TODO 明确是否需要保留测试任务链接，是否可以通过test_id拼接出来
-    test_url = Column(VARCHAR(100), comment="任务的类型") 
     created = Column(Integer, comment="本记录创建的时间")
     updated = Column(Integer, comment="本记录更新的时间")
 
