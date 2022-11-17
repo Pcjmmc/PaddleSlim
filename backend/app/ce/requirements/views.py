@@ -267,6 +267,7 @@ class ProjectManage(MABaseView):
         await Project.aio_update(validated_data=kwargs, params_data=query_params)
         approve = kwargs.get("approve")
         if approve == "pass":
+            kwargs["method"] = "确认"
             await update_icafe(**kwargs)
 
 async def update_icafe(**kwargs):
