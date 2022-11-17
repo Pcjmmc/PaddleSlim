@@ -40,7 +40,7 @@ class ManageIcafe(MABaseView):
         if not begin_time and not end_time:
             today = datetime.date.today()
             end_time = str(today)
-            begin_time = str(today - datetime.timedelta(days=14))  
+            begin_time = str(today - datetime.timedelta(days=30))  
         if begin_time and not end_time:
             today = datetime.date.today()
             end_time = str(today)
@@ -120,7 +120,7 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         'pw': PADDLE_ICAFE_PASSD,
         'page': page,
         'maxRecords': page_num,
-        'iql': iql,
+        'iql': iql
     }).get_data()
     total = result.get("total")
     #print(total)
