@@ -399,51 +399,49 @@ export default {
                   '测试详情'
                 )
               );
-              if (params.row.test_status !== 'running') {
+              if (params.row.test_status !== 'running' && this.userInfo.identifyQA) {
                 // 如果没有在运行中的任务，则可以首次或者重新发起测试
-                if (this.userInfo.identifyQA) {
-                  ret.push(
-                    h(
-                      'Button',
-                      {
-                        props: {
-                          type: 'primary',
-                          size: 'small'
-                        },
-                        style: {
-                          marginTop: '5px',
-                          marginBottom: '5px',
-                          marginRight: '5px'
-                        },
-                        on: {
-                          click: () => {
-                            this.createTestJob(params.row);
-                          }
-                        }
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small'
                       },
-                      '发起测试'
-                    )
-                  );
-                } else {
-                  ret.push(
-                    h(
-                      'Button',
-                      {
-                        props: {
-                          type: 'primary',
-                          size: 'small',
-                          disabled: true
-                        },
-                        style: {
-                          marginTop: '5px',
-                          marginBottom: '5px',
-                          marginRight: '5px'
-                        }
+                      style: {
+                        marginTop: '5px',
+                        marginBottom: '5px',
+                        marginRight: '5px'
                       },
-                      '发起测试'
-                    )
-                  );
-                }
+                      on: {
+                        click: () => {
+                          this.createTestJob(params.row);
+                        }
+                      }
+                    },
+                    '发起测试'
+                  )
+                );
+              } else {
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small',
+                        disabled: true
+                      },
+                      style: {
+                        marginTop: '5px',
+                        marginBottom: '5px',
+                        marginRight: '5px'
+                      }
+                    },
+                    '发起测试'
+                  )
+                );
               }
             } else if (params.row.status === '测试完成') {
               ret.push(
