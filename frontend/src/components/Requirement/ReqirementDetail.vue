@@ -1,7 +1,8 @@
 <template>
   <div>
    <Card
-      class="center-card-s"
+    class="center-card-s"
+    v-if="content"
     >
       <div>
         <Row style="margin-top: 1%;">
@@ -283,7 +284,6 @@ export default {
       const {code, data, message} = await api.get(AssociateBugUrl, params);
       if (parseInt(code, 10) === 200) {
         this.content = data[0];
-        console.log('icafe detail is', this.content);
       } else {
         this.content = null;
         this.$Message.error({
