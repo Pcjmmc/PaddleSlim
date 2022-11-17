@@ -756,7 +756,7 @@ export default {
   width: 96%;
   margin-left: 2%;
   margin-right: 2%;
-  max-height: 600px;
+  max-height: 800px;
   overflow: auto;
   font-size: 15px;
   color: lightslategrey
