@@ -40,7 +40,7 @@ class ManageIcafe(MABaseView):
         if not begin_time and not end_time:
             today = datetime.date.today()
             end_time = str(today)
-            begin_time = str(today - datetime.timedelta(days=14))  
+            begin_time = str(today - datetime.timedelta(days=30))  
         if begin_time and not end_time:
             today = datetime.date.today()
             end_time = str(today)
@@ -263,8 +263,11 @@ class ProjectManage(MABaseView):
                 query_params["test_id__ne"] = None
         else:
             return {}
+        kwargs.pop("method")
         await Project.aio_update(validated_data=kwargs, params_data=query_params)
-        await update_icafe(**kwargs)
+        approve = kwargs.get("approve")
+        if approve == "pass":
+            await update_icafe(**kwargs)
 
 async def update_icafe(**kwargs):
     #TOTO 梳理卡片required字段更新对应icafe卡片
