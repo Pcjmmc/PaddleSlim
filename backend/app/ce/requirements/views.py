@@ -283,7 +283,7 @@ async def update_icafe(**kwargs):
     target = None
     fields_list = []
     if method == "提测":
-        target = "测试中"
+        target = "开发完成"
         operator = rd
         if rd:
             fields_list.append("RD负责人={}".format(rd))
