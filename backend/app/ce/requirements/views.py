@@ -263,6 +263,7 @@ class ProjectManage(MABaseView):
                 query_params["test_id__ne"] = None
         else:
             return {}
+        kwargs.pop("method")
         await Project.aio_update(validated_data=kwargs, params_data=query_params)
         approve = kwargs.get("approve")
         if approve == "pass":
