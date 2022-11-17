@@ -62,7 +62,7 @@ class ManageIcafe(MABaseView):
             iql = iql + sub_iql
         if qa:
             sub_iql = " AND qa负责人 in ({})".format(qa)
-            if qa in ["zhangdeyin", "weike"]:
+            if qa in ["zhangdeyin", "weike", "liuhuanling", "guozhengxin"]:
                 sub_iql = ""
             iql = iql + sub_iql
         if keyword:
