@@ -173,17 +173,27 @@ async def get_bugs_by_filter(query):
         level = ""
         rd_owner = ""
         qa_owner = ""
+        qa_username = ""
+        rd_username = ""
+        repo = ""
+        pr = ""
         properties = item.get("properties", [])
         for arr in properties:
             if arr.get("propertyName") == "优先级":
                 level = arr.get("displayValue")
             elif arr.get("propertyName") == "QA负责人":
                 qa_owner = arr.get("displayValue")
+                qa_username = arr.get("value")
             elif arr.get("propertyName") == "RD负责人":
                 rd_owner = arr.get("displayValue")
+                rd_username = arr.get("value")
             elif arr.get("propertyName") == "bug发现方式":
                 task_type = arr.get("value")
                 displayValue = arr.get("displayValue")
+            elif arr.get("propertyName") == "repo":
+                repo = arr.get("displayValue")
+            elif arr.get("propertyName") == "PR链接":
+                pr = arr.get("displayValue")
         tmp = {
             "title": item.get("title"),
             "createdTime": item.get("createdTime"),
@@ -191,7 +201,11 @@ async def get_bugs_by_filter(query):
             "url": baseUrl.format(space=space, sequence=sequence),
             "level": level,
             "rd_owner": rd_owner,
+            "rd_username": rd_username,
             "qa_owner": qa_owner,
+            "qa_username": qa_username,
+            "repo": repo,
+            "pr": pr,
             "task_type": inner_dict.get(task_type) or displayValue,
             "log_url": await get_result_by_sequence(sequence)
         }

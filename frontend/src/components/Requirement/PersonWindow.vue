@@ -376,31 +376,29 @@ export default {
                 )
               );
             } else if (params.row.status === '测试中') {
-              if (params.row.test_id) {
-                // 如果有最新的任务创建，则可以查看具体进度
-                ret.push(
-                  h(
-                    'Button',
-                    {
-                      props: {
-                        type: 'primary',
-                        size: 'small'
-                      },
-                      style: {
-                        marginTop: '5px',
-                        marginBottom: '5px',
-                        marginRight: '5px'
-                      },
-                      on: {
-                        click: () => {
-                          this.getTestJobDetail(params.row);
-                        }
-                      }
+              // 如果有最新的任务创建，则可以查看具体进度
+              ret.push(
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: 'primary',
+                      size: 'small'
                     },
-                    '查看进度'
-                  )
-                );
-              }
+                    style: {
+                      marginTop: '5px',
+                      marginBottom: '5px',
+                      marginRight: '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.getReqDetail(params.row);
+                      }
+                    }
+                  },
+                  '测试详情'
+                )
+              );
               if (params.row.test_status !== 'running') {
                 // 如果没有在运行中的任务，则可以首次或者重新发起测试
                 if (this.userInfo.identifyQA) {
@@ -447,52 +445,6 @@ export default {
                   );
                 }
               }
-              if (params.row.test_status === 'done') {
-                // 如果最新的一次测试完成，则可以修改状态标记成已完成
-                if (this.userInfo.identifyQA) {
-                  ret.push(
-                    h(
-                      'Button',
-                      {
-                        props: {
-                          type: 'primary',
-                          size: 'small'
-                        },
-                        style: {
-                          marginTop: '5px',
-                          marginBottom: '5px',
-                          marginRight: '5px'
-                        },
-                        on: {
-                          click: () => {
-                            this.TestJobDone(params.row);
-                          }
-                        }
-                      },
-                      '标记完成'
-                    )
-                  );
-                } else {
-                  ret.push(
-                    h(
-                      'Button',
-                      {
-                        props: {
-                          type: 'primary',
-                          size: 'small',
-                          disabled: true
-                        },
-                        style: {
-                          marginTop: '5px',
-                          marginBottom: '5px',
-                          marginRight: '5px'
-                        }
-                      },
-                      '标记完成'
-                    )
-                  );
-                }
-              }
             } else if (params.row.status === '测试完成') {
               ret.push(
                 h(
@@ -513,7 +465,26 @@ export default {
                       }
                     }
                   },
-                  '查看结果'
+                  '测试详情'
+                )
+              );
+            } else {
+              ret.push(
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: 'primary',
+                      size: 'small',
+                      disabled: true
+                    },
+                    style: {
+                      marginTop: '5px',
+                      marginBottom: '5px',
+                      marginRight: '5px'
+                    }
+                  },
+                  '提测'
                 )
               );
             }
@@ -583,7 +554,7 @@ export default {
     getBeginData() {
       // 在end_time的基础上+1， 因为end_time代表的今天0点0分0秒的时间
       let begin_time = new Date();
-      begin_time = begin_time.setDate(begin_time.getDate() - 14);
+      begin_time = begin_time.setDate(begin_time.getDate() - 30);
       begin_time = new Date(begin_time);
       return begin_time;
     },
@@ -669,15 +640,8 @@ export default {
       let _params = {
         reqid: item.sequence
       };
-      let _query = {
-        title: item.title,
-        rd: item.rd_owner.username,
-        qa: item.qa_owner.username,
-        repo: item.repo,
-        pr: item.pr
-      };
       // 根据branch获取commit列表
-      const { href } = this.$router.resolve({name: 'ReqDetails', params: _params, query: _query});
+      const { href } = this.$router.resolve({name: 'ReqDetails', params: _params});
       window.open(href, '_blank');
     },
     async createTestJob(item) {
@@ -763,27 +727,6 @@ export default {
           closable: true
         });
         this.initTestData();
-      }
-    },
-    // 标记icafe测试完成
-    async TestJobDone(row) {
-      let params = {
-        method: '确认',
-        icafe_id: row.sequence,
-        rd: row.rd_owner.username,
-        qa: row.qa_owner.username,
-        test_id: row.test_id,
-        approve: 'pass'
-      };
-      const { code, message } = await api.put(StartTestUrl, params);
-      if (parseInt(code, 10) === 200) {
-        await this.getData();
-      } else {
-        this.$Message.error({
-          content: '请求出错: ' + message,
-          duration: 30,
-          closable: true
-        });
       }
     }
   }

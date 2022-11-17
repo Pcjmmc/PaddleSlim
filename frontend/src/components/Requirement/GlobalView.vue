@@ -272,31 +272,29 @@ export default {
             let ret = [];
             // 每一个状态要管理好操作
             if (params.row.status === '测试中') {
-              if (params.row.test_id) {
-                // 如果有最新的任务创建，则可以查看具体进度
-                ret.push(
-                  h(
-                    'Button',
-                    {
-                      props: {
-                        type: 'primary',
-                        size: 'small'
-                      },
-                      style: {
-                        marginTop: '5px',
-                        marginBottom: '5px',
-                        marginRight: '5px'
-                      },
-                      on: {
-                        click: () => {
-                          this.getTestJobDetail(params.row);
-                        }
-                      }
+              // 如果有最新的任务创建，则可以查看具体进度
+              ret.push(
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: 'primary',
+                      size: 'small'
                     },
-                    '查看进度'
-                  )
-                );
-              }
+                    style: {
+                      marginTop: '5px',
+                      marginBottom: '5px',
+                      marginRight: '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.getReqDetail(params.row);
+                      }
+                    }
+                  },
+                  '测试详情'
+                )
+              );
             } else if (params.row.status === '测试完成') {
               ret.push(
                 h(
@@ -317,7 +315,7 @@ export default {
                       }
                     }
                   },
-                  '查看结果'
+                  '测试详情'
                 )
               );
             }
@@ -352,7 +350,7 @@ export default {
     getBeginData() {
       // 在end_time的基础上+1， 因为end_time代表的今天0点0分0秒的时间
       let begin_time = new Date();
-      begin_time = begin_time.setDate(begin_time.getDate() - 14);
+      begin_time = begin_time.setDate(begin_time.getDate() - 30);
       begin_time = new Date(begin_time);
       return begin_time;
     },
@@ -457,15 +455,8 @@ export default {
       let _params = {
         reqid: item.sequence
       };
-      let _query = {
-        title: item.title,
-        rd: item.rd_owner.username,
-        qa: item.qa_owner.username,
-        repo: item.repo,
-        pr: item.pr
-      };
       // 根据branch获取commit列表
-      const { href } = this.$router.resolve({name: 'ReqDetails', params: _params, query: _query});
+      const { href } = this.$router.resolve({name: 'ReqDetails', params: _params});
       window.open(href, '_blank');
     }
   }

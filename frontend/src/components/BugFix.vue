@@ -221,7 +221,7 @@ export default {
         case '开发中':
           return 'primary';
         case '测试中':
-          return 'waring';
+          return 'warning';
         case '测试完成':
           return 'success';
         default:

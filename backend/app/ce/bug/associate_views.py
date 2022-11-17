@@ -28,10 +28,13 @@ class AssociatedBugManage(MABaseView):
         响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
         """
         # 获取所有的bug卡片, 根据plan tag 和 类型来查询
-
-        result = await CeIcafe.aio_filter_details(
-            need_all=True, **kwargs
-        )
+        if kwargs.get("sequence"):
+            # 已知sequence的去查询
+            result = [kwargs]
+        else:
+            result = await CeIcafe.aio_filter_details(
+                need_all=True, **kwargs
+            )
         FinalBugData = []
         # 根据卡片sequence获取卡片详情 TODO
         for ret in result:
