@@ -18,7 +18,7 @@
           Repo: {{ content.repo }}
           </Col>
           <Col offset="1">
-          pr: 
+          pr:
           <a href="javascript:void(0)" @click="jumper(content.pr)">
             {{ content.pr }}
           </a>
