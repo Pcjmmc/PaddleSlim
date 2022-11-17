@@ -352,7 +352,7 @@ export default {
           render: (h, params) => {
             let ret = [];
             // 每一个状态要管理好操作
-            if (['新建', '开发完成', '开发中'].indexOf(params.row.status) >= 0) {
+            if (['新建', '开发中'].indexOf(params.row.status) >= 0) {
               ret.push(
                 h(
                   'Button',
@@ -375,7 +375,7 @@ export default {
                   '提测'
                 )
               );
-            } else if (params.row.status === '测试中') {
+            } else if (['开发完成', '测试中'].indexOf(params.row.status) >= 0) {
               // 如果有最新的任务创建，则可以查看具体进度
               ret.push(
                 h(
