@@ -9,6 +9,7 @@ from framework.job_details import JobDetails
 from framework.mission_pkg.mission_callback import MissionCallback
 from framework.compile_pkg.compile_callback import CompileCallback
 from framework.mission_pkg.mission_failed import MissionFailed
+from framework.mission_pkg.mission_rerun import MissionRerun
 
 
 
@@ -33,6 +34,7 @@ urlpatterns = [
     # 任务相关
     url(r'missioncallback/?$', MissionCallback),
     url(r'missionfailed/?$', MissionFailed),
+    url(r'missionrerun/?$', MissionRerun),
 
     # 编译相关
     url(r'compile/?$', CompileInit),
