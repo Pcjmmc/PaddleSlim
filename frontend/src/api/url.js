@@ -32,6 +32,7 @@ export const FrameReportUrl = '/framework/reportgenerator';
 export const FrameCompileSearchUrl = '/framework/compile_search';
 export const FrameCompileCreateUrl = '/framework/compile';
 export const FrameMissionFailedUrl = '/framework/missionfailed';
+export const FrameMissionRerunUrl = '/framework/missionrerun';
 export const BinarySearchUrl = '/ce/tools/binarysearch';
 export const VersionUrl = '/ce/version';
 export const UserCheckUrl = '/ce/user/check';

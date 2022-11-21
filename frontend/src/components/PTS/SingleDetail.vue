@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { FrameWorkJobDetail, FrameReportUrl, FrameMissionFailedUrl, FrameModuleConfigUrl } from '../../api/url.js';
+import { FrameWorkJobDetail, FrameReportUrl, FrameMissionFailedUrl, FrameModuleConfigUrl, FrameMissionRerunUrl } from '../../api/url.js';
 import api from '../../api/index';
 import Clipboard from 'clipboard';
 import Modal from '../ModalSimple/Modal.vue';
@@ -337,7 +337,7 @@ export default {
           title: '操作',
           key: 'operation',
           align: 'center',
-          width: '100px',
+          width: '190px',
           fixed: 'right',
           render: (h, params) => {
             let ret = [];
@@ -361,16 +361,29 @@ export default {
                 '标记异常'
               )
             );
+            ret.push(
+              h(
+                'Button',
+                {
+                  props: {
+                    icon: 'md-refresh-circle',
+                    size: 'small'
+                  },
+                  style: {
+                    'background-color': '#75C1C4',
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.rerunJob(params.row.id);
+                    }
+                  }
+                },
+                'rerun'
+              )
+            );
             return h(
               'div',
-              {
-                style: {
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start'
-                }
-              },
               ret
             );
           }
@@ -406,6 +419,26 @@ export default {
           closable: true
         });
       }
+    },
+    async rerunJob(id) {
+      Modal.confirm({
+        title: '确认重跑？',
+        onOk: async () => {
+          let params = {
+            id: id
+          };
+          const {code, message} = await api.post(FrameMissionRerunUrl, params);
+          if (parseInt(code, 10) === 200) {
+            await this.getDetails();
+          } else {
+            this.$Message.error({
+              content: '请求出错: ' + message,
+              duration: 30,
+              closable: true
+            });
+          }
+        }
+      });
     },
     async getDetails() {
       let jid = this.$route.params.jid;
