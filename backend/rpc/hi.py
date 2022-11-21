@@ -13,10 +13,32 @@ from rpc.base import BaseRpc
 PADDLE_HI_GATEWAY = RPC_SETTINGS['paddle_hi']['gateway']
 PADDLE_HI_TOKEN = RPC_SETTINGS['paddle_hi']['access_token']
 PADDLE_HI_AGENTID = RPC_SETTINGS['paddle_hi']['agentid']
+PADDLE_HI_CORPID = RPC_SETTINGS['paddle_hi']['corpid']
+PADDLE_HI_CORPSECRET = RPC_SETTINGS['paddle_hi']['corpsecret']
 
+class HiGetToken(BaseRpc):
+    """
+    获取token
+    """
+    method = 'get'
+    gateway = PADDLE_HI_GATEWAY
+    api = "api/gettoken"
+    params_keys = [
+        {'key': 'corpid', 'type': str},
+        {'key': 'corpsecret', 'type': str},
+    ]
+    
+    async def get_data(self, **kwargs):
+        result = await self.is_valid()
+        if result and str(self._status == '200'):
+            return self.response_json
+        return {}
+
+    
+     
 class HiSendMessage(BaseRpc):
     """
-    创建icafe卡片
+    发送消息
     """
     method = 'post'
     gateway = PADDLE_HI_GATEWAY
@@ -45,6 +67,7 @@ class HiSendMessage(BaseRpc):
 if __name__ == "__main__":
     # 测试给自己发消息
     loop = asyncio.get_event_loop()
+    """
     result = loop.run_until_complete(HiSendMessage(
         {
         'touser':'guozhengxin',
@@ -52,4 +75,9 @@ if __name__ == "__main__":
         'agentid': PADDLE_HI_AGENTID,
         'text': {"content": "gzx test"}
         }).get_data(**{'access_token': PADDLE_HI_TOKEN}))      
+    """
+    result = loop.run_until_complete(HiGetToken({
+        'corpid': PADDLE_HI_CORPID,
+        'corpsecret': PADDLE_HI_CORPSECRET
+     }).get_data())
     print("result=", result)
