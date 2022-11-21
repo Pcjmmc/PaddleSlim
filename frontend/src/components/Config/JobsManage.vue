@@ -135,6 +135,9 @@
         <FormItem label="任务名: " prop="tname">
           <Input v-model="addForm.tname" placeholder="与tc或者效率云一致"/>
         </FormItem>
+        <FormItem label="下线:" prop="is_offline">
+          <i-switch v-model="addForm.is_offline"></i-switch>
+        </FormItem>
         <FormItem label="任务别名/后缀: " prop="show_name">
           <Input v-model="addForm.show_name" placeholder="简短、概括、可读"/>
         </FormItem>
@@ -254,6 +257,9 @@
         </FormItem>
         <FormItem label="任务名: " prop="tname">
           <Input v-model="selectedRow.tname" placeholder="与tc或者效率云一致"/>
+        </FormItem>
+        <FormItem label="下线: " prop="is_offline">
+          <i-switch v-model="selectedRow.is_offline"></i-switch>
         </FormItem>
         <FormItem label="任务别名/后缀: " prop="show_name">
           <Input v-model="selectedRow.show_name" placeholder="简短、概括、可读"/>
@@ -381,7 +387,8 @@ export default {
         'step': '',
         'reponame': '',
         'show_name': '',
-        'release_source': ''
+        'release_source': '',
+        'is_offline': false
       },
       addRules: {
         step: [
@@ -418,6 +425,17 @@ export default {
         {
           title: '阶段',
           key: 'step'
+        },
+        {
+          title: '状态',
+          key: 'is_offline',
+          render: (h, params) => {
+            return h('Tag', {
+              props: {
+                color: params.row.is_offline ? 'error' : 'success'
+              }
+            }, params.row.is_offline ? '下线' : '上线');
+          }
         },
         {
           title: '覆盖平台',
@@ -616,7 +634,8 @@ export default {
         reponame: this.selectedRow.reponame,
         show_name: this.selectedRow.show_name,
         release_source: this.selectedRow.release_source,
-        appid: Cookies.get('appid')
+        appid: Cookies.get('appid'),
+        is_offline: this.selectedRow.is_offline
       }
       if (params.secondary_type instanceof Array) {
         let tmp = params.secondary_type.filter(v => this.sendType2.includes(v));

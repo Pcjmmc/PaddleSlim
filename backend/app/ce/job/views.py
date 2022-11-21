@@ -4,8 +4,10 @@ import datetime
 import json
 import time
 
+from api.cache import BuildCacheBase
 from ce_web.settings.common import STORAGE
 from models.tasks import CeTasks
+
 from views.auth_view import AuthCheck
 from views.base_view import MABaseView
 
@@ -68,6 +70,10 @@ class JobManage(MABaseView):
         await CeTasks().aio_update(
             validated_data=kwargs, params_data={"id": tid}
         )
+        # 如果是下线，则将缓存中的任务最新一次信息删除
+        if kwargs.get('is_offline'):
+            await BuildCacheBase.delete_keys(tid, "release")
+            await BuildCacheBase.delete_keys(tid, "develop")
  
 
     async def delete(self, **kwargs):
@@ -79,4 +85,7 @@ class JobManage(MABaseView):
     async def delete_data(self, **kwargs):
         tid = kwargs.get("id")
         await CeTasks().aio_delete(params_data={"id": tid})
+        # 将缓存中的任务最新一次记录也清理掉
+        await BuildCacheBase.delete_keys(tid, "release")
+        await BuildCacheBase.delete_keys(tid, "develop")
 

@@ -8,7 +8,7 @@ import sys
 import traceback
 
 import sqlalchemy as sa
-from sqlalchemy import VARCHAR, Column, Float, Integer, MetaData, Table
+from sqlalchemy import VARCHAR, Column, Float, Integer, MetaData, Table, Boolean
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
@@ -51,6 +51,7 @@ class TaskTableObj(object):
             Column('release_source', VARCHAR(50), comment="tag之后编译任务发布源"),
             Column('dependencies', VARCHAR(100), comment="依赖的上游编译任务"),
             Column('step', VARCHAR(20), comment="任务所属的阶段"),
+            Column('is_offline', Boolean, comment="是否下线, True:已下线; False:为下线"),
             Column('appid', Integer, comment="任务所属的app"),
             Column('reponame', VARCHAR(50), comment="任务所属的repo"),
             Column('created', Integer, comment="本记录创建的时间"),

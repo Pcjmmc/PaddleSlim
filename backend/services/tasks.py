@@ -23,6 +23,8 @@ class TasksInfo(object):
         """
         根据条件原封不动筛选
         """
+        # 只呈现上线的任务
+        kwargs.update({"is_offline": False})
         if backup:
             table_name = "ce_task_" + version
             new_class = await create_task_backup(
@@ -46,7 +48,8 @@ class TasksInfo(object):
             step = [step] if type(step) != list else step
             step.append("shared")
             # 将符合要求的全量任务筛选出
-            query_params = {"step__in": step, "appid": appid}
+            # 将上线的任务筛选出
+            query_params = {"step__in": step, "appid": appid, "is_offline": False}
             if task_type:
                 query_params["task_type"] = task_type
             if secondary_type:
@@ -75,11 +78,13 @@ class TasksInfo(object):
                     CeTasks.Meta.app_label, table_name
                 )
                 task_records = await new_class.aio_filter_details(
-                    need_all=True, **query_params
+                    need_all=True, **{"is_offline": False}
                 )
             else:
                 print('无备份逻辑', backup)
-                task_records = await CeTasks().aio_filter_details(need_all=True)
+                task_records = await CeTasks().aio_filter_details(
+                    need_all=True,  **{"is_offline": False}
+                )
         return task_records
 
 

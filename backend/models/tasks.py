@@ -33,6 +33,7 @@ class CeTasks(BaseModel, BaseModelMixin):
     release_source = Column(VARCHAR(50), comment="tag之后编译任务发布源")
     dependencies = Column(VARCHAR(100), comment="依赖的上游编译任务") # xly： "pipelineConfId;得确定下这个值唯一吗"； teamcity："%system.teamcity.buildType.id%"
     step = Column(VARCHAR(20), comment="任务所属的阶段") # compile: 编译任务； 下游任务有分成： develop； release；shared;
+    is_offline = Column(Boolean, comment="是否下线, True:已下线; False:为下线")
     appid = Column(Integer, comment="任务所属的app")
     reponame = Column(VARCHAR(50), comment="任务所属的repo")
     created = Column(Integer, comment="本记录创建的时间")
