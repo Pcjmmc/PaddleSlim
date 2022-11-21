@@ -15,8 +15,10 @@ from ce_web.router import ModelRouter
 from ce_web.settings.common import STORAGE
 from sqlalchemy import column, desc, func
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import mapper
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.orm.properties import ColumnProperty
+from sqlalchemy.schema import CreateTable
 from sqlalchemy.sql import and_, not_, or_
 from sqlalchemy.sql.schema import ColumnDefault
 
@@ -526,3 +528,41 @@ class BaseModelMixin(object):
         if need_last_rowid:
             return row_count, last_rowid
         return row_count, None
+
+
+class AutoCreateTableManager(object):
+    """
+    负责动态创建表，并将表映射成相应的class对象
+    """
+    def __init__(self, new_class, table):
+        self.new_class = new_class
+        self.table = table
+        self.table_object = self.table.get_table_obj()
+        self.engine = db_engines[self.table.db_key]
+
+    def map_class_to_table(self, **kw):
+        """
+        将定义好的表映射成相应的类
+        """
+        newcls = type(self.table.table_name, (self.new_class,), {'__tablename__': self.table.table_name})
+        mapper(newcls, self.table_object, **kw)
+        return newcls
+    
+    async def construct_table(self):
+        """
+        封装自动创建表的逻辑; 根据str
+        """
+        async with self.engine.acquire() as conn:
+            await conn._connection.ping()
+            trans = await conn.begin()
+            result = None
+            try:
+                create_expr = CreateTable(self.table_object)
+                result = await conn.execute(create_expr)
+            except Exception as e:
+                print("创建失败或者表以及存在", e)
+                traceback.format_exc()
+                await trans.rollback()
+            else:
+                await trans.commit()
+            return result

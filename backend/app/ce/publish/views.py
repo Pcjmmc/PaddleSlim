@@ -38,11 +38,14 @@ class PublishSummaryManage(MABaseView):
             return 0, []
         summary = []
         verison_info = await CeReleaseVersion().aio_get_object(**{"name": version})
+        need_backup = False if verison_info.activated else True
         tag = verison_info.tag
         # 获取查询的全量任务
         query_params = copy.deepcopy(kwargs)
         query_params.pop('version')
-        all_task_info = await TasksInfo.get_task_by_filter(**query_params)
+        all_task_info = await TasksInfo.get_task_by_filter(
+            backup=need_backup, version=version, **query_params
+        )
         tids = [item.get("id") for item in all_task_info]
         total = len(tids)
         compile_res = {
@@ -102,11 +105,14 @@ class PublishTaskManage(MABaseView):
         if version == "develop":
             return 0, []
         verison_info = await CeReleaseVersion().aio_get_object(**{"name": version})
+        need_backup = False if verison_info.activated else True
         tag = verison_info.tag
         # 获取查询的全量任务
         query_params = copy.deepcopy(kwargs)
         query_params.pop('version')
-        all_task_info = await TasksInfo.get_task_by_filter(**query_params)
+        all_task_info = await TasksInfo.get_task_by_filter(
+            backup=need_backup, version=version, **query_params
+        )
         tids = [item.get("id") for item in all_task_info]
         # 如果是已封板的话; branch就会变成tag；则还算集测吗？？？tag都打了，应该不算
         build_info = await PublishBuildInfo.get_task_latest_status_by_tids(

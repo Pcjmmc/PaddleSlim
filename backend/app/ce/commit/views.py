@@ -87,6 +87,7 @@ class CommitDetailManage(MABaseView):
         根据具体的commit，则返回具体的commit的覆盖信息
         """
         commit_data = []
+        need_backup = False
         commit = kwargs.get("commit")
         version = kwargs.get("version")
         if commit and version:
@@ -94,9 +95,10 @@ class CommitDetailManage(MABaseView):
                 step = "release"
             else:
                 step = version
+                need_backup = False if version == "develop" else True
             # 根据release 的细腻来查询,改接口是负责release的，故step=release
             all_release_task = await TasksInfo.get_all_task_info_by_filter(
-                step=step
+                step=step, backup=need_backup, version=version
             )
             # 查询到来全量任务
             tids = [item.get("id") for item in all_release_task]

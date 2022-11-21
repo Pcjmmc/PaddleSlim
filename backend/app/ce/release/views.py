@@ -36,6 +36,7 @@ class ReleaseVersionManage(MABaseView):
         open_cache: 是否从缓存获取，默认False
         """
         open_cache = False
+        need_backup = False
         version = kwargs.get("version")
         appid = kwargs.get("appid", 1)
         if version == "release/undefined":
@@ -68,12 +69,14 @@ class ReleaseVersionManage(MABaseView):
                 print("seach git hub commit info 2222", end_time, flush=True)
                 latest_commit = branch_info.get("commit")
                 latest_commit_time = branch_info.get("time")
-                latest_commit_time = stmp_by_date(latest_commit_time, fmt="%Y-%m-%dT%H:%M:%SZ")
-                latest_commit_time = latest_commit_time + 28800
+                if latest_commit_time:
+                    latest_commit_time = stmp_by_date(latest_commit_time, fmt="%Y-%m-%dT%H:%M:%SZ")
+                    latest_commit_time = latest_commit_time + 28800
             else:
                 # 如果是已发版的，则直接从库里拿到封版的commit
                 latest_commit = res.end_commit
                 latest_commit_time = res.end_time
+                need_backup = True
             release_info["repo_info"] = {
                 "name": res.name,
                 "version_id": res.id,
@@ -86,7 +89,7 @@ class ReleaseVersionManage(MABaseView):
             # 根据release 的细腻来查询,改接口是负责release的，故step=release
             begin_time = int(time.time())
             all_release_task = await TasksInfo.get_all_task_info_by_filter(
-                step="release", appid=appid
+                step="release", appid=appid, backup=need_backup, version=version
             )
             end_time = int(time.time()) - begin_time
             print("get all release task 3333", end_time, flush=True)

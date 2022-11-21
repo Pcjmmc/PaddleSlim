@@ -5,13 +5,16 @@
 import asyncio
 import time
 
+from exception import HTTP400Error
 from models.release_version import CeReleaseVersion
+from models.tasks import CeTasks
 from rpc.github import GetCommit
+from services.auto_create_table import create_task_backup
 from services.menu import update_menu
 from utils.change_time import stmp_by_date
-from exception import HTTP400Error
-from views.base_view import MABaseView
+
 from views.auth_view import AuthCheck
+from views.base_view import MABaseView
 
 
 class CreateRVersion(MABaseView):
@@ -108,6 +111,8 @@ class CreateRVersion(MABaseView):
                 "activated": 0,
                 "updated": int(time.time())
             }
+            # 打完tag备份下当前的任务记录
+            await self.backup_task(kwargs.get("tag"))
         else:
             validated_data = {
                 "begin_commit": commit,
@@ -132,3 +137,14 @@ class CreateRVersion(MABaseView):
         """
         await CeReleaseVersion.aio_delete(params_data=kwargs)
         await update_menu()
+
+    async def backup_task(self, version):
+        """
+        负责将当时的任务实时备份起来
+        """
+        task_info = await CeTasks.aio_filter_details(need_all=True)
+        table_name = 'ce_task_' + version
+        new_class = await create_task_backup(
+            CeTasks.Meta.app_label, table_name, need_create=True
+        )
+        await new_class.aio_insert(validated_data=task_info)

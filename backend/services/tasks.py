@@ -14,21 +14,31 @@ from libs.mongo.db import Mongo
 from models.publish_task_builds import PubishTaskBuilds
 from models.task_builds import CeTaskBuilds
 from models.tasks import CeTasks
+from services.auto_create_table import create_task_backup
 
 
 class TasksInfo(object):
     @classmethod
-    async def get_task_by_filter(cls, **kwargs):
+    async def get_task_by_filter(cls, backup=False, version=None, **kwargs):
         """
         根据条件原封不动筛选
         """
-        task_records = await CeTasks().aio_filter_details(
-            need_all=True, **kwargs
-        )
+        if backup:
+            table_name = "ce_task_" + version
+            new_class = await create_task_backup(
+                CeTasks.Meta.app_label, table_name
+            )
+            task_records = await new_class.aio_filter_details(
+                need_all=True, **kwargs
+            )
+        else:
+            task_records = await CeTasks().aio_filter_details(
+                need_all=True, **kwargs
+            )
         return task_records
 
     @classmethod
-    async def get_all_task_info_by_filter(cls, step=None, task_type=None, secondary_type=None, appid=1):
+    async def get_all_task_info_by_filter(cls, step=None, task_type=None, secondary_type=None, appid=1, backup=False, version=None):
         """
         根据条件筛选出任务的全集
         """
@@ -41,14 +51,37 @@ class TasksInfo(object):
                 query_params["task_type"] = task_type
             if secondary_type:
                 query_params["secondary_type"] = secondary_type
-            task_records = await CeTasks().aio_filter_details(
-                need_all=True, **query_params
-            )
+            if backup:
+                print('发版记录走备份逻辑', backup)
+                print('verison is', version)
+                table_name = "ce_task_" + version
+                new_class = await create_task_backup(
+                    CeTasks.Meta.app_label, table_name
+                )
+                task_records = await new_class.aio_filter_details(
+                    need_all=True, **query_params
+                )
+            else:
+                print('无备份逻辑', backup)
+                task_records = await CeTasks().aio_filter_details(
+                    need_all=True, **query_params
+                )
         else:
-            task_records = await CeTasks().aio_filter_details(need_all=True)
+            if backup:
+                print('发版记录走备份逻辑', backup)
+                print('verison is', version)
+                table_name = "ce_task_" + version
+                new_class = await create_task_backup(
+                    CeTasks.Meta.app_label, table_name
+                )
+                task_records = await new_class.aio_filter_details(
+                    need_all=True, **query_params
+                )
+            else:
+                print('无备份逻辑', backup)
+                task_records = await CeTasks().aio_filter_details(need_all=True)
         return task_records
 
-        
 
 class TaskBuildInfo(object):
     @classmethod

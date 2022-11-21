@@ -44,8 +44,9 @@ class DevelopVersionManage(MABaseView):
         )
         latest_commit = branch_info.get("commit")
         latest_commit_time = branch_info.get("time")
-        latest_commit_time = stmp_by_date(latest_commit_time, fmt="%Y-%m-%dT%H:%M:%SZ")
-        latest_commit_time = latest_commit_time + 28800 # 8小时时差
+        if latest_commit_time:
+            latest_commit_time = stmp_by_date(latest_commit_time, fmt="%Y-%m-%dT%H:%M:%SZ")
+            latest_commit_time = latest_commit_time + 28800 # 8小时时差
         release_info["repo_info"] = {
             "name": version,
             "branch": version,
