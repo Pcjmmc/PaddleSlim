@@ -99,7 +99,9 @@
 </template>
 
 <script>
-import { FrameWorkJobDetail, FrameReportUrl, FrameMissionFailedUrl, FrameModuleConfigUrl, FrameMissionRerunUrl } from '../../api/url.js';
+import { FrameWorkJobDetail, FrameReportUrl,
+  FrameMissionFailedUrl, FrameModuleConfigUrl, FrameMissionRerunUrl
+} from '../../api/url.js';
 import api from '../../api/index';
 import Clipboard from 'clipboard';
 import Modal from '../ModalSimple/Modal.vue';

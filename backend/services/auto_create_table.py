@@ -1,3 +1,7 @@
+"""
+负责自动创建表
+"""
+# !/usr/bin/env python3
 # encoding: utf-8
 import asyncio
 import copy
