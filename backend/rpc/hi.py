@@ -43,7 +43,7 @@ class HiSendMessage(BaseRpc):
         return {}
 
 if __name__ == "__main__":
-    # 给自己的卡片建设
+    # 测试给自己发消息
     loop = asyncio.get_event_loop()
     result = loop.run_until_complete(HiSendMessage(
         {
