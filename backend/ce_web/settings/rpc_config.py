@@ -17,5 +17,10 @@ RPC_SETTINGS = {
         'gateway': 'http://icafeapi.baidu-int.com/api',
         'username': 'liuhuanling',
         'password': 'VVVYFBA8Ba4a84lDsLq0igrXfC5F2O8uW25'
+    },
+    'paddle_hi': {
+        'gateway': 'https://apiin.im.baidu.com/',
+        'access_token': 'a48ad1d94ae50aa26fb52eab71e3d74b9',
+        'agentid': '1804'
     }
 }
