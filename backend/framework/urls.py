@@ -10,6 +10,7 @@ from framework.mission_pkg.mission_callback import MissionCallback
 from framework.compile_pkg.compile_callback import CompileCallback
 from framework.mission_pkg.mission_failed import MissionFailed
 from framework.mission_pkg.mission_rerun import MissionRerun
+from framework.report_generator import ReportGenerator
 
 
 
@@ -35,12 +36,14 @@ urlpatterns = [
     url(r'missioncallback/?$', MissionCallback),
     url(r'missionfailed/?$', MissionFailed),
     url(r'missionrerun/?$', MissionRerun),
+    url(r'reportgenerator/?$', ReportGenerator),
 
     # 编译相关
     url(r'compile/?$', CompileInit),
     url(r'compile_search/?$', CompileSearch),
     url(r'compilecallback/?$', CompileCallback),
     url(r'compile_database/?$', CompileDatabase),
+
 
     # 配置相关
     url(r'getmodulesettings/?$', ModuleSettingsView),
