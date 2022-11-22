@@ -12,11 +12,17 @@ from ce_web.settings.scenes import back_dict, inner_dict, scenes_dict, selects
 from models.icafe import CeIcafe
 from models.project import Project
 from rpc.icafe import CreateCard, GetCards, ModifyCardStatus
+from rpc.hi import HiGetToken, HiSendMessage
 
 from views.base_view import MABaseView
 
 PADDLE_ICAFE_USER = RPC_SETTINGS['paddle_icafe']['username']
 PADDLE_ICAFE_PASSD = RPC_SETTINGS['paddle_icafe']['password']
+PADDLE_HI_GATEWAY = RPC_SETTINGS['paddle_hi']['gateway']
+PADDLE_HI_TOKEN = RPC_SETTINGS['paddle_hi']['access_token']
+PADDLE_HI_AGENTID = RPC_SETTINGS['paddle_hi']['agentid']
+PADDLE_HI_CORPID = RPC_SETTINGS['paddle_hi']['corpid']
+PADDLE_HI_CORPSECRET = RPC_SETTINGS['paddle_hi']['corpsecret']
 baseUrl = "https://console.cloud.baidu-int.com/devops/icafe/issue/{space}-{sequence}/show"
 
 
@@ -282,6 +288,8 @@ async def update_icafe(**kwargs):
     operator = ""
     target = None
     fields_list = []
+    content = ""
+    content_format = "https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-{}/show {}"
     if method == "提测":
         target = "开发完成"
         operator = rd
@@ -289,12 +297,16 @@ async def update_icafe(**kwargs):
             fields_list.append("RD负责人={}".format(rd))
         if qa:
             fields_list.append("QA负责人={}".format(qa))
+            content = content_format.format(icafe_id, target) 
+            await send_message(qa, icafe_id, target)
     elif method == "测试":
         target = "测试中"
         operator = qa
     elif method == "确认":
         operator = qa
         target = "测试完成"
+        content = content_format.format(icafe_id , target)
+        await send_message(qa, icafe_id, target)
     else:
         return 
     status_str_format = "流程状态={}"
@@ -322,4 +334,28 @@ async def update_icafe(**kwargs):
         'operator' : operator,
         'fields': fields_list
     }).get_data(**{"card_id":icafe_id})
- 
+
+async def send_message(qa, icafe_id, target): 
+    """
+    send message for qa
+    """
+    content = "**通知:**\n \
+               需求:[DLTP-{}](https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-{}/show)\n \
+               流程进度：{}\n \
+               请及时登录[平台处理](http://paddletest.baidu-int.com:8081/#/paddle/requirement)".format(icafe_id, icafe_id, target)   
+    result = await HiGetToken({
+        'corpid': PADDLE_HI_CORPID,
+        'corpsecret': PADDLE_HI_CORPSECRET
+     }).get_data()
+    if result: 
+        token = result.get("access_token")
+        result = await HiSendMessage({
+            'touser': qa,
+            'msgtype': 'md',
+            'agentid': PADDLE_HI_AGENTID,
+            'md': {"content": content}
+        }).get_data(**{'access_token': token})
+        #print("result=", result)
+
+
+

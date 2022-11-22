@@ -20,6 +20,8 @@ RPC_SETTINGS = {
     },
     'paddle_hi': {
         'gateway': 'https://apiin.im.baidu.com/',
+        'corpid': 'hi53Ldm7uvm7zopMha',
+        'corpsecret': '29nvGGFmMH8Snezg4lCjF1O3QmTZWxwGqyfdLAunAujtpTboyzwzMuvd1GKhG7Ei',
         'access_token': 'a48ad1d94ae50aa26fb52eab71e3d74b9',
         'agentid': '1804'
     }
