@@ -78,14 +78,14 @@ class Cloud(object):
     MKLDNN_INFER = "24297"
 
     # 模型
-    PaddleClas_P0 = "24222", {"priority":"models_list_cls_test_P0","reponame":"PaddleClas"}
-    PaddleClas_P1 = "24222", {"priority":"models_list_cls_test_P1","reponame":"PaddleClas"}
-    PaddleClas_P2 = "24222", {"priority":"models_list_cls_test_P2","reponame":"PaddleClas"}
-    PaddleClas_P2_1 = "24222", {"priority":"models_list_cls_test_P2_1","reponame":"PaddleClas"}
-    PaddleClas_P2_2 = "24222", {"priority":"models_list_cls_test_P2_2","reponame":"PaddleClas"}
+    PaddleClas_P0 = "24222", {"priority":"models_list_cls_test_P0", "reponame":"PaddleClas"}
+    PaddleClas_P1 = "24222", {"priority":"models_list_cls_test_P1", "reponame":"PaddleClas"}
+    PaddleClas_P2 = "24222", {"priority":"models_list_cls_test_P2", "reponame":"PaddleClas"}
+    PaddleClas_P2_1 = "24222", {"priority":"models_list_cls_test_P2_1", "reponame":"PaddleClas"}
+    PaddleClas_P2_2 = "24222", {"priority":"models_list_cls_test_P2_2", "reponame":"PaddleClas"}
 
-    PaddleGAN_P0 = "24401", {"priority":"models_list_gan_test_P0","reponame":"PaddleGAN"}
-    PaddleGAN_P1 = "24401", {"priority":"models_list_gan_test_P1","reponame":"PaddleGAN"}
+    PaddleGAN_P0 = "24401", {"priority":"models_list_gan_test_P0", "reponame":"PaddleGAN"}
+    PaddleGAN_P1 = "24401", {"priority":"models_list_gan_test_P1", "reponame":"PaddleGAN"}
 
 
     ##########  WINDOWS  ##########
