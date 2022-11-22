@@ -342,7 +342,7 @@ async def send_message(qa, icafe_id, target):
     content = "**通知:**\n \
                需求:[DLTP-{}](https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-{}/show)\n \
                流程进度：{}\n \
-               请及时处理[平台](http://paddletest.baidu-int.com:8081/#/paddle/requirement)".format(icafe_id, icafe_id, target)   
+               请及时登录[平台处理](http://paddletest.baidu-int.com:8081/#/paddle/requirement)".format(icafe_id, icafe_id, target)   
     result = await HiGetToken({
         'corpid': PADDLE_HI_CORPID,
         'corpsecret': PADDLE_HI_CORPSECRET
