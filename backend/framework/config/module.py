@@ -7,7 +7,7 @@
 module 配置原始数据
 """
 
-module_list = {
+module_mapping = {
     "op_function":"计算OP精度测试",
     "external_api_function":"功能性API测试",
     "distribution_api_function":"分布式API功能测试",
@@ -21,10 +21,17 @@ module_list = {
     "distribution_v100_accuracy_collective":"V100_分布式精度测试",
     "models_benchmark_a100_single_dp":"A100_单机性能测试",
     "models_benchmark_a100_multi_dp":"A100_多机性能测试",
+    "paddleclas_p0": "PaddleClas P0级功能测试",
+    "paddleclas_p1": "PaddleClas P1级功能测试",
+    "paddleclas_p2": "PaddleClas P2级功能测试",
+    "paddleclas_p2_1": "PaddleClas P2_1级功能测试",
+    "paddleclas_p2_2": "PaddleClas P2_2级功能测试",
+    "paddlegan_p0": "PaddleGAN P0级功能测试",
+    "paddlegan_p1": "PaddleGAN P1级功能测试",
 }
 
 
-module_mapping = [
+module_list = [
     {
         "id":"1",
         "label":"API功能测试",
@@ -91,6 +98,71 @@ module_mapping = [
                 "id":"3-3",
                 "label":"MKLDNN推理",
                 "key":"mkldnn_infer"
+            }
+        ]
+    },
+    {
+        "id":"4",
+        "label":"模型测试",
+        "key":"models",
+        "children":[
+            {
+                "pid":"4",
+                "id":"4-1",
+                "label":"PaddleClas",
+                "key":"PaddleClas",
+                "children":[
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-1",
+                        "label":"PaddleClas P0级功能测试",
+                        "key":"paddleclas_p0"
+                    },
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-2",
+                        "label":"PaddleClas P1级功能测试",
+                        "key":"paddleclas_p1"
+                    },
+                    {
+                        "pid": "4-1",
+                        "id": "4-1-3",
+                        "label": "PaddleClas P2级功能测试",
+                        "key": "paddleclas_p2"
+                    },
+                    {
+                        "pid": "4-1",
+                        "id": "4-1-4",
+                        "label": "PaddleClas P2_1级功能测试",
+                        "key": "paddleclas_p2_1"
+                    },
+                    {
+                        "pid": "4-1",
+                        "id": "4-1-5",
+                        "label": "PaddleClas P2_2级功能测试",
+                        "key": "paddleclas_p2_2"
+                    }
+                ]
+            },
+            {
+                "pid":"4",
+                "id":"4-2",
+                "label":"PaddleGAN",
+                "key":"PaddleGAN",
+                "children": [
+                    {
+                        "pid": "4-2",
+                        "id": "4-2-1",
+                        "label": "PaddleGAN P0级功能测试",
+                        "key": "paddlegan_p0"
+                    },
+                    {
+                        "pid": "4-2",
+                        "id": "4-2-2",
+                        "label": "PaddleGAN P1级功能测试",
+                        "key": "paddlegan_p1"
+                    }
+                ]
             }
         ]
     },

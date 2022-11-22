@@ -40,7 +40,13 @@ PLACE = {
     "mkldnn_infer": CLOUD,
     
     # models
-    "paddleclas": CLOUD,
+    "paddleclas_p0": CLOUD,
+    "paddleclas_p1": CLOUD,
+    "paddleclas_p2": CLOUD,
+    "paddleclas_p2_1": CLOUD,
+    "paddleclas_p2_2": CLOUD,
+    "paddlegan_p0": CLOUD,
+    "paddlegan_p1": CLOUD,
     # model benchmark
     "models_benchmark_v100_single_dp": LOCAL,
     "models_benchmark_v100_multi_dp": LOCAL,
@@ -62,7 +68,6 @@ class Cloud(object):
     DISTRIBUTION_API_FUNCTION = "23542"
     JIT_FUNCTION = "23640"
     API_BENCHMARK = ""
-    PADDLE_CLAS = "23369"
     MODEL_BENCHMARK = "23601"
 
     # 原生推理
@@ -71,6 +76,17 @@ class Cloud(object):
     TRT_INFER = "24296"
     # MKLDNN推理
     MKLDNN_INFER = "24297"
+
+    # 模型
+    PaddleClas_P0 = "24222", {"priority":"models_list_cls_test_P0", "reponame":"PaddleClas"}
+    PaddleClas_P1 = "24222", {"priority":"models_list_cls_test_P1", "reponame":"PaddleClas"}
+    PaddleClas_P2 = "24222", {"priority":"models_list_cls_test_P2", "reponame":"PaddleClas"}
+    PaddleClas_P2_1 = "24222", {"priority":"models_list_cls_test_P2_1", "reponame":"PaddleClas"}
+    PaddleClas_P2_2 = "24222", {"priority":"models_list_cls_test_P2_2", "reponame":"PaddleClas"}
+
+    PaddleGAN_P0 = "24401", {"priority":"models_list_gan_test_P0", "reponame":"PaddleGAN"}
+    PaddleGAN_P1 = "24401", {"priority":"models_list_gan_test_P1", "reponame":"PaddleGAN"}
+
 
     ##########  WINDOWS  ##########
     WIN_OP_FUNCTION = ""
@@ -87,32 +103,32 @@ class Local(object):
 
     # Benchmark 知识库 https://ku.baidu-int.com/knowledge/HFVrC7hq1Q/t7n0qKWNJW/QMxJ7wiFu-/WPNAbgcfv0R4MK?source=1
     # V100 单机性能测试（分布式策略：DP，默认模型优先级：S_P0）
-    MODELS_BENCHMARK_V100_SINGLE_DP = "http://10.138.35.185:8989/auto_test/", \
+    MODELS_BENCHMARK_V100_SINGLE_DP = "http://10.21.226.183:8980/auto_test/", \
                                       {"device_type": "V100", "cards_type_list": "N1C1,N1C8", "run_mode_list": "DP",
                                        "model_priority_list": "S_P0", "test_name": "V100单机性能测试"}
     # V100 多机性能测试（分布式策略：DP，默认模型优先级：M_P0）
-    MODELS_BENCHMARK_V100_MULTI_DP = "http://10.138.35.185:8989/auto_test/", \
+    MODELS_BENCHMARK_V100_MULTI_DP = "http://10.21.226.183:8980/auto_test/", \
                                      {"device_type": "V100", "cards_type_list": "N1C1,N1C8,N4C32",
                                       "run_mode_list": "DP", "model_priority_list": "M_P0",
                                       "test_name": "V100多机性能测试"}
     # V100 分布式Collective模式（分布式策略：Collective）（只看性能的模型）
-    MODELS_BENCHMARK_V100_DIST_COLLECTIVE = "http://10.138.35.185:8989/auto_test/", \
+    MODELS_BENCHMARK_V100_DIST_COLLECTIVE = "http://10.21.226.183:8980/auto_test/", \
                                             {"device_type": "V100", "cards_type_list": "N1C1,N1C8,N4C32",
                                              "run_mode_list": "Collective", "model_priority_list": "M_P5",
                                              "test_name": "V100分布式Collective模式（分布式策略：Collective）性能测试"}
     # A100 单机性能测试（分布式策略：DP，默认模型优先级：S_P0）
-    MODELS_BENCHMARK_A100_SINGLE_DP = "http://10.138.35.185:8989/auto_test/", \
+    MODELS_BENCHMARK_A100_SINGLE_DP = "http://10.21.226.183:8980/auto_test/", \
                                       {"device_type": "A100", "cards_type_list": "N1C1,N1C8",
                                        "run_mode_list": "DP", "model_priority_list": "S_P0",
                                        "test_name": "A100单机性能测试"
                                        }
     # A100 多机性能测试（分布式策略：DP，默认模型优先级：M_P0）
-    MODELS_BENCHMARK_A100_MULTI_DP = "http://10.138.35.185:8989/auto_test/", \
+    MODELS_BENCHMARK_A100_MULTI_DP = "http://10.21.226.183:8980/auto_test/", \
                                      {"device_type": "A100", "cards_type_list": "N1C1,N1C8,N4C32",
                                       "run_mode_list": "DP", "model_priority_list": "M_P0",
                                       "test_name": "A100多机性能测试"}
     # 分布式精度测试 V100 分布式Collective模式（分布式策略：Collective）
-    DISTRIBUTION_V100_ACCURACY_COLLECTIVE = "http://10.138.35.185:8989/auto_test/", \
+    DISTRIBUTION_V100_ACCURACY_COLLECTIVE = "http://10.21.226.183:8980/auto_test/", \
                                             {"device_type": "V100", "cards_type_list": "N1C1,N1C8,N4C32",
                                              "run_mode_list": "Collective", "model_priority_list": "D_P0",
                                              "email_index": "ips,convergence", "test_name": "V100分布式Collective精度测试"}
@@ -132,13 +148,18 @@ class CloudMission(object):
         "distribution_api_function": Cloud.DISTRIBUTION_API_FUNCTION,
         "jit_function": Cloud.JIT_FUNCTION,
         "api_benchmark": [],
-
+        # infer
         "native_infer": Cloud.NATIVE_INFER,
         "trt_infer": Cloud.TRT_INFER,
         "mkldnn_infer": Cloud.MKLDNN_INFER,
-
-        "paddleclas": Cloud.PADDLE_CLAS,
-        "models_benchmark": Cloud.MODEL_BENCHMARK,
+        # module
+        "paddleclas_p0": Cloud.PaddleClas_P0,
+        "paddleclas_p1": Cloud.PaddleClas_P1,
+        "paddleclas_p2": Cloud.PaddleClas_P2,
+        "paddleclas_p2_1": Cloud.PaddleClas_P2_1,
+        "paddleclas_p2_2": Cloud.PaddleClas_P2_2,
+        "paddlegan_p0": Cloud.PaddleGAN_P0,
+        "paddlegan_p1": Cloud.PaddleGAN_P1,
     }
 
 
@@ -147,6 +168,7 @@ class LocalMission(object):
     for local testing
     """
     ROUTER = {
+        # benchmark
         "models_benchmark_v100_single_dp": Local.MODELS_BENCHMARK_V100_SINGLE_DP,
         "models_benchmark_v100_multi_dp": Local.MODELS_BENCHMARK_V100_MULTI_DP,
         "models_benchmark_v100_dist_collective": Local.MODELS_BENCHMARK_V100_DIST_COLLECTIVE,

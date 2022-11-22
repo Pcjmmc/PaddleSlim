@@ -42,15 +42,8 @@ async def update_module():
         exit(8)
 
     # 更新新数据
-    res = await ModuleSettings.aio_update(validated_data={"value": json.dumps(module_list)}, params_data={"option": "module_list"})
-    if res == 0:
-        print("更新module_list 失败")
-        exit(8)
-    res = await ModuleSettings.aio_update({"value": json.dumps(module_mapping)}, {"option": "module_mapping"})
-    if res == 0:
-        print("更新module_mapping 失败")
-        exit(8)
-
+    await ModuleSettings.aio_update(validated_data={"value": json.dumps(module_list)}, params_data={"option": "module_list"})
+    await ModuleSettings.aio_update({"value": json.dumps(module_mapping)}, {"option": "module_mapping"})
 
 
 if __name__ == '__main__':
