@@ -52,7 +52,8 @@ class MissionRerun(MABaseView):
             res = Dispatcher.request_mission(mission_name, mission_id, env, wheel)
             if isinstance(res, dict):
                 # 初始化任务
-                await Mission.aio_update({"status": "running", "description": str(res)}, {"id": mission_id})
+                await Mission.aio_update({"status": "running", "description": ""}, {"id": mission_id})
+                await Job.aio_update({"status": "running"}, {"id": jid})
                 return "重新执行成功"
             else:
                 await Mission.aio_update({"status": "error", "description": res}, {"id": mission_id})
