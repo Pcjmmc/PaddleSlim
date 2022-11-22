@@ -376,29 +376,6 @@ export default {
                 )
               );
             } else if (['开发完成', '测试中'].indexOf(params.row.status) >= 0) {
-              // 如果有最新的任务创建，则可以查看具体进度
-              ret.push(
-                h(
-                  'Button',
-                  {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    style: {
-                      marginTop: '5px',
-                      marginBottom: '5px',
-                      marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-                        this.getReqDetail(params.row);
-                      }
-                    }
-                  },
-                  '测试详情'
-                )
-              );
               if (params.row.test_status !== 'running' && this.userInfo.identifyQA) {
                 // 如果没有在运行中的任务，则可以首次或者重新发起测试
                 ret.push(
@@ -440,6 +417,50 @@ export default {
                       }
                     },
                     '发起测试'
+                  )
+                );
+              }
+              // 如果有最新的任务创建，则可以查看具体进度；如果曾经有过测试任务就可以查看，没有的就置灰色
+              if (params.row.test_id) {
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small'
+                      },
+                      style: {
+                        marginTop: '5px',
+                        marginBottom: '5px',
+                        marginRight: '5px'
+                      },
+                      on: {
+                        click: () => {
+                          this.getReqDetail(params.row);
+                        }
+                      }
+                    },
+                    '测试详情'
+                  )
+                );
+              } else {
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small',
+                        disabled: true
+                      },
+                      style: {
+                        marginTop: '5px',
+                        marginBottom: '5px',
+                        marginRight: '5px'
+                      }
+                    },
+                    '测试详情'
                   )
                 );
               }

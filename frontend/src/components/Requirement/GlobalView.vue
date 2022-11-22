@@ -16,7 +16,7 @@
                   placeholder=" 开始时间 ～ 结束时间 "
                   v-model="search.dt"
                   style="width:80%"
-                  v-on:on-change="searchByfilter"
+                  v-on:on-change="searchByfilters"
                 ></DatePicker>
               </FormItem>
             </Col>
@@ -44,7 +44,7 @@
                     clearable
                     filterable
                     v-model="search.status"
-                    v-on:on-change="searchByfilter"
+                    v-on:on-change="searchByfilters"
                   >
                     <Option
                       :key="index"
@@ -59,7 +59,7 @@
                   type="primary"
                   shape="circle"
                   icon="ios-search"
-                  @click="searchByfilter"
+                  @click="searchByfilters"
                 >Search</Button>
               </Col>
             </Row>
@@ -93,6 +93,68 @@
         </div>
       </div>
     </Card>
+    <Modal
+      v-model="showModa"
+      title="创建测试任务"
+      width="60%"
+      v-on:on-cancel="handleReset"
+    >
+      <test-job
+        ref="child"
+        @closeModal="closeModal"
+        @searchByfilter="searchByfilter"
+        @SubmitRequirement="SubmitRequirement"
+      ></test-job>
+      <div slot="footer">
+        <Button type="text" @click="handleReset">重置</Button>
+        <Button type="primary" @click="handleSubmit">提交</Button>
+      </div>
+    </Modal>
+    <Modal
+      v-model="createTestModa"
+      title="提测"
+      width="40%"
+      v-on:on-cancel="handleResetTest"
+    >
+      <Form
+        :model="reqDetail"
+        :label-width="75"
+        style="width: 90%"
+      >
+        <FormItem label="icafeID:" prop="rd">
+          <Input
+            disabled
+            v-model="reqDetail.icafe_id"
+            placeholder="icafeId"
+          />
+        </FormItem>
+        <FormItem label="RD:" prop="rd">
+          <Input
+            disabled
+            v-model="reqDetail.rd"
+            placeholder="提测RD邮箱前缀"
+          />
+        </FormItem>
+        <FormItem label="QA:" prop="qa">
+          <Input v-model="reqDetail.qa" placeholder="输入QA邮箱前缀"/>
+        </FormItem>
+        <FormItem label="repo:" prop="repo">
+          <Input v-model="reqDetail.repo" placeholder="输入repo名"/>
+        </FormItem>
+        <!--
+        <FormItem label="分支:" prop="branch">
+          <Input v-model="reqDetail.branch" placeholder="输入分支"/>
+        </FormItem>
+        -->
+        <FormItem label="pr:" prop="pr">
+          <Input v-model="reqDetail.pr" placeholder="输入pr号"/>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button type="text" @click="handleResetTest">取消</Button>
+        <Button type="primary" @click="handleCreateTest">提交</Button>
+      </div>
+    </Modal>
     <Modal
       v-model="createReqModa"
       title="创建需求"
@@ -147,14 +209,18 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import { dateFmt } from '../../util/help.js';
-import { RequirementSearchUrl, CreateReqUrl } from '../../api/url.js';
+import { RequirementSearchUrl, CreateReqUrl, UserCheckUrl, StartTestUrl } from '../../api/url.js';
 import api from '../../api/index';
+import TestJob from '../PTS/TestJob.vue';
 
 export default {
   name: 'Global',
   data: function () {
     return {
+      createTestModa: false,
+      showModa: false,
       addReqForm: {
         type: 'Task',
         rd_owner: '',
@@ -190,6 +256,19 @@ export default {
       ],
       content: [
       ],
+      reqDetail: {
+        method: '提测',
+        rd: '',
+        qa: '',
+        pr: '',
+        branch: '',
+        repo: '',
+        icafe_id: ''
+      },
+      userInfo: {
+        identifyQA: false,
+        username: Cookies.get('username')
+      },
       search: {
         keyword: '',
         qaname: '',
@@ -267,12 +346,123 @@ export default {
           key: 'operation',
           align: 'center',
           fixed: 'right',
-          width: '100px',
+          width: '200px',
           render: (h, params) => {
             let ret = [];
             // 每一个状态要管理好操作
-            if (params.row.status === '测试中') {
-              // 如果有最新的任务创建，则可以查看具体进度
+            if (['新建', '开发中'].indexOf(params.row.status) >= 0) {
+              ret.push(
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: 'primary',
+                      size: 'small'
+                    },
+                    style: {
+                      marginTop: '5px',
+                      marginBottom: '5px',
+                      marginRight: '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.setTestModa(params.row);
+                      }
+                    }
+                  },
+                  '提测'
+                )
+              );
+            } else if (['开发完成', '测试中'].indexOf(params.row.status) >= 0) {
+              if (params.row.test_status !== 'running' && this.userInfo.identifyQA) {
+                // 如果没有在运行中的任务，则可以首次或者重新发起测试
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small'
+                      },
+                      style: {
+                        marginTop: '5px',
+                        marginBottom: '5px',
+                        marginRight: '5px'
+                      },
+                      on: {
+                        click: () => {
+                          this.createTestJob(params.row);
+                        }
+                      }
+                    },
+                    '发起测试'
+                  )
+                );
+              } else {
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small',
+                        disabled: true
+                      },
+                      style: {
+                        marginTop: '5px',
+                        marginBottom: '5px',
+                        marginRight: '5px'
+                      }
+                    },
+                    '发起测试'
+                  )
+                );
+              }
+              // 如果有最新的任务创建，则可以查看具体进度；如果曾经有过测试任务就可以查看，没有的就置灰色
+              if (params.row.test_id) {
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small'
+                      },
+                      style: {
+                        marginTop: '5px',
+                        marginBottom: '5px',
+                        marginRight: '5px'
+                      },
+                      on: {
+                        click: () => {
+                          this.getReqDetail(params.row);
+                        }
+                      }
+                    },
+                    '测试详情'
+                  )
+                );
+              } else {
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small',
+                        disabled: true
+                      },
+                      style: {
+                        marginTop: '5px',
+                        marginBottom: '5px',
+                        marginRight: '5px'
+                      }
+                    },
+                    '测试详情'
+                  )
+                );
+              }
+            } else if (params.row.status === '测试完成') {
               ret.push(
                 h(
                   'Button',
@@ -295,27 +485,23 @@ export default {
                   '测试详情'
                 )
               );
-            } else if (params.row.status === '测试完成') {
+            } else {
               ret.push(
                 h(
                   'Button',
                   {
                     props: {
                       type: 'primary',
-                      size: 'small'
+                      size: 'small',
+                      disabled: true
                     },
                     style: {
                       marginTop: '5px',
                       marginBottom: '5px',
                       marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-                        this.getReqDetail(params.row);
-                      }
                     }
                   },
-                  '测试详情'
+                  '提测'
                 )
               );
             }
@@ -340,9 +526,11 @@ export default {
   },
   mounted: async function () {
     this.initData();
+    await this.CheckUserInfo();
     await this.getData();
   },
   components: {
+    TestJob
   },
   computed: {
   },
@@ -354,11 +542,26 @@ export default {
       begin_time = new Date(begin_time);
       return begin_time;
     },
+    async CheckUserInfo() {
+      const { code, data, message } = await api.get(UserCheckUrl);
+      if (parseInt(code, 10) === 200) {
+        this.userInfo.identifyQA = data.identifyQA;
+      } else {
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
     async pageChange(pageNum) {
       this.page = pageNum;
       await this.getData();
     },
     async searchByfilter() {
+      // 保持一致，啥也不做
+    },
+    async searchByfilters() {
       this.page = 1;
       await this.getData();
     },
@@ -425,7 +628,7 @@ export default {
       this.$refs.addReqForm.validate(async (valid) => {
         if (valid) {
           await this.createJob();
-          await this.searchByfilter();
+          await this.searchByfilters();
         } else {
           this.$Message.error('请完善信息!');
         }
@@ -458,6 +661,82 @@ export default {
       // 根据branch获取commit列表
       const { href } = this.$router.resolve({name: 'ReqDetails', params: _params});
       window.open(href, '_blank');
+    },
+    // 发起测试相关
+    async createTestJob(item) {
+      this.selectRow = item;
+      this.showModa = true;
+    },
+    async handleReset() {
+      await this.$refs.child.initData();
+    },
+    async handleSubmit() {
+      await this.$refs.child.handleSubmit();
+    },
+    async SubmitRequirement(jid) {
+      // 子组件调用将jid返给父组件，同事父组件，将icafeid和jid通过接口传递给后端
+      let params = {
+        method: '测试',
+        test_id: jid,
+        test_status: 'running',
+        icafe_id: this.selectRow.sequence,
+        rd: this.selectRow.rd_owner.username,
+        qa: this.selectRow.qa_owner.username,
+        repo: this.selectRow.repo,
+        pr: this.selectRow.pr
+      };
+      const { code, message } = await api.post(StartTestUrl, params);
+      if (parseInt(code, 10) === 200) {
+        await this.getData();
+      } else {
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
+    closeModal(params) {
+      // 关闭弹窗
+      this.showModa = params;
+    },
+    // 提测相关操作
+    setTestModa(item) {
+      this.initTestData();
+      this.selectRow = item;
+      this.reqDetail.rd = this.userInfo.username;
+      this.reqDetail.icafe_id = item.sequence;
+      this.createTestModa = true;
+    },
+    initTestData() {
+      this.createTestModa = false;
+      this.selectRow = null;
+      this.reqDetail = {
+        method: '提测',
+        rd: '',
+        qa: '',
+        pr: '',
+        branch: '',
+        repo: '',
+        icafe_id: ''
+      };
+    },
+    handleResetTest() {
+      this.initTestData();
+    },
+    async handleCreateTest() {
+      const { code, message } = await api.post(StartTestUrl, this.reqDetail);
+      if (parseInt(code, 10) === 200) {
+        this.initTestData();
+        await this.getData();
+      } else {
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+        this.initTestData();
+      }
     }
   }
 };
