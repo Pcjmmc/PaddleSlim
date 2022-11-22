@@ -49,7 +49,7 @@ class HiSendMessage(BaseRpc):
         {'key': 'touser', 'type': str},
         {'key': 'msgtype', 'type': str},
         {'key': 'agentid', 'type': str},
-        {'key': 'text', 'type': dict}
+        {'key': 'md', 'type': dict}
     ]
 
     #icafe用get形式实现post请求，需要额外设置header和api
@@ -73,7 +73,7 @@ if __name__ == "__main__":
         'touser':'guozhengxin',
         'msgtype': 'text',
         'agentid': PADDLE_HI_AGENTID,
-        'text': {"content": "gzx test"}
+        'md': {"content": "gzx test"}
         }).get_data(**{'access_token': PADDLE_HI_TOKEN}))      
     """
     result = loop.run_until_complete(HiGetToken({
