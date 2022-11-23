@@ -339,7 +339,7 @@ export default {
           title: '操作',
           key: 'operation',
           align: 'center',
-          width: '190px',
+          width: '150px',
           fixed: 'right',
           render: (h, params) => {
             let ret = [];
@@ -352,7 +352,7 @@ export default {
                     size: 'small'
                   },
                   style: {
-                    marginRight: '5px'
+                    marginRight: '10px'
                   },
                   on: {
                     click: () => {
@@ -380,8 +380,7 @@ export default {
                       this.rerunJob(params.row.id);
                     }
                   }
-                },
-                'rerun'
+                }
               )
             );
             return h(

@@ -208,7 +208,7 @@ export default {
           }
         }
       ],
-      dt: [new Date(), new Date()],
+      dt: [this.getBeginData(), new Date()],
       search: {
         name: '',
         id: null,
@@ -232,6 +232,13 @@ export default {
   computed: {
   },
   methods: {
+    getBeginData() {
+      // 在end_time的基础上+1， 因为end_time代表的今天0点0分0秒的时间
+      let begin_time = new Date();
+      begin_time = begin_time.setDate(begin_time.getDate() - 7);
+      begin_time = new Date(begin_time);
+      return begin_time;
+    },
     getStatus(status) {
       for (let i = 0; i <= this.tags.length; i++) {
         let item = this.tags[i];

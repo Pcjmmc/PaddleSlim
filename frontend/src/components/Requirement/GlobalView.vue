@@ -194,10 +194,10 @@
           />
         </FormItem>
         <FormItem label="QA:" prop="qa_owner">
-          <Input v-model="addReqForm.qa_owner" placeholder="输入RD负责人邮箱前缀"/>
+          <Input v-model="addReqForm.qa_owner" placeholder="输入QA负责人邮箱前缀"/>
         </FormItem>
         <FormItem label="RD:" prop="rd_owner">
-          <Input v-model="addReqForm.rd_owner" placeholder="输入QA负责人邮箱前缀"/>
+          <Input v-model="addReqForm.rd_owner" placeholder="输入RD负责人邮箱前缀"/>
         </FormItem>
       </Form>
       <div slot="footer">
