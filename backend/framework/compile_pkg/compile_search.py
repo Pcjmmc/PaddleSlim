@@ -26,6 +26,13 @@ class CompileSearch(MABaseView):
 
     async def get_data(self, **kwargs):
         query = {key: val for key, val in kwargs.items() if val}
+        if "begin_time" in query.keys():
+            query["create_time__gte"] = query["begin_time"]
+            del (query["begin_time"])
+        if "end_time" in query.keys():
+            query["create_time__lte"] = query["end_time"]
+            del (query["end_time"])
+
         # 只返回查询列表
         data = await Compile.aio_filter_details(**query)
         total = await Compile.aio_filter_count(**query)
