@@ -37,7 +37,7 @@ class CompileDatabase(MABaseView):
         data["jid"] = 0
         data["uid"] = 0
         data["status"] = "done"
-        data["env"] = str(env)
+        data["env"] = str(json.dumps(env))
         data["create_time"] = datetime.now()
         data["update_time"] = datetime.now()
         data = dict(data, **kwargs)
