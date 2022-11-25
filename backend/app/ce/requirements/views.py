@@ -68,7 +68,7 @@ class ManageIcafe(MABaseView):
             iql = iql + sub_iql
         if qa:
             sub_iql = " AND qa负责人 in ({})".format(qa)
-            if qa in ["zhangdeyin", "weike", "liuhuanling", "guozhengxin"]:
+            if qa in ["zhangdeyin", "weike", "liuhuanling"]:
                 sub_iql = ""
             iql = iql + sub_iql
         if keyword:
@@ -153,6 +153,17 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
             elif arr.get("propertyName") == "RD负责人":
                 rd_owner["name"] = arr.get("displayValue")
                 rd_owner["username"] = arr.get("value")
+                if not rd_owner["name"] and not rd_owner["username"]:
+                    tmp_rp_list = item.get("responsiblePeople")
+                    for tmp_rp in tmp_rp_list:
+                        if not rd_owner["name"]:
+                            rd_owner["name"] = tmp_rp.get("name")
+                        else:
+                            rd_owner["name"] = rd_owner["name"] + "," + tmp_rp.get("name")
+                        if not rd_owner["username"]:
+                            rd_owner["username"] = tmp_rp.get("username")
+                        else:
+                            rd_owner["username"] = rd_owner["username"] + "," + tmp_rp.get("username")
             elif arr.get("propertyName") == "repo":
                  repo = arr.get("displayValue") if arr.get("displayValue") else ""
             elif arr.get("propertyName") == "PR链接":
