@@ -14,6 +14,7 @@
         label="全局视图"
         name="globle"
       >
+      <compile-globle></compile-globle>
       </TabPane>
     </Tabs>
   </div>
@@ -21,6 +22,7 @@
 <script>
 
 import CompileService from './CompileService.vue';
+import CompileGloble from './CompileGloble.vue';
 
 export default {
   data: function () {
@@ -33,7 +35,8 @@ export default {
   mounted: function () {
   },
   components: {
-    CompileService
+    CompileService,
+    CompileGloble
   },
   computed: {},
   methods: {

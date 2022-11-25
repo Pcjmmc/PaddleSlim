@@ -117,7 +117,9 @@
       v-on:on-cancel="handleResetTest"
     >
       <Form
+        ref="reqDetail"
         :model="reqDetail"
+        :rules="addReqRules"
         :label-width="75"
         style="width: 90%"
       >
@@ -130,7 +132,6 @@
         </FormItem>
         <FormItem label="RD:" prop="rd">
           <Input
-            disabled
             v-model="reqDetail.rd"
             placeholder="提测RD邮箱前缀"
           />
@@ -194,10 +195,18 @@
           />
         </FormItem>
         <FormItem label="QA:" prop="qa_owner">
-          <Input v-model="addReqForm.qa_owner" placeholder="输入QA负责人邮箱前缀"/>
+          <Input
+            clearable
+            v-model="addReqForm.qa_owner"
+            placeholder="输入QA负责人邮箱前缀"
+          ></Input>
         </FormItem>
         <FormItem label="RD:" prop="rd_owner">
-          <Input v-model="addReqForm.rd_owner" placeholder="输入RD负责人邮箱前缀"/>
+          <Input
+            clearable
+            v-model="addReqForm.rd_owner"
+            placeholder="输入RD负责人邮箱前缀"
+          ></Input>
         </FormItem>
       </Form>
       <div slot="footer">
@@ -229,6 +238,9 @@ export default {
         detail: ''
       },
       addRules: {
+        type: [
+          { required: true, message: '请选择需求类型', trigger: 'blur' }
+        ],
         title: [
           { required: true, message: '请输入需求标题', trigger: 'blur' }
         ],
@@ -237,6 +249,20 @@ export default {
         ],
         rd_owner: [
           { required: true, message: '请输入RD负责人', trigger: 'blur' }
+        ]
+      },
+      addReqRules: {
+        qa: [
+          { required: true, message: '请输入QA负责人', trigger: 'blur' }
+        ],
+        rd: [
+          { required: true, message: '请输入RD负责人', trigger: 'blur' }
+        ],
+        repo: [
+          { required: true, message: '请输入Repo信息', trigger: 'blur' }
+        ],
+        pr: [
+          { required: true, message: '请输入pr号', trigger: 'blur' }
         ]
       },
       createReqModa: false,
@@ -346,7 +372,7 @@ export default {
           key: 'operation',
           align: 'center',
           fixed: 'right',
-          width: '200px',
+          width: '130px',
           render: (h, params) => {
             let ret = [];
             // 每一个状态要管理好操作
@@ -360,9 +386,9 @@ export default {
                       size: 'small'
                     },
                     style: {
-                      marginTop: '5px',
-                      marginBottom: '5px',
-                      marginRight: '5px'
+                      marginTop: '2px',
+                      marginBottom: '2px',
+                      marginRight: '2px'
                     },
                     on: {
                       click: () => {
@@ -385,9 +411,9 @@ export default {
                         size: 'small'
                       },
                       style: {
-                        marginTop: '5px',
-                        marginBottom: '5px',
-                        marginRight: '5px'
+                        marginTop: '2px',
+                        marginBottom: '2px',
+                        marginRight: '2px'
                       },
                       on: {
                         click: () => {
@@ -395,7 +421,7 @@ export default {
                         }
                       }
                     },
-                    '发起测试'
+                    '测试'
                   )
                 );
               } else {
@@ -409,12 +435,12 @@ export default {
                         disabled: true
                       },
                       style: {
-                        marginTop: '5px',
-                        marginBottom: '5px',
-                        marginRight: '5px'
+                        marginTop: '2px',
+                        marginBottom: '2px',
+                        marginRight: '2px'
                       }
                     },
-                    '发起测试'
+                    '测试'
                   )
                 );
               }
@@ -429,9 +455,9 @@ export default {
                         size: 'small'
                       },
                       style: {
-                        marginTop: '5px',
-                        marginBottom: '5px',
-                        marginRight: '5px'
+                        marginTop: '2px',
+                        marginBottom: '2px',
+                        marginRight: '2px'
                       },
                       on: {
                         click: () => {
@@ -439,7 +465,7 @@ export default {
                         }
                       }
                     },
-                    '测试详情'
+                    '详情'
                   )
                 );
               } else {
@@ -453,12 +479,12 @@ export default {
                         disabled: true
                       },
                       style: {
-                        marginTop: '5px',
-                        marginBottom: '5px',
-                        marginRight: '5px'
+                        marginTop: '2px',
+                        marginBottom: '2px',
+                        marginRight: '2px'
                       }
                     },
-                    '测试详情'
+                    '详情'
                   )
                 );
               }
@@ -472,9 +498,9 @@ export default {
                       size: 'small'
                     },
                     style: {
-                      marginTop: '5px',
-                      marginBottom: '5px',
-                      marginRight: '5px'
+                      marginTop: '2px',
+                      marginBottom: '2px',
+                      marginRight: '2px'
                     },
                     on: {
                       click: () => {
@@ -482,7 +508,7 @@ export default {
                       }
                     }
                   },
-                  '测试详情'
+                  '详情'
                 )
               );
             } else {
@@ -496,9 +522,9 @@ export default {
                       disabled: true
                     },
                     style: {
-                      marginTop: '5px',
-                      marginBottom: '5px',
-                      marginRight: '5px'
+                      marginTop: '2px',
+                      marginBottom: '2px',
+                      marginRight: '2px'
                     }
                   },
                   '提测'
@@ -509,10 +535,7 @@ export default {
               'div',
               {
                 style: {
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start'
+                  'text-align': 'center'
                 }
               },
               ret
@@ -595,6 +618,11 @@ export default {
     async showCreateModa() {
       // 将弹窗打开
       this.initReqData();
+      if (this.userInfo.identifyQA) {
+        this.addReqForm.qa_owner = this.userInfo.username;
+      } else {
+        this.addReqForm.rd_owner = this.userInfo.username;
+      }
       this.createReqModa = true;
     },
     handleResetReq() {
@@ -704,8 +732,11 @@ export default {
     setTestModa(item) {
       this.initTestData();
       this.selectRow = item;
-      this.reqDetail.rd = this.userInfo.username;
+      this.reqDetail.rd = item.rd_owner.username ? item.rd_owner.username : this.userInfo.username;
       this.reqDetail.icafe_id = item.sequence;
+      this.reqDetail.qa = item.qa_owner.username;
+      this.reqDetail.repo = item.repo;
+      this.reqDetail.pr = item.pr;
       this.createTestModa = true;
     },
     initTestData() {
@@ -725,18 +756,24 @@ export default {
       this.initTestData();
     },
     async handleCreateTest() {
-      const { code, message } = await api.post(StartTestUrl, this.reqDetail);
-      if (parseInt(code, 10) === 200) {
-        this.initTestData();
-        await this.getData();
-      } else {
-        this.$Message.error({
-          content: '请求出错: ' + message,
-          duration: 30,
-          closable: true
-        });
-        this.initTestData();
-      }
+      this.$refs.reqDetail.validate(async (valid) => {
+        if (valid) {
+          const { code, message } = await api.post(StartTestUrl, this.reqDetail);
+          if (parseInt(code, 10) === 200) {
+            this.initTestData();
+            await this.getData();
+          } else {
+            this.$Message.error({
+              content: '请求出错: ' + message,
+              duration: 30,
+              closable: true
+            });
+            this.initTestData();
+          }
+        } else {
+          this.$Message.error('请完善信息!');
+        }
+      });
     }
   }
 };
