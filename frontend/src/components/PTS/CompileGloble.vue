@@ -104,27 +104,24 @@
         </Form>
       </div>
     </Card>
-    <div style="margin-top: 1%;text-align: center;">
-      <Card
-        class="card-s-new"
-        :key="index"
-        v-for="(item, index) in envInfo"
-      >
-        <div
-          :id="index"
+    <div>
+      <Row>
+        <Card
           :key="index"
+          :id="index"
           class="card-css"
-          @mousemove="inFun(index)"
-          @mouseleave="outFun(index)"
+          v-for="(item, index) in envInfo"
         >
-          <Table
-            border
-            :show-header="false"
-            :columns="envcolumns"
-            :data="item"
-          ></Table>
-        </div>
-      </Card>
+          <div>
+            <Table
+              border
+              :show-header="false"
+              :columns="envcolumns"
+              :data="item"
+            ></Table>
+          </div>
+        </Card>
+      </Row>
     </div>
     <Page
       :total="total"
@@ -151,14 +148,60 @@ export default {
       scale: 0.9,
       total: 0,
       page: 1,
-      pagesize: 10,
+      pagesize: 30,
       content: [
       ],
       envcolumns: [
         {
           title: '内容1',
           key: 'content1',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            let ret = [];
+            if (params.row.content1.indexOf('commit') !== -1) {
+              ret.push(
+                h('Tooltip', {
+                  props: {
+                    placement: 'right',
+                    transfer: true
+                  }
+                }, [
+                  h('div', {
+                    style: {
+                      width: '135px',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis'
+                    }
+                  }, params.row.content1),
+                  h('span', {
+                    slot: 'content',
+                    style: {
+                      whiteSpace: 'normal',
+                      wordBreak: 'break-all'
+                    }
+                  }, params.row.content1)
+                ])
+              );
+            } else {
+              ret.push(
+                h(
+                  'div',
+                  {
+                  }, params.row.content1
+                )
+              );
+            }
+            return h(
+              'div',
+              {
+                style: {
+                  align: 'center'
+                }
+              },
+              ret
+            );
+          }
         },
         {
           title: '内容2',
@@ -169,19 +212,19 @@ export default {
             let str1 = '产物地址 :';
             if (params.row.content2.indexOf(str1) === -1) {
               ret.push(
-              h(
-                'div',
-                {
-                }, params.row.content2
-              )
-            );
+                h(
+                  'div',
+                  {
+                  }, params.row.content2
+                )
+              );
             } else {
               let url = params.row.content2.substr(str1.length);
-              ret.push(h('div', [
+              ret.push(h('span', [
                 h('span', {
                 }, str1),
                 h('a', {
-                  }, url),
+                  }),
                   h('Poptip', {
                     props: {
                       trigger: 'hover',
@@ -214,6 +257,33 @@ export default {
                           clipboard.on('error', e => {
                             this.$Message.error('复制失败,请手动复制~');
                           });
+                        }
+                      }
+                    })
+                  ])
+                ])
+              );
+              ret.push(h('span', [
+                h('a', {
+                  }),
+                  h('Poptip', {
+                    props: {
+                      trigger: 'hover',
+                      placement: 'top',
+                      transfer: true,
+                      content: '下载'
+                    }
+                  },
+                  [
+                    h('Icon', {
+                      props: {
+                          type: 'md-arrow-down',
+                          size: '20',
+                          color: 'gray'
+                      },
+                      on: {
+                        click: () => {
+                          window.open(url, '_self');
                         }
                       }
                     })
@@ -353,7 +423,7 @@ export default {
         case 'os':
           return '系统';
         case 'python':
-          return 'python环境';
+          return 'Py环境';
         case 'cuda':
           return 'CUDA环境';
         case 'branch':
@@ -444,19 +514,17 @@ export default {
 
 <style scoped>
 .card-s-new {
-  width: 94%;
-  margin-left: 3%;
-  margin-right: 3%;
+  width: 98%;
+  margin-left: 1%;
+  margin-right: 1%;
   margin-bottom: 1%;
   font-size: 15px;
   color: lightslategrey
 }
 .card-css {
-  margin-left: 3%;
-  margin-right: 3%;
+  width: 33%;
   margin-top: 1%;
-  margin-bottom: 1%;
   text-align: center;
-  transform: scale(0.9)
+  font-size: 10px;
 }
 </style>
