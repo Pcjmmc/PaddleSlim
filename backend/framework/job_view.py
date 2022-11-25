@@ -30,6 +30,14 @@ class JobInitView(MABaseView):
             mission[i] = None
         return str(json.dumps(mission))
 
+    async def cache(self, query):
+        """
+        历史缓存查询命中
+        """
+        query = dict({"status": "done"}, **query)
+        data = await Compile.aio_filter_details(need_all=False, **query)
+        return data
+
     async def wheel_cache(self, jid, pd_type, value, python, cuda=None, os=None, branch=None):
         """
         编译查询器,后续替换成云燊的服务
@@ -72,52 +80,65 @@ class JobInitView(MABaseView):
             # 请求下游服务
             res = await Job.aio_get_object(order_by=None, group_by=None, id=jid)
             await Dispatcher.dispatch_missions(res)
+
         else:
-            # todo: 编译服务
             compile_info = await Compile.aio_get_object(order_by=None, group_by=None, jid=jid)
             id = compile_info[0]
-            data = {
-                "id": id,
-                "pd_type": pd_type,
-                "value": value,
-                "python": python,
-                "cuda": cuda,
-                "os": os,
-                "branch": branch
-            }
-            RETRY_TIME = 5
-            retry = 0
-            while (retry < RETRY_TIME):
-                res = requests.post(COMPILE_SERVICE, json=data)
-                if res.status_code != 200:
-                    print(res.text)
-                    retry += 1
-                    continue
-                else:
-                    break
-            if retry == RETRY_TIME:
-                query = dict()
-                query["jid"] = jid
-                data = dict()
-                data["status"] = "error"
-                data["update_time"] = datetime.now()
-                res = await Compile.aio_update(data, query)
-                if res == 0:
-                    raise HTTP400Error("Compile 库更新结果失败")
-                res = await Job.aio_update({"status": "error"}, {"id": jid})
-                if res == 0:
-                    raise HTTP400Error("Job 库更新结果失败")
+            # 缓存
+            query = {"pd_type": pd_type,
+                     "value": value,
+                     "python": python,
+                     "cuda": cuda,
+                     "os": os,
+                     "branch": branch}
+            res = await self.cache(query)
+            if len(res) != 0:
+                # 命中缓存 走缓存逻辑
+                wheel_path = res[0].get("wheel")
+                await Compile.aio_update({"status": "done", "wheel": wheel_path, "update_time": datetime.now()},
+                                         {"id": id})
             else:
-                query = dict()
-                query["jid"] = jid
-                data = dict()
-                data["status"] = "running"
-                data["update_time"] = datetime.now()
-                res = await Compile.aio_update(data, query)
-                if res == 0:
-                    raise HTTP400Error("Compile 库更新编译状态失败")
-
-
+                # 走编译
+                data = {
+                    "id": id,
+                    "pd_type": pd_type,
+                    "value": value,
+                    "python": python,
+                    "cuda": cuda,
+                    "os": os,
+                    "branch": branch
+                }
+                RETRY_TIME = 5
+                retry = 0
+                while (retry < RETRY_TIME):
+                    res = requests.post(COMPILE_SERVICE, json=data)
+                    if res.status_code != 200:
+                        print(res.text)
+                        retry += 1
+                        continue
+                    else:
+                        break
+                if retry == RETRY_TIME:
+                    query = dict()
+                    query["jid"] = jid
+                    data = dict()
+                    data["status"] = "error"
+                    data["update_time"] = datetime.now()
+                    res = await Compile.aio_update(data, query)
+                    if res == 0:
+                        raise HTTP400Error("Compile 库更新结果失败")
+                    res = await Job.aio_update({"status": "error"}, {"id": jid})
+                    if res == 0:
+                        raise HTTP400Error("Job 库更新结果失败")
+                else:
+                    query = dict()
+                    query["jid"] = jid
+                    data = dict()
+                    data["status"] = "running"
+                    data["update_time"] = datetime.now()
+                    res = await Compile.aio_update(data, query)
+                    if res == 0:
+                        raise HTTP400Error("Compile 库更新编译状态失败")
 
 
     async def post(self, **kwargs):
@@ -131,8 +152,8 @@ class JobInitView(MABaseView):
         2. 初始化快照信息入库
         """
         data = dict()
-        mission = json.loads(kwargs.get("mission", ''))
-        # mission = kwargs.get("mission", '')
+        # mission = json.loads(kwargs.get("mission", ''))
+        mission = kwargs.get("mission", '')
 
         data["mission"] = self.mission_analyse(mission)
         data["uid"] = self._cookies.get("userid", 0)
@@ -164,9 +185,7 @@ class JobInitView(MABaseView):
         id = kwargs.get("id")
         data =  await Job.aio_get_object(order_by=None, group_by=None, id=id)
         mission = dict()
-
         check_complete = True
-
         for k,v in json.loads(data["mission"]).items():
             res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
             mission[k] = {"id": v, "status": res["status"], "result": res["result"]}
