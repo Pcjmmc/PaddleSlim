@@ -97,6 +97,8 @@ class JobInitView(MABaseView):
                 wheel_path = res[0].get("wheel")
                 await Compile.aio_update({"status": "done", "wheel": wheel_path, "update_time": datetime.now()},
                                          {"id": id})
+                res = await Job.aio_get_object(order_by=None, group_by=None, id=jid)
+                await Dispatcher.dispatch_missions(res)
             else:
                 # 走编译
                 data = {
