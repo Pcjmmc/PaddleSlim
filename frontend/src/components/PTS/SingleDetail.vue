@@ -130,32 +130,40 @@ export default {
         {
           title: '系统',
           key: 'os',
-          align: 'center'
+          align: 'center',
+          fixed: 'left',
+          minWidth: 100
         },
         {
           title: 'CUDA',
           key: 'cuda',
-          align: 'center'
+          align: 'center',
+          minWidth: 100
         },
         {
           title: '分支',
           key: 'branch',
-          align: 'center'
+          align: 'center',
+          minWidth: 100
         },
         {
           title: 'python版本',
           key: 'python',
-          align: 'center'
+          align: 'center',
+          minWidth: 100
         },
         {
           title: '类型',
           key: 'type',
-          align: 'center'
+          align: 'center',
+          minWidth: 100
         },
         {
           title: '取值',
           key: 'value',
           align: 'center',
+          fixed: 'right',
+          minWidth: 100,
           render: (h, params) => {
             return h('Tooltip', {
               props: {
@@ -188,19 +196,19 @@ export default {
           key: 'id',
           align: 'center',
           fixed: 'left',
-          width: '100px'
+          minWidth: 80
         },
         {
           title: '测试项',
           key: 'mission',
           align: 'center',
-          width: '140px'
+          minWidth: 140
         },
         {
           title: '状态',
           key: 'status',
           align: 'center',
-          width: '130px',
+          minWidth: 130,
           render: (h, params) => {
             return h('div', [
               h('Tag', {
@@ -218,6 +226,7 @@ export default {
           title: '结果',
           key: 'result',
           align: 'center',
+          minWidth: 270,
           render: (h, params) => {
             return h('div', [
               h('p', {
@@ -231,14 +240,14 @@ export default {
         {
           title: '创建时间',
           key: 'create_time',
-          width: '170px',
+          minWidth: 170,
           align: 'center'
         },
         {
           title: '详细报告',
           key: 'report',
           align: 'center',
-          width: '200px',
+          minWidth: 200,
           render: (h, params) => {
             let bos_url = params.row.bos_url;
             let allure_report = params.row.allure_report;
@@ -339,7 +348,7 @@ export default {
           title: '操作',
           key: 'operation',
           align: 'center',
-          width: '150px',
+          minWidth: 150,
           fixed: 'right',
           render: (h, params) => {
             let ret = [];

@@ -151,17 +151,21 @@ export default {
         {
           title: '任务ID',
           key: 'id',
-          align: 'center'
+          align: 'center',
+          fixed: 'left',
+          minWidth: 100
         },
         {
           title: '任务名',
           key: 'description',
-          align: 'center'
+          align: 'center',
+          minWidth: 200
         },
         {
           title: '任务状态',
           key: 'status',
           align: 'center',
+          minWidth: 100,
           render: (h, params) => {
             return h('div', [
               h('Tag', {
@@ -178,17 +182,21 @@ export default {
         {
           title: '创建时间',
           key: 'create_time',
-          align: 'center'
+          align: 'center',
+          minWidth: 200
         },
         {
           title: '更新时间',
           key: 'update_time',
-          align: 'center'
+          align: 'center',
+          minWidth: 200
         },
         {
           title: '详情',
           key: 'detail',
           align: 'center',
+          fixed: 'right',
+          minWidth: 120,
           render: (h, params) => {
             return h('div', [
               h('Button', {

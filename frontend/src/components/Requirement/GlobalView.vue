@@ -309,6 +309,7 @@ export default {
           key: 'sequence',
           align: 'center',
           fixed: 'left',
+          minWidth: 100,
           render: (h, params) => {
             return h('div', [
               h('a', {
@@ -328,12 +329,14 @@ export default {
         {
           title: '需求描述',
           key: 'title',
-          align: 'center'
+          align: 'center',
+          minWidth: 300
         },
         {
           title: '创建人',
           key: 'id',
           align: 'center',
+          minWidth: 120,
           render: (h, params) => {
             return h('div', [
               h('p', {
@@ -345,6 +348,7 @@ export default {
           title: 'RD',
           key: 'rd_owner',
           align: 'center',
+          minWidth: 120,
           render: (h, params) => {
             return h('div', [
               h('p', {
@@ -356,6 +360,7 @@ export default {
           title: 'QA',
           key: 'qa_owner',
           align: 'center',
+          minWidth: 120,
           render: (h, params) => {
             return h('div', [
               h('p', {
@@ -366,14 +371,15 @@ export default {
         {
           title: '状态',
           key: 'status',
-          align: 'center'
+          align: 'center',
+          minWidth: 80
         },
         {
           title: '操作',
           key: 'operation',
           align: 'center',
           fixed: 'right',
-          width: '130px',
+          minWidth: 130,
           render: (h, params) => {
             let ret = [];
             // 每一个状态要管理好操作
