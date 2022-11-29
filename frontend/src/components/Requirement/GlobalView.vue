@@ -268,7 +268,7 @@ export default {
       createReqModa: false,
       total: 0,
       page: 1,
-      pagesize: 10,
+      pagesize: 15,
       bugType: [
         'Task'
       ],
@@ -278,7 +278,8 @@ export default {
         '开发中',
         '开发完成',
         '测试中',
-        '测试完成'
+        '测试完成',
+        '已完成'
       ],
       content: [
       ],
@@ -488,29 +489,50 @@ export default {
                   )
                 );
               }
-            } else if (params.row.status === '测试完成') {
-              ret.push(
-                h(
-                  'Button',
-                  {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    style: {
-                      marginTop: '2px',
-                      marginBottom: '2px',
-                      marginRight: '2px'
-                    },
-                    on: {
-                      click: () => {
-                        this.getReqDetail(params.row);
+            } else if (['测试完成', '已完成'].indexOf(params.row.status) >= 0) {
+              if (params.row.test_id) {
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small'
+                      },
+                      style: {
+                        marginTop: '2px',
+                        marginBottom: '2px',
+                        marginRight: '2px'
+                      },
+                      on: {
+                        click: () => {
+                          this.getReqDetail(params.row);
+                        }
                       }
-                    }
-                  },
-                  '详情'
-                )
-              );
+                    },
+                    '详情'
+                  )
+                );
+              } else {
+                ret.push(
+                  h(
+                    'Button',
+                    {
+                      props: {
+                        type: 'primary',
+                        size: 'small',
+                        disabled: true
+                      },
+                      style: {
+                        marginTop: '2px',
+                        marginBottom: '2px',
+                        marginRight: '2px'
+                      }
+                    },
+                    '详情'
+                  )
+                );
+              }
             } else {
               ret.push(
                 h(

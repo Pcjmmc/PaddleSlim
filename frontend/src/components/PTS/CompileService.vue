@@ -189,7 +189,7 @@ export default {
     return {
       total: 0,
       page: 1,
-      pagesize: 10,
+      pagesize: 15,
       content: [
       ],
       search: {

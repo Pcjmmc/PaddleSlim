@@ -216,7 +216,7 @@ export default {
         begin_time: null,
         end_time: null,
         page: 1,
-        pagesize: 10
+        pagesize: 15
       }
     };
   },
@@ -303,7 +303,7 @@ export default {
         end_time: null,
         status: 'all',
         page: 1,
-        pagesize: 10
+        pagesize: 15
       };
     },
     async changeTagStatus(item) {
