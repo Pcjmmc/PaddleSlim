@@ -73,12 +73,12 @@
           >
             <div v-if="isCollapsed">
               <Card style="text-align:center;">
-                <div class="menu-item-css" @click="collapsedSider">
+                <div class="ivu-menu-item" @click="collapsedSider">
                   <right></right>
                 </div>
               </Card>
               <Card style="text-align:left;minWidth:180px;">
-                <div class="menu-item-css">
+                <div class="ivu-menu-item">
                   <Dropdown>
                     <a href="javascript:void(0)">
                       {{ option }} <i class="el-icon-arrow-down el-icon--right"></i>
@@ -96,19 +96,19 @@
                 </div>
               </Card>
               <div>
-                <MenuItem name="1-2" class="menu-item-css-new">
+                <MenuItem name="1-2" class="ivu-menu-item">
                   <menu-fold :data="menuDesc" father-link="/paddle"></menu-fold>
                 </MenuItem>
               </div>
             </div>
             <div v-else>
               <Card style="text-align:center;">
-                <div class="menu-item-css" @click="collapsedSider">
+                <div class="ivu-menu-item" @click="collapsedSider">
                   <left></left>
                 </div>
               </Card>
               <Card style="text-align:center;">
-                <div class="menu-item-css-new">
+                <div class="ivu-menu-item">
                   <Dropdown>
                     <a href="javascript:void(0)">
                       {{ option }} <i class="el-icon-arrow-down el-icon--right"></i>
@@ -126,7 +126,7 @@
                 </div>
               </Card>
               <div>
-                <MenuItem name="1-2" class="menu-item-css">
+                <MenuItem name="1-2" class="ivu-menu-item">
                   <menu-nav :data="menuDesc" father-link="/paddle"></menu-nav>
                 </MenuItem>
               </div>
@@ -322,21 +322,10 @@ export default {
 }
 </script>
 <style scoped>
-  .menu-item-css {
+  .ivu-menu-item {
     font-size: 14px;
     color: #303133;
-    padding: 0 1px;
-    cursor: pointer;
-    -webkit-transition: border-color .3s,background-color .3s,color .3s;
-    -o-transition: border-color .3s,background-color .3s,color .3s;
-    transition: border-color .3s,background-color .3s,color .3s;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-  .menu-item-css-new {
-    font-size: 14px;
-    color: #303133;
-    padding: 0 10px;
+    padding: 10px 6px;
     cursor: pointer;
     -webkit-transition: border-color .3s,background-color .3s,color .3s;
     -o-transition: border-color .3s,background-color .3s,color .3s;

@@ -46,8 +46,3 @@ export default {
   }
 };
 </script>
-<style>
-.ivu-tabs-nav-container{
-  font-size:18px;
-}
-</style>
