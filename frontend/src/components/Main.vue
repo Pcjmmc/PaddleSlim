@@ -63,33 +63,88 @@
           }"
           ref="side1"
           hide-trigger collapsible 
-          :collapsed-width="78" 
+          :collapsed-width="120" 
           v-model="isCollapsed"
         >
-          <Menu theme="light" style="width:auto;height:100%" :class="menuitemClasses">
-            <el-dropdown v-if="appid==1">
-              <el-button style="width:200px">
-                {{ option }}<i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item
-                  :key="index"
-                  @click.native="handleClickTag(item)" 
-                  v-for="(item, index) in verisonList"
-                >
-                {{ item.desc }}
-              </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <menu-nav :data="menuDesc" father-link="/paddle"></menu-nav>
-            <div style="position:absolute;bottom:50px;right:0px">
-              <div v-if="isCollapsed">
-                <el-button type="text" icon="el-icon-s-unfold" @click="collapsedSider"></el-button>
-              </div>
-              <div v-else>
-                <el-button type="text" icon="el-icon-s-fold" @click="collapsedSider"></el-button>
+          <Menu theme="light" width="auto" style="height:100%;">
+            <div v-if="isCollapsed">
+              <Card style="text-align:center;">
+                <div @click="collapsedSider" class="menu-item-css">
+                  <right></right>
+                </div>
+              </Card>
+              <Card style="text-align:left;minWidth:180px;">
+                <div class="menu-item-css">
+                  <Dropdown>
+                    <a href="javascript:void(0)">
+                      {{ option }} <i class="el-icon-arrow-down el-icon--right"></i>
+                    </a>
+                    <DropdownMenu slot="list">
+                      <DropdownItem
+                        :key="index"
+                        @click.native="handleClickTag(item)" 
+                        v-for="(item, index) in verisonList"
+                      >
+                        {{ item.desc }}
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+              </Card>
+              <div>
+                <MenuItem name="1-2" class="menu-item-css-new">
+                  <menu-fold :data="menuDesc" father-link="/paddle"></menu-fold>
+                </MenuItem>
               </div>
             </div>
+            <div v-else>
+              <Card style="text-align:center;">
+                <div @click="collapsedSider" class="menu-item-css">
+                  <left></left>
+                </div>
+              </Card>
+              <Card style="text-align:center;">
+                <div class="menu-item-css-new">
+                  <Dropdown>
+                    <a href="javascript:void(0)">
+                      {{ option }} <i class="el-icon-arrow-down el-icon--right"></i>
+                    </a>
+                    <DropdownMenu slot="list">
+                      <DropdownItem
+                        :key="index"
+                        @click.native="handleClickTag(item)" 
+                        v-for="(item, index) in verisonList"
+                      >
+                        {{ item.desc }}
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+              </Card>
+              <div>
+                <MenuItem name="1-2" class="menu-item-css">
+                  <menu-nav :data="menuDesc" father-link="/paddle"></menu-nav>
+                </MenuItem>
+              </div>
+            </div>
+            <!--
+            <MenuItem name="1-2">
+              <el-dropdown v-if="appid==1">
+                <el-button>
+                  {{ option }}
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item
+                    :key="index"
+                    @click.native="handleClickTag(item)" 
+                    v-for="(item, index) in verisonList"
+                  >
+                    {{ item.desc }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </MenuItem>
+            -->
           </Menu>
         </Sider>
         <Layout class="main-layout-content">
@@ -115,6 +170,10 @@ import Cookies from 'js-cookie';
 import { MenuInfoUrl, LogoutUrl } from '../api/url.js';
 import api from "../api/index";
 import MenuNav from './CommonUtil/MenuNav.vue';
+import MenuFold from './CommonUtil/MenuFold.vue';
+import Left from './BaseIcon/Left.vue';
+import Right from './BaseIcon/Right.vue';
+
 export default {
   data: function () {
     return {
@@ -148,18 +207,18 @@ export default {
       }
       return menuItemArr;
     },
-    rotateIcon () {
-      return [
-        'menu-icon',
-        this.isCollapsed ? 'rotate-icon' : ''
-      ];
-    },
-    menuitemClasses () {
-      return [
-        'menu-item',
-        this.isCollapsed ? 'collapsed-menu' : ''
-      ]
-    },
+    // rotateIcon () {
+    //   return [
+    //     'menu-icon',
+    //     this.isCollapsed ? 'rotate-icon' : ''
+    //   ];
+    // },
+    // menuitemClasses () {
+    //   return [
+    //     'menu-item',
+    //     this.isCollapsed ? 'collapsed-menu' : ''
+    //   ]
+    // },
     versionName: {
       get() {
         return this.$store.state.version;
@@ -167,7 +226,10 @@ export default {
     }
   },
   components: {
-    MenuNav
+    MenuNav,
+    MenuFold,
+    Left,
+    Right
   },
   watch: {
     versionName: function () {
@@ -213,6 +275,7 @@ export default {
       this.$router.push({path: '/app_store'});
     },
     collapsedSider() {
+      this.isCollapsed = !this.isCollapsed;
       this.$refs.side1.toggleCollapse();
     },
     setUserInfo() {
@@ -255,6 +318,28 @@ export default {
 }
 </script>
 <style scoped>
+  .menu-item-css {
+    font-size: 14px;
+    color: #303133;
+    padding: 0 1px;
+    cursor: pointer;
+    -webkit-transition: border-color .3s,background-color .3s,color .3s;
+    -o-transition: border-color .3s,background-color .3s,color .3s;
+    transition: border-color .3s,background-color .3s,color .3s;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .menu-item-css-new {
+    font-size: 14px;
+    color: #303133;
+    padding: 0 10px;
+    cursor: pointer;
+    -webkit-transition: border-color .3s,background-color .3s,color .3s;
+    -o-transition: border-color .3s,background-color .3s,color .3s;
+    transition: border-color .3s,background-color .3s,color .3s;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
   .layout{
     border: 1px solid #d7dde4;
     background: #f5f7f9;

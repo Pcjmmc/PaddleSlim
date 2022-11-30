@@ -1,5 +1,5 @@
 <template>
-    <div style="display: inline">
+    <div style="display: inline;">
         <template v-for="(value, key, index) in data">
             <template v-if="!value.notMenu">
                 <template v-if="value.sub && value.sub.length !== 0">
@@ -8,7 +8,7 @@
                         :name="computeName(key)"
                     >
                         <template slot="title">
-                          <Icon :type="value.icon" v-if="value.icon"></Icon>
+                          <Icon :type="value.icon" v-if="value.icon" size="18"></Icon>
                           {{ value.desc }}
                         </template>
                         <menu-nav
@@ -24,7 +24,7 @@
                     :to="computeLink(key)"
                 >
                     <menuItem :name="computeName(index)">
-                        <Icon v-if="value.icon" :type="value.icon"></Icon>
+                        <Icon v-if="value.icon" :type="value.icon" size="18"></Icon>
                         {{ value.desc }}
                     </menuItem>
                 </router-link>
