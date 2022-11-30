@@ -8,7 +8,11 @@
                 :name="computeName(key)"
             >
                 <template slot="title">
-                  <Icon :type="value.icon" v-if="value.icon" size="18"></Icon>
+                  <Icon
+                    size="18"
+                    :type="value.icon"
+                    v-if="value.icon"
+                  ></Icon>
                 </template>
                 <menu-nav
                     :data="value.sub"
@@ -18,12 +22,16 @@
             </Submenu>
         </template>
         <router-link
-          v-else
           :key="index"
           :to="computeLink(key)"
+          v-else
         >
           <menuItem :name="computeName(index)">
-            <Icon v-if="value.icon" :type="value.icon" size="18"></Icon>
+            <Icon
+              size="18"
+              :type="value.icon"
+              v-if="value.icon"
+            ></Icon>
             <p v-if="fatherName"> {{ value.desc }} </p>
           </menuItem>
         </router-link>

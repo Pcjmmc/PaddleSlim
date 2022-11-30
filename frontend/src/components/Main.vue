@@ -63,13 +63,17 @@
           }"
           ref="side1"
           hide-trigger collapsible 
-          :collapsed-width="120" 
+          :collapsed-width="120"
           v-model="isCollapsed"
         >
-          <Menu theme="light" width="auto" style="height:100%;">
+          <Menu
+            theme="light"
+            width="auto"
+            style="height:100%;"
+          >
             <div v-if="isCollapsed">
               <Card style="text-align:center;">
-                <div @click="collapsedSider" class="menu-item-css">
+                <div class="menu-item-css" @click="collapsedSider">
                   <right></right>
                 </div>
               </Card>
@@ -82,8 +86,8 @@
                     <DropdownMenu slot="list">
                       <DropdownItem
                         :key="index"
-                        @click.native="handleClickTag(item)" 
                         v-for="(item, index) in verisonList"
+                        @click.native="handleClickTag(item)"
                       >
                         {{ item.desc }}
                       </DropdownItem>
@@ -99,7 +103,7 @@
             </div>
             <div v-else>
               <Card style="text-align:center;">
-                <div @click="collapsedSider" class="menu-item-css">
+                <div class="menu-item-css" @click="collapsedSider">
                   <left></left>
                 </div>
               </Card>
@@ -112,8 +116,8 @@
                     <DropdownMenu slot="list">
                       <DropdownItem
                         :key="index"
-                        @click.native="handleClickTag(item)" 
                         v-for="(item, index) in verisonList"
+                        @click.native="handleClickTag(item)"
                       >
                         {{ item.desc }}
                       </DropdownItem>
@@ -136,7 +140,7 @@
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item
                     :key="index"
-                    @click.native="handleClickTag(item)" 
+                    @click.native="handleClickTag(item)"
                     v-for="(item, index) in verisonList"
                   >
                     {{ item.desc }}
