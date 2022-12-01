@@ -214,8 +214,8 @@
           :title="title"
           :from_data="data2"
           :to_data="toData"
-          :renderContentLeft="renderFunc"
-          :renderContentRight="renderFunc"
+          :render-content-left="renderFunc"
+          :render-content-right="renderFunc"
           :default-props="{label:'label'}"
           mode="transfer"
           height="600px"
@@ -317,7 +317,6 @@ export default {
     remove(data2, toData, obj) {
     },
     renderFunc(h, option) {
-      let _this = this;
       let ret = [];
       if (option.data.desc) {
         ret.push(
