@@ -8,11 +8,13 @@
                 :name="computeName(key)"
             >
                 <template slot="title">
-                  <Icon
-                    size="18"
-                    :type="value.icon"
-                    v-if="value.icon"
-                  ></Icon>
+                  <Tooltip placement="top" :content="value.desc">
+                    <Icon
+                      size="18"
+                      :type="value.icon"
+                      v-if="value.icon"
+                    ></Icon>
+                  </Tooltip>
                 </template>
                 <menu-nav
                     :data="value.sub"
@@ -27,12 +29,18 @@
           v-else
         >
           <menuItem :name="computeName(index)">
-            <Icon
-              size="18"
-              :type="value.icon"
-              v-if="value.icon"
-            ></Icon>
-            <p v-if="fatherName"> {{ value.desc }} </p>
+            <Tooltip placement="top" :content="value.desc">
+              <Icon
+                size="18"
+                :type="value.icon"
+                v-if="value.icon"
+              ></Icon>
+              <Icon
+                size="18"
+                type="md-exit"
+                v-else
+              ></Icon>
+            </Tooltip>
           </menuItem>
         </router-link>
       </template>
