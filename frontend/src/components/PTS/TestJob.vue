@@ -214,6 +214,8 @@
           :title="title"
           :from_data="data2"
           :to_data="toData"
+          :renderContentLeft="renderFunc"
+          :renderContentRight="renderFunc"
           :default-props="{label:'label'}"
           mode="transfer"
           height="600px"
@@ -313,6 +315,54 @@ export default {
     },
     // 监听穿梭框组件移除
     remove(data2, toData, obj) {
+    },
+    renderFunc(h, option) {
+      let _this = this;
+      let ret = [];
+      if (option.data.desc) {
+        ret.push(
+          h('Tooltip', {
+            props: {
+              placement: 'right',
+              transfer: true
+            }
+          }, [
+            h('div', {
+              style: {
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis'
+              }
+            }, option.data.label),
+            h('span', {
+              slot: 'content',
+              style: {
+                whiteSpace: 'normal',
+                wordBreak: 'break-all'
+              }
+            }, option.data.desc)
+          ])
+        );
+      } else {
+        ret.push(
+          h('div', {
+            style: {
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis'
+            }
+          }, option.data.label)
+        );
+      }
+      return h(
+        'div',
+        {
+          style: {
+            align: 'center'
+          }
+        },
+        ret
+      );
     },
     async handleSubmit() {
       this.$refs.addForm.validate(async (valid) => {
