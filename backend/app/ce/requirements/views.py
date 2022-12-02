@@ -126,9 +126,11 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         'pw': PADDLE_ICAFE_PASSD,
         'page': page,
         'maxRecords': page_num,
-        'iql': iql
+        'iql': iql,
+        'showChildren': 'true'
     }).get_data()
     total = result.get("total")
+    #print(result)
     #print(total)
     #总共页数
     page_size = result.get('pageSize')
@@ -144,6 +146,11 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
         rd_owner = {}
         qa_owner = {}
         properties = item.get("properties", [])
+        children = []
+        children_list = item.get("children", [])  
+        for citem in children_list:
+            children.append(citem.get("sequence"))
+        #print("children=",children)
         repo = ""
         pr = ""
         for arr in properties:
@@ -154,7 +161,9 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
                 rd_owner["name"] = arr.get("displayValue")
                 rd_owner["username"] = arr.get("value")
                 if not rd_owner["name"] and not rd_owner["username"]:
-                    tmp_rp_list = item.get("responsiblePeople")
+                    #测试
+                    tmp_rp_list = item.get("responsiblePeople", [])
+                    #print("card", sequence, "rp", tmp_rp_list)
                     for tmp_rp in tmp_rp_list:
                         if not rd_owner["name"]:
                             rd_owner["name"] = tmp_rp.get("name")
@@ -189,6 +198,7 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
             "page_size": page_size,
             "repo": repo,
             "pr": pr,
+            "children": children,
             "currnet_page": current_page,
             "test_id":  test_info.get("test_id") if test_info.get("test_id") else "",
             "test_status" : test_info.get("test_status") if test_info.get("test_status") else "",
