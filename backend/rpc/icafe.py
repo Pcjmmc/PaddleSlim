@@ -71,7 +71,8 @@ class GetCards(BaseRpc):
         {'key': 'pw', 'type': str},
         {'key': 'iql', 'type': str},
         {'key': 'page', 'type': int},
-        {'key': 'maxRecords', 'type': str}
+        {'key': 'maxRecords', 'type': str},
+        {'key': 'showChildren', 'type': str}
      ]
      async def get_data(self, **kwargs):
          result = await self.is_valid()
