@@ -161,7 +161,6 @@ async def get_cards_by_filter(page=1, page_num=20, iql=None):
                 rd_owner["name"] = arr.get("displayValue")
                 rd_owner["username"] = arr.get("value")
                 if not rd_owner["name"] and not rd_owner["username"]:
-                    #测试
                     tmp_rp_list = item.get("responsiblePeople", [])
                     #print("card", sequence, "rp", tmp_rp_list)
                     for tmp_rp in tmp_rp_list:
