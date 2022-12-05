@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left:1%;margin-right:1%;">
+  <div>
     <Table
       :columns="columns"
       :data="data"

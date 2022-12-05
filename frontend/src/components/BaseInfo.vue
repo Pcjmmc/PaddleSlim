@@ -1,9 +1,9 @@
 <template>
-  <div style="font-size:15px">
-    <Row type="flex" justify="start">
-      <div class="branch">
+  <div style="font-size:14px">
+    <Row>
+      <Col span="6">
         <div style="text-align:center">
-          <h3>branch / tag</h3>
+          <p style="font-size:14px">branch / tag</p>
         </div>
         <div style="text-align:center">
           <Icon type="md-git-branch" />
@@ -11,23 +11,23 @@
             {{ repoinfo.branch }}
           </a>
         </div>
-      </div>
+      </Col>
       <Divider type="vertical" style="height:40px"/>
-      <div class="commit">
+      <Col  span="8">
         <div style="text-align:center">
-          <h3>commit</h3>
+          <p style="font-size:14px">commit</p>
         </div>
-        <div style="text-align:center;font-size:13px">
+        <div style="text-align:center;font-size:14px">
           <Icon type="md-git-commit" />
           <a href="javascript:void(0)" @click="jumper(repoinfo.name)">
             {{ repoinfo.commit }}
           </a> 
         </div>
-      </div>
+      </Col>
       <Divider type="vertical" style="height:40px"/>
-      <div class="abc">
+      <Col span="9">
         <div style="text-align:center">
-          <h3>任务成功占比</h3>
+          <p style="font-size:14px">任务成功占比</p>
         </div>
         <div style="text-align:center">
          <Progress
@@ -38,7 +38,7 @@
         >
         </Progress>
         </div>
-      </div>
+      </Col>
     </Row>
   </div>
 </template>
@@ -84,36 +84,5 @@ export default {
 </script>
 
 <style scoped>
-.video-header {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 6px;
-}
-.abc{ height:40px; margin:0 auto}
-@media screen and (min-width: 1501px) {
-.abc {
-  width: 800px}
-}
-@media screen and (max-width: 1500px) {
-.abc {
-  width: 600px}
-}
-.commit{ height:40px; margin:0 auto}
-@media screen and (min-width: 1501px) {
-.commit {
-  width: 500px;}
-}
-@media screen and (max-width: 1500px) {
-.commit {
-  width: 400px;}
-}
-.branch{ height:40px; margin:0 auto}
-@media screen and (min-width: 1501px) {
-.branch {
-  width: 300px;}
-}
-@media screen and (max-width: 1500px) {
-.branch {
-  width: 200px;}
-}
+
 </style>

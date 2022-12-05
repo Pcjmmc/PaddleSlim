@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div style="margin-left:1%;margin-right:1%;margin-top:1%;">
     <Split v-model="split1">
-      <div slot="left" class="center-card-s">
+      <div slot="left">
         <div style="margin-bottom: 10px;">
           <p>{{ version }} commit列表 </p>
         </div>
@@ -243,8 +243,6 @@ export default {
 </script>
 <style scoped>
 .center-card-s {
-  width: 98%;
-  overflow:auto;
-  margin-bottom: 2%
+  overflow: scroll;
 }
 </style>

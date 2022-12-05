@@ -1,31 +1,25 @@
 <template>
   <div>
-    <Tabs :value="tabName" v-on:on-click="clickTab">
-      <TabPane
+    <el-tabs
+      v-model="tabName"
+      type="card"
+      @tab-click="clickTab"
+    >
+      <el-tab-pane
         label="进度"
         name="progress"
-        icon="ios-list-box"
       >
         <div>
-          <div>
-            <Divider
-            orientation="left"
-            style="font-size: 0.5em;font-style: italic;margin-top: 0.1px"
-          >
-          测试进度及信息 </Divider>
-          </div>
-          <div style="margin-bottom: 2%">
+          <div style="margin-bottom: 1%;">
             <base-info :repoinfo="repoinfo" :processdata="processdata"> </base-info>
           </div>
-          <div style="margin-bottom: 2%;">
-            <h5 style="margin-left: 2%;"> 集测整体进展 </h5>
+          <div style="margin-bottom: 1%;">
+            <h5> 集测整体进展 </h5>
             <Table
-              size="small"
               align=center
               border
               :columns="columns"
               :data="summary"
-              style="margin-left: 2%;margin-right: 2%;"
             >
             </Table>
           </div>
@@ -33,7 +27,6 @@
             type="card"
             v-model="childname"
             @tab-click="clickChildTab"
-            style="margin-left: 1%;"
           >
             <el-tab-pane
             :label="item.desc"
@@ -54,22 +47,20 @@
             </el-tab-pane>
           </el-tabs>
         </div>
-      </TabPane>
-      <TabPane
+      </el-tab-pane>
+      <el-tab-pane
         label="风险"
         name="risk"
-        icon="ios-bug"
       >
         <bug-fix
           ref="mychild"
           :tag="repoinfo.tag"
           :tasktypelist="taskTypeList"
         ></bug-fix>
-      </TabPane>
-      <TabPane
+      </el-tab-pane>
+      <el-tab-pane
         label="结论"
         name="conclusion"
-        icon="md-document"
       >
         <conclusion
           ref="mychild2"
@@ -77,8 +68,8 @@
           :tag="repoinfo.tag"
           :branch="repoinfo.branch"
         ></conclusion>
-      </TabPane>
-    </Tabs>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -165,7 +156,7 @@ export default {
                     percent: params.row.percent
                   },
                   style: {
-                    fontSize: '12px'
+                    fontSize: '14px'
                   }
                 }
               )

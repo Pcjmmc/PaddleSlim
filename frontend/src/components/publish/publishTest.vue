@@ -2,7 +2,6 @@
   <div>
     <div
       v-for="(item, index) in data"
-      class="one-fifth-video-col"
     >
       <publishBase
         v-if="item"
@@ -54,9 +53,4 @@ export default {
 </script>
 
 <style scoped>
-  .one-fifth-video-col {
-    margin-right: 2%;
-    margin-left: 2%;
-    margin-bottom: 0.5%;
-  }
 </style>

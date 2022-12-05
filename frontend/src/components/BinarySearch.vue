@@ -10,7 +10,7 @@
         <h3>欢迎使用二分查找工具，请输入二分条件!
          <a
           href="javascript:void(0)"
-          style="font-size:13px;margin-left:2%;"
+          style="font-size:14px;margin-left:2%;"
           @click="jumper('https://xly.bce.baidu.com/paddlepaddle/PR-Location/newipipe/builds/23574?module=github/PaddlePaddle/Paddle&pipeline=PR-Location&branch=branches')"
         > 效率云任务入口 </a>
       </h3>
@@ -79,7 +79,7 @@
         </Col>
       </Row>
       <Row justify="center">
-        <Button type="primary" @click="handleSummit">确认并提交二分任务</Button>
+        <Button class="btn-success" @click="handleSummit">确认并提交二分任务</Button>
       </Row>
     </Form>
     <Modal
@@ -91,7 +91,7 @@
       <div>
         <a
           href="javascript:void(0)"
-          style="font-size:13px;margin-left:2%;"
+          style="font-size:14px;margin-left:2%;"
           @click="jumper(joburl)"
         > {{ joburl }} </a>
       </div>
@@ -229,9 +229,15 @@ export default {
 
 <style scoped>
 .one-fifth-video-col {
-  margin-right: 2%;
-  margin-left: 2%;
-  margin-bottom: 2%;
-  margin-top: 2%;
+  margin-right: 1%;
+  margin-left: 1%;
+  margin-bottom: 1%;
+  margin-top: 1%;
+  font-size:14px;
+}
+.btn-success {
+  color: #fff;
+  background-color: #67c23a;
+  border-color: #67c23a;
 }
 </style>

@@ -1,9 +1,8 @@
 <template>
-  <div style="margin-left:1%;margin-top: 1%;margin-right:1%">
+  <div class="all-line-row">
     <Row
       type="flex"
       justify="end"
-      class="all-line-row"
     >
       <div v-if="jobsList.length > 0">
         <Button disabled>
@@ -377,5 +376,8 @@ export default {
 <style scoped>
 .all-line-row {
   font-size: 14px;
+  margin-left:1%;
+  margin-top: 1%;
+  margin-right:1%
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div style="margin-bottom: 1.5%">
+  <div style="margin-top:1%;margin-left:1%;margin-right:1%;font-size:14px;">
     <!--
     <div v-if="allSteps.integration !== undefined && allSteps.integration.flag">
       <intergration

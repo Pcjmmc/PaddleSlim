@@ -1,26 +1,26 @@
 <template>
-  <div>
-    <Tabs :value="tabName" v-on:on-click="clickTab">
-      <TabPane
+  <div style="margin-top:1%;margin-left:1%;margin-right:1%;font-size:14px;">
+    <el-tabs
+      v-model="tabName"
+      type="card"
+      @tab-click="clickTab"
+    >
+      <el-tab-pane
         label="编译"
         name="progress"
-        icon="md-sync"
       >
-        <div style="margin-bottom:2%;">
+        <div style="margin-bottom:1%;">
           <Table
-            size="large"
             align="center"
             border
             :columns="columns"
             :data="summary"
-            style="margin-left:2%;margin-right:2%;"
           >
           </Table>
         </div>
         <div>
           <el-tabs
             type="card"
-            style="margin-left:1%;"
             v-model="childname"
             @tab-click="clickChildTab"
           >
@@ -30,19 +30,18 @@
               :name="item"
               v-for="(item, index) in publishOriginList"
             >
-            <publish-test :data="integrationdata"></publish-test>
+              <publish-test :data="integrationdata"></publish-test>
             </el-tab-pane>
           </el-tabs>
         </div>
-      </TabPane>
-      <TabPane
+      </el-tab-pane>
+      <el-tab-pane
         label="发布"
         name="publish"
-        icon="md-cloud-done"
       >
       <upload-result> </upload-result>
-      </TabPane>
-   </Tabs>
+      </el-tab-pane>
+   </el-tabs>
   </div>
 </template>
 
@@ -254,9 +253,3 @@ export default {
 <style scoped>
 </style>
 
-<style>
-.el-tabs__item.is-active {
-  color: blue;
-  background-color:rgb(69, 190, 238);
-}
-</style>

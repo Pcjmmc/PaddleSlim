@@ -1,9 +1,8 @@
 <template>
-  <div>
+  <div class="all-line-row">
     <Row
       type="flex"
       justify="start"
-      class="all-line-row"
     >
       <Col span="3" offset="0.5">
         <Select clearable v-model="search.task_type">
@@ -28,31 +27,33 @@
           placeholder="任务唯一id"
         ></Input>
       </Col>
-      <Col span="1" offset="1">
+      <Col span="2" offset="1">
         <Button
           icon="ios-search"
-          type="primary"
+          class="btn-success"
           @click="searchData"
         >search</Button>
       </Col>
-      <Col span="2" offset="9">
-        <Button type="primary" @click="activateCreateModal()">
-          新增Job
+      <Col span="2" offset="1">
+        <Button class="btn-success" @click="activateCreateModal()">
+          +新增Job
         </Button>
       </Col>
     </Row>
-    <Table border
-      :columns="jobsColumn"
-      :data="jobsList"
-    ></Table>
-    <Page :total="total"
-      :current="parseInt(search.page)"
-      :page-size="parseInt(search.pagesize)"
-      @on-change="pageChange"
-      size="small"
-      style="text-align: center;"
-      >
-    </Page>
+    <div style="margin-top:2%;font-size:14px;">
+      <Table
+        :columns="jobsColumn"
+        :data="jobsList"
+      ></Table>
+      <Page :total="total"
+        :current="parseInt(search.page)"
+        :page-size="parseInt(search.pagesize)"
+        @on-change="pageChange"
+        size="small"
+        style="text-align: center;"
+        >
+      </Page>
+    </div>
     <Modal v-model="setCreateModal" title="录入任务" @on-cancel="handleReset" width="700px">
       <Form ref="addForm" :model="addForm" :rules="addRules" :label-width="120">
         <FormItem label="所属阶段: " prop="step">
@@ -741,5 +742,13 @@ export default {
 .all-line-row {
   margin-bottom: 1%;
   margin-top: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+  font-size: 14px;
+}
+.btn-success {
+  color: #fff;
+  background-color: #67c23a;
+  border-color: #67c23a;
 }
 </style>
