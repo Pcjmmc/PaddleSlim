@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <Card class="center-card-s">
-      <div style="margin-top: 1%;">
+  <div class="center-card-s">
+    <div>
+      <div style="margin-top: 2%;">
         <div style="cursor:pointer;">
           任务状态:
             <span v-for="item, index in tags">
@@ -12,7 +12,7 @@
                   color="primary"
                   v-on:on-change="changeTagStatus(item)"
                 >
-                  <font size="3"> {{ item.desc }}</font>
+                  <p style="font-size:14px;"> {{ item.desc }}</p>
                 </Tag>
               </span>
               <span v-else>
@@ -23,7 +23,7 @@
                   color="primary"
                   v-on:on-change="changeTagStatus(item)"
                 >
-                  <font size="3"> {{ item.desc }}</font>
+                  <p style="font-size:14px;"> {{ item.desc }}</p>
                 </Tag>
               </span>
             </span>
@@ -43,7 +43,7 @@
         </span>
       </div>
       <div style="margin-top: 2%;">
-        <div class="left">
+        <div>
           任务ID:
           <Input
             v-model="search.id"
@@ -57,16 +57,16 @@
             style="width:300px;"
           ></Input>
           <Button
-            type="primary"
+            class="btn-success"
             shape="circle"
             icon="ios-search"
             @click="searchByfilter"
           >Search</Button>
         </div>
-        <div class="right">
+        <div style="text-align:right;">
           <Button
             icon="md-add"
-            type="primary"
+            class="btn-success"
             @click="createNewJob"
           >新建测试任务</Button>
         </div>
@@ -74,7 +74,6 @@
       <div style="margin-top: 2%;">
         <div class="left" style="margin-top: 2%;">
           <Table
-            border
             :columns="columns"
             :data="content"
           ></Table>
@@ -89,7 +88,7 @@
           </Page>
         </div>
       </div>
-    </Card>
+    </div>
     <Modal
       v-model="showModa"
       title="创建测试任务"
@@ -377,72 +376,15 @@ export default {
 </script>
 
 <style scoped>
-.left{
-  float:left;
-}
-.right{
-float:right;
-margin-right: 5%;
-}
-.demo-split{
-  overflow:auto;
-}
-.modacss{
-  width: 80%;
-}
-.demo-split-pane{
-  padding: 10px;
-  text-align:center
-}
-.demo-tree {
-  width: 100%;
-  line-height: 2;
-}
-.one-fifth-video-col {
-  margin-right: 2px;
-  margin-left: 2px;
-  margin-bottom: 2px;
-  margin-top: 2px;
+.btn-success {
+  color: #fff;
+  background-color: #67c23a;
+  border-color: #67c23a;
 }
 .center-card-s {
-  width: 96%;
-  margin-left: 2%;
-  margin-right: 2%;
-  min-height: 100px;
-  overflow: auto;
-  font-size: 16px;
-  color:lightslategrey
-}
-.main {
-  color:lightslategrey;
   margin-left: 1%;
-  margin-bottom: 2%;
-  font-size: 18px;
-  align: center;
-}
-.all-line-row {
-  margin-left: 2%;
-  margin-right: 2%;
-  margin-bottom: 2%;
-  margin-top: 1%;
-}
-</style>
-
-<style>
-.ivu-tree ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 20px;
-}
-.ivu-tree-title {
-  display: inline-block;
-  margin: 0;
-  padding: 0 4px;
-  border-radius: 3px;
-  cursor: pointer;
-  vertical-align: top;
-  -webkit-transition: all .2s ease-in-out;
-  transition: all .2s ease-in-out;
+  margin-right: 1%;
+  font-size: 14px;
+  color:lightslategrey
 }
 </style>

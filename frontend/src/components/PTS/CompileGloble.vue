@@ -94,7 +94,7 @@
             </Col>
             <Col span="2" offset="1">
               <Button
-                type="primary"
+                class="btn-success"
                 shape="circle"
                 icon="ios-search"
                 @click="searchByfilters"
@@ -514,17 +514,23 @@ export default {
 
 <style scoped>
 .card-s-new {
-  width: 98%;
-  margin-left: 1%;
-  margin-right: 1%;
-  margin-bottom: 1%;
-  font-size: 15px;
+  width: 100%;
+  font-size: 14px;
   color: lightslategrey
+}
+.ivu-form-item{
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.btn-success {
+  color: #fff;
+  background-color: #67c23a;
+  border-color: #67c23a;
 }
 .card-css {
   width: 33%;
   margin-top: 1%;
   text-align: center;
-  font-size: 10px;
+  font-size: 14px;
 }
 </style>

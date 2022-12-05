@@ -1,98 +1,103 @@
 <template>
   <div>
-    <Card class="center-card-s">
-      <div>
-        <Form
-          :model="search"
-          :label-width="75"
-          style="width: 85%"
-        >
+    <div>
+      <Form
+        :model="search"
+        :label-width="75"
+      >
+        <Row>
+          <Col span="12">
+            <FormItem label="时间:" prop="dt">
+              <DatePicker
+                type="daterange"
+                placement="bottom-end"
+                placeholder=" 开始时间 ～ 结束时间 "
+                v-model="search.dt"
+                style="width:80%"
+                v-on:on-change="searchByfilters"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+        </Row>
+        <div style="margin-top: 1%;">
           <Row>
-            <Col span="12">
-              <FormItem label="时间:" prop="dt">
-                <DatePicker
-                  type="daterange"
-                  placement="bottom-end"
-                  placeholder=" 开始时间 ～ 结束时间 "
-                  v-model="search.dt"
-                  style="width:80%"
-                  v-on:on-change="searchByfilters"
-                ></DatePicker>
+            <Col span="5">
+              <FormItem label="需求:" prop="keyword">
+                <Input v-model="search.keyword" placeholder="输入需求关键字"/>
               </FormItem>
             </Col>
+            <Col span="5">
+              <FormItem label="RD:" prop="rdname">
+                <Input v-model="search.rdname" placeholder="输入RD邮箱前缀"/>
+              </FormItem>
+            </Col>
+            <Col span="5">
+              <FormItem label="QA:" prop="qaname">
+                <Input v-model="search.qaname" placeholder="输入QA邮箱前缀"/>
+              </FormItem>
+            </Col>
+            <Col span="3">
+              <FormItem label="状态:" prop="staus">
+                <Select
+                  clearable
+                  filterable
+                  v-model="search.status"
+                  v-on:on-change="searchByfilters"
+                >
+                  <Option
+                    :key="index"
+                    :value="item"
+                    v-for="(item, index) in statusList"
+                  >{{ item }}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="2" offset="1">
+              <Button
+                class="btn-success"
+                shape="circle"
+                icon="ios-search"
+                @click="searchByfilters"
+              >Search</Button>
+            </Col>
+            <Col span="2" offset="1">
+              <Button
+                class="btn-success"
+                type="primary"
+                @click="showCreateModa"
+              >创建需求</Button>
+            </Col>
           </Row>
-          <div style="margin-top: 1%;">
-            <Row>
-              <Col span="6">
-                <FormItem label="需求:" prop="keyword">
-                  <Input v-model="search.keyword" placeholder="输入需求关键字"/>
-                </FormItem>
-              </Col>
-              <Col span="6">
-                <FormItem label="RD:" prop="rdname">
-                  <Input v-model="search.rdname" placeholder="输入RD邮箱前缀"/>
-                </FormItem>
-              </Col>
-              <Col span="6">
-                <FormItem label="QA:" prop="qaname">
-                  <Input v-model="search.qaname" placeholder="输入QA邮箱前缀"/>
-                </FormItem>
-              </Col>
-              <Col span="4">
-                <FormItem label="状态:" prop="staus">
-                  <Select
-                    clearable
-                    filterable
-                    v-model="search.status"
-                    v-on:on-change="searchByfilters"
-                  >
-                    <Option
-                      :key="index"
-                      :value="item"
-                      v-for="(item, index) in statusList"
-                    >{{ item }}</Option>
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col span="1" offset="1">
-                <Button
-                  type="primary"
-                  shape="circle"
-                  icon="ios-search"
-                  @click="searchByfilters"
-                >Search</Button>
-              </Col>
-            </Row>
-          </div>
-        </Form>
-      </div>
-      <div>
-        <div style="text-align: right;">
-          <Button
-            icon="md-add"
-            type="primary"
-            @click="showCreateModa"
-          >创建需求</Button>
         </div>
-        <div style="margin-top: 1%;">
-          <Table
-            border
-            :columns="columns"
-            :data="content"
-            width="100%"
-          ></Table>
-          <Page
-            :total="total"
-            :current="parseInt(page)"
-            :page-size="parseInt(pagesize)"
-            size="small"
-            style="text-align: center;"
-            v-on:on-change="pageChange"
-            >
-          </Page>
-        </div>
+      </Form>
+    </div>
+    <div>
+      <!--
+      <div style="text-align: right;">
+        <Button
+          class="btn-success"
+          type="primary"
+          @click="showCreateModa"
+        >创建需求</Button>
       </div>
-    </Card>
+      -->
+      <div style="margin-top: 1%;">
+        <Table
+          :columns="columns"
+          :data="content"
+          width="100%"
+        ></Table>
+        <Page
+          :total="total"
+          :current="parseInt(page)"
+          :page-size="parseInt(pagesize)"
+          size="small"
+          style="text-align: center;"
+          v-on:on-change="pageChange"
+          >
+        </Page>
+      </div>
+    </div>
     <Modal
       v-model="showModa"
       title="创建测试任务"
@@ -635,6 +640,11 @@ export default {
       if (parseInt(code, 10) === 200) {
         this.total = all_count;
         this.content = data;
+        for (let i = 0; i < this.content.length; i++) {
+          // 后端的字段跟前端的属性冲突，但是格式又不一样；故重命名
+          this.content[i].child = this.content[i].children;
+          this.content[i].children = null;
+        }
       } else {
         this.$Message.error({
           content: '请求出错: ' + message,
@@ -808,54 +818,14 @@ export default {
 </script>
 
 <style scoped>
-.demo-split{
-  overflow:auto;
-}
-.demo-split-pane{
-  padding: 10px;
-  text-align:center
-}
-.demo-tree {
-  width: 100%;
-  line-height: 2;
-}
-.one-fifth-video-col {
-  margin-right: 2px;
-  margin-left: 2px;
-  margin-bottom: 2px;
-  margin-top: 2px;
-}
-.center-card-s {
-  width: 96%;
-  margin-left: 2%;
-  margin-right: 2%;
-  max-height: 800px;
-  overflow: auto;
-  font-size: 15px;
-  color: lightslategrey
-}
-.card-s-new {
-  width: 96%;
-  margin-left: 2%;
-  margin-right: 2%;
-  font-size: 15px;
-  color: lightslategrey
-}
 .ivu-form-item{
   margin-bottom: 12px;
+  font-size: 14px;
 }
-.main {
-  color:lightslategrey;
-  margin-left: 1%;
-  margin-bottom: 2%;
-  font-size: 18px;
-  align: center;
-}
-.all-line-row {
-  margin-left: 2%;
-  margin-right: 2%;
-  margin-bottom: 2%;
-  margin-top: 1%;
+.btn-success {
+  color: #fff;
+  background-color: #67c23a;
+  border-color: #67c23a;
 }
 </style>
 

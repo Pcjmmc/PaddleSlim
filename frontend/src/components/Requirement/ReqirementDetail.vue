@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div class="center-card-s">
    <Card
-    class="center-card-s"
     v-if="content"
     >
       <div>
@@ -27,20 +26,15 @@
         </Row>
       </div>
     </Card>
-   <Card
-      class="center-card-s"
-    >
+    <div style="margin-top:1%;">
       <div>
-        <div>
-        测试记录
-          <Table
-            border
-            :columns="columns"
-            :data="datas"
-          ></Table>
-        </div>
+      测试记录:
+        <Table
+          :columns="columns"
+          :data="datas"
+        ></Table>
       </div>
-    </Card>
+    </div>
     <Modal
       v-model="showApproveModa"
       title="确认结果"
@@ -378,9 +372,9 @@ export default {
 </script>
 <style scoped>
 .center-card-s {
-  width: 95%;
-  margin-left: 2%;
-  margin-right: 2%;
-  margin-top: 2%;
+  margin-left: 1%;
+  margin-right: 1%;
+  margin-top: 1%;
+  font-size: 14px;
 }
 </style>

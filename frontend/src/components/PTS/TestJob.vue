@@ -517,21 +517,13 @@ export default {
 </script>
 
 <style scoped>
-.form-pane-sty{
-  width: 50%;
-  align: center;
-}
-.demo-tree {
-  width: 100%;
-  line-height: 2;
-}
 .center-card-s {
   width: 98%;
   margin-left: 2%;
   margin-right: 2%;
   max-height: 600px;
   overflow: auto;
-  font-size: 15px;
+  font-size: 14px;
   color:lightslategrey
 }
 .new-card-s {
@@ -540,37 +532,11 @@ export default {
   margin-right: 2%;
   max-height: 1000px;
   overflow: auto;
-  font-size: 15px;
+  font-size: 14px;
   color:lightslategrey
-}
-.main {
-  color:lightslategrey;
-  margin-left: 2%;
-  margin-top: 1%;
-  margin-bottom: 1%;
-  font-size: 20px;
-  align: center;
 }
 .ivu-form-item{
   margin-bottom: 12px;
-}
-</style>
-
-<style>
-.ivu-tree ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 20px;
-}
-.ivu-tree-title {
-  display: inline-block;
-  margin: 0;
-  padding: 0 4px;
-  border-radius: 3px;
-  cursor: pointer;
-  vertical-align: top;
-  -webkit-transition: all .2s ease-in-out;
-  transition: all .2s ease-in-out;
+  font-size: 14px;
 }
 </style>

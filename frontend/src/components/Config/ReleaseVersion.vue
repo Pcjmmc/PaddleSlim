@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-left:1%;margin-top: 1%;margin-right:1%">
     <Row
       type="flex"
       justify="end"
@@ -7,16 +7,16 @@
     >
       <div v-if="jobsList.length > 0">
         <Button disabled>
-          开启release监控
+          <p style="font-size:14px;">开启release监控</p>
         </Button>
       </div>
       <div v-else>
         <Button type="primary" @click="activateCreateModal()">
-          开启release监控
+          <p style="font-size:14px;">开启release监控</p>
         </Button>
       </div>
     </Row>
-    <h3>计划中的版本</h3>
+    <p style="font-size:14px;">计划中的版本</p>
     <Table
       border
       :columns="jobsColumn"
@@ -376,8 +376,6 @@ export default {
 </script>
 <style scoped>
 .all-line-row {
-  margin-top: 1%;
-  margin-right: 1%;
-  margin-left: 1%;
+  font-size: 14px;
 }
 </style>

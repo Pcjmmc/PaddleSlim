@@ -1,22 +1,23 @@
 <template>
-  <div>
-    <Tabs
-      :value="tabName"
-      v-on:on-click="clickTab"
+  <div style="margin-top: 1%;margin-left:1%;margin-right:1%;">
+    <el-tabs
+      v-model="tabName"
+      type="card"
+      @tab-click="clickTab"
     >
-      <TabPane
+      <el-tab-pane
         label="个人空间"
         name="personal"
       >
       <compile-service></compile-service>
-      </TabPane>
-      <TabPane
+      </el-tab-pane>
+      <el-tab-pane
         label="全局视图"
         name="globle"
       >
       <compile-globle></compile-globle>
-      </TabPane>
-    </Tabs>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
@@ -40,8 +41,7 @@ export default {
   },
   computed: {},
   methods: {
-    clickTab(name) {
-      console.log('click name is', name);
+    clickTab(tag, event) {
     }
   }
 };

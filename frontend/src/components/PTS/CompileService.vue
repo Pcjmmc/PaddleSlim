@@ -2,7 +2,7 @@
   <div>
     <Card class="card-s-new">
       <div class="main">
-        <p align="left"> 编译选项 </p>
+        <p align="left" style="font-size:14px;font-weight:bold;"> 编译选项 </p>
       </div>
       <div>
         <Form
@@ -106,10 +106,10 @@
         style="margin-top: 1%;"
       >
         <Col span="4">
-          <Button type="primary" @click="handleSummit">创建编译任务</Button>
+          <Button class="btn-success" @click="handleSummit">创建编译任务</Button>
         </Col>
         <Col span="4">
-          <Button type="primary" @click="handleReset">重置</Button>
+          <Button class="btn-success" @click="handleReset">重置</Button>
         </Col>
       </Row>
     </Card>
@@ -379,69 +379,23 @@ export default {
 </script>
 
 <style scoped>
-.demo-split{
-  overflow:auto;
-}
-.demo-split-pane{
-  padding: 10px;
-  text-align:center
-}
-.demo-tree {
-  width: 100%;
-  line-height: 2;
-}
-.one-fifth-video-col {
-  margin-right: 2px;
-  margin-left: 2px;
-  margin-bottom: 2px;
-  margin-top: 2px;
+.ivu-form-item{
+  margin-bottom: 12px;
+  font-size: 14px;
 }
 .center-card-s {
-  width: 96%;
-  margin-left: 2%;
-  margin-right: 2%;
-  max-height: 600px;
-  overflow: auto;
-  font-size: 15px;
+  width: 100%;
+  font-size: 14px;
   color: lightslategrey
 }
 .card-s-new {
-  width: 96%;
-  margin-left: 2%;
-  margin-right: 2%;
-  font-size: 15px;
+  width: 100%;
+  font-size: 14px;
   color: lightslategrey
 }
-.main {
-  color:lightslategrey;
-  margin-left: 1%;
-  margin-bottom: 2%;
-  font-size: 18px;
-  align: center;
-}
-.all-line-row {
-  margin-left: 2%;
-  margin-right: 2%;
-  margin-bottom: 2%;
-  margin-top: 1%;
-}
-</style>
-
-<style>
-.ivu-tree ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 20px;
-}
-.ivu-tree-title {
-  display: inline-block;
-  margin: 0;
-  padding: 0 4px;
-  border-radius: 3px;
-  cursor: pointer;
-  vertical-align: top;
-  -webkit-transition: all .2s ease-in-out;
-  transition: all .2s ease-in-out;
+.btn-success {
+  color: #fff;
+  background-color: #67c23a;
+  border-color: #67c23a;
 }
 </style>

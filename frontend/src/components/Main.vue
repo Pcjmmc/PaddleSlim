@@ -63,7 +63,7 @@
           }"
           ref="side1"
           hide-trigger collapsible 
-          :collapsed-width="120"
+          :collapsed-width="100"
           v-model="isCollapsed"
         >
           <Menu
@@ -321,7 +321,7 @@ export default {
   .item-css-new {
     font-size: 14px;
     color: #303133;
-    padding: 0 10px;
+    padding: 0 6px;
     cursor: pointer;
     -webkit-transition: border-color .3s,background-color .3s,color .3s;
     -o-transition: border-color .3s,background-color .3s,color .3s;

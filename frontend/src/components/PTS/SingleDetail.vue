@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-left:1%;margin-right:1%;">
     <Card class="center-card-s">
       <Row style="margin-top: 1%;">
         <span> 任务名: {{ jobinfo.name }} </span>
@@ -226,7 +226,7 @@ export default {
           title: '结果',
           key: 'result',
           align: 'center',
-          minWidth: 270,
+          minWidth: 320,
           render: (h, params) => {
             return h('div', [
               h('p', {
@@ -247,7 +247,7 @@ export default {
           title: '详细报告',
           key: 'report',
           align: 'center',
-          minWidth: 200,
+          minWidth: 190,
           render: (h, params) => {
             let bos_url = params.row.bos_url;
             let allure_report = params.row.allure_report;
@@ -332,14 +332,6 @@ export default {
             }
             return h(
               'div',
-              {
-                style: {
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start'
-                }
-              },
               ret
             );
           }
@@ -348,7 +340,7 @@ export default {
           title: '操作',
           key: 'operation',
           align: 'center',
-          minWidth: 150,
+          minWidth: 145,
           fixed: 'right',
           render: (h, params) => {
             let ret = [];
@@ -361,7 +353,7 @@ export default {
                     size: 'small'
                   },
                   style: {
-                    marginRight: '10px'
+                    marginRight: '5px'
                   },
                   on: {
                     click: () => {
@@ -670,9 +662,8 @@ export default {
 </script>
 <style scoped>
 .center-card-s {
-  width: 95%;
-  margin-left: 2%;
-  margin-right: 2%;
-  margin-top: 2%;
+  width: 100%;
+  margin-top: 1%;
+  font-size: 14px;
 }
 </style>

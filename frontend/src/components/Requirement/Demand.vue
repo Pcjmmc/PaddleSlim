@@ -1,22 +1,23 @@
 <template>
-  <div>
-    <Tabs
-      :value="tabName"
-      v-on:on-click="clickTab"
+  <div style="margin-top: 1%;margin-left:1%;margin-right:1%;">
+    <el-tabs
+      v-model="tabName"
+      type="card"
+      @tab-click="clickTab"
     >
-      <TabPane
+      <el-tab-pane
         label="个人空间"
         name="personal"
       >
       <person-window></person-window>
-      </TabPane>
-      <TabPane
+      </el-tab-pane>
+      <el-tab-pane
         label="团队空间"
         name="project"
       >
       <global-view></global-view>
-      </TabPane>
-    </Tabs>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
@@ -41,14 +42,8 @@ name: 'PaddleDemand',
   },
   computed: {},
   methods: {
-    clickTab(name) {
-      console.log('click name is', name);
+    clickTab(tab, event) {
     }
   }
 };
 </script>
-<style>
-  .ivu-tabs-nav-container{
-    font-size:18px;
-  }
-</style>
