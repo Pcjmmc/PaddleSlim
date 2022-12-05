@@ -385,7 +385,6 @@ float:right;
 margin-right: 5%;
 }
 .demo-split{
-  height: 861px;
   overflow:auto;
 }
 .modacss{

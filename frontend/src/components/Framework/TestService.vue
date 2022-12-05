@@ -426,7 +426,6 @@ export default {
 
 <style scoped>
 .demo-split{
-  height: 861px;
   overflow:auto;
 }
 .demo-split-pane{

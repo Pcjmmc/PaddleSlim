@@ -9,13 +9,22 @@
 </script>
 
 <style>
-  html, body {
-    width: 100%;
-    height: 100%;
-    background: #f0f0f0;
-    overflow: auto;
+  /* 大屏幕时 */
+  @media screen and (min-width: 1200px){
+    html, body{
+      background: #f0f0f0;
+      overflow: scroll;
+      min-width: 1200px;
+    }
   }
-
+  /* 小屏幕时 */
+  @media screen and (max-width: 1200px){
+    html, body{
+      background: #f0f0f0;
+      overflow: scroll;
+      min-width: 1500px;
+    }
+  }
   .app-main {
     width: 100%;
     height: 100%;

@@ -244,7 +244,6 @@ export default {
 <style scoped>
 .center-card-s {
   width: 98%;
-  max-height: 861px;
   overflow:auto;
   margin-bottom: 2%
 }
