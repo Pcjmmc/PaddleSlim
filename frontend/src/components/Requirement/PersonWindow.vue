@@ -2,7 +2,6 @@
   <div>
     <div>
       <Form
-        ref="addForm"
         :model="search"
         :label-width="75"
       >
