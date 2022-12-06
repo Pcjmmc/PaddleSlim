@@ -13,7 +13,7 @@
         </div>
       </Col>
       <Divider type="vertical" style="height:40px"/>
-      <Col  span="8">
+      <Col span="8">
         <div style="text-align:center">
           <p style="font-size:14px">commit</p>
         </div>
