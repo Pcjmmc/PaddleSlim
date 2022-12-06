@@ -14,10 +14,8 @@
             <base-info :repoinfo="repoinfo" :processdata="processdata"> </base-info>
           </div>
           <div style="margin-bottom: 1%;">
-            <h5> 集测整体进展 </h5>
             <Table
               align=center
-              border
               :columns="columns"
               :data="summary"
             >

@@ -6,7 +6,7 @@
     </Col>
   </Row> -->
   <div>
-    <div style="margin-top: 1%;margin-left: 2%">
+    <div style="font-size:14px;">
       <span>
         <label> 所属计划: </label>
         <span v-if="tag"> {{ tag }} </span>
@@ -14,18 +14,17 @@
       </span>
     </div>
     <CheckboxGroup v-model="checkAllGroup">
-      <div v-for="(item, index) in tasktypelist" style="margin-top: 1%;margin-right: 2%;margin-left: 2%">
+      <div v-for="(item, index) in tasktypelist" style="margin-top: 1%;">
         <div v-if="item.key=='model'">
           <label> 套件兼容性:
             <Button
               size="small"
               type="info"
               icon="md-cloud-download"
-              style="margin-left:5px;"
               @click="showIcafe(item.key)"
             >load卡片</Button>
           </label>
-          <div v-for="(repo, idx) in repoNames" style="margin-top: 1%;margin-left: 1%">
+          <div v-for="(repo, idx) in repoNames">
             <Checkbox :label="repo"> {{ repo }} </Checkbox>
             <Input
               clearable
@@ -45,7 +44,6 @@
               size="small"
               type="info"
               icon="md-cloud-download"
-              style="margin-left:5px;"
               @click="showIcafe(item.key)"
             >load卡片</Button>
           </Checkbox>

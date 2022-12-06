@@ -22,16 +22,13 @@
       </row>
     </div>
     -->
-    <div style="margin-left:1%;margin-right:1%;">
+    <div>
       <!--
       <Divider orientation="left" style="font-size: 0.5em;font-style: italic;">bug列表</Divider>
       -->
-      <h3>集测bug列表</h3>
       <Table
-        border
         :columns="columns"
         :data="datas"
-        style="width: 100%;margin-top: 1%;"
       >
       </Table>
     </div>

@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="all-line-row">
     <Card class="center-card-s">
-      <p slot="title" style="text-align: center;font-size: 1.4em;">
+      <p slot="title" style="text-align: center;font-size: 16px;">
           <Icon type="ios-information-circle" size="20"></Icon>
           {{ "任务信息概述" }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em; margin-top: 2%">
+      <p slot="title" style="text-align: left;font-size: 14px;margin-top: 2%">
         任务名: {{ $route.query.tname }}
         <span style="float:right;">
           <ButtonGroup size="small">
@@ -14,38 +14,38 @@
           </ButtonGroup>
         </span>
       </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
+      <p slot="title" style="text-align: left;font-size: 14px;">
         repo信息: {{ $route.query.repo }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
+      <p slot="title" style="text-align: left;font-size: 14px;">
         commit信息: {{ $route.query.commit_id }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
+      <p slot="title" style="text-align: left;font-size: 14px;">
         commit提交时间: {{ changeTimestamp($route.query.commit_time) }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
+      <p slot="title" style="text-align: left;font-size: 14px;">
         分支信息: {{ $route.query.branch }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 1.0em;">
+      <p slot="title" style="text-align: left;font-size: 14px;">
         执行时间: {{ changeTimestamp($route.query.created) }}
       </p>
       <p
         slot="title"
-        style="text-align: left;font-size: 1.0em;color: red"
+        style="text-align: left;font-size: 14px;color: red"
         v-if="$route.query.status.toLowerCase()=='failed'"
       >
         状态: {{ $route.query.status }}
       </p>
       <p
         slot="title"
-        style="text-align: left;font-size: 1.0em;color: green"
+        style="text-align: left;font-size: 14px;color: green"
         v-else
       >
         状态: {{ $route.query.status }}
       </p>
       <p
         slot="title"
-        style="text-align: left;font-size: 1.0em;color: red"
+        style="text-align: left;font-size: 14px;color: red"
         v-if="$route.query.status.toLowerCase()=='failed'"
       >
         原因: {{ getErrorReason($route.query.exit_code) }}
@@ -56,52 +56,46 @@
       class="center-card-s"
       v-if="bugList.length > 0"
     >
-      <p slot="title" style="text-align: center;font-size: 1.2em;">
+      <p slot="title" style="text-align: center;font-size: 14px;">
         关联卡片
       </p>
       <icafe-base :datas="bugList"></icafe-base>
     </Card>
     <Card class="center-card-s" v-if="JSON.stringify(env_info) != '[]'">
-      <p slot="title" style="text-align: center;font-size: 1.4em;">
+      <p slot="title" style="text-align: center;font-size: 16px;">
         <Icon type="md-document" size="20"></Icon>
         {{ "编译环境" }}
       </p>
       <p>
         <Table
-          border
           :columns="column"
           :data="env_info"
-          style="margin-right: 2%"
         >
         </Table>
       </p>
     </Card>
     <Card class="center-card-s" v-if="JSON.stringify(compile_param) != '[]'">
-      <p slot="title" style="text-align: center;font-size: 1.4em;">
+      <p slot="title" style="text-align: center;font-size: 16px;">
         <Icon type="md-bookmarks" size="20"></Icon>
         {{ "编译参数" }}
       </p>
       <p>
         <Table
-          border
           :columns="column"
           :data="compile_param"
-          style="margin-right: 2%"
         >
         </Table>
       </p>
     </Card>
     <Card class="center-card-s" v-if="JSON.stringify(gpu_arch) != '[]'">
-      <p slot="title" style="text-align: center;font-size: 1.4em;">
+      <p slot="title" style="text-align: center;font-size: 16px;">
         <Icon type="md-cloud-download" size="20"></Icon>
         {{ "产物详情" }}
       </p>
       <p>
         <Table
-          border
           :columns="column"
           :data="gpu_arch"
-          style="margin-right: 2%"
         >
         </Table>
       </p>
@@ -655,18 +649,21 @@ export default {
 </script>
 
 <style scoped>
-  .tips {
-    color: #ff9900;
-  }
+.tips {
+  color: #ff9900;
+}
   .all-line-row {
-    margin-bottom: 0.5%;
-    margin-left: 0.5%;
+    margin-bottom: 1%;
+    margin-top: 1%;
+    margin-left: 1%;
+    margin-right: 1%;
+    font-size: 14px;
   }
   .center-card-s {
     width: 100%;
     max-height: 600px;
-    overflow:auto;
-    margin-bottom: 2%
+    overflow: auto;
+    margin-bottom: 1%
   }
   .demo-upload-list-cover{
     display: none;

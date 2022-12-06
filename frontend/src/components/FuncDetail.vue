@@ -58,17 +58,4 @@ export default {
 </script>
 
 <style scoped>
-  .tips {
-    color: #ff9900;
-  }
-  .all-line-row {
-    margin-bottom: 0.5%;
-    margin-left: 0.5%;
-  }
-  .center-card-s {
-    width: 100%;
-    max-height: 600px;
-    overflow:auto;
-    margin-bottom: 2%
-  }
 </style>

@@ -3,10 +3,9 @@
     style="margin-bottom: 10px;"
   >
     <Table
+      border
       :columns="columns"
       :data="data"
-      style="margin-right: 2%"
-      border
     >
     </Table>
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top:1%;margin-left:1%;margin-right:1%;font-size:14px;">
+  <div class="all-line-row">
     <el-tabs
       v-model="tabName"
       type="card"
@@ -251,5 +251,12 @@ export default {
 </script>
 
 <style scoped>
+.all-line-row {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+  font-size:14px;
+}
 </style>
 

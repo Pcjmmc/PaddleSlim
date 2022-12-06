@@ -1,8 +1,8 @@
 <template>
-  <div style="margin-left:1%;margin-right:1%;margin-top:1%;">
+  <div class="all-line-row">
     <Split v-model="split1">
-      <div slot="left">
-        <div style="margin-bottom: 10px;">
+      <div slot="left" class="center-card-s">
+        <div style="margin-bottom: 1%;">
           <p>{{ version }} commit列表 </p>
         </div>
         <div>
@@ -46,7 +46,6 @@
       </div>
       <div
         slot="right"
-        class="center-card-s"
         v-else
       >
         <p align="center" style="font-size: 16px">{{ selectCommit }} 暂无数据 </p>
@@ -242,7 +241,16 @@ export default {
 };
 </script>
 <style scoped>
+.all-line-row {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+  font-size: 14px;
+  
+}
 .center-card-s {
-  overflow: scroll;
+  max-height: 861px;
+  overflow: auto;
 }
 </style>

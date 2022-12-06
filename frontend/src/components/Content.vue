@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div style="margin-top:1%;margin-left:1%;margin-right:1%;font-size:14px;">
+  <div class="all-line-row">
     <!--
     <div v-if="allSteps.integration !== undefined && allSteps.integration.flag">
       <intergration
@@ -230,12 +230,10 @@ export default {
 
 <style scoped>
 .all-line-row {
-  margin-bottom: 0.5%;
-  margin-left: 0.5%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+  font-size:14px;
 }
-.center-card-s {
-    width: 100%;
-    max-height: 600px;
-    overflow:auto;
-  }
 </style>

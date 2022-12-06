@@ -386,6 +386,7 @@ export default {
 .center-card-s {
   width: 100%;
   font-size: 14px;
+  border-color: green;
   color: lightslategrey
 }
 .card-s-new {

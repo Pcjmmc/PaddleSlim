@@ -376,8 +376,9 @@ export default {
 <style scoped>
 .all-line-row {
   font-size: 14px;
-  margin-left:1%;
+  margin-left: 1%;
   margin-top: 1%;
-  margin-right:1%
+  margin-right: 1%;
+  margin-bottom: 1%;
 }
 </style>

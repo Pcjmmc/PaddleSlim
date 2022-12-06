@@ -1,62 +1,66 @@
 <template>
-  <div style="margin-right: 2%; padding-left: 20px; margin-top: 10px">
+  <div class="all-line-row">
     <!--搜索组件-->
-    <Row :gutter="16" style="margin-top: 10px">
-      <Col span="1">
-        <label>模块:</label>
-      </Col>
-      <Col span="3" offset="0.5">
-        <Select
-          clearable
-          v-model="search.task_type"
-          v-on:on-change="selectTaskType"
-        >
-          <Option
-            :key="index"
-            :value="item.key"
-            v-for="(item, index) in taskTypeList"
-          >{{ item.desc }}</Option>
-        </Select>
-      </Col>
-      <Col span="1" offset="1">
-        <label>任务:</label>
-      </Col>
-      <Col span="8">
-      <Select
-        placeholder="请选择任务"
-        v-model="tid"
-        clearable
-        filterable
-        v-on:on-change="selectTask"
-      >
-        <Option
-          v-for="item in taskList"
-          :key="item.id"
-          :value="item.id"
-        >{{ item.tname }}</Option>
-      </Select>
-      </Col>
-      <Col span="1" offset="1">
-      <label>日期:</label>
-      </Col>
-      <Col span="6">
-      <DatePicker
-        type="daterange"
-        placement="bottom-end"
-        placeholder="选择时间"
-        v-model="search.dt"
-        style="width:100%"
-        v-on:on-change="selectTask"
-      ></DatePicker>
-      </Col>
-    </Row>
-    <template v-if="builds.length>0">
-      <div style="margin-top: 50px">
+    <div>
+      <Row
+        type="flex"
+        justify="left"
+        style="margin-top: 1%;">
+        <Col span="1">
+          <p font-size="14px;">方向:</p>
+        </Col>
+        <Col span="4" offset="0.1">
+          <Select
+            clearable
+            v-model="search.task_type"
+            v-on:on-change="selectTaskType"
+          >
+            <Option
+              :key="index"
+              :value="item.key"
+              v-for="(item, index) in taskTypeList"
+            >{{ item.desc }}</Option>
+          </Select>
+        </Col>
+        <Col span="1" offset="1">
+          <p font-size="14px;">任务:</p>
+        </Col>
+        <Col span="6" offset="0.1">
+          <Select
+            placeholder="请选择任务"
+            v-model="tid"
+            clearable
+            filterable
+            v-on:on-change="selectTask"
+          >
+            <Option
+              v-for="item in taskList"
+              :key="item.id"
+              :value="item.id"
+            >{{ item.tname }}</Option>
+          </Select>
+        </Col>
+        <Col span="1" offset="1">
+          <p font-size="14px;">日期:</p>
+        </Col>
+        <Col span="8" offset="0.1">
+          <DatePicker
+            type="daterange"
+            placement="bottom-end"
+            placeholder="选择时间"
+            v-model="search.dt"
+            style="width:100%"
+            v-on:on-change="selectTask"
+          ></DatePicker>
+        </Col>
+      </Row>
+    </div>
+    <div v-if="builds.length>0">
+      <div style="margin-top: 2%;">
         <Table
           border
           :columns="buildColumns"
           :data="builds"
-          style="margin-right: 2%"
         ></Table>
         <!--分页-->
         <Page
@@ -68,7 +72,7 @@
           v-on:on-change="pageChange"
         ></Page>
       </div>
-    </template>
+    </div>
 </div>
 </template>
 
@@ -290,7 +294,10 @@ export default {
 
 <style scoped>
 .all-line-row {
-  margin-bottom: 0.5%;
-  margin-left: 0.5%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+  font-size:14px;
 }
 </style>
