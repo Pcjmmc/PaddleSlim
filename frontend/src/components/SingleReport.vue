@@ -5,7 +5,8 @@
       <Row
         type="flex"
         justify="left"
-        style="margin-top: 1%;">
+        style="margin-top: 1%;"
+      >
         <Col span="1">
           <p font-size="14px;">方向:</p>
         </Col>
@@ -34,9 +35,9 @@
             v-on:on-change="selectTask"
           >
             <Option
-              v-for="item in taskList"
               :key="item.id"
               :value="item.id"
+              v-for="item in taskList"
             >{{ item.tname }}</Option>
           </Select>
         </Col>

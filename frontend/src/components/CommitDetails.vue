@@ -247,7 +247,6 @@ export default {
   margin-left: 1%;
   margin-right: 1%;
   font-size: 14px;
-  
 }
 .center-card-s {
   max-height: 861px;
