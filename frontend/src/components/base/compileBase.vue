@@ -562,8 +562,8 @@ export default {
   .center-card-s {
     width: 100%;
     max-height: 600px;
-    overflow:auto;
-    border-color:green;
+    overflow: auto;
+    border-color: green;
   }
   .demo-spin-col{
     height: 100px;

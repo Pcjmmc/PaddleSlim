@@ -115,6 +115,7 @@
           <div>
             <Table
               border
+              disabled-hover
               :show-header="false"
               :columns="envcolumns"
               :data="item"
@@ -532,5 +533,13 @@ export default {
   margin-top: 1%;
   text-align: center;
   font-size: 14px;
+}
+.card-css:hover {
+  width: 33%;
+  margin-top: 1%;
+  text-align: center;
+  font-size: 14px;
+  border-color: green;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 </style>

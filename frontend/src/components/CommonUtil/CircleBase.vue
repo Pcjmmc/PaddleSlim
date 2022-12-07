@@ -1,14 +1,14 @@
 <template>
   <div>
     <i-circle
-        :percent="percent"
-        :size="30"
-        :stroke-width="8"
+      :percent="percent"
+      :size="30"
+      :stroke-width="8"
     >
-        <span
-            class="demo-i-circle-inner"
-            style="font-size:12px"
-        >{{ percent }}%</span>
+      <span
+        class="demo-i-circle-inner"
+        style="font-size:12px"
+      >{{ percent }}%</span>
     </i-circle>
   </div>
 </template>
