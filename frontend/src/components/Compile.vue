@@ -1,11 +1,11 @@
 <template>
   <div class="all-line-row">
     <Card class="center-card-s">
-      <p slot="title" style="text-align: center;font-size: 16px;">
+      <p style="text-align: center;font-size: 16px;">
           <Icon type="ios-information-circle" size="20"></Icon>
           {{ "任务信息概述" }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 14px;margin-top: 2%">
+      <p style="text-align: left;font-size: 14px;margin-top: 2%">
         任务名: {{ $route.query.tname }}
         <span style="float:right;">
           <ButtonGroup size="small">
@@ -14,37 +14,34 @@
           </ButtonGroup>
         </span>
       </p>
-      <p slot="title" style="text-align: left;font-size: 14px;">
+      <p style="text-align: left;font-size: 14px;">
         repo信息: {{ $route.query.repo }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 14px;">
+      <p style="text-align: left;font-size: 14px;">
         commit信息: {{ $route.query.commit_id }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 14px;">
+      <p style="text-align: left;font-size: 14px;">
         commit提交时间: {{ changeTimestamp($route.query.commit_time) }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 14px;">
+      <p style="text-align: left;font-size: 14px;">
         分支信息: {{ $route.query.branch }}
       </p>
-      <p slot="title" style="text-align: left;font-size: 14px;">
+      <p style="text-align: left;font-size: 14px;">
         执行时间: {{ changeTimestamp($route.query.created) }}
       </p>
       <p
-        slot="title"
         style="text-align: left;font-size: 14px;color: red"
         v-if="$route.query.status.toLowerCase()=='failed'"
       >
         状态: {{ $route.query.status }}
       </p>
       <p
-        slot="title"
         style="text-align: left;font-size: 14px;color: green"
         v-else
       >
         状态: {{ $route.query.status }}
       </p>
       <p
-        slot="title"
         style="text-align: left;font-size: 14px;color: red"
         v-if="$route.query.status.toLowerCase()=='failed'"
       >
@@ -56,7 +53,7 @@
       class="center-card-s"
       v-if="bugList.length > 0"
     >
-      <p slot="title" style="text-align: center;font-size: 14px;">
+      <p slot="title" style="text-align: center;font-size: 16px;">
         关联卡片
       </p>
       <icafe-base :datas="bugList"></icafe-base>

@@ -8,13 +8,13 @@
                 :name="computeName(key)"
             >
                 <template slot="title">
-                  <Tooltip placement="top" :content="value.desc">
+                  <el-tooltip effect="dark" placement="top" :content="value.desc">
                     <Icon
                       size="18"
                       :type="value.icon"
                       v-if="value.icon"
                     ></Icon>
-                  </Tooltip>
+                  </el-tooltip>
                 </template>
                 <menu-nav
                     :data="value.sub"
@@ -29,7 +29,7 @@
           v-else
         >
           <menuItem :name="computeName(index)">
-            <Tooltip placement="top" :content="value.desc">
+            <el-tooltip effect="dark" placement="top" :content="value.desc">
               <Icon
                 size="18"
                 :type="value.icon"
@@ -40,7 +40,7 @@
                 type="md-exit"
                 v-else
               ></Icon>
-            </Tooltip>
+            </el-tooltip>
           </menuItem>
         </router-link>
       </template>
