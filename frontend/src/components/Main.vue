@@ -79,20 +79,20 @@
               </Card>
               <Card style="text-align:left;minWidth:180px;">
                 <div class="item-css-new">
-                  <Dropdown>
+                  <el-dropdown>
                     <a href="javascript:void(0)">
                       {{ option }} <i class="el-icon-arrow-down el-icon--right"></i>
                     </a>
-                    <DropdownMenu slot="list">
-                      <DropdownItem
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item
                         :key="index"
                         v-for="(item, index) in verisonList"
                         @click.native="handleClickTag(item)"
                       >
                         {{ item.desc }}
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </div>
               </Card>
               <div class="item-css-new">
