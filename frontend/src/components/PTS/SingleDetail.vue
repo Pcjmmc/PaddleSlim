@@ -45,7 +45,7 @@
             </a>
           </span>
         </Row>
-        <div style="margin-top: 1%;">
+        <div style="margin-top:1%;font-size:14px;">
           <div v-if="datas.length === 0">
             <span>
               <span>测试项:</span>
@@ -53,7 +53,7 @@
                 disabled
                 :key="index"
                 v-for="(item, index) in selectedItems"
-                style="width:150px;margin-left: 0.5%;"
+                style="width:auto;margin-left:0.5%;margin-bottom:0.5%;"
               >
                 {{ serverMap[item] }}
               </Button>
