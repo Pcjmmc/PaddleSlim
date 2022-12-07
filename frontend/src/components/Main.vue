@@ -63,7 +63,7 @@
           }"
           ref="side1"
           hide-trigger collapsible 
-          :collapsed-width="100"
+          :collapsed-width="70"
           v-model="isCollapsed"
         >
           <Menu
@@ -73,57 +73,65 @@
           >
             <div v-if="isCollapsed">
               <Card style="text-align:center;">
-                <div class="item-css-new" @click="collapsedSider">
+                <div class="item-css" @click="collapsedSider">
                   <right></right>
                 </div>
               </Card>
-              <Card style="text-align:left;minWidth:180px;">
-                <div class="item-css-new">
-                  <el-dropdown>
-                    <a href="javascript:void(0)">
-                      {{ option }} <i class="el-icon-arrow-down el-icon--right"></i>
-                    </a>
+              <Card style="text-align:center;">
+                <div class="item-css">
+                  <el-dropdown @command="handleClickTag">
+                    <span class="el-dropdown-link">
+                      <el-tooltip
+                        effect="dark"
+                        placement="top"
+                        :content="option"
+                      >
+                        <Icon
+                          size="18"
+                          type="md-git-branch"
+                        ><i class="el-icon-arrow-down el-icon--right"></i>
+                        </Icon>
+                      </el-tooltip>
+                    </span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item
-                        :key="index"
                         v-for="(item, index) in verisonList"
-                        @click.native="handleClickTag(item)"
-                      >
-                        {{ item.desc }}
+                        :key="index"
+                        :command="item"
+                      >{{ item.desc }}
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </div>
+              </Card>
+              <div class="item-css">
+                <menu-fold :data="menuDesc" father-link="/paddle"></menu-fold>
+              </div>
+            </div>
+            <div v-else>
+              <Card style="text-align:center;">
+                <div class="item-css" @click="collapsedSider">
+                  <left></left>
+                </div>
+              </Card>
+              <Card style="text-align:center;">
+                <div class="item-css">
+                  <el-dropdown @command="handleClickTag">
+                    <span class="el-dropdown-link">
+                      {{ option }}<i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item
+                        v-for="(item, index) in verisonList"
+                        :key="index"
+                        :command="item"
+                      >{{ item.desc }}
                       </el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </div>
               </Card>
               <div class="item-css-new">
-                <menu-fold :data="menuDesc" father-link="/paddle"></menu-fold>
-              </div>
-            </div>
-            <div v-else>
-              <Card style="text-align:center;">
-                <div class="item-css-new" @click="collapsedSider">
-                  <left></left>
-                </div>
-              </Card>
-              <Card style="text-align:center;">
-                <div class="item-css-new">
-                  <Dropdown>
-                    <a href="javascript:void(0)">
-                      {{ option }} <i class="el-icon-arrow-down el-icon--right"></i>
-                    </a>
-                    <DropdownMenu slot="list">
-                      <DropdownItem
-                        :key="index"
-                        v-for="(item, index) in verisonList"
-                        @click.native="handleClickTag(item)"
-                      >
-                        {{ item.desc }}
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
-              </Card>
-              <div class="item-css">
                 <menu-nav :data="menuDesc" father-link="/paddle"></menu-nav>
               </div>
             </div>
@@ -215,7 +223,7 @@ export default {
     // },
     // menuitemClasses () {
     //   return [
-    //     'menu-item',
+    //     '',
     //     this.isCollapsed ? 'collapsed-menu' : ''
     //   ]
     // },
@@ -321,7 +329,7 @@ export default {
   .item-css-new {
     font-size: 14px;
     color: #303133;
-    padding: 0 6px;
+    padding: 0 1px;
     cursor: pointer;
     -webkit-transition: border-color .3s,background-color .3s,color .3s;
     -o-transition: border-color .3s,background-color .3s,color .3s;
@@ -332,13 +340,16 @@ export default {
   .item-css {
     font-size: 14px;
     color: #303133;
-    padding: 0 1px;
+    padding: 0 6px;
     cursor: pointer;
     -webkit-transition: border-color .3s,background-color .3s,color .3s;
     -o-transition: border-color .3s,background-color .3s,color .3s;
     transition: border-color .3s,background-color .3s,color .3s;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+  }
+  .item-css >>> .ivu-icon-ios-arrow-down{
+    display: none;
   }
   .layout{
     border: 1px solid #d7dde4;
@@ -413,16 +424,6 @@ export default {
     transition: font-size .2s ease, transform .2s ease;
     vertical-align: middle;
     font-size: 16px;
-  }
-  .collapsed-menu span{
-    width: 0px;
-    transition: width .2s ease;
-  }
-  .collapsed-menu i{
-    transform: translateX(5px);
-    transition: font-size .2s ease .2s, transform .2s ease .2s;
-    vertical-align: middle;
-    font-size: 22px;
   }
   .user-dropdown-menu-con {
     display: inline-block;
