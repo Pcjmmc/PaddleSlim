@@ -529,17 +529,19 @@ export default {
   border-color: #67c23a;
 }
 .card-css {
-  width: 33%;
+  width: 33.2%;
   margin-top: 1%;
   text-align: center;
   font-size: 14px;
 }
 .card-css:hover {
-  width: 33%;
+  width: 32.5%;
   margin-top: 1%;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
   text-align: center;
   font-size: 14px;
   border-color: green;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 8px 0 #8F8F8F, 0 6px 20px 0 #8F8F8F;
 }
 </style>
