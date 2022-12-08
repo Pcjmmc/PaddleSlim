@@ -274,6 +274,8 @@ export default {
         // 打开用户反馈页面 todo
       } else if (item === 'usertips') {
         // 跳转到用户手册知识库
+        let href = 'https://ku.baidu-int.com/knowledge/HFVrC7hq1Q/t7n0qKWNJW/QMxJ7wiFu-/JlxaUkV3t989L0';
+        window.open(href, '_blank');
       }
     },
     handleClickApp(name) {
