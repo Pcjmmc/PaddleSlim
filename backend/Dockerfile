@@ -11,7 +11,11 @@ RUN mkdir -p /home/app/backend \
              /etc/supervisor.d/
 
 # COPY . /home/app/backend/
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+
+COPY requirements.txt /app/
+
+RUN pip install --proxy http://172.19.57.45:3128 -r /app/requirements.txt
 
 # WORKDIR /home/app/backend/
 # RUN pip install -r requirements.txt
