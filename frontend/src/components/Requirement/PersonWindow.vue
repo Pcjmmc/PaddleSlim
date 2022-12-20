@@ -227,6 +227,7 @@ import { dateFmt } from '../../util/help.js';
 import { RequirementSearchUrl, UserCheckUrl, StartTestUrl, CreateReqUrl } from '../../api/url.js';
 import api from '../../api/index';
 import TestJob from '../PTS/TestJob.vue';
+import baseChild from './baseChild.vue';
 
 export default {
   name: 'Personal',
@@ -316,19 +317,58 @@ export default {
           fixed: 'left',
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('a', {
-                href: 'javascript:void(0);',
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.jumper(params.row.url);
+            let ret = [];
+            if (params.row.child.length > 0) {
+              ret.push(
+                h('Tooltip', {
+                  props: {
+                    placement: 'top',
+                    transfer: true
                   }
-                }
-              }, params.row.sequence)
-            ]);
+                }, [
+                  h('div', [
+                    h('a', {
+                      href: 'javascript:void(0);',
+                      style: {
+                        marginRight: '5px'
+                      },
+                      on: {
+                        click: () => {
+                          this.jumper(params.row.url);
+                        }
+                      }
+                    }, params.row.sequence)
+                  ]),
+                  h('div', {
+                      slot: 'content'
+                    },
+                    [
+                      h(baseChild, {
+                      props: {
+                        child: params.row.child
+                      }
+                    })
+                  ])
+                ])
+              );
+            } else {
+              ret.push(
+                h('div', [
+                  h('a', {
+                    href: 'javascript:void(0);',
+                    style: {
+                      marginRight: '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.jumper(params.row.url);
+                      }
+                    }
+                  }, params.row.sequence)
+                ])
+              );
+            }
+            return h('div', ret);
           }
         },
         {
@@ -586,7 +626,8 @@ export default {
     await this.getData();
   },
   components: {
-    TestJob
+    TestJob,
+    baseChild
   },
   computed: {
   },
