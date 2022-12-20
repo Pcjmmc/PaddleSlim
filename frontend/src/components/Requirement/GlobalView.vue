@@ -626,8 +626,7 @@ export default {
     await this.getData();
   },
   components: {
-    TestJob,
-    baseChild
+    TestJob
   },
   computed: {
   },
