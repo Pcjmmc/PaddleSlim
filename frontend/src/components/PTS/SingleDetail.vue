@@ -37,11 +37,11 @@
             ></Icon>
           </span>
         </Row>
-        <Row style="margin-top: 1%;" v-if="req">
+        <Row style="margin-top: 1%;" v-if="JSON.stringify(this.req) != '{}'">
           <span style="display:inline-block;width:95%;margin-bottom:1%;">
-            <span> 关联需求: </span>
-            <a href="javascript:void(0)" @click="jumper()">
-              {{ req.desc }}
+            <span> 关联IcafeId: </span>
+            <a href="javascript:void(0)" @click="jumper(req.icafe_id)">
+              {{ req.icafe_id }}
             </a>
           </span>
         </Row>
@@ -100,7 +100,8 @@
 
 <script>
 import { FrameWorkJobDetail, FrameReportUrl,
-  FrameMissionFailedUrl, FrameModuleConfigUrl, FrameMissionRerunUrl
+  FrameMissionFailedUrl, FrameModuleConfigUrl,
+  FrameMissionRerunUrl, ReqInfoUrl
 } from '../../api/url.js';
 import api from '../../api/index';
 import Clipboard from 'clipboard';
@@ -112,10 +113,7 @@ export default {
   data: function () {
     return {
       serverMap: {},
-      req: {
-        id: 3,
-        desc: 'xxxx'
-      },
+      req: {},
       jobinfo: {
         id: this.$route.params.jid,
         name: ''
@@ -396,6 +394,7 @@ export default {
   mounted: async function () {
     await this.getModuleConfig();
     await this.getDetails();
+    await this.getReqInfo();
   },
   computed: {
     envInfo: {
@@ -415,6 +414,22 @@ export default {
         this.serverMap = JSON.parse(data.module_mapping);
       } else {
         this.serverMap = {};
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
+    },
+    async getReqInfo() {
+      let params = {
+        test_id: this.$route.params.jid
+      };
+      const {code, data, message} = await api.get(ReqInfoUrl, params);
+      if (parseInt(code, 10) === 200) {
+        this.req = data;
+      } else {
+        this.req = {};
         this.$Message.error({
           content: '请求出错: ' + message,
           duration: 30,
@@ -634,9 +649,10 @@ export default {
           return 'error';
       }
     },
-    jumper() {
+    jumper(key) {
       // 跳转到相应的需求页,自己的工作台 todo
-      console.log('desc', this.req);
+      let url = `https://console.cloud.baidu-int.com/devops/icafe/issue/DLTP-${key}/show`;
+      window.open(url, '_blank');
     },
     handleDetail() {
       console.log('查看allure 报告详情');
