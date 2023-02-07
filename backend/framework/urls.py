@@ -18,6 +18,9 @@ from framework.compile_pkg.compile import CompileInit
 from framework.compile_pkg.compile_search import CompileSearch
 from framework.compile_pkg.compile_database import CompileDatabase
 
+from framework.release_pkg.report_view import ReportView
+from framework.release_pkg.report_add import ReportAdd
+
 from framework.module_settings import ModuleSettingsView
 from framework.settings import SettingsView
 
@@ -44,6 +47,9 @@ urlpatterns = [
     url(r'compilecallback/?$', CompileCallback),
     url(r'compile_database/?$', CompileDatabase),
 
+    # 发版报告相关
+    url(r'reportview/?$', ReportView),
+    url(r'reportadd/?$', ReportAdd),
 
     # 配置相关
     url(r'getmodulesettings/?$', ModuleSettingsView),
