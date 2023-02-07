@@ -21,6 +21,9 @@ class ReportAdd(MABaseView):
     天级报告展示
     """
     async def post(self, **kwargs):
+        """
+        post
+        """
         return await super().post(**kwargs)
 
     async def post_data(self, **kwargs):

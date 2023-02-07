@@ -19,6 +19,9 @@ class ReportView(MABaseView):
     天级报告展示
     """
     async def get(self, **kwargs):
+        """
+        get
+        """
         return await super().get(**kwargs)
 
     async def get_data(self, **kwargs):

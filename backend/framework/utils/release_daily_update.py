@@ -17,6 +17,9 @@ from models.framework import ReleaseDailySettings
 
 
 async def update_release_daily_settings():
+    """
+    更新脚本
+    """
     for data in RELEASE_DAILY_SETTINGS:
         # 查询数据，有就更新，没有就插入
         res = await ReleaseDailySettings.aio_filter_count(module=data["module"])
