@@ -128,3 +128,39 @@ class FeedBack(BaseModel, BaseModelMixin):
         定义model属于那个库
         """
         app_label = 'framework'
+
+
+class ReleaseDailySettings(BaseModel, BaseModelMixin):
+    """
+    定义ReleaseDailySettings任务的表结构
+    """
+    __tablename__ = 'release_daily_settings'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    module = Column(VARCHAR(256), comment='模块名')
+    order = Column(Integer)
+    owner = Column(VARCHAR(256), comment='负责人')
+
+    class Meta:
+        """
+        定义model属于那个库
+        """
+        app_label = 'framework'
+
+
+class ReleaseDailyContent(BaseModel, BaseModelMixin):
+    """
+    定义RReleaseDailyContent任务的表结构
+    """
+    __tablename__ = 'release_daily_content'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    module_id = Column(Integer, comment='模块名')
+    content = Column(Text(2048))
+    user = Column(VARCHAR(256), comment='提交人')
+    version = Column(VARCHAR(256), comment='版本')
+    create_time = Column(DateTime, comment='负责人')
+
+    class Meta:
+        """
+        定义model属于那个库
+        """
+        app_label = 'framework'
