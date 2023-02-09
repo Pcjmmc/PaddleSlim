@@ -32,10 +32,10 @@ class ReportAdd(MABaseView):
         """
         module_id = kwargs.get("module_id")
         content = kwargs.get("content")
+        # content 处理
         if isinstance(content, str):
             content = json.loads(content)
-        content = str(json.dumps(content))
-        # print(content)
+        content = self.content_trans(content)
         release_daily_settings = await ReleaseDailySettings.aio_filter_details(id=module_id)
         print(release_daily_settings)
         owner = release_daily_settings[0]["owner"].split(",")
@@ -67,5 +67,32 @@ class ReportAdd(MABaseView):
                 else:
                     raise HTTP400Error("当前用户权限不能提交{}方向报告".format(module_name))
         return "数据写入成功"
+
+    def content_trans(self, content):
+        """
+        json信息内容转换
+        """
+
+        risks = content.get("risk", None)
+        regression = content.get("regression", None)
+        content["icafe"] = []
+        if risks is None or regression is None:
+            raise HTTP400Error("提交数据格式错误")
+        for i in range(len(risks)):
+            icafes = risks[i].get("icafe", None)
+            if icafes is None:
+                continue
+            else:
+                for icafe in icafes:
+                    icafe["ref"] = i
+                    content["icafe"].append(icafe)
+        # print(content)
+        return str(json.dumps(content))
+
+
+
+
+
+
 
 
