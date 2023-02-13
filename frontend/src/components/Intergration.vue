@@ -250,25 +250,30 @@ export default {
         return this.$route.params.version ? this.$route.params.version : this.$store.state.version;
       }
     },
-    tabName() {
-      let tmp = 'progress';
-      if (this.$route.query.tab) {
-        if (['progress', 'risk', 'conclusion'].includes(this.$route.query.tab)) {
-          tmp = this.$route.query.tab;
-        }
-        this.$router.replace({query: {tab: tmp}}).catch(error => {
-          if (error.name !== 'NavigationDuplicated') {
-            throw error;
+    tabName: {
+      get() {
+        let tmp = 'progress';
+        if (this.$route.query.tab) {
+          if (['progress', 'risk', 'conclusion'].includes(this.$route.query.tab)) {
+            tmp = this.$route.query.tab;
           }
-        });
-      }
-      return tmp;
+          this.$router.replace({query: {tab: tmp}}).catch(error => {
+            if (error.name !== 'NavigationDuplicated') {
+              throw error;
+            }
+          });
+        }
+        return tmp;
+      },
+    set(val) {
+    }
     }
   },
   methods: {
     clickTab(name) {
+      let tmpname = name.name;
       if (this.$route.query.tab) {
-        let query = {tab: name};
+        let query = {tab: tmpname};
         this.$router.replace({query: query}).catch(error => {
           if (error.name !== 'NavigationDuplicated') {
             throw error;
