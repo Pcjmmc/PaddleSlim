@@ -67,6 +67,14 @@
           :branch="repoinfo.branch"
         ></conclusion>
       </el-tab-pane>
+      <el-tab-pane
+        label="新结论"
+        name="newConclusion"
+      >
+        <new-conclusion
+          ref="mychild3"
+        ></new-conclusion>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -82,6 +90,7 @@ import BaseInfo from './BaseInfo.vue';
 import CircleBase from './CommonUtil/CircleBase.vue';
 import CaseBase from './CommonUtil/CaseBase.vue';
 import Conclusion from './Result/Conclusion.vue';
+import NewConclusion from './NewConclusion/NewConclusion.vue';
 
 export default {
   props: {
@@ -242,7 +251,8 @@ export default {
     ApiCoverage,
     BugFix,
     IntegrationTest,
-    Conclusion
+    Conclusion,
+    NewConclusion
   },
   computed: {
     version: {
@@ -265,8 +275,8 @@ export default {
         }
         return tmp;
       },
-    set(val) {
-    }
+      set(val) {
+      }
     }
   },
   methods: {
@@ -283,6 +293,8 @@ export default {
       this.$nextTick(function () {
         if (name === 'conclusion') {
           this.$refs.mychild2.getData();
+        } else if (name === 'newConclusion') {
+          this.$refs.mychild3.getData();
         } else {
           this.$refs.mychild.getbugdata();
           this.$refs.mychild.getStatusFilters();

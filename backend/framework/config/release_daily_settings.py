@@ -8,7 +8,7 @@ for icode
 
 # 发版风险日报数据库配置信息
 
-RELEASE_DAILY_SUPERUSER = ["zhengtianyu"]
+RELEASE_DAILY_SUPERUSER = ["zhengtianyu", "liuhuanling"]
 
 RELEASE_DAILY_SETTINGS = [
     {

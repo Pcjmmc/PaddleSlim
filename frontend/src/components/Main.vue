@@ -306,13 +306,16 @@ export default {
         if (this.$route.params && this.$route.params.version) {
           this.option = this.$route.params.version;
           Cookies.set('version', this.option);
+          Cookies.set('ver', this.option);
           this.$store.commit('changeVersion', this.option);
         } else if (this.$store.state.version) {
           this.option = this.$store.state.version;
           Cookies.set('version', this.option);
+          Cookies.set('ver', this.option);
         } else {
           this.option = this.verisonList[1].desc;
           Cookies.set('version', this.option);
+          Cookies.set('ver', this.option);
           this.$store.commit('changeVersion', this.option);
         }
         this.$delete(this.menuDesc, 'version');

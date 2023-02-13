@@ -42,3 +42,6 @@ export const StartTestUrl = '/ce/requirments/manage';
 export const CreateReqUrl = '/ce/requirments/icafe';
 export const RequriementDetailUrl = '/ce/requirments/history';
 export const ReqInfoUrl = '/ce/requirments/getassociatedreq';
+export const AddNewConclusionUrl = '/framework/reportadd';
+export const SearchNewConclusionUrl = '/framework/reportview';
+export const SearchSummaryConclusionUrl = '/framework/reportsummary';
