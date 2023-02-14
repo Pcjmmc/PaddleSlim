@@ -20,6 +20,7 @@ from framework.compile_pkg.compile_database import CompileDatabase
 
 from framework.release_pkg.report_view import ReportView
 from framework.release_pkg.report_add import ReportAdd
+from framework.release_pkg.report_summary import ReportSummary
 
 from framework.module_settings import ModuleSettingsView
 from framework.settings import SettingsView
@@ -50,6 +51,7 @@ urlpatterns = [
     # 发版报告相关
     url(r'reportview/?$', ReportView),
     url(r'reportadd/?$', ReportAdd),
+    url(r'reportsummary/?$', ReportSummary),
 
     # 配置相关
     url(r'getmodulesettings/?$', ModuleSettingsView),
