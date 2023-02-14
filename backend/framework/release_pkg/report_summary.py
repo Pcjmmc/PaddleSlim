@@ -54,8 +54,8 @@ class ReportSummary(MABaseView):
                 data["icafes"].update(icafe)
 
         # summary get!
-        data["important"]["summary"] = self.important_summary(data["content"])
-        data["regression"]["summary"] = self.regression_summary(data["content"])
+        data["important_summary"] = self.important_summary(data["content"])
+        data["regression_summary"] = self.regression_summary(data["content"])
         return len(settings), data
 
     async def get_report_settings(self):
