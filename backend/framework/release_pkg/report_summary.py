@@ -73,7 +73,7 @@ class ReportSummary(MABaseView):
         if isinstance(content, str):
             content = json.loads(content)
         for i in content.get("risk", []):
-            if i.get("important") is True and i.get("status") == "未解决":
+            if i.get("important") == "是" and i.get("status") == "未解决":
                 # 判断如果有内容就append
                 if data.get(module) is None:
                     data[module] = []
