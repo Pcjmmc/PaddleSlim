@@ -36,14 +36,14 @@
             </Form-item>
           </Col>
           <Col span="4">
-            <Form-item label="状态:" prop="status">
+            <Form-item label="风险状态:" prop="status">
               <el-radio-group v-model="item.status">
                 <el-radio-button :label="item.status"></el-radio-button>
               </el-radio-group>
             </Form-item>
           </Col>
           <Col span="4">
-            <Form-item label="类型:" prop="type">
+            <Form-item label="风险类型:" prop="type">
               <el-radio-group v-model="item.type">
                 <el-radio-button :label="item.type"></el-radio-button>
               </el-radio-group>

@@ -316,7 +316,7 @@ export default {
           important: '否',
           influence: '',
           status: '未解决',
-          type: 'Bug',
+          type: '功能Bug',
           pr: '',
           icafe: []
         }

@@ -9,45 +9,56 @@
     </div>
     -->
     <div id="app" ref="document" style="margin-top:0.2%;">
+      <h1 slot="title" style="text-align:center">集测风险&进展</h1>
+
       <Card
-        v-if="JSON.stringify(important_summary) !== '{}' || JSON.stringify(important) !== '{}'"
+        v-if="JSON.stringify(important_summary) !== '{}' || JSON.stringify(important) !== '{}'" class="main-card"
       >
-        <p slot="title" style="text-align:center">重点关注高风险</p>
+        <h2 slot="title" style="text-align:center; color: #F56C6C;">重点关注高风险</h2>
         <div style="font-size: 14px;margin-left: 1%;" v-if="JSON.stringify(important_summary) !== '{}'">
           <Table :columns="columns" :data="important_summary"></Table>
         </div>
         <div v-for="(item, key, index) in important" v-if="JSON.stringify(important) !== '{}'">
           <div style="margin-top: 1%;" :bordered="false">
-            <h3 slot="title" style="text-align:center;">{{ key }}</h3>
-            <div v-for="(itm, idx) in item">
-              <summary-base :idx="idx" :datas="itm"></summary-base>
-            </div>
+            <Card>
+              <h3 slot="title" style="text-align:left;  color: #F56C6C;">{{ key }}</h3>
+              <ol>
+                <div v-for="(itm, idx) in item">
+                  <Row>
+                    <Col span="22" offset="1">
+                        <li>【{{itm.type}}】 {{itm.content}}。{{itm.influence}}。 PR：<a :href="itm.pr">{{itm.pr}}</a> 负责人：这里不知道如何判空<!-- {{itm.icafe[0].owner}} --></li>
+                    </Col>
+                  </Row>
+                  <!-- <summary-base :idx="idx" :datas="itm"></summary-base> -->
+                </div>
+              </ol>
+            </Card>
         </div>
         </div>
       </Card>
       <Card
         v-if="JSON.stringify(regression_summary) !== '{}' || regression.length > 0"
-        style="margin-top: 1%;"
+        style="margin-top: 1%;"  class="main-card"
       >
-        <p slot="title" style="text-align:center">集成测试情况</p>
+        <h2 slot="title" style="text-align:center">集成测试情况</h2>
         <div v-if="regression.length > 0" style="margin-top: 1%;">
           <progress-base :datas="regression"> </progress-base>
         </div>
       </Card>
       <Card
         v-if="JSON.stringify(icafes) !== '{}'"
-        style="margin-top: 1%;"
+        style="margin-top: 1%;"  class="main-card"
       >
-        <p slot="title" style="text-align:center">各方向详细进展</p>
+        <h2 slot="title" style="text-align:center">各方向详细进展</h2>
         <div style="margin-top: 1%;">
           <detail-base :settings="settings" :content="content"></detail-base>
         </div>
       </Card>
       <Card
         v-if="JSON.stringify(icafes) !== '{}'"
-        style="margin-top: 1%;"
+        style="margin-top: 1%;"  class="main-card"
       >
-        <p slot="title" style="text-align:center">卡片汇总</p>
+        <h2 slot="title" style="text-align:center">卡片汇总</h2>
         <div style="margin-top: 1%;">
           <card-base :icafes="icafes"> </card-base>
         </div>
@@ -282,6 +293,7 @@ export default {
             }
           ]
         }
+        this.important = data.important;
       } else {
         this.settings = [];
         this.important = {};
@@ -317,5 +329,9 @@ export default {
   color: #fff;
   background-color: #67c23a;
   border-color: #67c23a;
+}
+.main-card {
+  border: 1px solid #809399;
+  margin-bottom: 20px;
 }
 </style>
