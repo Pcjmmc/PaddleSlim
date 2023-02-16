@@ -307,7 +307,7 @@ export default {
   methods: {
     addItem() {
       // 在后面追剧一条新的内容
-      this.risk.push(
+      this.risk.unshift(
         {
           content: '',
           level: 0,

@@ -133,22 +133,24 @@ export default {
     },
     async getIcafeInfo(index, row) {
       // 发送icafe请求
-      let params = {
+      if (row.url) {
+        let params = {
         sequence: row.url
-      };
-      const {code, data, message} = await api.get(AssociateBugUrl, params);
-      if (parseInt(code, 10) === 200 && data.length > 0) {
-        let info = data[0];
-        this.datas[index].title = info.title;
-        this.datas[index].owner = info.rd_owner;
-        this.datas[index].url = info.url;
-        this.$emit('updataDate', this.idx, this.datas);
-      } else {
-        this.$Message.error({
-          content: '请求出错: ' + message,
-          duration: 30,
-          closable: true
-        });
+        };
+        const {code, data, message} = await api.get(AssociateBugUrl, params);
+        if (parseInt(code, 10) === 200 && data.length > 0) {
+          let info = data[0];
+          this.datas[index].title = info.title;
+          this.datas[index].owner = info.rd_owner;
+          this.datas[index].url = info.url;
+          this.$emit('updataDate', this.idx, this.datas);
+        } else {
+          this.$Message.error({
+            content: '请求出错: ' + message,
+            duration: 30,
+            closable: true
+          });
+        }
       }
     }
   }
