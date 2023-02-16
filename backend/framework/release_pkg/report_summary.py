@@ -129,7 +129,7 @@ class ReportSummary(MABaseView):
             data["pass"] += int(reg["pass"])
             data["fail"] += int(reg["fail"])
             data["running"] += int(reg["running"])
-        data["progress"] = format(data["pass"] / data["total"], '.2%')
+        data["progress"] = "0%" if data["total"] == 0 else format(data["pass"] / data["total"], '.2%')
         return data
 
     def icafes(self, module, content):
