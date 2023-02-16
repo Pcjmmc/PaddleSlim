@@ -76,7 +76,7 @@
               <Col span="7">
                 <Form-item label="状态:" prop="status">
                   <el-radio-group v-model="item.status">
-                    <el-radio-button label="已解决" fill="#123124"></el-radio-button>
+                    <el-radio-button label="已解决"></el-radio-button>
                     <el-radio-button label="未解决"></el-radio-button>
                     <el-radio-button label="延期"></el-radio-button>
                   </el-radio-group>
