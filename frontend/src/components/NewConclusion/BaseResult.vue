@@ -1,9 +1,10 @@
 <template>
   <div style="margin-top:0.5%;">
+    <span :id="moduleid"></span>
     <Card>
       <p slot="title" style="text-align: left;font-size: 16px;">
         <span> {{ modulename }}</span>
-        <span>: @{{ owner }}</span>
+        <span>: 负责人（{{ owner.replace(/,/g, " | ") }}）</span>
         <span style="float: right">最新更新时间: {{ date }} </span>
       </p>
       <Row type="flex" justify="start">
@@ -75,7 +76,7 @@
               <Col span="7">
                 <Form-item label="状态:" prop="status">
                   <el-radio-group v-model="item.status">
-                    <el-radio-button label="已解决"></el-radio-button>
+                    <el-radio-button label="已解决" fill="#123124"></el-radio-button>
                     <el-radio-button label="未解决"></el-radio-button>
                     <el-radio-button label="延期"></el-radio-button>
                   </el-radio-group>
@@ -93,7 +94,7 @@
             <Row style="margin-top:1%;" v-if="item.icafe.length > 0">
               <Col span="22">
                 <Form-item label="卡片列表:">
-                  <base-table :datas="item.icafe" :idx="index" @updataDate="updataDate"> </base-table>
+                  <base-table :datas="item.icafe" :idx="index" @updataDate="updataDate"></base-table>
                 </Form-item>
               </Col>
             </Row>
@@ -103,15 +104,15 @@
       <Row style="margin-top:1%;">
         <Form :label-width="75">
           <Col span="24">
-            <Form-item label="回测进度:">
+            <b><Form-item label="回测进度:">
               目前进行第<Input-number size="small" :max="100" :min="0" v-model="regression.round"></Input-number>轮测试，共有流水线<Input-number size="small" :max="100" :min="0" v-model="regression.total"></Input-number>条，成功<Input-number size="small" :max="100" :min="0" v-model="regression.pass"></Input-number>条，失败<Input-number size="small" :max="100" :min="0" v-model="regression.fail"></Input-number>条，进行中<Input-number size="small" :max="100" :min="0" v-model="regression.running"></Input-number>条。
-            </Form-item>
+            </Form-item></b>
           </Col>
         </Form>
       </Row>
       <Row type="flex" justify="center">
         <Col span="3">
-          <Button type="primary" icon="plus-circled" @click="saveData">保存</Button>
+          <Button type="primary" icon="plus-circled" @click="saveData">保存&nbsp;</Button>
         </Col>
       </Row>
     </Card>
@@ -140,6 +141,7 @@
     </Modal>
     -->
   </div>
+
 </template>
 
 <script>
@@ -386,6 +388,11 @@ export default {
       if (parseInt(code, 10) === 200) {
         // 如果点击保存，这里就保存成今天的日期
         this.$emit('searchByfilter');
+        this.$Message.success({
+          content: '保存成功',
+          duration: 3.3,
+          closable: true
+        })
         console.log('通过校验，提交数据', params);
       } else {
         this.$Message.error({

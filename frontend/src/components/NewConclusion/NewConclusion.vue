@@ -6,6 +6,18 @@
         @click="exportReport"
       >查看报告</Button>
     </div>
+    <div style="text-align:left;">
+      <el-dropdown>
+        <span class="el-dropdown-link">
+          模块快速索引<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <div v-for="(item, index) in allData" :key="index">
+              <a :href="'#'+item.id" ><el-dropdown-item>{{item.id}}.{{item.module}}</el-dropdown-item></a>
+          </div>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
     <div v-for="(item, index) in allData" :key="index">
       <base-result
         :idx="index"
@@ -252,4 +264,11 @@ export default {
   background-color: #67c23a;
   border-color: #67c23a;
 }
+.el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
 </style>
