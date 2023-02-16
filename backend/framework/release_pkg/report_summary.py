@@ -90,6 +90,8 @@ class ReportSummary(MABaseView):
             if isinstance(i.get("content"), str):
                 i = json.loads(i.get("content"))
             for risk in i.get("risk"):
+                if risk.get("important") == "否":
+                    continue
                 status = risk.get("status")
                 if status == "未解决":
                     data["未解决"] += 1
