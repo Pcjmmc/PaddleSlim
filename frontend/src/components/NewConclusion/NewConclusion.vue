@@ -268,7 +268,7 @@ export default {
     cursor: pointer;
     color: #409EFF;
   }
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
+.el-icon-arrow-down {
+  font-size: 12px;
+}
 </style>
