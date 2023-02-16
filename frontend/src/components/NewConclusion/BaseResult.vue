@@ -24,7 +24,7 @@
           <Card>
             <Form :ref="'addForm' + index" :model="item" :rules="ruleCustom" :label-width="75">
               <Row>
-                <Col span="18">
+                <Col span="19">
                   <Form-item label="风险:" prop="content">
                     <Input v-model="item.content" placeholder="录入问题描述"/>
                   </Form-item>
@@ -45,12 +45,12 @@
                 </Col>
               </Row>
               <Row>
-                <Col span="9">
+                <Col span="12">
                   <Form-item label="影响:" prop="influence">
                     <Input v-model="item.influence" placeholder="录入影响面"/>
                   </Form-item>
                 </Col>
-                <Col span="9" offset="0.5">
+                <Col span="12" offset="0.5">
                   <Form-item label="PR链接:" prop="pr">
                     <Input v-model="item.pr" placeholder="录入pr"/>
                   </Form-item>
@@ -93,7 +93,7 @@
                 </Col>
               </Row>
               <Row style="margin-top:1%;" v-if="item.icafe.length > 0">
-                <Col span="22">
+                <Col span="24">
                   <Form-item label="卡片列表:">
                     <base-table :datas="item.icafe" :idx="index" @updataDate="updataDate"></base-table>
                   </Form-item>
@@ -430,5 +430,8 @@ export default {
 .main-card {
   border: 1px solid #809399;
   margin-bottom: 20px;
+}
+.regression-size {
+  font-size: 18px;
 }
 </style>
