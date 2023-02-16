@@ -19,6 +19,7 @@ import TestService from '../components/PTS/TestService.vue';
 import SingleDetail from '../components/PTS/SingleDetail.vue';
 import Demand from '../components/Requirement/Demand.vue';
 import ReqirementDetail from '../components/Requirement/ReqirementDetail.vue';
+import SummaryResult from '../components/NewConclusion/SummaryResult';
 
 // Vue.use(VueRouter);
 export const ROUTES = [
@@ -52,6 +53,11 @@ export const ROUTES = [
           path: '/paddle/integration/',
           name: 'Content',
           component: Content
+        },
+        { // API 配置
+          path: '/paddle/integration-summary/:version',
+          name: 'SummaryResult',
+          component: SummaryResult
         },
         { // API 配置
           path: '/paddle/integration/:version',

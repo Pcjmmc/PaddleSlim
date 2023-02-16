@@ -126,6 +126,7 @@ export default {
     $route() {
       let _version = this.$route.params.version;
       Cookies.set('version', _version);
+      Cookies.set('ver', _version);
       this.$store.commit('changeVersion', _version);
     }
   },

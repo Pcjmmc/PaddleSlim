@@ -95,6 +95,7 @@ export default {
     $route() {
       let _version = this.$route.params.version;
       Cookies.set('version', _version);
+      Cookies.set('ver', _version);
       this.$store.commit('changeVersion', _version);
     }
   },
@@ -127,6 +128,7 @@ export default {
       }
       this.$store.commit('changeVersion', _version);
       Cookies.set('version', _version);
+      Cookies.set('ver', _version);
       this.$router.push(data).catch(error => {
         if (error.name !== 'NavigationDuplicated') {
           throw error;

@@ -21,6 +21,7 @@
     "echarts": "^4.9.0",
     "el-tree-transfer": "^2.4.7",
     "element-ui": "^2.15.8",
+    "html2pdf.js": "^0.10.1",
     "iview": "^3.5.4",
     "js-cookie": "^3.0.1",
     "nprogress": "^0.2.0",
