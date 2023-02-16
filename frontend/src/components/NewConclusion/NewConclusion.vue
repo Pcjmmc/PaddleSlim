@@ -1,22 +1,24 @@
 <template>
   <div>
-    <div style="text-align:right;">
-      <Button
-        class="btn-success"
-        @click="exportReport"
-      >查看报告</Button>
-    </div>
-    <div style="text-align:left;">
-      <el-dropdown>
-        <span class="el-dropdown-link">
-          模块快速索引<i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <div v-for="(item, index) in allData" :key="index">
+    <div style="height:30px;">
+      <div style="float: left;">
+        <el-dropdown>
+          <span class="el-dropdown-link ins">
+            模块快速索引<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <div v-for="(item, index) in allData" :key="index">
               <a :href="'#'+item.id" ><el-dropdown-item>{{item.id}}.{{item.module}}</el-dropdown-item></a>
-          </div>
-        </el-dropdown-menu>
-      </el-dropdown>
+            </div>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+      <div style="float: right;">
+        <Button
+          class="btn-success"
+          @click="exportReport"
+        >查看报告</Button>
+      </div>
     </div>
     <div v-for="(item, index) in allData" :key="index">
       <base-result
@@ -271,4 +273,8 @@ export default {
 .el-icon-arrow-down {
   font-size: 12px;
 }
+.ins {
+  font-size: 18px;
+}
 </style>
+
