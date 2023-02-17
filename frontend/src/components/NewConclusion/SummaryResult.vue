@@ -26,7 +26,7 @@
                 <div v-for="(itm, idx) in item">
                   <Row>
                     <Col span="22" offset="1">
-                        <li>【{{itm.type}}】 {{itm.content}}。{{itm.influence}}。 PR：<a :href="itm.pr">{{itm.pr}}</a> 负责人：这里不知道如何判空<!-- {{itm.icafe[0].owner}} --></li>
+                        <li>【{{itm.type}}】 {{itm.content}}。{{itm.influence}}。 PR：<a :href="itm.pr">{{itm.pr}}</a> 负责人：@{{itm.owner}}</li>
                     </Col>
                   </Row>
                   <!-- <summary-base :idx="idx" :datas="itm"></summary-base> -->
