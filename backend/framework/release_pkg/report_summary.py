@@ -104,7 +104,7 @@ class ReportSummary(MABaseView):
                 else:
                     data["延期"] += 1
         data["总量"] = data["未解决"] + data["已解决"] + data["延期"]
-        data["修复率"] = "100%" if data["总量"] == 0 else format(data["已解决"] / data["总量"], '.2%')
+        data["修复率"] = format(100, '.2%') if data["总量"] == 0 else format(data["已解决"] / data["总量"], '.2%')
         return data
 
     def regression(self, module, content):
@@ -117,7 +117,7 @@ class ReportSummary(MABaseView):
             content = json.loads(content)
         reg = content.get("regression", None)
         if reg is not None:
-            reg["progress"] = "100%" if reg["total"] == 0 else format(reg["pass"] / reg["total"], '.2%')
+            reg["progress"] = format(0, '.2%') if reg["total"] == 0 else format(reg["pass"] / reg["total"], '.2%')
         data[module] = reg
         return data
 
@@ -135,7 +135,7 @@ class ReportSummary(MABaseView):
             data["pass"] += int(reg["pass"])
             data["fail"] += int(reg["fail"])
             data["running"] += int(reg["running"])
-        data["progress"] = "0%" if data["total"] == 0 else format(data["pass"] / data["total"], '.2%')
+        data["progress"] = format(0, '.2%') if data["total"] == 0 else format(data["pass"] / data["total"], '.2%')
         return data
 
     def icafes(self, module, content):
