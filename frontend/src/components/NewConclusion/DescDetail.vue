@@ -37,14 +37,14 @@
           </Col>
           <Col span="6">
             <Form-item label="风险状态:" prop="status">
-              <el-radio-group v-model="item.status" :fill="getColor(item.status)">
+              <el-radio-group v-model="item.status" :fill="getColor(item.status)" size="small">
                 <el-radio-button :label="item.status"></el-radio-button>
               </el-radio-group>
             </Form-item>
           </Col>
           <Col span="5">
             <Form-item label="风险类型:" prop="type">
-              <el-radio-group v-model="item.type">
+              <el-radio-group v-model="item.type" size="small">
                 <el-radio-button :label="item.type"></el-radio-button>
               </el-radio-group>
             </Form-item>
@@ -147,7 +147,7 @@ export default {
         case '已解决':
           return 'green';
         case '延期修复':
-          return 'yellow';
+          return '#f90';
         default:
           return 'red';
       }

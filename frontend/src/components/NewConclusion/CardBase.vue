@@ -2,14 +2,15 @@
   <div style="margin-left: 1%;">
     <div>
       关联卡片列表:
-      <Form style="margin-left: 2%;">
-       <div v-for="(item, key, index) in icafes" :key="index" v-if="item.length > 0 ">
-          {{ key }}
-          <div style="margin-left: 1%;">
+      <Form style="margin-left: 2%;margin-top:1%;">
+        <div v-for="(item, key, index) in icafes" :key="index" v-if="item.length > 0 ">
+          {{ key }}:
+          <div style="margin-left: 2%;">
             <Row v-for="(itm, ids) in item" :key="ids">
               <Col span="24">
                 <Form-item prop="title">
                   <span>
+                    <span> {{ (ids + 1) }}: </span>
                     <a href="item.url">{{ itm.title }}
                     </a>
                     <span>@ {{ itm.owner }}</span>
