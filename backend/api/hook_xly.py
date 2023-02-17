@@ -56,7 +56,7 @@ class HookxlyView(MABaseView):
             print(xly_build)
             await XlyBuild.aio_insert(xly_build)
         if status in ["FAIL", "SUCC", "CANCEL"]:
-            build_id = kwargs.get("build_id")
+            job_id = kwargs.get("job_id")
             xly_build["exit_code"] = header.get("exit_code", None)
             xly_build["end_time"] = kwargs.get("end_time")
             print(xly_build)
