@@ -55,7 +55,7 @@
         </div>
       </Card>
       <Card
-        v-if="JSON.stringify(icafes) !== '{}'"
+        v-if="isIcafes()"
         style="margin-top: 1%;"  class="main-card"
       >
         <h2 slot="title" style="text-align:center">卡片汇总</h2>
@@ -105,7 +105,7 @@
           </div>
         </Card>
         <Card
-          v-if="JSON.stringify(icafes) !== '{}'"
+          v-if="isIcafes()"
           style="margin-top: 1%;"
         >
           <p slot="title" style="text-align:center">卡片汇总</p>
@@ -216,16 +216,29 @@ export default {
     handleReset() {
       this.ShowPreview = false;
     },
-    // exportReport() {
-    //   let doc = document.getElementById('previewApp');
-    //   var opt = {
-    //     margin: 1,
-    //     filename: 'Report.pdf',
-    //     image: { type: 'jpeg', quality: 0.98 },
-    //     html2canvas: { scale: 4 }
-    //   };
-    //   html2pdf().from(doc).set(opt).save();
-    // },
+    isIcafes() {
+      let res = false;
+      if (JSON.stringify(this.icafes) !== '{}') {
+        for (let item in this.icafes) {
+          if (this.icafes[item].length > 0) {
+            res = true;
+            return res;
+          }
+        }
+      }
+      console.log('res is', res);
+      return res;
+    },
+    exportReport() {
+      // let doc = document.getElementById('previewApp');
+      // var opt = {
+      //   margin: 1,
+      //   filename: 'Report.pdf',
+      //   image: { type: 'jpeg', quality: 0.98 },
+      //   html2canvas: { scale: 4 }
+      // };
+      // html2pdf().from(doc).set(opt).save();
+    },
     changeObjtoArry(data) {
       let result = [];
       for (let item in data) {

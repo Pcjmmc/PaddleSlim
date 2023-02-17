@@ -3,26 +3,26 @@
     <Card>
       <Form :ref="'addForm' + index" :model="item" :label-width="75">
         <Row>
-          <Col span="18">
+          <Col span="24">
             <Form-item label="风险:" prop="content">
             <Input readonly v-model="item.content" placeholder="录入问题描述"/>
             </Form-item>
           </Col>
         </Row>
         <Row>
-          <Col span="9">
+          <Col span="12">
             <Form-item label="影响:" prop="influence">
             <Input readonly v-model="item.influence" placeholder="录入影响面"/>
             </Form-item>
           </Col>
-          <Col span="9" offset="0.5">
+          <Col span="12" offset="0.5">
             <Form-item label="PR链接:" prop="pr">
             <Input readonly v-model="item.pr" placeholder="录入pr"/>
             </Form-item>
           </Col>
         </Row>
         <Row>
-          <Col span="4">
+          <Col span="5">
             <Form-item label="阻塞发版:" prop="important">
               <Radio-group v-model="item.important">
                 <Radio :label="item.important">
@@ -30,19 +30,19 @@
               </Radio-group>
             </Form-item>
           </Col>
-          <Col span="7">
+          <Col span="8">
             <Form-item label="严重程度:" prop="level">
               <Rate disabled v-model="item.level"></Rate>
             </Form-item>
           </Col>
-          <Col span="4">
+          <Col span="6">
             <Form-item label="风险状态:" prop="status">
-              <el-radio-group v-model="item.status">
+              <el-radio-group v-model="item.status" :fill="getColor(item.status)">
                 <el-radio-button :label="item.status"></el-radio-button>
               </el-radio-group>
             </Form-item>
           </Col>
-          <Col span="4">
+          <Col span="5">
             <Form-item label="风险类型:" prop="type">
               <el-radio-group v-model="item.type">
                 <el-radio-button :label="item.type"></el-radio-button>
@@ -53,7 +53,7 @@
         <Form-item label="卡片列表:" v-if="item.icafe.length > 0">
           <div v-for="(it, id) in item.icafe">
             <Row style="margin-top:1%;" >
-              <Col span="22">
+              <Col span="24">
                 <a :href="it.url"> {{ it.title }} </a> @{{ it.owner }}
               </Col>
             </Row>
@@ -142,6 +142,16 @@ export default {
   components: {
   },
   methods: {
+    getColor(status) {
+      switch (status.toLowerCase()) {
+        case '已解决':
+          return 'green';
+        case '延期修复':
+          return 'yellow';
+        default:
+          return 'red';
+      }
+    }
   }
 };
 </script>
