@@ -77,6 +77,10 @@ class ReportSummary(MABaseView):
                 # 判断如果有内容就append
                 if data.get(module) is None:
                     data[module] = []
+                i["owner"] = []
+                for icafe in i.get("icafe"):
+                    i["owner"].append(icafe.get("owner"))
+                i["owner"] = " @".join(i["owner"])
                 data[module].append(i)
         return data
 
