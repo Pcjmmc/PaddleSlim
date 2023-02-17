@@ -8,7 +8,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <div v-for="(item, index) in allData" :key="index">
-              <a :href="'#'+item.id" ><el-dropdown-item>{{item.id}}.{{item.module}}</el-dropdown-item></a>
+              <a @click="changeModuel(item.id)" ><el-dropdown-item>{{item.id}}.{{item.module}}</el-dropdown-item></a>
             </div>
           </el-dropdown-menu>
         </el-dropdown>
@@ -196,6 +196,9 @@ export default {
     async saveData() {
       // 保存数据
       this.showData = false;
+    },
+    changeModuel(idName) {
+      document.getElementById(idName).scrollIntoView(true)
     },
     cancelShowData() {
       this.showData = false;
