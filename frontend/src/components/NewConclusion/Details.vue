@@ -1,7 +1,7 @@
 <template>
   <div style="margin-top:0.5%;">
     <p slot="title" style="text-align: left;font-size: 16px;">
-      <span>负责人: @{{ owner }}</span>
+      <span>负责人:（{{ owner.replace(/,/g, " | ") }}）</span>
       <span style="float: right">最新更新时间: {{ date }} </span>
     </p>
     <div v-for="(item, index) in risk" :key="index" style="margin-top:1%;">
@@ -10,14 +10,14 @@
     <Row style="margin-top:1%;">
       <Form :label-width="75">
         <Col span="24">
-          <Form-item label="回测进度:">
+          <b><Form-item label="回测进度:">
             目前进行第
               <Input-number readonly size="small" :max="100" :min="0" v-model="regression.round"></Input-number>
               轮测试，共有流水线<Input-number readonly size="small" :max="100" :min="0" v-model="regression.total"></Input-number>
               条，成功<Input-number readonly size="small" :max="100" :min="0" v-model="regression.pass"></Input-number>
               条，失败<Input-number readonly size="small" :max="100" :min="0" v-model="regression.fail"></Input-number>
               条，进行中<Input-number readonly size="small" :max="100" :min="0" v-model="regression.running"></Input-number>条。
-          </Form-item>
+          </Form-item></b>
         </Col>
       </Form>
     </Row>

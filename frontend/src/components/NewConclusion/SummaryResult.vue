@@ -257,7 +257,7 @@ export default {
         this.regression_summary = data.regression_summary;
         this.regression = this.changeObjtoArry(data.regression);
         if (JSON.stringify(this.regression_summary) !== '{}') {
-          this.regression_summary['step'] = '整体';
+          this.regression_summary['step'] = '->整体情况<-';
           this.regression.unshift(this.regression_summary);
         }
         this.content = data.content;
