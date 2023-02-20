@@ -40,13 +40,9 @@ PLACE = {
     "mkldnn_infer": CLOUD,
     
     # models
-    "paddleclas_p0": CLOUD,
-    "paddleclas_p1": CLOUD,
-    "paddleclas_p2": CLOUD,
-    "paddleclas_p2_1": CLOUD,
-    "paddleclas_p2_2": CLOUD,
-    "paddlegan_p0": CLOUD,
-    "paddlegan_p1": CLOUD,
+    "paddleclas_p0_function": CLOUD,
+    "paddleclas_p0_pretrained_eval": CLOUD,
+
     # model benchmark
     "models_benchmark_v100_single_dp": LOCAL,
     "models_benchmark_v100_multi_dp": LOCAL,
@@ -78,15 +74,16 @@ class Cloud(object):
     MKLDNN_INFER = "24297"
 
     # 模型
-    PaddleClas_P0 = "24222", {"priority":"models_list_cls_test_P0", "reponame":"PaddleClas"}
-    PaddleClas_P1 = "24222", {"priority":"models_list_cls_test_P1", "reponame":"PaddleClas"}
-    PaddleClas_P2 = "24222", {"priority":"models_list_cls_test_P2", "reponame":"PaddleClas"}
-    PaddleClas_P2_1 = "24222", {"priority":"models_list_cls_test_P2_1", "reponame":"PaddleClas"}
-    PaddleClas_P2_2 = "24222", {"priority":"models_list_cls_test_P2_2", "reponame":"PaddleClas"}
-
-    PaddleGAN_P0 = "24401", {"priority":"models_list_gan_test_P0", "reponame":"PaddleGAN"}
-    PaddleGAN_P1 = "24401", {"priority":"models_list_gan_test_P1", "reponame":"PaddleGAN"}
-
+    PaddleClas_P0_Function = "25210", {"reponame": "PaddleClas", 
+        "priority": "P0", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleClas_P0_Pretrained_Eval = "25210", {"reponame":"PaddleClas",
+        "priority":"P0",
+        "mode":"precison",
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
 
     ##########  WINDOWS  ##########
     WIN_OP_FUNCTION = ""
@@ -153,13 +150,9 @@ class CloudMission(object):
         "trt_infer": Cloud.TRT_INFER,
         "mkldnn_infer": Cloud.MKLDNN_INFER,
         # module
-        "paddleclas_p0": Cloud.PaddleClas_P0,
-        "paddleclas_p1": Cloud.PaddleClas_P1,
-        "paddleclas_p2": Cloud.PaddleClas_P2,
-        "paddleclas_p2_1": Cloud.PaddleClas_P2_1,
-        "paddleclas_p2_2": Cloud.PaddleClas_P2_2,
-        "paddlegan_p0": Cloud.PaddleGAN_P0,
-        "paddlegan_p1": Cloud.PaddleGAN_P1,
+        "paddleclas_p0_function": Cloud.PaddleClas_P0_Function,
+        "paddleclas_p0_pretained_eval": Cloud.PaddleClas_P0_Pretrained_Eval,
+
     }
 
 

@@ -21,13 +21,8 @@ module_mapping = {
     "distribution_v100_accuracy_collective":"V100_分布式精度测试",
     "models_benchmark_a100_single_dp":"A100_单机性能测试",
     "models_benchmark_a100_multi_dp":"A100_多机性能测试",
-    "paddleclas_p0": "PaddleClas P0级功能测试",
-    "paddleclas_p1": "PaddleClas P1级功能测试",
-    "paddleclas_p2": "PaddleClas P2级功能测试",
-    "paddleclas_p2_1": "PaddleClas P2_1级功能测试",
-    "paddleclas_p2_2": "PaddleClas P2_2级功能测试",
-    "paddlegan_p0": "PaddleGAN P0级功能测试",
-    "paddlegan_p1": "PaddleGAN P1级功能测试",
+    "paddleclas_p0_function": "PaddleClas P0级功能性",
+    "paddleclas_p0_pretrained_eval": "PaddleClas P0级预训练模型精度",
 }
 
 
@@ -109,58 +104,28 @@ module_list = [
             {
                 "pid":"4",
                 "id":"4-1",
-                "label":"PaddleClas",
-                "key":"PaddleClas",
+                "label":"重要模型功能性",
+                "key":"p0_function",
                 "children":[
                     {
                         "pid":"4-1",
                         "id":"4-1-1",
-                        "label":"PaddleClas P0级功能测试",
-                        "key":"paddleclas_p0"
-                    },
-                    {
-                        "pid":"4-1",
-                        "id":"4-1-2",
-                        "label":"PaddleClas P1级功能测试",
-                        "key":"paddleclas_p1"
-                    },
-                    {
-                        "pid": "4-1",
-                        "id": "4-1-3",
-                        "label": "PaddleClas P2级功能测试",
-                        "key": "paddleclas_p2"
-                    },
-                    {
-                        "pid": "4-1",
-                        "id": "4-1-4",
-                        "label": "PaddleClas P2_1级功能测试",
-                        "key": "paddleclas_p2_1"
-                    },
-                    {
-                        "pid": "4-1",
-                        "id": "4-1-5",
-                        "label": "PaddleClas P2_2级功能测试",
-                        "key": "paddleclas_p2_2"
+                        "label":"PaddleClas P0级功能性",
+                        "key":"paddleclas_p0_function"
                     }
                 ]
             },
             {
                 "pid":"4",
                 "id":"4-2",
-                "label":"PaddleGAN",
-                "key":"PaddleGAN",
+                "label":"重要模型 预训练模型 评估、动态图推理、静态图预测精度",
+                "key":"p0_pretrained_eval",
                 "children": [
                     {
                         "pid": "4-2",
                         "id": "4-2-1",
-                        "label": "PaddleGAN P0级功能测试",
-                        "key": "paddlegan_p0"
-                    },
-                    {
-                        "pid": "4-2",
-                        "id": "4-2-2",
-                        "label": "PaddleGAN P1级功能测试",
-                        "key": "paddlegan_p1"
+                        "label": "PaddleClas P0级预训练模型精度",
+                        "key": "paddleclas_p0_pretrained_eval"
                     }
                 ]
             }
