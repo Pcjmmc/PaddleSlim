@@ -24,37 +24,154 @@ export default {
         {
           title: '阶段',
           align: 'center',
-          key: 'step'
+          key: 'step',
+          render: (h, params) => {
+            if (params.index === 0) {
+              return h('div', [
+                h('span', {
+                  style: {
+                    fontWeight: 'bold'
+                  }
+                }, params.row.step)
+              ]);
+            } else {
+              return h('div', [
+                h('span', {
+                }, params.row.step)
+              ]);
+            }
+          }
         },
         {
           title: '总量',
           align: 'center',
-          key: 'total'
+          key: 'total',
+          render: (h, params) => {
+            if (params.index === 0) {
+              return h('div', [
+                h('span', {
+                  style: {
+                    fontWeight: 'bold'
+                  }
+                }, params.row.total)
+              ]);
+            } else {
+              return h('div', [
+                h('span', {
+                }, params.row.total)
+              ]);
+            }
+          }
         },
         {
           title: '成功',
           align: 'center',
-          key: 'pass'
+          key: 'pass',
+          render: (h, params) => {
+            if (params.index === 0) {
+              return h('div', [
+                h('span', {
+                  style: {
+                    fontWeight: 'bold'
+                  }
+                }, params.row.pass)
+              ]);
+            } else {
+              return h('div', [
+                h('span', {
+                }, params.row.pass)
+              ]);
+            }
+          }
         },
         {
           title: '失败',
           align: 'center',
-          key: 'fail'
+          key: 'fail',
+          render: (h, params) => {
+            if (params.index === 0) {
+              return h('div', [
+                h('span', {
+                  style: {
+                    fontWeight: 'bold',
+                    color: 'red'
+                  }
+                }, params.row.fail)
+              ]);
+            } else {
+              return h('div', [
+                h('span', {
+                  style: {
+                    fontWeight: 'bold',
+                    color: 'red'
+                  }
+                }, params.row.fail)
+              ]);
+            }
+          }
         },
         {
           title: '运行中',
           align: 'center',
-          key: 'running'
+          key: 'running',
+          render: (h, params) => {
+            if (params.index === 0) {
+              return h('div', [
+                h('span', {
+                  style: {
+                    fontWeight: 'bold'
+                  }
+                }, params.row.running)
+              ]);
+            } else {
+              return h('div', [
+                h('span', {
+                }, params.row.running)
+              ]);
+            }
+          }
         },
         {
           title: '轮数',
           align: 'center',
-          key: 'round'
+          key: 'round',
+          render: (h, params) => {
+            if (params.index === 0) {
+              return h('div', [
+                h('span', {
+                  style: {
+                    fontWeight: 'bold'
+                  }
+                }, params.row.round)
+              ]);
+            } else {
+              return h('div', [
+                h('span', {
+                }, params.row.round)
+              ]);
+            }
+          }
         },
         {
           title: '进度',
           align: 'center',
-          key: 'progress'
+          key: 'progress',
+          render: (h, params) => {
+            if (params.index === 0) {
+              return h('div', [
+                h('span', {
+                  style: {
+                    fontWeight: 'bold'
+                  }
+                }, params.row.progress)
+              ]);
+            } else {
+              return h('div', [
+                h('span', {
+                }, params.row.progress)
+              ]);
+            }
+          }
         }
       ]
     };

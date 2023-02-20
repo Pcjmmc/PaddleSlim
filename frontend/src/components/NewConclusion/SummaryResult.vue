@@ -226,7 +226,6 @@ export default {
           }
         }
       }
-      console.log('res is', res);
       return res;
     },
     exportReport() {

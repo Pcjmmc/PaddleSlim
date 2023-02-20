@@ -210,7 +210,6 @@ export default {
       const {code, data, message} = await api.get(SearchNewConclusionUrl);
       if (parseInt(code, 10) === 200) {
         this.allData = this.RestructData(data);
-        console.log('this all Data', this.allData);
       } else {
         this.allData = [];
         this.$Message.error({
@@ -237,7 +236,6 @@ export default {
           if (settings[i].id === content[j].module_id) {
             // 将数据解析出来，拼装到settings
             let detail = JSON.parse(content[j].content);
-            console.log('detail is', detail);
             settings[i].risk = detail.risk;
             settings[i].regression = detail.regression;
             settings[i].create_time = content[j].create_time;

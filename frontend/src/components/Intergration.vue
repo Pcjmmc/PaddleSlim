@@ -46,6 +46,7 @@
           </el-tabs>
         </div>
       </el-tab-pane>
+      <!--
       <el-tab-pane
         label="风险"
         name="risk"
@@ -67,9 +68,10 @@
           :branch="repoinfo.branch"
         ></conclusion>
       </el-tab-pane>
+      -->
       <el-tab-pane
         label="风险&进展"
-        name="newConclusion"
+        name="conclusion"
       >
         <new-conclusion
           ref="mychild3"
@@ -264,7 +266,7 @@ export default {
       get() {
         let tmp = 'progress';
         if (this.$route.query.tab) {
-          if (['progress', 'risk', 'conclusion'].includes(this.$route.query.tab)) {
+          if (['progress', 'conclusion'].includes(this.$route.query.tab)) {
             tmp = this.$route.query.tab;
           }
           this.$router.replace({query: {tab: tmp}}).catch(error => {
@@ -292,12 +294,7 @@ export default {
       }
       this.$nextTick(function () {
         if (name === 'conclusion') {
-          this.$refs.mychild2.getData();
-        } else if (name === 'newConclusion') {
           this.$refs.mychild3.getData();
-        } else {
-          this.$refs.mychild.getbugdata();
-          this.$refs.mychild.getStatusFilters();
         }
       });
     },

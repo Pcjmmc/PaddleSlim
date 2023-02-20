@@ -566,7 +566,6 @@ export default {
         bos_url: item.bos_url,
         id: item.id
       };
-      console.log(params);
       const {code, data, message} = await api.post(FrameReportUrl, params);
       if (parseInt(code, 10) === 200) {
         item.allure_report = data.allure_report;
