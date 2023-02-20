@@ -68,7 +68,7 @@
         ></conclusion>
       </el-tab-pane>
       <el-tab-pane
-        label="新结论"
+        label="风险&进展"
         name="newConclusion"
       >
         <new-conclusion
