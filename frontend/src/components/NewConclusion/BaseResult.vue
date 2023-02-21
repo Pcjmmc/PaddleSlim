@@ -312,7 +312,7 @@ export default {
       this.risk.unshift(
         {
           content: '',
-          level: 0,
+          level: 5,
           important: '否',
           influence: '',
           status: '未解决',
