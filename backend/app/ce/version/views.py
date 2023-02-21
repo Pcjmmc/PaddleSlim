@@ -8,6 +8,7 @@ import time
 from exception import HTTP400Error
 from models.release_version import CeReleaseVersion
 from models.tasks import CeTasks
+from models.framework import ReleaseDailySettings, ReleaseDailyContent
 from rpc.github import GetCommit
 from services.auto_create_table import create_task_backup
 from services.menu import update_menu
@@ -123,6 +124,22 @@ class CreateRVersion(MABaseView):
         await CeReleaseVersion.aio_update(
             validated_data=validated_data, params_data={"id": _id}
         )
+
+        # 刷新看板记录到制定tag内容
+        settings = await ReleaseDailySettings.aio_filter_details(need_all=True)
+        for setting in settings:
+            module_id = setting["id"]
+            res = await ReleaseDailyContent.aio_filter_details(order_by="-create_time",
+                                                               module_id=module_id, version=self._cookies.get("ver"))
+            if len(res) == 0:
+                continue
+            else:
+                res[0]["version"] = kwargs.get("tag")
+                del(res[0]["id"])
+                print(res[0])
+                res = await ReleaseDailyContent.aio_insert(res[0])
+                if res[0] == 0:
+                    raise HTTP400Error("看板数据备份报错")
         await update_menu()
 
     async def delete(self, **kwargs):
