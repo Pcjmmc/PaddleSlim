@@ -198,7 +198,7 @@ export default {
       this.showData = false;
     },
     changeModuel(idName) {
-      document.getElementById(idName).scrollIntoView(true)
+      document.getElementById(idName).scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"})
     },
     cancelShowData() {
       this.showData = false;

@@ -245,6 +245,7 @@ export default {
     }
   },
   mounted: function () {
+    this.$route.query.tab = 'progress';
     this.getScenesList();
     this.getData();
   },
@@ -291,6 +292,8 @@ export default {
             throw error;
           }
         });
+      } else {
+        this.$route.query.tab = tmpname;
       }
       this.$nextTick(function () {
         if (name === 'conclusion') {
