@@ -57,7 +57,8 @@ export default {
     Details
   },
   mounted: async function () {
-    this.allData = this.RestructData();
+    this.allData = [];
+    this.RestructData();
   },
   computed: {
   },
@@ -85,7 +86,7 @@ export default {
           }
         }
       }
-      return settings;
+      this.allData = settings;
     }
   }
 };

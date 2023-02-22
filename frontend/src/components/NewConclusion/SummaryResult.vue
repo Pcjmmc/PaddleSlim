@@ -51,7 +51,7 @@
       >
         <h2 slot="title" style="text-align:center">各方向详细进展</h2>
         <div style="margin-top: 1%;">
-          <detail-base :settings="settings" :content="content"></detail-base>
+          <detail-base ref="mychild" :settings="settings" :content="content"></detail-base>
         </div>
       </Card>
       <Card
@@ -260,51 +260,10 @@ export default {
           this.regression.unshift(this.regression_summary);
         }
         this.content = data.content;
+        this.$nextTick(function () {
+          this.$refs.mychild.RestructData();
+        });
         this.icafes = data.icafes;
-        this.important = {
-          分布式: [
-            {
-              content: '这是风险1',
-              influence: 'hshshs',
-              level: 5,
-              important: '是',
-              status: '未解决',
-              type: 'Bug',
-              pr: 'hshsh',
-              icafe: [
-                {
-                  url: 'xxxxxx',
-                  owner: '张三',
-                  title: '这是一个icafe卡片',
-                  ref: 0
-                },
-                {
-                  url: 'yyyyyy',
-                  owner: '李四',
-                  title: '这是一个icafe卡片',
-                  ref: 0
-                }
-              ]
-            },
-            {
-              content: '这是风险2',
-              influence: 'lalala',
-              level: 4,
-              important: '是',
-              status: '未解决',
-              type: 'Delay',
-              pr: 'hshsh',
-              icafe: [
-                {
-                  url: 'yyyyyy',
-                  owner: '王五',
-                  title: '这是一个icafe卡片',
-                  ref: 1
-                }
-              ]
-            }
-          ]
-        }
         this.important = data.important;
       } else {
         this.settings = [];
