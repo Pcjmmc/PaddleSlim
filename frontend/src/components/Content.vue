@@ -75,7 +75,7 @@ export default {
       let data = {
         name: 'ContentVersion',
         params: {
-          version: this.versionName
+          version: this.versionName.replace('/', '-')
         }
       };
       // 如果有query则最近进去
@@ -93,7 +93,7 @@ export default {
       this.getData();
     },
     $route() {
-      let _version = this.$route.params.version;
+      let _version = this.$route.params.version.replace('-', '/');
       Cookies.set('version', _version);
       Cookies.set('ver', _version);
       this.$store.commit('changeVersion', _version);
@@ -113,11 +113,11 @@ export default {
   },
   methods: {
     SyncSelected() {
-      let _version = this.$route.params.version ? this.$route.params.version : this.$store.state.version;
+      let _version = this.$route.params.version ? this.$route.params.version.replace('-', '/') : this.$store.state.version;
       let data = {
         name: 'ContentVersion',
         params: {
-          version: _version
+          version: _version.replace('/', '-')
         }
       };
       if (this.$route.query.tab) {

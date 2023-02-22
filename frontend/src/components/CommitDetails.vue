@@ -114,7 +114,7 @@ export default {
       this.$router.push({
         name: 'CommitDetails',
         params: {
-          version: this.version
+          version: this.version.replace('/', '-')
         }
       }).catch(error => {
         if (error.name !== 'NavigationDuplicated') {
@@ -124,7 +124,7 @@ export default {
       this.getData();
     },
     $route() {
-      let _version = this.$route.params.version;
+      let _version = this.$route.params.version.replace('-', '/');
       Cookies.set('version', _version);
       Cookies.set('ver', _version);
       this.$store.commit('changeVersion', _version);

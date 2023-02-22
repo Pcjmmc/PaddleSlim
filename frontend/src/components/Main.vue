@@ -304,7 +304,7 @@ export default {
         // 暂时定义menu
         this.verisonList = this.menuDesc.version;
         if (this.$route.params && this.$route.params.version) {
-          this.option = this.$route.params.version;
+          this.option = this.$route.params.version.replace('-', "/");
           Cookies.set('version', this.option);
           Cookies.set('ver', this.option);
           this.$store.commit('changeVersion', this.option);

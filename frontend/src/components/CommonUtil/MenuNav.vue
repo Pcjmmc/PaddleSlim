@@ -69,7 +69,8 @@ export default {
     computeLink: function (key) {
       if (this.fatherLink) {
         if (key === 'publish' || key === 'integration') {
-          let branch = encodeURIComponent(this.$store.state.version);
+          // let branch = encodeURIComponent(this.$store.state.version);
+          let branch = this.$store.state.version.replace('/', "-");
           return `${this.fatherLink}/${key}/${branch}`;
         } else {
           return `${this.fatherLink}/${key}`;

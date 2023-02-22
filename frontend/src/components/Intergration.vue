@@ -260,7 +260,7 @@ export default {
   computed: {
     version: {
       get() {
-        return this.$route.params.version ? this.$route.params.version : this.$store.state.version;
+        return this.$route.params.version ? this.$route.params.version.replace('-', '/') : this.$store.state.version;
       }
     },
     tabName: {

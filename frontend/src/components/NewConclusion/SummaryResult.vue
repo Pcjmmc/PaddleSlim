@@ -177,7 +177,7 @@ export default {
       this.$router.push({
         name: 'SummaryResult',
         params: {
-          version: this.versionName
+          version: this.versionName.replace('/', '-')
         }
       }).catch(error => {
         if (error.name !== 'NavigationDuplicated') {
@@ -187,7 +187,7 @@ export default {
       await this.getData();
     },
     $route() {
-      let _version = this.$route.params.version;
+      let _version = this.$route.params.version.replace('-', '/');
       Cookies.set('version', _version);
       Cookies.set('ver', _version);
       this.$store.commit('changeVersion', _version);
@@ -202,7 +202,7 @@ export default {
   computed: {
     versionName: {
       get() {
-        return this.$store.state.version ? this.$store.state.version : this.$route.params.version;
+        return this.$store.state.version ? this.$store.state.version : this.$route.params.version.replace('-', '/');
       }
     }
   },

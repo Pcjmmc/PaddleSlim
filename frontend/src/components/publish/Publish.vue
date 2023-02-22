@@ -94,7 +94,7 @@ export default {
       let data = {
         name: 'PublishVersion',
         params: {
-          version: this.version
+          version: this.version.replace('/', '-')
         }
       };
       // 如果有query则最近进去
@@ -113,7 +113,7 @@ export default {
       this.getSummary();
     },
     $route() {
-      let _version = this.$route.params.version;
+      let _version = this.$route.params.version.replace('-', '/');
       Cookies.set('version', _version);
       Cookies.set('ver', _version);
       this.$store.commit('changeVersion', _version);
@@ -135,31 +135,35 @@ export default {
         return this.$store.state.version;
       }
     },
-    tabName() {
-      let tmp = 'progress';
-      if (this.$route.query.tab) {
-        if (['progress', 'publish'].includes(this.$route.query.tab)) {
-          tmp = this.$route.query.tab;
-        }
-        this.$router.replace({query: {tab: tmp}}).catch(error => {
-          if (error.name !== 'NavigationDuplicated') {
-            throw error;
+    tabName: {
+      get() {
+        let tmp = 'progress';
+        if (this.$route.query.tab) {
+          if (['progress', 'publish'].includes(this.$route.query.tab)) {
+            tmp = this.$route.query.tab;
           }
-        });
+          this.$router.replace({query: {tab: tmp}}).catch(error => {
+            if (error.name !== 'NavigationDuplicated') {
+              throw error;
+            }
+          });
+        }
+        return tmp;
+      },
+      set(val) {
       }
-      return tmp;
     }
   },
   methods: {
     SyncSelected() {
-      let _version = this.$route.params.version ? this.$route.params.version : this.$store.state.version;
+      let _version = this.$route.params.version ? this.$route.params.version.replace('-', '/') : this.$store.state.version;
       this.$store.commit('changeVersion', _version);
       Cookies.set('version', _version);
       Cookies.set('ver', _version);
       let data = {
         name: 'PublishVersion',
         params: {
-          version: _version
+          version: _version.replace('/', '-')
         }
       };
       if (this.$route.query.tab) {

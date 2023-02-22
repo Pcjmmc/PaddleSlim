@@ -171,7 +171,7 @@ export default {
   computed: {
     versionName: {
       get() {
-        return this.$store.state.version ? this.$store.state.version : this.$route.params.version;
+        return this.$store.state.version ? this.$store.state.version : this.$route.params.version.replace('-', '/');
       }
     }
   },
