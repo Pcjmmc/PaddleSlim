@@ -79,7 +79,7 @@ class ReportSummary(MABaseView):
                     data[module] = []
                 i["owner"] = []
                 for icafe in i.get("icafe"):
-                    i["owner"].append(icafe.get("owner"))
+                    i["owner"] = i["owner"] + icafe.get("owner")
                 i["owner"] = " @".join(i["owner"])
                 data[module].append(i)
         return data
