@@ -11,9 +11,16 @@
                 <Form-item prop="title">
                   <span>
                     <span> {{ (ids + 1) }}: </span>
-                    <a href="item.url">{{ itm.title }}
+                    <a href="javascript:void(0)" @click="jumper(itm.url)">{{ itm.title }}
                     </a>
-                    <span>@ {{ itm.owner }}</span>
+                    <span v-if="(itm.owner instanceof Array)===true">
+                      <span v-for="(t, d) in itm.owner">
+                      @ {{ t }}
+                      </span>
+                    </span>
+                    <span v-else>
+                      @ {{ itm.owner }}
+                    </span>
                   </span>
                 </Form-item>
               </Col>
@@ -48,6 +55,9 @@ export default {
   components: {
   },
   methods: {
+    jumper(url) {
+      window.open(url, '_blank');
+    }
   }
 };
 </script>

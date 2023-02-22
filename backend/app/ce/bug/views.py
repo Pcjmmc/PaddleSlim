@@ -170,6 +170,7 @@ async def get_bugs_by_filter(query):
     for item in bugData:
         space = item.get('spacePrefixCode')
         sequence = item.get('sequence')
+        responsible_people = item.get('responsiblePeople', [])
         level = ""
         rd_owner = ""
         qa_owner = ""
@@ -203,6 +204,7 @@ async def get_bugs_by_filter(query):
             "rd_owner": rd_owner,
             "rd_username": rd_username,
             "qa_owner": qa_owner,
+            "responsible_people": [it.get("name") for it in responsible_people],
             "qa_username": qa_username,
             "repo": repo,
             "pr": pr,

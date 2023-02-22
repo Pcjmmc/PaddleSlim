@@ -74,7 +74,13 @@ export default {
         {
           title: '负责人',
           align: 'center',
-          key: 'owner'
+          key: 'owner',
+          render: (h, params) => {
+            return h('div', [
+                h('span', {
+                }, params.row.owner.join(','))
+            ]);
+          }
         },
         {
           title: '操作',
@@ -141,7 +147,7 @@ export default {
         if (parseInt(code, 10) === 200 && data.length > 0) {
           let info = data[0];
           this.datas[index].title = info.title;
-          this.datas[index].owner = info.rd_owner;
+          this.datas[index].owner = info.responsible_people;
           this.datas[index].url = info.url;
           this.$emit('updataDate', this.idx, this.datas);
         } else {

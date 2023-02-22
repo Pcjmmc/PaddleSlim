@@ -54,7 +54,19 @@
           <div v-for="(it, id) in item.icafe">
             <Row style="margin-top:1%;" >
               <Col span="24">
-                <a :href="it.url"> {{ it.title }} </a> @{{ it.owner }}
+                <span>
+                  <span> {{ (id + 1) }}: </span>
+                  <a href="javascript:void(0)" @click="jumper(it.url)">{{ it.title }}
+                  </a>
+                  <span v-if="(it.owner instanceof Array)===true">
+                    <span v-for="(t, d) in it.owner">
+                    @ {{ t }}
+                    </span>
+                  </span>
+                  <span v-else>
+                    @ {{ it.owner }}
+                  </span>
+                </span>
               </Col>
             </Row>
           </div>
@@ -151,6 +163,9 @@ export default {
         default:
           return 'red';
       }
+    },
+    jumper(url) {
+      window.open(url, '_blank');
     }
   }
 };
