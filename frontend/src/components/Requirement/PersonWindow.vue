@@ -7,7 +7,7 @@
       >
         <Row>
           <Col span="12">
-            <FormItem label="时间:" prop="dt">
+            <FormItem label="时间:" prop="dt" class="form-css">
               <DatePicker
                 type="daterange"
                 placement="bottom-end"
@@ -22,22 +22,31 @@
         <div style="margin-top: 1%;">
           <Row>
             <Col span="6">
-              <FormItem label="需求:" prop="keyword">
-                <Input v-model="search.keyword" placeholder="输入需求关键字"/>
+              <FormItem label="需求:" prop="keyword" class="form-css">
+                <Input
+                  clearable
+                  v-model="search.keyword"
+                  placeholder="输入需求关键字"/>
               </FormItem>
             </Col>
             <Col span="6" v-if="userInfo.identifyQA">
-              <FormItem label="RD:" prop="rdname">
-                <Input v-model="search.rdname" placeholder="输入RD邮箱前缀"/>
+              <FormItem label="RD:" prop="rdname" class="form-css">
+                <Input
+                  clearable
+                  v-model="search.rdname"
+                  placeholder="输入RD邮箱前缀"/>
               </FormItem>
             </Col>
             <Col span="6" v-else>
-              <FormItem label="QA:" prop="qaname">
-                <Input v-model="search.qaname" placeholder="输入QA邮箱前缀"/>
+              <FormItem label="QA:" prop="qaname" class="form-css">
+                <Input
+                  clearable
+                  v-model="search.qaname"
+                  placeholder="输入QA邮箱前缀"/>
               </FormItem>
             </Col>
             <Col span="4">
-              <FormItem label="状态:" prop="staus">
+              <FormItem label="状态:" prop="staus" class="form-css">
                 <Select
                   clearable
                   filterable
@@ -866,9 +875,8 @@ export default {
 </script>
 
 <style scoped>
-.ivu-form-item{
+.form-css {
   margin-bottom: 12px;
-  font-size: 14px;
 }
 .btn-success {
   color: #fff;

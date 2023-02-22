@@ -13,7 +13,7 @@
           style="width: 85%"
         >
           <Row>
-            <Col span="6">
+            <Col span="8">
              <FormItem label="系统:" prop="os">
                 <Select clearable v-model="search.os">
                   <Option
@@ -24,7 +24,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="6">
+            <Col span="8">
               <FormItem
                 label="分支:"
                 prop="branch"
@@ -39,25 +39,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="4">
-              <FormItem label="预测库:" prop="OpenInfer">
-                <i-switch v-model="search.OpenInfer">
-                  <span slot="open">开</span>
-                  <span slot="close">关</span>
-                </i-switch>
-              </FormItem>
-            </Col>
-            <Col>
-              <FormItem label="开启缓存:" prop="OpenCache">
-                <i-switch v-model="search.OpenCache">
-                  <span slot="open">开</span>
-                  <span slot="close">关</span>
-                </i-switch>
-              </FormItem>
-            </Col>
-          </Row>
-          <Row>
-            <Col span="6">
+            <Col span="8">
               <FormItem label="CUDA:" prop="cuda">
                 <Select clearable v-model="search.cuda">
                   <Option
@@ -68,6 +50,8 @@
                 </Select>
               </FormItem>
             </Col>
+          </Row>
+          <Row>
             <Col span="8">
               <FormItem label="Python:" prop="python">
                 <Select clearable v-model="search.python">
@@ -79,9 +63,7 @@
                 </Select>
               </FormItem>
             </Col>
-          </Row>
-          <Row>
-            <Col span="6">
+            <Col span="8">
               <FormItem label="类型:" prop="type">
                 <Select clearable v-model="search.type">
                   <Option
@@ -94,16 +76,36 @@
             </Col>
             <Col span="8">
               <FormItem label="取值:" prop="value">
-                <Input v-model="search.value" placeholder="输入 pr、commit 或 包地址"/>
+                <Input
+                  clearable
+                  v-model="search.value"
+                  placeholder="输入 pr、commit 或 包地址"/>
               </FormItem>
             </Col>
           </Row>
+          <Row>
+          <Col span="4">
+            <FormItem label="预测库:" prop="OpenInfer">
+              <i-switch v-model="search.OpenInfer">
+                <span slot="open">开</span>
+                <span slot="close">关</span>
+              </i-switch>
+            </FormItem>
+          </Col>
+          <Col span="4">
+            <FormItem label="开启缓存:" prop="OpenCache">
+              <i-switch v-model="search.OpenCache">
+                <span slot="open">开</span>
+                <span slot="close">关</span>
+              </i-switch>
+            </FormItem>
+          </Col>
+        </Row>
         </Form>
       </div>
       <Row
         type="flex"
         justify="center"
-        style="margin-top: 1%;"
       >
         <Col span="4">
           <Button class="btn-success" @click="handleSummit">创建编译任务</Button>
@@ -379,10 +381,6 @@ export default {
 </script>
 
 <style scoped>
-.ivu-form-item{
-  margin-bottom: 12px;
-  font-size: 14px;
-}
 .center-card-s {
   width: 100%;
   font-size: 14px;
