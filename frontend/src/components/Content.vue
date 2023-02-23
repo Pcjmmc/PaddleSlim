@@ -127,6 +127,8 @@ export default {
           let tmp = this.$route.query.tab;
           data.query = {tab: tmp};
         }
+      } else {
+        data.query = {tab: 'progress'};
       }
       this.$store.commit('changeVersion', _version);
       Cookies.set('version', _version);

@@ -245,7 +245,7 @@ export default {
     }
   },
   mounted: function () {
-    this.$route.query.tab = 'progress';
+    // 不能这样写会有bug
     this.getScenesList();
     this.getData();
   },
