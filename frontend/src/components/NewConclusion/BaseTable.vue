@@ -78,7 +78,7 @@ export default {
           render: (h, params) => {
             return h('div', [
                 h('span', {
-                }, params.row.owner.join(','))
+                }, (params.row.owner instanceof Array) ? params.row.owner.join(',') : params.row.owner)
             ]);
           }
         },

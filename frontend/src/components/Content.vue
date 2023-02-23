@@ -75,7 +75,7 @@ export default {
       let data = {
         name: 'ContentVersion',
         params: {
-          version: this.versionName.replace('/', '-')
+          version: this.versionName ? this.versionName.replace('/', '-') : this.versionName
         }
       };
       // 如果有query则最近进去
@@ -93,10 +93,12 @@ export default {
       this.getData();
     },
     $route() {
-      let _version = this.$route.params.version.replace('-', '/');
-      Cookies.set('version', _version);
-      Cookies.set('ver', _version);
-      this.$store.commit('changeVersion', _version);
+      if (this.$route.params.version) {
+        let _version = this.$route.params.version.replace('-', '/');
+        Cookies.set('version', _version);
+        Cookies.set('ver', _version);
+        this.$store.commit('changeVersion', _version);
+      }
     }
   },
   components: {
