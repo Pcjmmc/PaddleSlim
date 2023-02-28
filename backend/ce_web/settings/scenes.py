@@ -100,19 +100,21 @@ secondary_type = {
 
 # 套件顺序
 ORDER = {
-    "PaddleClas": 1,
-    "PaddleDetection": 2,
-    "PaddleGAN": 3,
-    "PaddleNLP": 4,
-    "PaddleOCR": 5,
-    "PaddleSeg": 6,
-    "PaddleSlim": 7,
-    "PaddleRec": 8,
-    "PaddleSpeech": 9,
-    "Paddle2ONNX": 10,
-    "PaddleHub": 11,
-    "other": 12
+    'Paddle2ONNX': 1,
+    'Paddle3D': 2,
+    'PaddleClas': 3,
+    'PaddleDetection': 4,
+    'PaddleGAN': 5,
+    'PaddleHub': 6,
+    'PaddleNLP': 7,
+    'PaddleOCR': 8,
+    'PaddleRec': 9,
+    'PaddleSeg': 10,
+    'PaddleSlim': 11,
+    'PaddleSpeech': 12,
+    "other": 13
 }
+
 # compile是一个全量的，其他块自己按环境重要程度排序
 system_list = {
     'compile': [
@@ -131,17 +133,11 @@ system_list = {
         'Linux_ROCM', 'Linux_Cpu', 'Windows_GPU_2080',
         'Windows_GPU_3080', 'Npu', 'Windows_Cpu', 'Mac'],
     'model': [
-        'Linux_Gpu_Cuda10.2', 'Linux_Gpu_Cuda11.0',
-        'Linux_Gpu_Cuda10.1', 'Linux_Gpu_Cuda11.1',
-        'Linux_Gpu_Cuda11.2', 'Linux_Gpu_Cuda11.3',
+        'Linux_Gpu_Cuda10.2', 'Linux_Gpu_Cuda11.2', 
         'Linux_Gpu_Cuda11.6', 'Linux_Gpu_Cuda11.7',
-        'Linux_Gpu_Cuda11.8', 'Linux_Gpu_Cuda12.0',
-        'Linux_Gpu(T4)_Cuda10.2', 'Linux_Gpu(T4)_Cuda11.1',
-        'Linux_Gpu(T4)_Cuda11.2', 'Linux_Jetpack4.6', 'Linux_Jetpack5.0.2',
-        'Linux_ROCM', 'Windows_GPU_2080', 'Windows_GPU_3080', 
+        'Linux_Gpu_Cuda11.6_Centos', 'Windows_Gpu_Cuda11.2',
         'Windows_Gpu_Cuda11.6', 'Windows_Gpu_Cuda11.7',
-        'Windows_Gpu_Cuda11.8', 'Windows_Gpu_Cuda12.0',
-        'Npu', 'Mac', 'Windows_Cpu', 'Linux_Cpu', 'Xpu'
+        'Windows_Cpu_Intel', 'Mac_Intel', 'Mac_M1'
     ],
     'dist': [
         'Linux_Gpu_Cuda11.0', 'Linux_Gpu_Cuda10.2',

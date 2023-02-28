@@ -92,7 +92,7 @@
     <Modal
       v-model="showModa"
       title="创建测试任务"
-      width="60%"
+      width="70%"
       v-on:on-cancel="handleReset"
     >
       <test-job

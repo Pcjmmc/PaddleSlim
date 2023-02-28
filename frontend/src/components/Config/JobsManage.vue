@@ -55,8 +55,8 @@
         >
       </Page>
     </div>
-    <Modal v-model="setCreateModal" title="录入任务" @on-cancel="handleReset" width="700px">
-      <Form ref="addForm" :model="addForm" :rules="addRules" :label-width="120">
+    <Modal v-model="setCreateModal" title="录入任务" @on-cancel="handleReset" width="800px">
+      <Form ref="addForm" :model="addForm" :rules="addRules" :label-width="130">
         <FormItem label="所属阶段: " prop="step">
           <Select v-model="addForm.step" >
             <Option v-for="(item, index) in stepList" :value="item.key" :key="index">{{ item.desc }}</Option>
@@ -150,7 +150,8 @@
           <Select
             filterable
             clearable
-          v-model="addForm.system"
+            placeholder="支持关键字检索"
+            v-model="addForm.system"
         >
             <Option v-for="(item, index) in systemList" :value="item.key" :key="index">{{ item.desc }}</Option>
           </Select>
@@ -340,13 +341,14 @@ export default {
         'other',
         'PaddleClas',
         'PaddleGAN',
-        'PaddleOCR',
-        'PaddleNLP',
-        'PaddleSeg',
-        'PaddleDetection',
-        'PaddleSpeech',
         'PaddleRec',
         'PaddleSlim',
+        'PaddleDetection',
+        'PaddleSeg',
+        'PaddleNLP',
+        'PaddleOCR',
+        'PaddleSpeech',
+        'Paddle3D',
         'PaddleHub',
         'Paddle2ONNX',
         'PaddleScience',

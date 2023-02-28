@@ -28,10 +28,16 @@ class ScenesManage(MABaseView):
         """
         响应请求, 实现获取数据逻辑, 并返回符合查询条件的数据
         """
+        tempList = [val for key, val in system_list.items()]
+        systemList = list()
+        for item in tempList:
+            systemList = list(set(systemList + item))
+        systemList.sort()
+        systemList = [{'key': item, 'desc': item} for item in systemList]
         data = {
             "taskTypeList": [],
             "sendTypeList": secondary_type,
-            "systemList": [{'key': item, 'desc': item} for item in system_list['compile']],
+            "systemList": systemList,
             "bugTypeList": back_dict,
             "publishOriginList": publish_origin_list
 

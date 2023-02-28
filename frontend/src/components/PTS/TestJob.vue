@@ -210,18 +210,19 @@
     <Card class="new-card-s">
       <div align="center" style="margin-top: 1%;">
         <tree-transfer
-          open-all
+          high-light
           :title="title"
           :from_data="data2"
           :to_data="toData"
           :render-content-left="renderFunc"
           :render-content-right="renderFunc"
           :default-props="{label:'label'}"
+          :default-expanded-keys="treeData"
           mode="transfer"
-          height="600px"
           width="100%"
           @add-btn="add"
           @remove-btn="remove"
+          height="700px"
         ></tree-transfer>
       </div>
     </Card>
@@ -294,6 +295,14 @@ export default {
     treeTransfer
   },
   computed: {
+    treeData() {
+      let result = [];
+      for (let i = 0; i < this.data2.length; i++) {
+        let dt = this.data2[i];
+        result.push(dt.id);
+      }
+      return result;
+    }
   },
   methods: {
     handleClose() {
