@@ -22,7 +22,45 @@ module_mapping = {
     "models_benchmark_a100_single_dp":"A100_单机性能测试",
     "models_benchmark_a100_multi_dp":"A100_多机性能测试",
     "paddleclas_p0_function": "PaddleClas P0级功能性",
+    "paddlegan_p0_function": "PaddleGAN P0级功能性",
+    "paddleocr_p0_function": "PaddleOCR P0级功能性",
+    "paddle3d_p0_function": "Paddle3D P0级功能性",
+    "paddlespeech_p0_function": "PaddleSpeech P0级功能性",
+    "paddledetection_p0_function": "PaddleDetection P0级功能性",
+    "paddleseg_p0_function": "PaddleSeg P0级功能性",
+    "paddlenlp_p0_function": "PaddleNLP P0级功能性",
+    "paddleslim_p0_function": "PaddleSlim P0级功能性",
+    "paddlerec_p0_function": "PaddleRec P0级功能性",
     "paddleclas_p0_pretrained_eval": "PaddleClas P0级预训练模型精度",
+    "paddlegan_p0_pretrained_eval": "PaddleGAN P0级预训练模型精度",
+    "paddleocr_p0_pretrained_eval": "PaddleOCR P0级预训练模型精度",
+    "paddle3d_p0_pretrained_eval": "Paddle3D P0级预训练模型精度",
+    "paddlespeech_p0_pretrained_eval": "PaddleSpeech P0级预训练模型精度",
+    "paddledetection_p0_pretrained_eval": "PaddleDetection P0级预训练模型精度",
+    "paddleseg_p0_pretrained_eval": "PaddleSeg P0级预训练模型精度",
+    "paddlenlp_p0_pretrained_eval": "PaddleNLP P0级预训练模型精度",
+    "paddleslim_p0_pretrained_eval": "PaddleSlim P0级预训练模型精度",
+    "paddlerec_p0_pretrained_eval": "PaddleRec P0级预训练模型精度",
+    "paddleclas_all_function": "PaddleClas ALL级功能性",
+    "paddlegan_all_function": "PaddleGAN ALL级功能性",
+    "paddleocr_all_function": "PaddleOCR ALL级功能性",
+    "paddle3d_all_function": "Paddle3D ALL级功能性",
+    "paddlespeech_all_function": "PaddleSpeech ALL级功能性",
+    "paddledetection_all_function": "PaddleDetection ALL级功能性",
+    "paddleseg_all_function": "PaddleSeg ALL级功能性",
+    "paddlenlp_all_function": "PaddleNLP ALL级功能性",
+    "paddleslim_all_function": "PaddleSlim ALL级功能性",
+    "paddlerec_all_function": "PaddleRec ALL级功能性",
+    "paddleclas_all_pretrained_eval": "PaddleClas ALL级预训练模型精度",
+    "paddlegan_all_pretrained_eval": "PaddleGAN ALL级预训练模型精度",
+    "paddleocr_all_pretrained_eval": "PaddleOCR ALL级预训练模型精度",
+    "paddle3d_all_pretrained_eval": "Paddle3D ALL级预训练模型精度",
+    "paddlespeech_all_pretrained_eval": "PaddleSpeech ALL级预训练模型精度",
+    "paddledetection_all_pretrained_eval": "PaddleDetection ALL级预训练模型精度",
+    "paddleseg_all_pretrained_eval": "PaddleSeg ALL级预训练模型精度",
+    "paddlenlp_all_pretrained_eval": "PaddleNLP ALL级预训练模型精度",
+    "paddleslim_all_pretrained_eval": "PaddleSlim ALL级预训练模型精度",
+    "paddlerec_all_pretrained_eval": "PaddleRec ALL级预训练模型精度"
 }
 
 
@@ -104,14 +142,69 @@ module_list = [
             {
                 "pid":"4",
                 "id":"4-1",
-                "label":"重要模型功能性",
+                "label":"重要模型 功能性",
                 "key":"p0_function",
                 "children":[
                     {
                         "pid":"4-1",
                         "id":"4-1-1",
                         "label":"PaddleClas P0级功能性",
-                        "key":"paddleclas_p0_function"
+                        "key":"paddleclas_p0_function",
+                        "desc":"执行P0优先级模型, 阶段包括训练、评估、推理、动转静、静态图预测的功能, 具体执行模型列表见报告"
+                    },
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-2",
+                        "label":"PaddleGAN P0级功能性",
+                        "key":"paddlegan_p0_function"
+                    },
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-3",
+                        "label":"PaddleOCR P0级功能性",
+                        "key":"paddleocr_p0_function"
+                    },
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-4",
+                        "label":"Paddle3D P0级功能性",
+                        "key":"paddle3d_p0_function"
+                    },
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-5",
+                        "label":"PaddleSpeech P0级功能性",
+                        "key":"paddlespeech_p0_function"
+                    },
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-6",
+                        "label":"PaddleDetection P0级功能性",
+                        "key":"paddledetection_p0_function"
+                    },
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-7",
+                        "label":"PaddleSeg P0级功能性",
+                        "key":"paddleseg_p0_function"
+                    },
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-8",
+                        "label":"PaddleNLP P0级功能性",
+                        "key":"paddlenlp_p0_function"
+                    },
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-9",
+                        "label":"PaddleSlim P0级功能性",
+                        "key":"paddleslim_p0_function"
+                    },
+                    {
+                        "pid":"4-1",
+                        "id":"4-1-10",
+                        "label":"PaddleRec P0级功能性",
+                        "key":"paddlerec_p0_function"
                     }
                 ]
             },
@@ -119,13 +212,203 @@ module_list = [
                 "pid":"4",
                 "id":"4-2",
                 "label":"重要模型 预训练模型 评估、动态图推理、静态图预测精度",
-                "key":"p0_pretrained_eval",
-                "children": [
+                "key":"p0_function",
+                "children":[
                     {
-                        "pid": "4-2",
-                        "id": "4-2-1",
-                        "label": "PaddleClas P0级预训练模型精度",
-                        "key": "paddleclas_p0_pretrained_eval"
+                        "pid":"4-2",
+                        "id":"4-2-1",
+                        "label":"PaddleClas P0级预训练模型精度",
+                        "key":"paddleclas_p0_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-2",
+                        "id":"4-2-2",
+                        "label":"PaddleGAN P0级预训练模型精度",
+                        "key":"paddlegan_p0_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-2",
+                        "id":"4-2-3",
+                        "label":"PaddleOCR P0级预训练模型精度",
+                        "key":"paddleocr_p0_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-2",
+                        "id":"4-2-4",
+                        "label":"Paddle3D P0级预训练模型精度",
+                        "key":"paddle3d_p0_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-2",
+                        "id":"4-2-5",
+                        "label":"PaddleSpeech P0级预训练模型精度",
+                        "key":"paddlespeech_p0_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-2",
+                        "id":"4-2-6",
+                        "label":"PaddleDetection P0级预训练模型精度",
+                        "key":"paddledetection_p0_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-2",
+                        "id":"4-2-7",
+                        "label":"PaddleSeg P0级预训练模型精度",
+                        "key":"paddleseg_p0_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-2",
+                        "id":"4-2-8",
+                        "label":"PaddleNLP P0级预训练模型精度",
+                        "key":"paddlenlp_p0_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-2",
+                        "id":"4-2-9",
+                        "label":"PaddleSlim P0级预训练模型精度",
+                        "key":"paddleslim_p0_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-2",
+                        "id":"4-2-10",
+                        "label":"PaddleRec P0级预训练模型精度",
+                        "key":"paddlerec_p0_pretrained_eval"
+                    }
+                ]
+            },
+            {
+                "pid":"4",
+                "id":"4-3",
+                "label":"全量模型 功能性",
+                "key":"p0_function",
+                "children":[
+                    {
+                        "pid":"4-3",
+                        "id":"4-3-1",
+                        "label":"PaddleClas ALL级功能性",
+                        "key":"paddleclas_all_function"
+                    },
+                    {
+                        "pid":"4-3",
+                        "id":"4-3-2",
+                        "label":"PaddleGAN ALL级功能性",
+                        "key":"paddlegan_all_function"
+                    },
+                    {
+                        "pid":"4-3",
+                        "id":"4-3-3",
+                        "label":"PaddleOCR ALL级功能性",
+                        "key":"paddleocr_all_function"
+                    },
+                    {
+                        "pid":"4-3",
+                        "id":"4-3-4",
+                        "label":"Paddle3D ALL级功能性",
+                        "key":"paddle3d_all_function"
+                    },
+                    {
+                        "pid":"4-3",
+                        "id":"4-3-5",
+                        "label":"PaddleSpeech ALL级功能性",
+                        "key":"paddlespeech_all_function"
+                    },
+                    {
+                        "pid":"4-3",
+                        "id":"4-3-6",
+                        "label":"PaddleDetection ALL级功能性",
+                        "key":"paddledetection_all_function"
+                    },
+                    {
+                        "pid":"4-3",
+                        "id":"4-3-7",
+                        "label":"PaddleSeg ALL级功能性",
+                        "key":"paddleseg_all_function"
+                    },
+                    {
+                        "pid":"4-3",
+                        "id":"4-3-8",
+                        "label":"PaddleNLP ALL级功能性",
+                        "key":"paddlenlp_all_function"
+                    },
+                    {
+                        "pid":"4-3",
+                        "id":"4-3-9",
+                        "label":"PaddleSlim ALL级功能性",
+                        "key":"paddleslim_all_function"
+                    },
+                    {
+                        "pid":"4-3",
+                        "id":"4-3-10",
+                        "label":"PaddleRec ALL级功能性",
+                        "key":"paddlerec_all_function"
+                    }
+                ]
+            },
+            {
+                "pid":"4",
+                "id":"4-4",
+                "label":"全量模型 预训练模型 评估、动态图推理、静态图预测精度",
+                "key":"all_function",
+                "children":[
+                    {
+                        "pid":"4-4",
+                        "id":"4-4-1",
+                        "label":"PaddleClas ALL级预训练模型精度",
+                        "key":"paddleclas_all_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-4",
+                        "id":"4-4-2",
+                        "label":"PaddleGAN ALL级预训练模型精度",
+                        "key":"paddlegan_all_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-4",
+                        "id":"4-4-3",
+                        "label":"PaddleOCR ALL级预训练模型精度",
+                        "key":"paddleocr_all_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-4",
+                        "id":"4-4-4",
+                        "label":"Paddle3D ALL级预训练模型精度",
+                        "key":"paddle3d_all_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-4",
+                        "id":"4-4-5",
+                        "label":"PaddleSpeech ALL级预训练模型精度",
+                        "key":"paddlespeech_all_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-4",
+                        "id":"4-4-6",
+                        "label":"PaddleDetection ALL级预训练模型精度",
+                        "key":"paddledetection_all_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-4",
+                        "id":"4-4-7",
+                        "label":"PaddleSeg ALL级预训练模型精度",
+                        "key":"paddleseg_all_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-4",
+                        "id":"4-4-8",
+                        "label":"PaddleNLP ALL级预训练模型精度",
+                        "key":"paddlenlp_all_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-4",
+                        "id":"4-4-9",
+                        "label":"PaddleSlim ALL级预训练模型精度",
+                        "key":"paddleslim_all_pretrained_eval"
+                    },
+                    {
+                        "pid":"4-4",
+                        "id":"4-4-10",
+                        "label":"PaddleRec ALL级预训练模型精度",
+                        "key":"paddlerec_all_pretrained_eval"
                     }
                 ]
             }

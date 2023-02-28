@@ -40,8 +40,53 @@ PLACE = {
     "mkldnn_infer": CLOUD,
     
     # models
+    #重要模型功能性
     "paddleclas_p0_function": CLOUD,
+    "paddlegan_p0_function": CLOUD,
+    "paddleocr_p0_function": CLOUD,
+    "paddle3d_p0_function": CLOUD,
+    "paddlespeech_p0_function": CLOUD,
+    "paddledetection_p0_function": CLOUD,
+    "paddleseg_p0_function": CLOUD,
+    "paddlenlp_p0_function": CLOUD,
+    "paddleslim_p0_function": CLOUD,
+    "paddlerec_p0_function": CLOUD,
+
+    #重要模型 预训练模型评估、推理、预测精度
     "paddleclas_p0_pretrained_eval": CLOUD,
+    "paddlegan_p0_pretrained_eval": CLOUD,
+    "paddleocr_p0_pretrained_eval": CLOUD,
+    "paddle3d_p0_pretrained_eval": CLOUD,
+    "paddlespeech_p0_pretrained_eval": CLOUD,
+    "paddledetection_p0_pretrained_eval": CLOUD,
+    "paddleseg_p0_pretrained_eval": CLOUD,
+    "paddlenlp_p0_pretrained_eval": CLOUD,
+    "paddleslim_p0_pretrained_eval": CLOUD,
+    "paddlerec_p0_pretrained_eval": CLOUD,
+
+    #全量模型功能性
+    "paddleclas_all_function": CLOUD,
+    "paddlegan_all_function": CLOUD,
+    "paddleocr_all_function": CLOUD,
+    "paddle3d_all_function": CLOUD,
+    "paddlespeech_all_function": CLOUD,
+    "paddledetection_all_function": CLOUD,
+    "paddleseg_all_function": CLOUD,
+    "paddlenlp_all_function": CLOUD,
+    "paddleslim_all_function": CLOUD,
+    "paddlerec_all_function": CLOUD,
+
+    #全量模型 预训练模型评估、推理、预测精度
+    "paddleclas_all_pretrained_eval": CLOUD,
+    "paddlegan_all_pretrained_eval": CLOUD,
+    "paddleocr_all_pretrained_eval": CLOUD,
+    "paddle3d_all_pretrained_eval": CLOUD,
+    "paddlespeech_all_pretrained_eval": CLOUD,
+    "paddledetection_all_pretrained_eval": CLOUD,
+    "paddleseg_all_pretrained_eval": CLOUD,
+    "paddlenlp_all_pretrained_eval": CLOUD,
+    "paddleslim_all_pretrained_eval": CLOUD,
+    "paddlerec_all_pretrained_eval": CLOUD,
 
     # model benchmark
     "models_benchmark_v100_single_dp": LOCAL,
@@ -74,14 +119,211 @@ class Cloud(object):
     MKLDNN_INFER = "24297"
 
     # 模型
-    PaddleClas_P0_Function = "25210", {"reponame": "PaddleClas", 
+    #重要模型功能性
+    PaddleClas_P0_Function = "25246", {"reponame": "PaddleClas", 
         "priority": "P0", 
         "mode": "function", 
         "system": "linux", 
         "step": "train:all+eval:all+infer:all+export:all+predict:all"}
-    PaddleClas_P0_Pretrained_Eval = "25210", {"reponame":"PaddleClas",
-        "priority":"P0",
-        "mode":"precison",
+    PaddleGAN_P0_Function = "25246", {"reponame": "PaddleGAN", 
+        "priority": "P0", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleOCR_P0_Function = "25246", {"reponame": "PaddleOCR", 
+        "priority": "P0", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    Paddle3D_P0_Function = "25246", {"reponame": "Paddle3D", 
+        "priority": "P0", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSpeech_P0_Function = "25246", {"reponame": "PaddleSpeech", 
+        "priority": "P0", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleDetection_P0_Function = "25246", {"reponame": "PaddleDetection", 
+        "priority": "P0", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSeg_P0_Function = "25246", {"reponame": "PaddleSeg", 
+        "priority": "P0", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleNLP_P0_Function = "25246", {"reponame": "PaddleNLP", 
+        "priority": "P0", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSlim_P0_Function = "25246", {"reponame": "PaddleSlim", 
+        "priority": "P0", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleRec_P0_Function = "25246", {"reponame": "PaddleRec", 
+        "priority": "P0", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+
+    #重要模型 预训练模型评估、推理、预测精度
+    PaddleClas_P0_Pretrained_Eval = "25246", {"reponame": "PaddleClas", 
+        "priority": "P0", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleGAN_P0_Pretrained_Eval = "25246", {"reponame": "PaddleGAN", 
+        "priority": "P0", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleOCR_P0_Pretrained_Eval = "25246", {"reponame": "PaddleOCR", 
+        "priority": "P0", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    Paddle3D_P0_Pretrained_Eval = "25246", {"reponame": "Paddle3D", 
+        "priority": "P0", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleSpeech_P0_Pretrained_Eval = "25246", {"reponame": "PaddleSpeech", 
+        "priority": "P0", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleDetection_P0_Pretrained_Eval = "25246", {"reponame": "PaddleDetection", 
+        "priority": "P0", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleSeg_P0_Pretrained_Eval = "25246", {"reponame": "PaddleSeg", 
+        "priority": "P0", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleNLP_P0_Pretrained_Eval = "25246", {"reponame": "PaddleNLP", 
+        "priority": "P0", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleSlim_P0_Pretrained_Eval = "25246", {"reponame": "PaddleSlim", 
+        "priority": "P0", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleRec_P0_Pretrained_Eval = "25246", {"reponame": "PaddleRec", 
+        "priority": "P0", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+
+    #全量模型功能性
+    PaddleClas_ALL_Function = "25246", {"reponame": "PaddleClas", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleGAN_ALL_Function = "25246", {"reponame": "PaddleGAN", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleOCR_ALL_Function = "25246", {"reponame": "PaddleOCR", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    Paddle3D_ALL_Function = "25246", {"reponame": "Paddle3D", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSpeech_ALL_Function = "25246", {"reponame": "PaddleSpeech", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleDetection_ALL_Function = "25246", {"reponame": "PaddleDetection", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSeg_ALL_Function = "25246", {"reponame": "PaddleSeg", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleNLP_ALL_Function = "25246", {"reponame": "PaddleNLP", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSlim_ALL_Function = "25246", {"reponame": "PaddleSlim", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleRec_ALL_Function = "25246", {"reponame": "PaddleRec", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+
+    #全量模型 预训练模型评估、推理、预测精度
+    PaddleClas_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleClas", 
+        "priority": "ALL", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleGAN_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleGAN", 
+        "priority": "ALL", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleOCR_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleOCR", 
+        "priority": "ALL", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    Paddle3D_ALL_Pretrained_Eval = "25246", {"reponame": "Paddle3D", 
+        "priority": "ALL", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleSpeech_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleSpeech", 
+        "priority": "ALL", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleDetection_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleDetection", 
+        "priority": "ALL", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleSeg_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleSeg", 
+        "priority": "ALL", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleNLP_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleNLP", 
+        "priority": "ALL", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleSlim_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleSlim", 
+        "priority": "ALL", 
+        "mode": "precison", 
+        "system": "linux", 
+        "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+    PaddleRec_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleRec", 
+        "priority": "ALL", 
+        "mode": "precison", 
         "system": "linux", 
         "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
 
