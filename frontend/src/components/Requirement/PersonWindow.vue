@@ -52,6 +52,8 @@
                   filterable
                   v-model="search.status"
                   v-on:on-change="searchByfilters"
+                  :transfer="true" 
+                  :popper-append-to-body="false"
                 >
                   <Option
                     :key="index"
@@ -814,6 +816,11 @@ export default {
       const { code, message } = await api.post(CreateReqUrl, this.addReqForm);
       if (parseInt(code, 10) === 200) {
         this.initReqData();
+        this.$Message.info({
+          content: '创建成功!',
+          duration: 3,
+          closable: true
+        });
       } else {
         this.$Message.error({
           content: '请求出错: ' + message,
@@ -857,6 +864,11 @@ export default {
           if (parseInt(code, 10) === 200) {
             this.initTestData();
             await this.getData();
+            this.$Message.info({
+              content: '我们已收到提测请求，请耐心等待!',
+              duration: 3,
+              closable: true
+            });
           } else {
             this.$Message.error({
               content: '请求出错: ' + message,
