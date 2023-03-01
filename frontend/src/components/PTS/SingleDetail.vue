@@ -250,84 +250,104 @@ export default {
             let bos_url = params.row.bos_url;
             let allure_report = params.row.allure_report;
             let ret = [];
-            if (bos_url) {
-              ret.push(
-                h(
-                  'Button',
-                  {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-                        this.generateReport(params.row);
-                      }
-                    }
+            ret.push(
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
                   },
-                  '生成报告'
-                )
-              );
-            } else {
-              ret.push(
-                h(
-                  'Button',
-                  {
-                    props: {
-                      type: 'primary',
-                      size: 'small',
-                      disabled: true
-                    },
-                    style: {
-                      marginRight: '5px'
-                    }
+                  style: {
+                    marginRight: '5px'
                   },
-                  '生成报告'
-                )
-              );
-            }
-            if (allure_report) {
-              ret.push(
-                h(
-                  'Button',
-                  {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-                        this.openReport(params.row);
-                      }
+                  on: {
+                    click: () => {
+                      this.openReport(params.row);
                     }
-                  },
-                  '查看报告'
-                )
-              );
-            } else {
-              ret.push(
-                h(
-                  'Button',
-                  {
-                    props: {
-                      type: 'primary',
-                      size: 'small',
-                      disabled: true
-                    },
-                    style: {
-                      marginRight: '5px'
-                    }
-                  },
-                  '查看报告'
-                )
-              );
-            }
+                  }
+                },
+                '查看报告'
+              )
+            );
+            // if (bos_url) {
+            //   ret.push(
+            //     h(
+            //       'Button',
+            //       {
+            //         props: {
+            //           type: 'primary',
+            //           size: 'small'
+            //         },
+            //         style: {
+            //           marginRight: '5px'
+            //         },
+            //         on: {
+            //           click: () => {
+            //             this.generateReport(params.row);
+            //           }
+            //         }
+            //       },
+            //       '生成报告'
+            //     )
+            //   );
+            // } else {
+            //   ret.push(
+            //     h(
+            //       'Button',
+            //       {
+            //         props: {
+            //           type: 'primary',
+            //           size: 'small',
+            //           disabled: true
+            //         },
+            //         style: {
+            //           marginRight: '5px'
+            //         }
+            //       },
+            //       '生成报告'
+            //     )
+            //   );
+            // }
+            // if (allure_report) {
+            //   ret.push(
+            //     h(
+            //       'Button',
+            //       {
+            //         props: {
+            //           type: 'primary',
+            //           size: 'small'
+            //         },
+            //         style: {
+            //           marginRight: '5px'
+            //         },
+            //         on: {
+            //           click: () => {
+            //             this.openReport(params.row);
+            //           }
+            //         }
+            //       },
+            //       '查看报告'
+            //     )
+            //   );
+            // } else {
+            //   ret.push(
+            //     h(
+            //       'Button',
+            //       {
+            //         props: {
+            //           type: 'primary',
+            //           size: 'small',
+            //           disabled: true
+            //         },
+            //         style: {
+            //           marginRight: '5px'
+            //         }
+            //       },
+            //       '查看报告'
+            //     )
+            //   );
+            // }
             return h(
               'div',
               ret
@@ -578,14 +598,11 @@ export default {
       }
     },
     async openReport(item) {
+      if (!item.allure_report) {
+        await this.generateReport(item);
+      }
       if (item.allure_report) {
         window.open(item.allure_report, '_blank');
-      } else {
-        this.$Message.error({
-          content: '没有可查询报告，请先生成报告！',
-          duration: 30,
-          closable: true
-        });
       }
     },
     async setFailedStatus(id) {
