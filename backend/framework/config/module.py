@@ -212,7 +212,7 @@ module_list = [
                 "pid":"4",
                 "id":"4-2",
                 "label":"重要模型 预训练模型 评估、动态图推理、静态图预测精度",
-                "key":"p0_function",
+                "key":"p0_pretrained_eval",
                 "children":[
                     {
                         "pid":"4-2",
@@ -280,7 +280,7 @@ module_list = [
                 "pid":"4",
                 "id":"4-3",
                 "label":"全量模型 功能性",
-                "key":"p0_function",
+                "key":"all_function",
                 "children":[
                     {
                         "pid":"4-3",
@@ -348,7 +348,7 @@ module_list = [
                 "pid":"4",
                 "id":"4-4",
                 "label":"全量模型 预训练模型 评估、动态图推理、静态图预测精度",
-                "key":"all_function",
+                "key":"all_pretrained_eval",
                 "children":[
                     {
                         "pid":"4-4",
