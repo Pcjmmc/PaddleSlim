@@ -391,9 +391,55 @@ class CloudMission(object):
         "native_infer": Cloud.NATIVE_INFER,
         "trt_infer": Cloud.TRT_INFER,
         "mkldnn_infer": Cloud.MKLDNN_INFER,
+        
         # module
+        #重要模型功能性
         "paddleclas_p0_function": Cloud.PaddleClas_P0_Function,
-        "paddleclas_p0_pretained_eval": Cloud.PaddleClas_P0_Pretrained_Eval,
+        "paddlegan_p0_function": Cloud.PaddleGAN_P0_Function
+        "paddleocr_p0_function": Cloud.PaddleOCR_P0_Function
+        "paddle3d_p0_function": Cloud.Paddle3D_P0_Function
+        "paddlespeech_p0_function": Cloud.PaddleSpeech_P0_Function
+        "paddledetection_p0_function": Cloud.PaddleDetection_P0_Function
+        "paddleseg_p0_function": Cloud.PaddleSeg_P0_Function
+        "paddlenlp_p0_function": Cloud.PaddleNLP_P0_Function
+        "paddleslim_p0_function": Cloud.PaddleSlim_P0_Function
+        "paddlerec_p0_function": Cloud.PaddleRec_P0_Function
+
+        #重要模型 预训练模型评估、推理、预测精度
+        "paddleclas_p0_pretrained_eval": Cloud.PaddleClas_P0_Pretrained_Eval
+        "paddlegan_p0_pretrained_eval": Cloud.PaddleGAN_P0_Pretrained_Eval
+        "paddleocr_p0_pretrained_eval": Cloud.PaddleOCR_P0_Pretrained_Eval
+        "paddle3d_p0_pretrained_eval": Cloud.Paddle3D_P0_Pretrained_Eval
+        "paddlespeech_p0_pretrained_eval": Cloud.PaddleSpeech_P0_Pretrained_Eval
+        "paddledetection_p0_pretrained_eval": Cloud.PaddleDetection_P0_Pretrained_Eval
+        "paddleseg_p0_pretrained_eval": Cloud.PaddleSeg_P0_Pretrained_Eval
+        "paddlenlp_p0_pretrained_eval": Cloud.PaddleNLP_P0_Pretrained_Eval
+        "paddleslim_p0_pretrained_eval": Cloud.PaddleSlim_P0_Pretrained_Eval
+        "paddlerec_p0_pretrained_eval": Cloud.PaddleRec_P0_Pretrained_Eval
+
+        #全量模型功能性
+        "paddleclas_all_function": Cloud.PaddleClas_ALL_Function
+        "paddlegan_all_function": Cloud.PaddleGAN_ALL_Function
+        "paddleocr_all_function": Cloud.PaddleOCR_ALL_Function
+        "paddle3d_all_function": Cloud.Paddle3D_ALL_Function
+        "paddlespeech_all_function": Cloud.PaddleSpeech_ALL_Function
+        "paddledetection_all_function": Cloud.PaddleDetection_ALL_Function
+        "paddleseg_all_function": Cloud.PaddleSeg_ALL_Function
+        "paddlenlp_all_function": Cloud.PaddleNLP_ALL_Function
+        "paddleslim_all_function": Cloud.PaddleSlim_ALL_Function
+        "paddlerec_all_function": Cloud.PaddleRec_ALL_Function
+
+        #全量模型 预训练模型评估、推理、预测精度
+        "paddleclas_all_pretrained_eval": Cloud.PaddleClas_ALL_Pretrained_Eval
+        "paddlegan_all_pretrained_eval": Cloud.PaddleGAN_ALL_Pretrained_Eval
+        "paddleocr_all_pretrained_eval": Cloud.PaddleOCR_ALL_Pretrained_Eval
+        "paddle3d_all_pretrained_eval": Cloud.Paddle3D_ALL_Pretrained_Eval
+        "paddlespeech_all_pretrained_eval": Cloud.PaddleSpeech_ALL_Pretrained_Eval
+        "paddledetection_all_pretrained_eval": Cloud.PaddleDetection_ALL_Pretrained_Eval
+        "paddleseg_all_pretrained_eval": Cloud.PaddleSeg_ALL_Pretrained_Eval
+        "paddlenlp_all_pretrained_eval": Cloud.PaddleNLP_ALL_Pretrained_Eval
+        "paddleslim_all_pretrained_eval": Cloud.PaddleSlim_ALL_Pretrained_Eval
+        "paddlerec_all_pretrained_eval": Cloud.PaddleRec_ALL_Pretrained_Eval
 
     }
 
