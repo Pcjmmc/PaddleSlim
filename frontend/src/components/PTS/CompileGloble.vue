@@ -25,7 +25,12 @@
           <Row>
             <Col span="6">
              <FormItem label="系统:" prop="os">
-                <Select clearable v-model="search.os">
+                <Select
+                  clearable
+                  v-model="search.os"
+                  :transfer="true" 
+                  :popper-append-to-body="false"
+                >
                   <Option
                     :key="index"
                     :value="item"
@@ -43,6 +48,8 @@
                   <Option
                     :key="index"
                     :value="item"
+                    :transfer="true" 
+                    :popper-append-to-body="false"
                     v-for="(item, index) in branch"
                   >{{ item }}</Option>
                 </Select>
@@ -50,7 +57,12 @@
             </Col>
             <Col span="6">
               <FormItem label="CUDA:" prop="cuda">
-                <Select clearable v-model="search.cuda">
+                <Select
+                  clearable
+                  v-model="search.cuda"
+                  :transfer="true" 
+                  :popper-append-to-body="false"
+                >
                   <Option
                     :key="index"
                     :value="item"
@@ -63,7 +75,12 @@
           <Row>
              <Col span="6">
               <FormItem label="Python:" prop="python">
-                <Select clearable v-model="search.python">
+                <Select
+                  clearable
+                  v-model="search.python"
+                  :transfer="true" 
+                  :popper-append-to-body="false"
+                >
                   <Option
                     :key="index"
                     :value="item"
@@ -74,7 +91,12 @@
             </Col>
             <Col span="6">
               <FormItem label="类型:" prop="type">
-                <Select clearable v-model="search.type">
+                <Select
+                  clearable
+                  v-model="search.type"
+                  :transfer="true" 
+                  :popper-append-to-body="false"
+                >
                   <Option
                     :key="index"
                     :value="item"

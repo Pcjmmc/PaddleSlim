@@ -582,6 +582,14 @@ export default {
       });
     },
     async generateReport(item) {
+      if (!item.bos_url) {
+        this.$Message.info({
+          content: '暂时没有报告可查看，可以刷新页面看下任务是否结束。',
+          duration: 5,
+          closable: true
+        });
+        return;
+      }
       let params = {
         bos_url: item.bos_url,
         id: item.id
