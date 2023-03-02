@@ -28,7 +28,7 @@
                 <Select
                   clearable
                   v-model="search.os"
-                  :transfer="true" 
+                  :transfer="true"
                   :popper-append-to-body="false"
                 >
                   <Option
@@ -48,7 +48,7 @@
                   <Option
                     :key="index"
                     :value="item"
-                    :transfer="true" 
+                    :transfer="true"
                     :popper-append-to-body="false"
                     v-for="(item, index) in branch"
                   >{{ item }}</Option>
@@ -60,7 +60,7 @@
                 <Select
                   clearable
                   v-model="search.cuda"
-                  :transfer="true" 
+                  :transfer="true"
                   :popper-append-to-body="false"
                 >
                   <Option
@@ -78,7 +78,7 @@
                 <Select
                   clearable
                   v-model="search.python"
-                  :transfer="true" 
+                  :transfer="true"
                   :popper-append-to-body="false"
                 >
                   <Option
@@ -94,7 +94,7 @@
                 <Select
                   clearable
                   v-model="search.type"
-                  :transfer="true" 
+                  :transfer="true"
                   :popper-append-to-body="false"
                 >
                   <Option
