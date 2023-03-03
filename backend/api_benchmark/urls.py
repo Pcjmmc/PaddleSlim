@@ -9,6 +9,10 @@ from api_benchmark.cuda import GetCuda
 from api_benchmark.os import GetOs
 from api_benchmark.place import GetPlace
 from api_benchmark.version import GetVersion
+
+from api_benchmark.apibm_xly.apibm_view import ApiBenchmarkInitView
+from api_benchmark.apibm_xly.apibm_pkg.apibm_rerun import ApiBenchmarkRerun
+from api_benchmark.apibm_xly.apibm_pkg.apibm_callback import ApiBenchmarkCallback
 from urls import url
 
 urlpatterns = [
@@ -20,4 +24,9 @@ urlpatterns = [
     url(r'getcuda/?$', GetCuda),
     url(r'getversion/?$', GetVersion),
     url(r'getplace/?$', GetPlace),
+
+    # 触发效率云流水线
+    url(r'apibminitview/?$', ApiBenchmarkInitView),
+    url(r'apibmrerun/?$', ApiBenchmarkRerun),
+    url(r'apibmcallback/?$', ApiBenchmarkCallback),
 ]
