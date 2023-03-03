@@ -72,3 +72,37 @@ class Settings(BaseModel, BaseModelMixin):
         定义model属于那个库
         """
         app_label = 'api_benchmark'
+
+
+class ApiBenchmarkMission(BaseModel, BaseModelMixin):
+    """
+    定义tasks任务的表结构
+    """
+    __tablename__ = 'apibm_mission'
+    metadata = MetaData()
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    # jid = Column(Integer)
+    status = Column(VARCHAR(256), comment='运行状态，running， error， done')
+    comment = Column(VARCHAR(256), comment='任务名/备注，随便写')
+    with_gpu = Column(VARCHAR(256), comment='是否使用gpu，True/False')
+    enable_backward = Column(VARCHAR(256), comment='是否开启反向，True/False')
+    framework = Column(VARCHAR(256), comment='框架选择，paddle/torch')
+    wheel_link = Column(VARCHAR(512), comment='框架版本信息，paddle支持链接或版本号，torch支持版本号')
+    cuda = Column(VARCHAR(256), comment='cuda版本')
+    python = Column(VARCHAR(256), comment='python版本')
+
+    yaml_type = Column(VARCHAR(256), comment='是否使用默认配置，True/False')
+    yaml_info = Column(VARCHAR(256), comment='yaml配置信息')
+
+    # result = Column(VARCHAR(256), comment='结果')
+    description = Column(VARCHAR(256), comment='xly请求描述')
+    bos_url = Column(VARCHAR(256), comment='bos存储地址')
+    # allure_report = Column(VARCHAR(256), comment='allure地址')
+    create_time = Column(DateTime, comment="本记录创建的时间")
+    update_time = Column(DateTime, comment="本记录更新的时间")
+
+    class Meta:
+        """
+        定义model属于那个库
+        """
+        app_label = 'api_benchmark'
