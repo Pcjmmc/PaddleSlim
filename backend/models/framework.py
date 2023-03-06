@@ -19,6 +19,7 @@ class Job(BaseModel, BaseModelMixin):
     version = Column(VARCHAR(200), comment='版本号的值， version， commit or pr array')
     compile =  Column(Integer, comment="编译任务外键")
     mission = Column(VARCHAR(512), comment='子任务外键集合 ， json string')
+    is_deleted = Column(Integer, comment='删除状态')
     create_time = Column(DateTime, comment="本记录创建的时间")
     update_time = Column(DateTime, comment="本记录更新的时间")
 
@@ -47,6 +48,7 @@ class Compile(BaseModel, BaseModelMixin):
     branch = Column(VARCHAR(512), comment='分支信息')
     python = Column(VARCHAR(512), comment='python版本信息')
     cuda = Column(VARCHAR(512), comment='cuda信息')
+    is_deleted = Column(Integer, comment='删除状态')
     create_time = Column(DateTime, comment="本记录创建的时间")
     update_time = Column(DateTime, comment="本记录更新的时间")
 
@@ -70,6 +72,7 @@ class Mission(BaseModel, BaseModelMixin):
     description = Column(VARCHAR(256), comment='xly请求描述')
     bos_url = Column(VARCHAR(256), comment='bos存储地址')
     allure_report = Column(VARCHAR(256), comment='allure地址')
+    is_deleted = Column(Integer, comment='删除状态')
     create_time = Column(DateTime, comment="本记录创建的时间")
     update_time = Column(DateTime, comment="本记录更新的时间")
 

@@ -29,7 +29,7 @@ class JobDetails(MABaseView):
             if v is None:
                 mission[k] = v
                 continue
-            res = await Mission.aio_get_object(order_by=None, group_by=None, id=v)
+            res = await Mission.aio_get_object(order_by=None, group_by=None, id=v, is_deleted=0)
             mission[k] = {"id": v, "status": res["status"], "result": res["result"],
                           "bos_url": res["bos_url"], "allure_report": res["allure_report"],
                           "description": res["description"], "create_time": str(res["create_time"]),

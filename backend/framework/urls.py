@@ -6,10 +6,12 @@ from framework.views import TestView
 from framework.job_view import JobInitView
 from framework.job_list import JobList
 from framework.job_details import JobDetails
+from framework.job_delete import JobDelete
 from framework.mission_pkg.mission_callback import MissionCallback
 from framework.compile_pkg.compile_callback import CompileCallback
 from framework.mission_pkg.mission_failed import MissionFailed
 from framework.mission_pkg.mission_rerun import MissionRerun
+from framework.mission_pkg.mission_delete import MissionDelete
 from framework.report_generator import ReportGenerator
 
 
@@ -36,11 +38,14 @@ urlpatterns = [
     url(r'jobinit/?$', JobInitView),
     url(r'joblist/?$', JobList),
     url(r'jobdetails/?$', JobDetails),
+    url(r'jobdelete/?$', JobDelete),
     # 任务相关
     url(r'missioncallback/?$', MissionCallback),
     url(r'missionfailed/?$', MissionFailed),
     url(r'missionrerun/?$', MissionRerun),
+    url(r'missiondelete/?$', MissionDelete),
     url(r'reportgenerator/?$', ReportGenerator),
+
 
     # 编译相关
     url(r'compile/?$', CompileInit),
