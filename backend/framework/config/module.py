@@ -70,7 +70,7 @@ module_mapping = {
     "paddleseg_all_pretrained_eval": "PaddleSeg ALL级预训练模型精度",
     "paddlenlp_all_pretrained_eval": "PaddleNLP ALL级预训练模型精度",
     "paddleslim_all_pretrained_eval": "PaddleSlim ALL级预训练模型精度",
-    "paddlerec_all_pretrained_eval": "PaddleRec ALL级预训练模型精度"
+    "paddlerec_all_pretrained_eval": "PaddleRec ALL级预训练模型精度",
     "paddleclas_all_precision": "PaddleClas ALL级小数据集精度",
     "paddlegan_all_precision": "PaddleGAN ALL级小数据集精度",
     "paddleocr_all_precision": "PaddleOCR ALL级小数据集精度",
