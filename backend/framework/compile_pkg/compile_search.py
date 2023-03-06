@@ -26,6 +26,9 @@ class CompileSearch(MABaseView):
 
     async def get_data(self, **kwargs):
         query = {key: val for key, val in kwargs.items() if val}
+        if "value" in query.keys():
+            query["value__contains"] = query["value"]
+            del(query["value"])
         if "begin_time" in query.keys():
             query["create_time__gte"] = query["begin_time"]
             del (query["begin_time"])
