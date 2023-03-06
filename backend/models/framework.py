@@ -49,6 +49,7 @@ class Compile(BaseModel, BaseModelMixin):
     python = Column(VARCHAR(512), comment='python版本信息')
     cuda = Column(VARCHAR(512), comment='cuda信息')
     is_deleted = Column(Integer, comment='删除状态')
+    remark = Column(VARCHAR(512), comment='备注')
     create_time = Column(DateTime, comment="本记录创建的时间")
     update_time = Column(DateTime, comment="本记录更新的时间")
 
