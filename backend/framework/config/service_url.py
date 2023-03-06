@@ -64,6 +64,18 @@ PLACE = {
     "paddleslim_p0_pretrained_eval": CLOUD,
     "paddlerec_p0_pretrained_eval": CLOUD,
 
+    #重要模型 小数据集精度
+    "paddleclas_p0_precision": CLOUD,
+    "paddlegan_p0_precision": CLOUD,
+    "paddleocr_p0_precision": CLOUD,
+    "paddle3d_p0_precision": CLOUD,
+    "paddlespeech_p0_precision": CLOUD,
+    "paddledetection_p0_precision": CLOUD,
+    "paddleseg_p0_precision": CLOUD,
+    "paddlenlp_p0_precision": CLOUD,
+    "paddleslim_p0_precision": CLOUD,
+    "paddlerec_p0_precision": CLOUD,
+
     #全量模型功能性
     "paddleclas_all_function": CLOUD,
     "paddlegan_all_function": CLOUD,
@@ -88,6 +100,18 @@ PLACE = {
     "paddleslim_all_pretrained_eval": CLOUD,
     "paddlerec_all_pretrained_eval": CLOUD,
 
+    #全量模型 小数据集精度
+    "paddleclas_all_precision": CLOUD,
+    "paddlegan_all_precision": CLOUD,
+    "paddleocr_all_precision": CLOUD,
+    "paddle3d_all_precision": CLOUD,
+    "paddlespeech_all_precision": CLOUD,
+    "paddledetection_all_precision": CLOUD,
+    "paddleseg_all_precision": CLOUD,
+    "paddlenlp_all_precision": CLOUD,
+    "paddleslim_all_precision": CLOUD,
+    "paddlerec_all_precision": CLOUD,
+    
     # model benchmark
     "models_benchmark_v100_single_dp": LOCAL,
     "models_benchmark_v100_multi_dp": LOCAL,
@@ -131,6 +155,7 @@ class Cloud(object):
         "system": "linux", 
         "step": "train:all+eval:all+infer:all+export:all+predict:all"}
     PaddleOCR_P0_Function = "25246", {"reponame": "PaddleOCR", 
+        "models_branch": "dygraph", 
         "priority": "P0", 
         "mode": "function", 
         "system": "linux", 
@@ -161,12 +186,13 @@ class Cloud(object):
         "system": "linux", 
         "step": "train:all+eval:all+infer:all+export:all+predict:all"}
     PaddleSlim_P0_Function = "25246", {"reponame": "PaddleSlim", 
-        "priority": "P0", 
+        "priority": "P0Precision", 
         "mode": "function", 
         "system": "linux", 
         "step": "train:all+eval:all+infer:all+export:all+predict:all"}
     PaddleRec_P0_Function = "25246", {"reponame": "PaddleRec", 
-        "priority": "P0", 
+        "models_branch": "master", 
+        "priority": "P0Precision", 
         "mode": "function", 
         "system": "linux", 
         "step": "train:all+eval:all+infer:all+export:all+predict:all"}
@@ -183,6 +209,7 @@ class Cloud(object):
         "system": "linux", 
         "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
     PaddleOCR_P0_Pretrained_Eval = "25246", {"reponame": "PaddleOCR", 
+        "models_branch": "dygraph", 
         "priority": "P0", 
         "mode": "precison", 
         "system": "linux", 
@@ -213,15 +240,70 @@ class Cloud(object):
         "system": "linux", 
         "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
     PaddleSlim_P0_Pretrained_Eval = "25246", {"reponame": "PaddleSlim", 
-        "priority": "P0", 
+        "priority": "P0Precision", 
         "mode": "precison", 
         "system": "linux", 
         "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
     PaddleRec_P0_Pretrained_Eval = "25246", {"reponame": "PaddleRec", 
-        "priority": "P0", 
+        "models_branch": "master", 
+        "priority": "P0Precision", 
         "mode": "precison", 
         "system": "linux", 
         "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+
+    #重要模型 小数据集精度
+    PaddleClas_P0_Precision = "25246", {"reponame": "PaddleClas", 
+        "priority": "P0", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleGAN_P0_Precision = "25246", {"reponame": "PaddleGAN", 
+        "priority": "P0", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleOCR_P0_Precision = "25246", {"reponame": "PaddleOCR", 
+        "models_branch": "dygraph", 
+        "priority": "P0", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    Paddle3D_P0_Precision = "25246", {"reponame": "Paddle3D", 
+        "priority": "P0", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSpeech_P0_Precision = "25246", {"reponame": "PaddleSpeech", 
+        "priority": "P0", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleDetection_P0_Precision = "25246", {"reponame": "PaddleDetection", 
+        "priority": "P0", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSeg_P0_Precision = "25246", {"reponame": "PaddleSeg", 
+        "priority": "P0", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleNLP_P0_Precision = "25246", {"reponame": "PaddleNLP", 
+        "priority": "P0", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSlim_P0_Precision = "25246", {"reponame": "PaddleSlim", 
+        "priority": "P0Precision", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleRec_P0_Precision = "25246", {"reponame": "PaddleRec", 
+        "models_branch": "master", 
+        "priority": "P0Precision", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
 
     #全量模型功能性
     PaddleClas_ALL_Function = "25246", {"reponame": "PaddleClas", 
@@ -235,6 +317,7 @@ class Cloud(object):
         "system": "linux", 
         "step": "train:all+eval:all+infer:all+export:all+predict:all"}
     PaddleOCR_ALL_Function = "25246", {"reponame": "PaddleOCR", 
+        "models_branch": "dygraph", 
         "priority": "ALL", 
         "mode": "function", 
         "system": "linux", 
@@ -265,12 +348,13 @@ class Cloud(object):
         "system": "linux", 
         "step": "train:all+eval:all+infer:all+export:all+predict:all"}
     PaddleSlim_ALL_Function = "25246", {"reponame": "PaddleSlim", 
-        "priority": "ALL", 
+        "priority": "ALLPrecision", 
         "mode": "function", 
         "system": "linux", 
         "step": "train:all+eval:all+infer:all+export:all+predict:all"}
     PaddleRec_ALL_Function = "25246", {"reponame": "PaddleRec", 
-        "priority": "ALL", 
+        "models_branch": "master", 
+        "priority": "ALLPrecision", 
         "mode": "function", 
         "system": "linux", 
         "step": "train:all+eval:all+infer:all+export:all+predict:all"}
@@ -287,6 +371,7 @@ class Cloud(object):
         "system": "linux", 
         "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
     PaddleOCR_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleOCR", 
+        "models_branch": "dygraph", 
         "priority": "ALL", 
         "mode": "precison", 
         "system": "linux", 
@@ -317,15 +402,70 @@ class Cloud(object):
         "system": "linux", 
         "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
     PaddleSlim_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleSlim", 
-        "priority": "ALL", 
+        "priority": "ALLPrecision", 
         "mode": "precison", 
         "system": "linux", 
         "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
     PaddleRec_ALL_Pretrained_Eval = "25246", {"reponame": "PaddleRec", 
-        "priority": "ALL", 
+        "models_branch": "master", 
+        "priority": "ALLPrecision", 
         "mode": "precison", 
         "system": "linux", 
         "step":"eval:pretrained+infer:pretrained+export:pretrained+predict:pretrained"}
+
+    #全量模型 小数据集精度
+    PaddleClas_ALL_Precision = "25246", {"reponame": "PaddleClas", 
+        "priority": "ALL", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleGAN_ALL_Precision = "25246", {"reponame": "PaddleGAN", 
+        "priority": "ALL", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleOCR_ALL_Precision = "25246", {"reponame": "PaddleOCR", 
+        "models_branch": "dygraph", 
+        "priority": "ALL", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    Paddle3D_ALL_Precision = "25246", {"reponame": "Paddle3D", 
+        "priority": "ALL", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSpeech_ALL_Precision = "25246", {"reponame": "PaddleSpeech", 
+        "priority": "ALL", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleDetection_ALL_Precision = "25246", {"reponame": "PaddleDetection", 
+        "priority": "ALL", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSeg_ALL_Precision = "25246", {"reponame": "PaddleSeg", 
+        "priority": "ALL", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleNLP_ALL_Precision = "25246", {"reponame": "PaddleNLP", 
+        "priority": "ALL", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleSlim_ALL_Precision = "25246", {"reponame": "PaddleSlim", 
+        "priority": "ALLPrecision", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+    PaddleRec_ALL_Precision = "25246", {"reponame": "PaddleRec", 
+        "models_branch": "master", 
+        "priority": "ALLPrecision", 
+        "mode": "precision", 
+        "system": "linux", 
+        "step": "train:all+eval:all+infer:all+export:all+predict:all"}
 
     ##########  WINDOWS  ##########
     WIN_OP_FUNCTION = ""
@@ -417,6 +557,18 @@ class CloudMission(object):
         "paddleslim_p0_pretrained_eval": Cloud.PaddleSlim_P0_Pretrained_Eval,
         "paddlerec_p0_pretrained_eval": Cloud.PaddleRec_P0_Pretrained_Eval,
 
+        #重要模型 小数据集精度
+        "paddleclas_p0_precision": Cloud.PaddleClas_P0_Precision,
+        "paddlegan_p0_precision": Cloud.PaddleGAN_P0_Precision,
+        "paddleocr_p0_precision": Cloud.PaddleOCR_P0_Precision,
+        "paddle3d_p0_precision": Cloud.Paddle3D_P0_Precision,
+        "paddlespeech_p0_precision": Cloud.PaddleSpeech_P0_Precision,
+        "paddledetection_p0_precision": Cloud.PaddleDetection_P0_Precision,
+        "paddleseg_p0_precision": Cloud.PaddleSeg_P0_Precision,
+        "paddlenlp_p0_precision": Cloud.PaddleNLP_P0_Precision,
+        "paddleslim_p0_precision": Cloud.PaddleSlim_P0_Precision,
+        "paddlerec_p0_precision": Cloud.PaddleRec_P0_Precision,
+
         #全量模型功能性
         "paddleclas_all_function": Cloud.PaddleClas_ALL_Function,
         "paddlegan_all_function": Cloud.PaddleGAN_ALL_Function,
@@ -439,8 +591,19 @@ class CloudMission(object):
         "paddleseg_all_pretrained_eval": Cloud.PaddleSeg_ALL_Pretrained_Eval,
         "paddlenlp_all_pretrained_eval": Cloud.PaddleNLP_ALL_Pretrained_Eval,
         "paddleslim_all_pretrained_eval": Cloud.PaddleSlim_ALL_Pretrained_Eval,
-        "paddlerec_all_pretrained_eval": Cloud.PaddleRec_ALL_Pretrained_Eval
+        "paddlerec_all_pretrained_eval": Cloud.PaddleRec_ALL_Pretrained_Eval,
 
+        #全量模型 小数据集精度
+        "paddleclas_all_precision": Cloud.PaddleClas_ALL_Precision,
+        "paddlegan_all_precision": Cloud.PaddleGAN_ALL_Precision,
+        "paddleocr_all_precision": Cloud.PaddleOCR_ALL_Precision,
+        "paddle3d_all_precision": Cloud.Paddle3D_ALL_Precision,
+        "paddlespeech_all_precision": Cloud.PaddleSpeech_ALL_Precision,
+        "paddledetection_all_precision": Cloud.PaddleDetection_ALL_Precision,
+        "paddleseg_all_precision": Cloud.PaddleSeg_ALL_Precision,
+        "paddlenlp_all_precision": Cloud.PaddleNLP_ALL_Precision,
+        "paddleslim_all_precision": Cloud.PaddleSlim_ALL_Precision,
+        "paddlerec_all_precision": Cloud.PaddleRec_ALL_Precision
     }
 
 
