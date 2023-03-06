@@ -19,6 +19,7 @@ from framework.report_generator import ReportGenerator
 from framework.compile_pkg.compile import CompileInit
 from framework.compile_pkg.compile_search import CompileSearch
 from framework.compile_pkg.compile_database import CompileDatabase
+from framework.compile_pkg.compile_delete import CompileDelete
 
 from framework.release_pkg.report_view import ReportView
 from framework.release_pkg.report_add import ReportAdd
@@ -52,6 +53,7 @@ urlpatterns = [
     url(r'compile_search/?$', CompileSearch),
     url(r'compilecallback/?$', CompileCallback),
     url(r'compile_database/?$', CompileDatabase),
+    url(r'compiledelete/?$', CompileDelete),
 
     # 发版报告相关
     url(r'reportview/?$', ReportView),

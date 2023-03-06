@@ -26,6 +26,7 @@ class CompileSearch(MABaseView):
 
     async def get_data(self, **kwargs):
         query = {key: val for key, val in kwargs.items() if val}
+        # 模糊查询f
         if "value" in query.keys():
             query["value__contains"] = query["value"]
             del(query["value"])
