@@ -23,7 +23,7 @@ class JobList(MABaseView):
     任务初始化
     """
 
-    # auth_class = AuthCheck
+    auth_class = AuthCheck
 
     async def get(self, **kwargs):
         return await super().get(**kwargs)
