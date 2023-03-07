@@ -36,6 +36,7 @@ class Dispatcher(object):
                 "wheel": wheel,
                 "python": json.loads(env).get("python"),
                 "cuda": json.loads(env).get("cuda"),
+                "branch": json.loads(env).get("branch"),
                 "env": str(json.loads(env)),
                 "docker_image": DOCKER_IMAGE.get(json.loads(env).get("cuda")),
                 "docker_infer_image": DOCKER_INFER_IMAGE.get(json.loads(env).get("cuda"))
