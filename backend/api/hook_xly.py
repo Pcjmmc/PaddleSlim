@@ -37,12 +37,13 @@ class HookxlyView(MABaseView):
         """
         remote_ip = self.request.remote_ip
         header = self.request.headers
+        #print(header)
+        trigger_type = header.get("TRIGGER_TYPE", "")
+        operation = header.get("OPERATION", "")
         status = header.get("BUILD_STATUS", "")
-        print("status=", header.get("BUILD_STATUS", ""))
-        print("conf_id=", kwargs.get('conf_id'), "build_id=", kwargs.get('build_id'), "job_id=", kwargs.get('job_id'))
         xly_basic = {}
         xly_build = {}
-        if "RUNNING" == status:
+        if "STATUS" == trigger_type and "PENDING" == status:
             xly_basic['conf_id'] = kwargs.get("conf_id")
             xly_basic['workspace'] = kwargs.get("workspace")
             xly_basic['jobname'] = kwargs.get("jobname")
@@ -52,14 +53,48 @@ class HookxlyView(MABaseView):
             xly_build['job_id'] = kwargs.get("job_id")
             xly_build['conf_id'] = kwargs.get("conf_id")
             xly_build['status'] = status
-            xly_build['begin_ime'] = kwargs.get("begin_time")
-            print(xly_build)
-            await XlyBuild.aio_insert(xly_build)
-        if status in ["FAIL", "SUCC", "CANCEL"]:
+            begin_time = header.get("JOB_START_TIME", None)
+            if begin_time:
+                begin_time = int(int(begin_time) / 1000)
+            else:
+                print("web hook header not have JOB_START_TIME")
+                begin_time = time.now()
+            xly_build['begin_time'] = begin_time
+            print("xly build info is", xly_build)
+            await XlyBuild.aio_insert(xly_build) 
+        if "STATUS" == trigger_type and "RUNNING" == status:
             job_id = kwargs.get("job_id")
-            xly_build["exit_code"] = header.get("exit_code", None)
-            xly_build["end_time"] = kwargs.get("end_time")
-            print(xly_build)
+            xly_build['status'] = status
+            #xly_build['job_id'] = kwargs.get("job_id")
+            run_time = header.get("JOB_REAL_START_TIME", None)
+            if run_time:
+                run_time = int(int(run_time) / 1000)
+            else:
+                print("web hook header not have JOB_REAL_START_TIME")
+                run_time = time.now()
+            xly_build['run_time'] = run_time
+            print(status, "xly buidl info is", xly_build)
+            await XlyBuild.aio_update(validated_data=xly_build, params_data={"job_id": job_id})
+        if "STATUS" == trigger_type and status in ["FAIL", "SUCC", "CANCEL"]:
+            job_id = kwargs.get("job_id")
+            xly_build['status'] = status
+            xly_build["exit_code"] = header.get("JOB_EXIT_CODE", None)
+            end_time = header.get("JOB_EXIT_TIME", None) 
+            if end_time:
+                end_time = int(int(end_time) / 1000) 
+            else:
+                end_time = time.now()
+            xly_build["end_time"] = end_time
+            print(status, "xly build info is", xly_build)
             #考虑到任务如果被重复触发buildid不变，但是jobid变化，设置jobid为主键
             await XlyBuild.aio_update(validated_data=xly_build, params_data={"job_id": job_id})
-               
+        if "OPERATION" == trigger_type and "BUILD_ISSUE" == operation:
+            #TODO 修正xlywebhook中文编码异常，待讨论
+            job_id = kwargs.get("job_id")
+            print("job_id =", job_id)
+            fail_reason = header.get("CATEGORY_LIST")
+            print(fail_reason.encode("iso-8859-1").decode('utf-8'))  
+            xly_build["fail_reason"] = fail_reason
+            print("xly issue desc is", header.get("ISSUE_DESC"))
+            print(trigger_type, "xly build info is", xly_build) 
+            await XlyBuild.aio_update(validated_data=xly_build, params_data={"job_id": job_id})
