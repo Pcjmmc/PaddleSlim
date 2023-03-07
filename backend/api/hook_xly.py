@@ -5,7 +5,7 @@
 """
 import asyncio
 import json
-
+import time
 from ce_web.settings.common import STORAGE
 from exception import HTTP400Error
 from libs.mongo.db import Mongo
@@ -58,7 +58,7 @@ class HookxlyView(MABaseView):
                 begin_time = int(int(begin_time) / 1000)
             else:
                 print("web hook header not have JOB_START_TIME")
-                begin_time = time.now()
+                begin_time = int(time.time())
             xly_build['begin_time'] = begin_time
             print("xly build info is", xly_build)
             await XlyBuild.aio_insert(xly_build) 
@@ -71,7 +71,7 @@ class HookxlyView(MABaseView):
                 run_time = int(int(run_time) / 1000)
             else:
                 print("web hook header not have JOB_REAL_START_TIME")
-                run_time = time.now()
+                run_time = int(time.time())
             xly_build['run_time'] = run_time
             print(status, "xly buidl info is", xly_build)
             await XlyBuild.aio_update(validated_data=xly_build, params_data={"job_id": job_id})
@@ -83,7 +83,7 @@ class HookxlyView(MABaseView):
             if end_time:
                 end_time = int(int(end_time) / 1000) 
             else:
-                end_time = time.now()
+                end_time = int(time.time())
             xly_build["end_time"] = end_time
             print(status, "xly build info is", xly_build)
             #考虑到任务如果被重复触发buildid不变，但是jobid变化，设置jobid为主键
