@@ -23,7 +23,7 @@ class JobList(MABaseView):
     任务初始化
     """
 
-    auth_class = AuthCheck
+    # auth_class = AuthCheck
 
     async def get(self, **kwargs):
         return await super().get(**kwargs)
@@ -65,6 +65,6 @@ class JobList(MABaseView):
         # 屏蔽编译任务
         query = dict({"mission__ne": None}, **query)
 
-        query = dict({"order_by": "-id"}, **query)
+        query = dict({"order_by": "-id", "is_deleted": 0}, **query)
         # print(query)
         return query
