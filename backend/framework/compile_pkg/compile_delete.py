@@ -26,12 +26,12 @@ class CompileDelete(MABaseView):
         """
         快速失败
         """
-        mission_id = kwargs.get("id")
+        compile_id = kwargs.get("id")
         data = {
             "update_time": datetime.now(),
             "is_deleted": 1,
         }
-        res = await Compile.aio_update(data, {"id": mission_id})
+        res = await Compile.aio_update(data, {"id": compile_id})
         if res == 0:
             raise HTTP400Error
         else:
