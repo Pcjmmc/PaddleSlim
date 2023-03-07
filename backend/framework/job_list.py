@@ -65,6 +65,6 @@ class JobList(MABaseView):
         # 屏蔽编译任务
         query = dict({"mission__ne": None}, **query)
 
-        query = dict({"order_by": "-id"}, **query)
+        query = dict({"order_by": "-id", "is_deleted": 0}, **query)
         # print(query)
         return query
