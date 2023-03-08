@@ -30,12 +30,14 @@ class MissionCallback(MABaseView):
         status = kwargs.get("status")
         result = kwargs.get("result")
         bos_url = kwargs.get("bos_url")
+        info = kwargs.get("info")
         allure_report = kwargs.get("report")
         data = {
             "id": id,
             "status": status,
             "result": result,
             "bos_url": bos_url,
+            "info": info,
             "allure_report": allure_report,
             "update_time": datetime.now()
         }
