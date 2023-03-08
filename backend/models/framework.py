@@ -71,6 +71,7 @@ class Mission(BaseModel, BaseModelMixin):
     module = Column(VARCHAR(256), comment='模块名字')
     result = Column(VARCHAR(256), comment='结果')
     description = Column(VARCHAR(256), comment='xly请求描述')
+    info = Column(VARCHAR(256), comment='info 任务链接信息')
     bos_url = Column(VARCHAR(256), comment='bos存储地址')
     allure_report = Column(VARCHAR(256), comment='allure地址')
     is_deleted = Column(Integer, comment='删除状态')
