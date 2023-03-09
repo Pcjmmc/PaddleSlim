@@ -10,9 +10,10 @@ from api_benchmark.os import GetOs
 from api_benchmark.place import GetPlace
 from api_benchmark.version import GetVersion
 
-from api_benchmark.apibm_xly.apibm_view import ApiBenchmarkInitView
-from api_benchmark.apibm_xly.apibm_pkg.apibm_rerun import ApiBenchmarkRerun
-from api_benchmark.apibm_xly.apibm_pkg.apibm_callback import ApiBenchmarkCallback
+from api_benchmark.apibm_view import ApiBenchmarkInitView
+from api_benchmark.compare.main_compare import MainCompare
+from api_benchmark.apibm_pkg.apibm_rerun import ApiBenchmarkRerun
+from api_benchmark.apibm_pkg.apibm_callback import ApiBenchmarkCallback
 from urls import url
 
 urlpatterns = [
@@ -29,4 +30,5 @@ urlpatterns = [
     url(r'apibminitview/?$', ApiBenchmarkInitView),
     url(r'apibmrerun/?$', ApiBenchmarkRerun),
     url(r'apibmcallback/?$', ApiBenchmarkCallback),
+    url(r'maincompare/?$', MainCompare),
 ]
