@@ -26,22 +26,10 @@ class MissionCallback(MABaseView):
         """
         mission 回调函数
         """
-        id = kwargs.get("id")
-        status = kwargs.get("status")
-        result = kwargs.get("result")
-        bos_url = kwargs.get("bos_url")
-        allure_report = kwargs.get("report")
-        data = {
-            "id": id,
-            "status": status,
-            "result": result,
-            "bos_url": bos_url,
-            "allure_report": allure_report,
-            "update_time": datetime.now()
-        }
-        res = await Mission.aio_update(data, {"id": id})
+        kwargs["update_time"] = datetime.now()
+        res = await Mission.aio_update(kwargs, {"id": id})
         if res == 0:
-            raise HTTP400Error
+            raise HTTP400Error("回调数据有问题")
         # get jid
         mission = await Mission.aio_get_object(id=id)
         job = await Job.aio_get_object(id=mission["jid"])
