@@ -141,11 +141,29 @@ class Dispatcher(object):
                 res = self.request_mission(k, id, env, wheel)
                 if isinstance(res, dict):
                     # 初始化任务
-                    await Mission.aio_update({"status": "running", "description": str(res)}, {"id":id})
+                    info = self.get_xly_mission_url(res.get("pipelineBuildId"))
+                    print(info)
+                    await Mission.aio_update({"status": "running", "description": res.get("pipelineBuildId"),
+                                              "info": info}, {"id":id})
                     break
                 else:
                     await Mission.aio_update({"status": "error", "description": res}, {"id": id})
                     retry += 1
         await Job.aio_update({"mission": str(json.dumps(mission))}, {"id":job.get("id")})
 
-
+    def get_xly_mission_url(pipelineBuildId):
+        """
+        获取效率云任务链接
+        """
+        retry = 0
+        xly_agent = XlyOpenApiRequest()
+        while (retry < 5):
+            url = "https://xly.bce.baidu.com/open-api/ipipe/rest/v3/pipelines/getPipelineBuildPageUrl?pipelineBuildId={}".format(pipelineBuildId)
+            url_param = "pipelineBuildId={}".format(pipelineBuildId)
+            res = xly_agent.get_method(url, param=url_param)
+            if res.status_code == 200:
+                res_str = res.text.replace("\"", "")
+                return res_str
+            else:
+                retry += 1
+        return None

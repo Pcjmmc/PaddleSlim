@@ -27,8 +27,13 @@ class MissionCallback(MABaseView):
         mission 回调函数
         """
         id = kwargs.get("id")
+        pipelineid = kwargs.get("AGILE_PIPELINE_BUILD_ID")
         kwargs["update_time"] = datetime.now()
-        res = await Mission.aio_update(kwargs, {"id": id})
+        #  Todo：解析数据 self.request.header.get() 等大佬给数据结构
+        if id is not None:
+            res = await Mission.aio_update(kwargs, {"id": id})
+        else:
+            res = await Mission.aio_update(kwargs, {"description": pipelineid})
         if res == 0:
             raise HTTP400Error("回调数据有问题")
         # get jid
