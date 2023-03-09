@@ -66,6 +66,9 @@ class Dispatcher(object):
 
     @classmethod
     def request_mission(self, module, id, data):
+        """
+        请求任务
+        """
         # todo: 请求任务 任务环境，编译内容，发送请求给效率云
         if PLACE.get(module) is not None:
             if PLACE.get(module) == CLOUD:
