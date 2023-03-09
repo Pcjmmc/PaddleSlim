@@ -26,6 +26,7 @@ class MissionCallback(MABaseView):
         """
         mission 回调函数
         """
+        id = kwargs.get("id")
         kwargs["update_time"] = datetime.now()
         res = await Mission.aio_update(kwargs, {"id": id})
         if res == 0:
