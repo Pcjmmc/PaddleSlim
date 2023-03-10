@@ -11,7 +11,7 @@ from api_benchmark.place import GetPlace
 from api_benchmark.version import GetVersion
 
 from api_benchmark.apibm_view import ApiBenchmarkInitView
-from api_benchmark.compare.main_compare import MainCompare
+from api_benchmark.compare_pkg.main_compare import MainCompare
 from api_benchmark.apibm_pkg.apibm_rerun import ApiBenchmarkRerun
 from api_benchmark.apibm_pkg.apibm_callback import ApiBenchmarkCallback
 from urls import url
