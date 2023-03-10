@@ -34,7 +34,11 @@ class MissionCancel(MABaseView):
         mission_id = kwargs.get("id")
         # 获取效率云任务id
         data = await Mission.aio_filter_details(limit=1, id=mission_id)
-        description = data[0].get("description")
+        if len(data) != 1:
+            raise HTTP400Error("任务取消失败,没有找到指定任务，请排查任务ID")
+        description = data[0].get("description", None)
+        if description is None:
+            raise HTTP400Error("任务取消失败,没有找到指定效率云任务，请排查效率云任务ID（description）")
         res = pipeline_cancel(description)
         if not res:
             raise HTTP400Error("任务取消失败")

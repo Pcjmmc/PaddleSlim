@@ -13,6 +13,7 @@ from framework.config.status import MissionStatus
 from framework.dispatcher import Dispatcher
 from framework.utils.callback import get_job_status
 import requests
+from framework.config.status import ERROR_MSG
 
 
 class MissionCallback(MABaseView):
@@ -26,13 +27,23 @@ class MissionCallback(MABaseView):
         """
         mission 回调函数
         """
-        id = kwargs.get("id")
+        id = kwargs.get("id", None)
         pipelineid = kwargs.get("AGILE_PIPELINE_BUILD_ID")
         kwargs["update_time"] = datetime.now()
-        #  Todo：解析数据 self.request.header.get() 等大佬给数据结构
+        #  Todo：解析数据 self.request.headers.get() 等对齐数据结构就OK
         if id is not None:
             res = await Mission.aio_update(kwargs, {"id": id})
         else:
+            exit_code = self.request.headers.get("JOB_EXIT_CODE")
+            if exit_code == "0":
+                # Todo: 对齐成功回调的数据内容，解析映射数据库字段，入库
+                data = {}
+            else:
+                # Todo: 根据退出码赋值
+                data = {
+                    "status": "error",
+                    "result": ERROR_MSG.get(exit_code),
+                }
             res = await Mission.aio_update(kwargs, {"description": pipelineid})
         if res == 0:
             raise HTTP400Error("回调数据有问题")
