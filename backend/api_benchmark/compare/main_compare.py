@@ -45,8 +45,8 @@ class MainCompare(MABaseView):
         latest_place = latest_develop['place']
         latest_create_time = latest_develop['create_time']
 
-        data1 = await Case.aio_filter_details(need_all=True, jid=baseline_id)
-        data2 = await Case.aio_filter_details(need_all=True, jid=dev_id)
+        data1 = await Case.aio_filter_details(need_all=True, jid=dev_id)
+        data2 = await Case.aio_filter_details(need_all=True, jid=baseline_id)
         res = []
         out = []
         # todo: 数据预处理
@@ -61,8 +61,8 @@ class MainCompare(MABaseView):
             temp = {
                 "case_name": case_name,
                 "api": i.get("api"),
-                "baseline": dict(),
                 "latest": dict(),
+                "baseline": dict(),
                 "compare": dict()
             }
             if case_name not in res2.keys():
@@ -105,12 +105,12 @@ class MainCompare(MABaseView):
                 temp = {
                     "case_name": case_name,
                     "api": i.get("api"),
-                    "baseline": {
+                    "latest": {
                         "forward": forward_v1,
                         "backward": backward_v1,
                         "total": total_v1,
                     },
-                    "latest":{
+                    "baseline":{
                         "forward": forward_v2,
                         "backward": backward_v2,
                         "total": total_v2,
