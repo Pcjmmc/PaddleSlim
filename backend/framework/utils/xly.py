@@ -143,3 +143,39 @@ def Post_ipipe_auth(url, data, query_param=''):
     sign = Sign(query_param)
     req.headers.update({'Authorization': sign})
     return session, req
+
+
+def get_xly_mission_url(pipelineBuildId):
+    """
+    获取效率云任务链接
+    """
+    retry = 0
+    xly_agent = XlyOpenApiRequest()
+    while (retry < 5):
+        url = "https://xly.bce.baidu.com/open-api/ipipe/rest/v3/pipelines/getPipelineBuildPageUrl?pipelineBuildId={}".format(pipelineBuildId)
+        url_param = "pipelineBuildId={}".format(pipelineBuildId)
+        res = xly_agent.get_method(url, param=url_param)
+        if res.status_code == 200:
+            res_str = res.text.replace("\"", "")
+            return res_str
+        else:
+            retry += 1
+    return None
+
+
+def pipeline_cancel(pipelineBuildId):
+    """
+    取消流水线
+    """
+    retry = 0
+    xly_agent = XlyOpenApiRequest()
+    while (retry < 5):
+        url = "https://xly.bce.baidu.com/open-api/ipipe/rest/v4/pipelines/{}/cancel".format(
+            pipelineBuildId)
+        data = '{"type":"CANCEL"}'
+        res = xly_agent.post_method(url, data)
+        if res.status_code == 200:
+            return True
+        else:
+            retry += 1
+    return False
