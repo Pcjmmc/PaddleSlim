@@ -12,6 +12,7 @@ from framework.compile_pkg.compile_callback import CompileCallback
 from framework.mission_pkg.mission_failed import MissionFailed
 from framework.mission_pkg.mission_rerun import MissionRerun
 from framework.mission_pkg.mission_delete import MissionDelete
+from framework.mission_pkg.mission_cancel import MissionCancel
 from framework.report_generator import ReportGenerator
 
 
@@ -45,6 +46,7 @@ urlpatterns = [
     url(r'missionfailed/?$', MissionFailed),
     url(r'missionrerun/?$', MissionRerun),
     url(r'missiondelete/?$', MissionDelete),
+    url(r'missioncancel/?$', MissionCancel),
     url(r'reportgenerator/?$', ReportGenerator),
 
 

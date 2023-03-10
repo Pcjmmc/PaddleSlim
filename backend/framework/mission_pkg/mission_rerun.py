@@ -20,7 +20,7 @@ from framework.utils.callback import get_job_status
 from framework.config.service_url import Local, LocalMission, Cloud, CloudMission, PLACE, CLOUD, LOCAL, DOCKER_IMAGE, DOCKER_INFER_IMAGE
 import requests
 import framework.config.status as STATUS
-from framework.utils.xly import XlyOpenApiRequest
+from framework.utils.xly import XlyOpenApiRequest, get_xly_mission_url
 
 
 class MissionRerun(MABaseView):
@@ -52,8 +52,10 @@ class MissionRerun(MABaseView):
             res = Dispatcher.request_mission(mission_name, mission_id, env, wheel)
             if isinstance(res, dict):
                 # 初始化任务
-                await Mission.aio_update({"status": "running", "description": "", "result": "", "allure_report":""},
-                                         {"id": mission_id})
+                info = get_xly_mission_url(res.get("pipelineBuildId"))
+                print(info)
+                await Mission.aio_update({"status": "running", "description": res.get("pipelineBuildId"),
+                                          "info": info, "result": "", "allure_report":""}, {"id": mission_id})
                 await Job.aio_update({"status": "running"}, {"id": jid})
                 return "重新执行成功"
             else:
