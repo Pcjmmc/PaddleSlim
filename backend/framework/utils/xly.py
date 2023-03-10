@@ -152,7 +152,8 @@ def get_xly_mission_url(pipelineBuildId):
     retry = 0
     xly_agent = XlyOpenApiRequest()
     while (retry < 5):
-        url = "https://xly.bce.baidu.com/open-api/ipipe/rest/v3/pipelines/getPipelineBuildPageUrl?pipelineBuildId={}".format(pipelineBuildId)
+        url = "https://xly.bce.baidu.com/open-api/ipipe/rest/v3/pipelines/getPipelineBuildPageUrl?pipelineBuildId={}"\
+            .format(pipelineBuildId)
         url_param = "pipelineBuildId={}".format(pipelineBuildId)
         res = xly_agent.get_method(url, param=url_param)
         if res.status_code == 200:
