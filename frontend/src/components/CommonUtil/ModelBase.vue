@@ -96,11 +96,11 @@ export default {
           key: 'status',
           align: 'center',
           render: (h, params) => {
-            let ret = []
+            let ret = [];
             if (params.row.status) {
               ret.push(
                 h('Tag', {
-              }, params.row.status))
+              }, params.row.status));
             }
             if (params.row.status.toLowerCase() === 'failed') {
               ret.push(
@@ -114,7 +114,7 @@ export default {
                     this.autoBinarySearch(params.row);
                   }
                 }
-              }, '自动定位'))
+              }, '自动定位'));
             } else {
               // zhanwei
               ret.push(
@@ -132,7 +132,7 @@ export default {
                     this.jumper(params.row);
                   }
                 }
-              }, '自动定位'))
+              }, '自动定位'));
             }
             return h(
               'div',
@@ -145,7 +145,7 @@ export default {
                 }
               },
               ret
-            )
+            );
           }
         }
       ]
@@ -162,7 +162,7 @@ export default {
         model_name: this.modelName,
         step_name: row.step_name,
         email_add: Cookies.get('username') + '@baidu.com'
-      }
+      };
       const {code, data, message} = await api.post(AutoBinarySearchUrl, params);
       if (parseInt(code, 10) === 200) {
         this.joburl = data.url;
