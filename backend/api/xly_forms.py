@@ -19,6 +19,8 @@ class XlyForm(object):
         "begin_time": [str, int],
         "run_time": [str, int],
         "end_time": [str, int],
+        "agent_name": [str],
+        "cluster_name": [str]
         
     }
     #need_data_params = ["build_type_id", "build_id", "job_id"] 
