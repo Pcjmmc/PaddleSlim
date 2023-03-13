@@ -27,8 +27,8 @@ urlpatterns = [
     url(r'getplace/?$', GetPlace),
 
     # 触发效率云流水线
-    url(r'apibminitview/?$', ApiBenchmarkInitView),
+    url(r'api_benchmark/apibminitview/?$', ApiBenchmarkInitView),
     url(r'apibmrerun/?$', ApiBenchmarkRerun),
     url(r'apibmcallback/?$', ApiBenchmarkCallback),
-    url(r'maincompare/?$', MainCompare),
+    url(r'api_benchmark/maincompare/?$', MainCompare),
 ]

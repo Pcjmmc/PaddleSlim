@@ -145,6 +145,15 @@ if __name__ == "__main__":
             "desc": "发布管理",
             "icon": "md-cloud-upload"
         },
+        "benchmark": {
+            "desc": "benchmark",
+            "sub": {
+                "apiBenchmark": {
+                    "icon": 'md-build',
+                    "desc": 'Api Benchmark'
+                }
+            }
+        },
         "config": {
             "desc": '测试能力管理',
             "icon": 'md-paper',
