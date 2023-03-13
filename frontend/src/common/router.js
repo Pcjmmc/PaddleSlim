@@ -20,6 +20,7 @@ import SingleDetail from '../components/PTS/SingleDetail.vue';
 import Demand from '../components/Requirement/Demand.vue';
 import ReqirementDetail from '../components/Requirement/ReqirementDetail.vue';
 import SummaryResult from '../components/NewConclusion/SummaryResult';
+import ApiBenchmarkService from '../components/ApiBenchmark/ApiBenchmarkService.vue';
 
 // Vue.use(VueRouter);
 export const ROUTES = [
@@ -133,6 +134,11 @@ export const ROUTES = [
           path: '/paddle/publish/:version',
           name: 'PublishVersion',
           component: Publish
+        },
+        { // API 配置
+          path: '/paddle/benchmark/apiBenchmark',
+          name: 'ApiBenchmarkService',
+          component: ApiBenchmarkService
         }
       ]
     }

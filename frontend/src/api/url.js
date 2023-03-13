@@ -45,3 +45,5 @@ export const ReqInfoUrl = '/ce/requirments/getassociatedreq';
 export const AddNewConclusionUrl = '/framework/reportadd';
 export const SearchNewConclusionUrl = '/framework/reportview';
 export const SearchSummaryConclusionUrl = '/framework/reportsummary';
+export const BenchmarkExec = '/api_benchmark/apibminitview';
+export const ApiCompare = '/api_benchmark/maincompare';
