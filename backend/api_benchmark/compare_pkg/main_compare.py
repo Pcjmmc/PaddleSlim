@@ -1,4 +1,4 @@
-#!/bin/env python3
+#!/bin/env python
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
@@ -45,8 +45,12 @@ class MainCompare(MABaseView):
         latest_place = latest_develop['place']
         latest_create_time = latest_develop['create_time']
 
-        data1 = await Case.aio_filter_details(need_all=True, jid=dev_id)
-        data2 = await Case.aio_filter_details(need_all=True, jid=baseline_id)
+        data1 = await Case.aio_filter_details(need_all=True, jid=baseline_id)
+        data2 = await Case.aio_filter_details(need_all=True, jid=dev_id)
+
+        good = 0
+        same = 0
+        bad = 0
         res = []
         out = []
         # todo: 数据预处理
@@ -98,19 +102,26 @@ class MainCompare(MABaseView):
                         backward = (backward_v1 / backward_v2) * -1
                     else:
                         backward = backward_v2 / backward_v1
-                if total_v1 > total_v2:
+                if total_v1 > total_v2:  # baseline耗时更多
                     total = (total_v1 / total_v2) * -1
-                else:
+                else:  # latest耗时更多
                     total = total_v2 / total_v1
+
+                if total < -1.15:
+                    good += 1
+                elif -1.15 < total < 1.15:
+                    same += 1
+                else:
+                    bad += 1
                 temp = {
                     "case_name": case_name,
                     "api": i.get("api"),
-                    "latest": {
+                    "baseline": {
                         "forward": forward_v1,
                         "backward": backward_v1,
                         "total": total_v1,
                     },
-                    "baseline":{
+                    "latest":{
                         "forward": forward_v2,
                         "backward": backward_v2,
                         "total": total_v2,
@@ -122,10 +133,15 @@ class MainCompare(MABaseView):
                     }
                 }
             res.append(temp)
+        summary = {}
+        summary['good'] = str(good)
+        summary['same'] = str(same)
+        summary['bad'] = str(bad)
         out_tmp = {
             'baseline': {'version': baseline_ver},
             'latest': {'commit': latest_commit, 'place': latest_place, 'create_time': str(latest_create_time)},
-            'compare': res
+            'compare': res,
+            'summary': summary,
         }
         out.append(out_tmp)
         return out
