@@ -18,7 +18,7 @@ from app.ce.release.views import ReleaseVersionManage, TaskManage
 from app.ce.requirements.associated_views import AssociatedManage
 from app.ce.requirements.history_views import ProjectHistory
 from app.ce.requirements.views import ManageIcafe, ProjectManage
-from app.ce.tools.views import BinarySearchManage
+from app.ce.tools.views import AutoBinarySearchManage, BinarySearchManage
 from app.ce.user.views import UserIdentifyCheck
 from app.ce.ValidateToken.views import CheckManage, LogoutManage, ValidateManage
 from app.ce.version.views import CreateRVersion
@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'builds/?$', BuildManage),
     url(r'associated/bugs', AssociatedBugManage),
     url(r'tools/binarysearch', BinarySearchManage),
+    url(r'tools/autobinarysearch', AutoBinarySearchManage),
     url(r'version/?$', CreateRVersion),
     url(r'sTokenBackendValidate/?$', ValidateManage),
     url(r'user/check/?$', UserIdentifyCheck),
