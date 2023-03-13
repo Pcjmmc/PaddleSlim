@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env python3
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
@@ -45,8 +45,8 @@ class MainCompare(MABaseView):
         latest_place = latest_develop['place']
         latest_create_time = latest_develop['create_time']
 
-        data1 = await Case.aio_filter_details(need_all=True, jid=baseline_id)
-        data2 = await Case.aio_filter_details(need_all=True, jid=dev_id)
+        data1 = await Case.aio_filter_details(need_all=True, jid=dev_id)
+        data2 = await Case.aio_filter_details(need_all=True, jid=baseline_id)
 
         good = 0
         same = 0
@@ -102,26 +102,27 @@ class MainCompare(MABaseView):
                         backward = (backward_v1 / backward_v2) * -1
                     else:
                         backward = backward_v2 / backward_v1
-                if total_v1 > total_v2:  # baseline耗时更多
+                if total_v1 > total_v2:
                     total = (total_v1 / total_v2) * -1
-                else:  # latest耗时更多
+                else:
                     total = total_v2 / total_v1
 
                 if total < -1.15:
-                    good += 1
+                    bad += 1
                 elif -1.15 < total < 1.15:
                     same += 1
                 else:
-                    bad += 1
+                    good += 1
+
                 temp = {
                     "case_name": case_name,
                     "api": i.get("api"),
-                    "baseline": {
+                    "latest": {
                         "forward": forward_v1,
                         "backward": backward_v1,
                         "total": total_v1,
                     },
-                    "latest":{
+                    "baseline":{
                         "forward": forward_v2,
                         "backward": backward_v2,
                         "total": total_v2,
