@@ -1,17 +1,35 @@
 <template>
     <div class="one-fifth-video-col">
-            <div style="font-weight: bold; line-height:200%; margin-bottom: 1%">
-                <Row>
-                    <Col span="3"> 例行任务(Latest)</Col>
-                    <Col span="8"> Commit: {{ latest.commit }}</Col>
-                    <Col span="6"> Place: {{ latest.place }}</Col>
-                    <Col span="6"> 执行时间：{{ latest.create_time }}</Col>
-                </Row>
-                <Row>
-                    <Col span="3"> 基线任务(Baseline)</Col>
-                    <Col span="6"> Version: {{ baseline.version }}</Col>
-                </Row>
-            </div>
+        <div style="font-weight: bold; line-height:200%; margin-bottom: 1%">
+            <Row>
+                <Col span="1"></Col>
+                <Col span="11"> 基线(Baseline)版本：{{ baseline.version }}</Col>
+                <Col span="12"> API数量统计:</Col>
+            </Row>
+            <Row>
+                <Col span="1"></Col>
+                <Col span="11"> 例行任务(Latest)参数：</Col>
+                <Col span="1"></Col>
+                <Col span="11"> 性能更好：{{ summary.good }}</Col>
+            </Row>
+            <Row>
+                <Col span="2"></Col>
+                <Col span="10"> Commit: {{ latest.commit }}</Col>
+                <Col span="1"></Col>
+                <Col span="11"> 性能一般：{{ summary.same }}</Col>
+            </Row>
+            <Row>
+                <Col span="2"></Col>
+                <Col span="10"> palce:  {{ latest.place }}</Col>
+                <Col span="1"></Col>
+                <Col span="11"> 性能更差：{{ summary.bad }}</Col>
+            </Row>
+            <Row>
+                <Col span="2"></Col>
+                <Col span="10"> 创建时间:  {{ latest.create_time }}</Col>
+                <Col span="12"></Col>
+            </Row>
+        </div>
         <div>
             <Table
                 border
@@ -36,6 +54,7 @@ export default {
             result: [],
             baseline: {},
             latest: {},
+            summary: {},
             columns: [
                 {
                     title: 'API',
@@ -78,7 +97,6 @@ export default {
                             sortable: true,
                             key: 'compare',
                             sortMethod: function (a, b, type) {
-                                console.log(a.forward, b.forward, type);
                                 if (type === 'asc') {
                                     return a.forward > b.forward ? -1 : 1;
                                 } else {
@@ -89,15 +107,11 @@ export default {
                                 let value = params.row.compare.forward;
                                 let str = this.round(value);
                                 return h('div', [
-                                    h(
-                                        'p',
-                                        {
-                                            style: {
-                                                color: this.setValueColor(value)
-                                            }
-                                        },
-                                        str
-                                    )
+                                    h('p', {
+                                        style: {
+                                            color: this.setValueColor(value)
+                                        }
+                                    }, str)
                                 ]);
                             }
                         }
@@ -130,7 +144,6 @@ export default {
                             sortable: true,
                             key: 'compare',
                             sortMethod: function (a, b, type) {
-                                console.log(a.backward, b.backward, type);
                                 if (type === 'asc') {
                                     return a.backward > b.backward ? -1 : 1;
                                 } else {
@@ -141,15 +154,11 @@ export default {
                                 let value = params.row.compare.backward;
                                 let str = this.round(value);
                                 return h('div', [
-                                    h(
-                                        'p',
-                                        {
-                                            style: {
-                                                color: this.setValueColor(value)
-                                            }
-                                        },
-                                        str
-                                    )
+                                    h('p', {
+                                        style: {
+                                            color: this.setValueColor(value)
+                                        }
+                                    }, str)
                                 ]);
                             }
                         }
@@ -193,15 +202,11 @@ export default {
                                 let value = params.row.compare.total;
                                 let str = this.round(value);
                                 return h('div', [
-                                    h(
-                                        'p',
-                                        {
-                                            style: {
-                                                color: this.setValueColor(value)
-                                            }
-                                        },
-                                        str
-                                    )
+                                    h('p', {
+                                        style: {
+                                            color: this.setValueColor(value)
+                                        }
+                                    }, str)
                                 ]);
                             }
                         }
@@ -218,9 +223,9 @@ export default {
             return value.toFixed(4).toString() + 'x';
         },
         setValueColor(value) {
-            if (value > 1.1) {
+            if (value >= 1.15) {
                 return 'green';
-            } else if (value < -1.1) {
+            } else if (value < -1.15) {
                 return 'red';
             } else {
                 return 'grad';
@@ -232,6 +237,7 @@ export default {
                 this.result = data[0].compare;
                 this.baseline = data[0].baseline;
                 this.latest = data[0].latest;
+                this.summary = data[0].summary;
                 this.loading = false;
             } else {
                 this.$Message.error({
@@ -241,7 +247,7 @@ export default {
                 });
             }
         }
-    }
+    },
 };
 </script>
 
