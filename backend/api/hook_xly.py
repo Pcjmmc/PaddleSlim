@@ -37,7 +37,7 @@ class HookxlyView(MABaseView):
         """
         remote_ip = self.request.remote_ip
         header = self.request.headers
-        print(header)
+        #print(header)
         trigger_type = header.get("TRIGGER_TYPE", "")
         operation = header.get("OPERATION", "")
         status = header.get("BUILD_STATUS", "")
