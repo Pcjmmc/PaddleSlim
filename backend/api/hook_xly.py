@@ -37,10 +37,13 @@ class HookxlyView(MABaseView):
         """
         remote_ip = self.request.remote_ip
         header = self.request.headers
-        #print(header)
+        print(header)
         trigger_type = header.get("TRIGGER_TYPE", "")
         operation = header.get("OPERATION", "")
         status = header.get("BUILD_STATUS", "")
+        mark_job = header.get("MARKED_JOB", "false")
+        if mark_job == "true":
+            return None
         xly_basic = {}
         xly_build = {}
         if "STATUS" == trigger_type and "PENDING" == status:
@@ -53,8 +56,9 @@ class HookxlyView(MABaseView):
             xly_build['job_id'] = kwargs.get("job_id")
             xly_build['conf_id'] = kwargs.get("conf_id")
             xly_build['status'] = status
-            begin_time = header.get("JOB_START_TIME", None)
+            begin_time = kwargs.get("begin_time", None)
             if begin_time:
+                print("generate begin time")
                 begin_time = int(int(begin_time) / 1000)
             else:
                 print("web hook header not have JOB_START_TIME")
@@ -66,7 +70,7 @@ class HookxlyView(MABaseView):
             job_id = kwargs.get("job_id")
             xly_build['status'] = status
             #xly_build['job_id'] = kwargs.get("job_id")
-            run_time = header.get("JOB_REAL_START_TIME", None)
+            run_time = kwargs.get("run_time", None)
             if run_time:
                 run_time = int(int(run_time) / 1000)
             else:
@@ -78,8 +82,8 @@ class HookxlyView(MABaseView):
         if "STATUS" == trigger_type and status in ["FAIL", "SUCC", "CANCEL"]:
             job_id = kwargs.get("job_id")
             xly_build['status'] = status
-            xly_build["exit_code"] = header.get("JOB_EXIT_CODE", None)
-            end_time = header.get("JOB_EXIT_TIME", None) 
+            xly_build["exit_code"] = kwargs.get("JOB_EXIT_CODE", None)
+            end_time = kwargs.get("end_time", None) 
             if end_time:
                 end_time = int(int(end_time) / 1000) 
             else:
@@ -92,9 +96,11 @@ class HookxlyView(MABaseView):
             #TODO 修正xlywebhook中文编码异常，待讨论
             job_id = kwargs.get("job_id")
             print("job_id =", job_id)
-            fail_reason = header.get("CATEGORY_LIST")
-            print(fail_reason.encode("iso-8859-1").decode('utf-8'))  
-            xly_build["fail_reason"] = fail_reason
-            print("xly issue desc is", header.get("ISSUE_DESC"))
+            mark_info_json = kwargs.get("OPERATION_DATA")
+            mark_info = mark_info_json.get("CATEGORY_LIST", [])
+            mark_info_str = ';'.join(mark_info)
+            print("xly issue mark info is", mark_info_str)
             print(trigger_type, "xly build info is", xly_build) 
+            xly_build["fail_reason"] = mark_info_str
+            print(status, "xly build info is", xly_build)
             await XlyBuild.aio_update(validated_data=xly_build, params_data={"job_id": job_id})
