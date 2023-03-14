@@ -42,20 +42,7 @@
         </span>
       </Row>
       <div style="margin-top:1%;font-size:14px;">
-        <div v-if="datas.length === 0">
-          <span>
-            <div>待测试项:</div>
-            <Button
-              :key="index"
-              disabled
-              v-for="(item, index) in selectedItems"
-              style="width:auto;margin-left:0.5%;margin-top:1%;"
-            >
-              {{ serverMap[item] }}
-            </Button>
-          </span>
-        </div>
-        <div v-else style="margin-top:2%;">
+        <div style="margin-top:2%;">
         测试模块详情:
         <div style="margin-top: 1%;">
           <Table
@@ -99,7 +86,7 @@ export default {
             if (params.row.step === '测试') {
               return h(childTable, {
                 props: {
-                  tableData: this.datas
+                  tableData: this.datas.length > 0 ? this.datas : this.selectedItems
                 },
                 on: {
                   getDetails: () => {
@@ -330,7 +317,19 @@ export default {
       let tmpData = [];
       this.selectedItems = [];
       for (let key in dt) {
-        this.selectedItems.push(key);
+        this.selectedItems.push(
+          {
+            mission: this.serverMap[key],
+            status: 'error',
+            result: '编译触发失败',
+            create_time: '--',
+            bos_url: '--',
+            allure_report: '--',
+            id: '--',
+            description: '--',
+            info: '--'
+          }
+        );
         if (dt[key]) {
           let temp = {
             mission: this.serverMap[key],

@@ -19,7 +19,10 @@
         align="center"
         width="140"
       >
-        <div slot-scope="scope">
+        <div slot-scope="scope" v-if="scope.row.id==='--'">
+          {{ scope.row.mission }}
+        </div>
+        <div slot-scope="scope" v-else>
           <a href="javascript:void(0)" @click="openXly(scope.row.info)">
             {{ scope.row.mission }}
           </a>
@@ -57,11 +60,16 @@
         label="详细报告"
       >
         <div slot-scope="scope">
-          <el-button
-            type="primary"
-            size="mini"
-            @click="openReport(scope.row)"
-          >查看报告</el-button>
+          <div v-if="scope.row.id==='--'">
+            <p>--</p>
+          </div>
+          <div v-else>
+            <el-button
+              type="primary"
+              size="mini"
+              @click="openReport(scope.row)"
+            >查看报告</el-button>
+          </div>
         </div>
       </el-table-column>
       <el-table-column
@@ -71,45 +79,50 @@
         label="操作"
       >
         <div slot-scope="scope">
-          <el-popconfirm
-            title="确定取消？"
-            @confirm="cancelJob(scope.row, scope.$index)"
-          >
-            <el-button
-              slot="reference"
-              :disabled="scope.row.status!=='running'"
-              size="mini"
-              type="primary"
-              icon="el-icon-video-pause"
-              circle
-            ></el-button>
-          </el-popconfirm>
-          <el-popconfirm
-            title="确定重跑？"
-            @confirm="rerunJob(scope.row, scope.$index)"
-          >
-            <el-button
-              slot="reference"
-              :disabled="scope.row.status ==='running'"
-              size="mini"
-              type="warning"
-              icon="el-icon-refresh-right"
-              circle
-            ></el-button>
-          </el-popconfirm>
-          <el-popconfirm
-            title="确定标记异常？"
-            @confirm="setFailedStatus(scope.row, scope.$index)"
-          >
-            <el-button
-              slot="reference"
-              :disabled="scope.row.status ==='running'"
-              size="mini"
-              type="danger"
-              icon="el-icon-edit-outline"
-              circle
-            ></el-button>
-          </el-popconfirm>
+          <div v-if="scope.row.id==='--'">
+            <p>--</p>
+          </div>
+          <div v-else>
+            <el-popconfirm
+              title="确定取消？"
+              @confirm="cancelJob(scope.row, scope.$index)"
+            >
+              <el-button
+                slot="reference"
+                :disabled="scope.row.status!=='running'"
+                size="mini"
+                type="primary"
+                icon="el-icon-video-pause"
+                circle
+              ></el-button>
+            </el-popconfirm>
+            <el-popconfirm
+              title="确定重跑？"
+              @confirm="rerunJob(scope.row, scope.$index)"
+            >
+              <el-button
+                slot="reference"
+                :disabled="scope.row.status ==='running'"
+                size="mini"
+                type="warning"
+                icon="el-icon-refresh-right"
+                circle
+              ></el-button>
+            </el-popconfirm>
+            <el-popconfirm
+              title="确定标记异常？"
+              @confirm="setFailedStatus(scope.row, scope.$index)"
+            >
+              <el-button
+                slot="reference"
+                :disabled="scope.row.status ==='running'"
+                size="mini"
+                type="danger"
+                icon="el-icon-edit-outline"
+                circle
+              ></el-button>
+            </el-popconfirm>
+          </div>
         </div>
       </el-table-column>
     </el-table>

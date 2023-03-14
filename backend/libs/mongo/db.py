@@ -147,9 +147,10 @@ if __name__ == "__main__":
         },
         "benchmark": {
             "desc": "benchmark",
+            "icon": "md-analytics",
             "sub": {
                 "apiBenchmark": {
-                    "icon": 'md-build',
+                    "icon": 'md-stats',
                     "desc": 'Api Benchmark'
                 }
             }
