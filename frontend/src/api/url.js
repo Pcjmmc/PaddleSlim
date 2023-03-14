@@ -35,6 +35,7 @@ export const FrameCompileSearchUrl = '/framework/compile_search';
 export const FrameCompileCreateUrl = '/framework/compile';
 export const FrameMissionFailedUrl = '/framework/missionfailed';
 export const FrameMissionRerunUrl = '/framework/missionrerun';
+export const FrameMissionCancelUrl = '/framework/missioncancel';
 export const BinarySearchUrl = '/ce/tools/binarysearch';
 export const AutoBinarySearchUrl = '/ce/tools/autobinarysearch';
 export const VersionUrl = '/ce/version';

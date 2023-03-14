@@ -64,18 +64,28 @@
           >Search</Button>
         </div>
         <div style="text-align:right;">
-          <Button
-            icon="md-add"
-            class="btn-success"
-            @click="createNewJob"
-          >新建测试任务</Button>
+          <span>
+            <Button
+              icon="md-add"
+              class="btn-success"
+              @click="createNewJob"
+            >新建测试任务</Button>
+          </span>
+          <span>
+            <Button
+              class="btn-success"
+              @click="deleteJob"
+            >删除</Button>
+          </span>
         </div>
       </div>
-      <div style="margin-top: 2%;">
-        <div class="left" style="margin-top: 2%;">
+      <div style="margin-top: 1%;">
+        <div class="left">
           <Table
             :columns="columns"
             :data="content"
+            @on-select="addSelected"
+            @on-row-click="openDrawer"
           ></Table>
           <Page
             :total="total"
@@ -89,6 +99,43 @@
         </div>
       </div>
     </div>
+    <Drawer
+      :closable="true"
+      width="72%"
+      scrollable
+      :mask-closable="false"
+      v-model="showRightModa"
+      v-if="selectedRow"
+    >
+      <div slot="header">
+        <Row style="font-size:16px;">
+          <Col>
+            <div style="width:50px;">
+              <a href="javascript:void(0)" @click="handleDetail">
+                [{{ selectedRow.id }}]
+              </a>
+            </div>
+          </Col>
+          <Col>
+            <div style="width:30px;">
+              <Tooltip content="复制链接" placement="bottom">
+                <Icon
+                  class="copyBtn"
+                  type="ios-link"
+                  @click="copyData"
+                ></Icon>
+              </Tooltip>
+            </div>
+          </Col>
+            <h3>{{ selectedRow.description }}</h3>
+          <Col>
+          </Col>
+        </Row>
+      </div>
+      <div>
+        <single-detail ref="mychild" :jid="selectedRow.id"></single-detail>
+      </div>
+    </Drawer>
     <Modal
       v-model="showModa"
       title="创建测试任务"
@@ -113,14 +160,19 @@
 // import Cookies from 'js-cookie';
 import api from '../../api/index';
 import { dateFmt } from '../../util/help.js';
-import { FrameWorkJobListUrl } from '../../api/url.js';
+import Clipboard from 'clipboard';
+import { FrameWorkJobListUrl, FrameWorkDelJobUrl } from '../../api/url.js';
 import TestJob from './TestJob.vue';
+import SingleDetail from './SingleDetail.vue';
 
 export default {
   name: 'CompileService',
   data: function () {
     return {
       showModa: false,
+      showRightModa: false,
+      tableSelect: [],
+      selectedRow: null,
       tags: [
         {
           id: 'all',
@@ -148,17 +200,21 @@ export default {
       ],
       columns: [
         {
+          type: 'selection',
+          width: 60,
+          align: 'center'
+        },
+        {
           title: '任务ID',
           key: 'id',
           align: 'center',
-          fixed: 'left',
-          minWidth: 100
+          minWidth: 60
         },
         {
           title: '任务名',
           key: 'description',
           align: 'center',
-          minWidth: 200
+          minWidth: 300
         },
         {
           title: '任务状态',
@@ -189,31 +245,31 @@ export default {
           key: 'update_time',
           align: 'center',
           minWidth: 200
-        },
-        {
-          title: '详情',
-          key: 'detail',
-          align: 'center',
-          fixed: 'right',
-          minWidth: 120,
-          render: (h, params) => {
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'info'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.handleDetail(params.row);
-                  }
-                }
-              }, '查看详情')
-            ]);
-          }
         }
+        // {
+        //   title: '详情',
+        //   key: 'detail',
+        //   align: 'center',
+        //   fixed: 'right',
+        //   minWidth: 120,
+        //   render: (h, params) => {
+        //     return h('div', [
+        //       h('Button', {
+        //         props: {
+        //           type: 'info'
+        //         },
+        //         style: {
+        //           marginRight: '5px'
+        //         },
+        //         on: {
+        //           click: () => {
+        //             this.handleDetail(params.row);
+        //           }
+        //         }
+        //       }, '查看详情')
+        //     ]);
+        //   }
+        // }
       ],
       dt: [this.getBeginData(), new Date()],
       search: {
@@ -234,7 +290,8 @@ export default {
     this.searchByfilter();
   },
   components: {
-    TestJob
+    TestJob,
+    SingleDetail
   },
   computed: {
   },
@@ -279,13 +336,30 @@ export default {
           return 'error';
       }
     },
-    handleDetail(row) {
+    handleDetail() {
       let _params = {
-        jid: row.id
+        jid: this.selectedRow.id
       };
       // 根据branch获取commit列表
       const { href } = this.$router.resolve({name: 'SingleDetail', params: _params});
       window.open(href, '_blank');
+    },
+    copyData() {
+      let localHost = window.location.host;
+      let url = 'http://' + localHost + '#/paddle/test/SingleDetail/410';
+      let clipboard = new Clipboard('.copyBtn', {
+        text: function (trigger) {
+          clipboard.destroy();
+          return url;
+        }
+      });
+      clipboard.on('success', e => {
+        this.$Message.success('复制成功~');
+        e.clearSelection();
+      });
+      clipboard.on('error', e => {
+        this.$Message.error('复制失败,请手动复制~');
+      });
     },
     async handleReset() {
       await this.$refs.child.initData();
@@ -302,6 +376,7 @@ export default {
       this.showModa = params;
     },
     initData() {
+      this.tableSelect = [];
       this.content = [];
       this.search = {
         name: '',
@@ -370,6 +445,72 @@ export default {
           closable: true
         });
       }
+    },
+    addSelected(selection, row) {
+      // 管理选中的选项
+      console.log('select row is', row);
+      this.tableSelect = selection;
+      console.log('select selection is', selection);
+    },
+    cancelJob() {
+      // 取消选中的任务
+      console.log('取消选中的任务');
+    },
+    refreshJob() {
+      // 刷新选中的任务
+      console.log('刷新选中的任务');
+    },
+    openDrawer(row, index) {
+      this.selectedRow = {};
+      this.selectedRow = row;
+      this.showRightModa = true;
+      // 主动调用子组件的方法刷新数据
+      this.$nextTick(function () {
+        this.$refs.mychild.getInitData();
+      });
+    },
+    async deleteJob() {
+      // 根据选项删除
+      if (this.tableSelect.length == 0) {
+        this.$Message.info({
+          content: '请至少勾选一个选项！',
+          duration: 5,
+          closable: true
+        });
+        return;
+      }
+      let count = 0;
+      let len = this.tableSelect.length;
+      for (let i = 0; i < this.tableSelect.length; i++) {
+        let temp = this.tableSelect[i];
+        let params = {
+          id: temp.id
+        };
+        const {code, message} = await api.post(FrameWorkDelJobUrl, params);
+        if (parseInt(code, 10) === 200) {
+          // 从content中将index删除 todo
+          count++;
+          this.content.forEach((item, index) => {
+            if (temp.id === item.id) {
+              this.content.splice(index, 1);
+            }
+          })
+        } else {
+          this.$Message.error({
+            content: '请求出错: ' + message,
+            duration: 30,
+            closable: true
+          });
+        }
+      }
+      if (count === len) {
+        this.$Message.info({
+          content: '删除成功！',
+          duration: 3,
+          closable: true
+        });
+      }
+      this.tableSelect = [];
     }
   }
 };
@@ -386,5 +527,16 @@ export default {
   margin-right: 1%;
   font-size: 14px;
   color:lightslategrey
+}
+.item-css {
+  font-size: 14px;
+  color: #303133;
+  padding: 0 6px;
+  cursor: pointer;
+  -webkit-transition: border-color .3s,background-color .3s,color .3s;
+  -o-transition: border-color .3s,background-color .3s,color .3s;
+  transition: border-color .3s,background-color .3s,color .3s;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 </style>

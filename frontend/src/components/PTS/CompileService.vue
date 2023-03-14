@@ -119,27 +119,33 @@
       <div v-for="item, index in content">
         <Card class="center-card-s">
           <Row>
-            <span style="display:inline-block;width:95%;margin-right:2%;">
-
+            <span style="display:inline-block;width:100%;margin-right:1%;">
               <span style="float:left;">
-                  <Button
-                    type="error"
-                    v-if="item.status=='error'"
-                    style="width: 120px;"
-                  >状态: {{ item.status }}
-                  </Button>
-                  <Button
-                    type="success"
-                    v-else-if="item.status=='done'"
-                    style="width: 120px;"
-                  >状态: {{ item.status }}
-                  </Button>
-                  <Button
-                  type="warning"
-                  v-else="item.status=='error'"
+                <a href="javascript:void(0)" @click="openXly(item.info)">
+                  状态：
+                </a>
+                <Button
+                  type="error"
+                  v-if="item.status=='error'"
                   style="width: 120px;"
-                >状态: {{ item.status }}
+                  @click="openXly(item.info)"
+                >{{ item.status }}
                 </Button>
+                <Button
+                  type="success"
+                  v-else-if="item.status=='done'"
+                  style="width: 120px;"
+                  @click="openXly(item.info)"
+                >{{ item.status }}
+                </Button>
+                <Button
+                  type="warning"
+                  v-else
+                  style="width: 120px;"
+                  @click="openXly(item.info)"
+                >{{ item.status }}
+                </Button>
+                <span v-if="item.status=='error'"><font color="red">{{ item.remark }}</font></span>
                 系统: {{ getValue(item.env, "os") }}
                 <span v-if="getValue(item.env, 'branch')">
                   | 分支: {{ getValue(item.env, "branch") }}
@@ -149,11 +155,62 @@
             </span>
           </Row>
           <Row style="margin-top: 1%;">
-            <span style="display:inline-block;width:95%;margin-right:2%;">
-              <span> {{ getDisplay(item.env) }}</span>
+            <span style="display:inline-block;width:100%;margin-right:1%;">
+              <span style="float:left;"> {{ getDisplay(item.env) }}</span>
+              <span style="float:right;">
+            <!--
+            <el-popconfirm title="确定取消？" v-if="item.status=='running'">
+              <el-button
+                slot="reference"
+                size="mini"
+                type="primary"
+                icon="el-icon-video-pause"
+                circle
+              ></el-button>
+            </el-popconfirm>
+             <el-popconfirm title="确定取消？" v-else>
+              <el-button
+                disabled
+                slot="reference"
+                size="mini"
+                type="primary"
+                icon="el-icon-video-pause"
+                circle
+              ></el-button>
+            </el-popconfirm>
+            <el-popconfirm title="确定重跑？" v-if="item.status !=='running'">
+              <el-button
+                slot="reference"
+                size="mini"
+                type="warning"
+                icon="el-icon-refresh-right"
+                circle
+              ></el-button>
+            </el-popconfirm>
+            <el-popconfirm title="确定重跑？" v-else>
+              <el-button
+                disabled
+                slot="reference"
+                size="mini"
+                type="warning"
+                icon="el-icon-refresh-right"
+                circle
+              ></el-button>
+            </el-popconfirm>
+            -->
+            <el-popconfirm title="确定删除？" @confirm="deleteJob(item, index)">
+              <el-button
+                slot="reference"
+                size="mini"
+                type="danger"
+                icon="el-icon-delete"
+                circle
+              ></el-button>
+            </el-popconfirm>
+              </span>
             </span>
           </Row>
-          <Row style="margin-top: 1%;">
+          <Row>
             <span>产物地址: <a :href="item.wheel">{{ item.wheel }}</a>
               <Icon
                 class="ivu-icon ivu-icon-ios-copy-outline copyBtn"
@@ -181,7 +238,7 @@
 
 <script>
 import Cookies from 'js-cookie';
-import { FrameWorkConfigUrl, FrameCompileSearchUrl, FrameCompileCreateUrl } from '../../api/url.js';
+import { FrameWorkConfigUrl, FrameCompileSearchUrl, FrameCompileCreateUrl, FrameWorkDelComUrl } from '../../api/url.js';
 import Clipboard from 'clipboard';
 import api from '../../api/index';
 
@@ -285,6 +342,17 @@ export default {
       content_list.push('Wheel安装包');
       return content_list.join(' | ');
     },
+    openXly(url) {
+      if (url) {
+        window.open(url, '_blank');
+      } else {
+        this.$Message.info({
+          content: '下游任务没有回写任务地址!',
+          duration: 5,
+          closable: true
+        });
+      }
+    },
     async getSelectDatas() {
       const {code, data, message} = await api.get(FrameWorkConfigUrl);
       if (parseInt(code, 10) === 200) {
@@ -375,6 +443,28 @@ export default {
           closable: true
         });
       }
+    },
+    async deleteJob(item, index) {
+      // 删除选项
+      let params = {
+        id: item.id
+      };
+      const {code, message} = await api.post(FrameWorkDelComUrl, params);
+      if (parseInt(code, 10) === 200) {
+        // 从content中将index删除 todo
+        this.content.splice(index, 1);
+        this.$Message.info({
+          content: '删除成功',
+          duration: 2,
+          closable: true
+        });
+      } else {
+        this.$Message.error({
+          content: '请求出错: ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
     }
   }
 };
@@ -396,5 +486,36 @@ export default {
   color: #fff;
   background-color: #67c23a;
   border-color: #67c23a;
+}
+.ul_box {
+  width: 600px;
+  height: 60px;
+  display: inline-block;
+  margin: 20px 2px;
+  overflow: hidden;
+}
+.my_timeline_item {
+  display: inline-block;
+  width: 100px;
+}
+.my_timeline_node {
+  width:10px;
+  height: 10px;
+  font-size: 18;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+.my_timeline_item_line {
+  width: 90px;
+  height: 10px;
+  margin: -6px 0 0 10px;
+  border-top: 2px solid #E4E7ED;
+  border-left: none;
+}
+.my_timeline_item_content {
+  margin: 10px 0 0 -10px;
+  display: flex;
+  flex-flow: column;
+  cursor: pointer;
 }
 </style>
