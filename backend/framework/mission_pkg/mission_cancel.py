@@ -51,7 +51,10 @@ class MissionCancel(MABaseView):
         if res == 0:
             raise HTTP400Error
         else:
-            return "删除成功"
+            # get jid
+            mission = await Mission.aio_get_object(id=mission_id)
+            job = await Job.aio_get_object(id=mission["jid"])
+            await get_job_status(job["id"], json.loads(job["mission"]))
 
 
 
