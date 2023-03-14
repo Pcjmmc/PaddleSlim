@@ -10,13 +10,15 @@
         prop="id"
         label="ID"
         align="center"
-        width="80">
+        width="80"
+      >
       </el-table-column>
       <el-table-column
         prop="mission"
         label="测试项"
         align="center"
-        width="140">
+        width="140"
+      >
         <div slot-scope="scope">
           <a href="javascript:void(0)" @click="openXly(scope.row.info)">
             {{ scope.row.mission }}
@@ -27,29 +29,33 @@
         prop="status"
         label="状态"
         width="100"
-        align="center">
+        align="center"
+      >
         <div slot-scope="scope">
           <Tag :color="setColor(scope.row.status)">
-            {{  getStatus(scope.row.status) }}
+            {{ getStatus(scope.row.status) }}
           </Tag>
         </div>
       </el-table-column>
       <el-table-column
         prop="result"
         label="结果"
-        align="center">
+        align="center"
+      >
       </el-table-column>
       <el-table-column
         prop="create_time"
         align="center"
         width="152"
-        label="创建时间">
+        label="创建时间"
+      >
       </el-table-column>
       <el-table-column
         prop="report"
         align="center"
         width="90"
-        label="详细报告">
+        label="详细报告"
+      >
         <div slot-scope="scope">
           <el-button
             type="primary"
@@ -62,15 +68,16 @@
         prop="report"
         align="center"
         width="120"
-        label="操作">
+        label="操作"
+      >
         <div slot-scope="scope">
           <el-popconfirm
             title="确定取消？"
             @confirm="cancelJob(scope.row, scope.$index)"
           >
             <el-button
-              :disabled="scope.row.status!=='running'"
               slot="reference"
+              :disabled="scope.row.status!=='running'"
               size="mini"
               type="primary"
               icon="el-icon-video-pause"
@@ -82,8 +89,8 @@
             @confirm="rerunJob(scope.row, scope.$index)"
           >
             <el-button
-              :disabled="scope.row.status ==='running'"
               slot="reference"
+              :disabled="scope.row.status ==='running'"
               size="mini"
               type="warning"
               icon="el-icon-refresh-right"
@@ -95,8 +102,8 @@
             @confirm="setFailedStatus(scope.row, scope.$index)"
           >
             <el-button
-              :disabled="scope.row.status ==='running'"
               slot="reference"
+              :disabled="scope.row.status ==='running'"
               size="mini"
               type="danger"
               icon="el-icon-edit-outline"
@@ -127,7 +134,7 @@
     },
     data() {
       return {
-      }
+      };
     },
     methods: {
       setColor(status) {
@@ -281,5 +288,5 @@
       }
     }
     }
-  }
+  };
 </script>

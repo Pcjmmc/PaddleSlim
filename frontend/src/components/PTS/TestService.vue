@@ -84,8 +84,8 @@
           <Table
             :columns="columns"
             :data="content"
-            @on-select="addSelected"
-            @on-row-click="openDrawer"
+            v-on:on-select="addSelected"
+            v-on:on-row-click="openDrawer"
           ></Table>
           <Page
             :total="total"
@@ -471,7 +471,7 @@ export default {
     },
     async deleteJob() {
       // 根据选项删除
-      if (this.tableSelect.length == 0) {
+      if (this.tableSelect.length === 0) {
         this.$Message.info({
           content: '请至少勾选一个选项！',
           duration: 5,
@@ -494,7 +494,7 @@ export default {
             if (temp.id === item.id) {
               this.content.splice(index, 1);
             }
-          })
+          });
         } else {
           this.$Message.error({
             content: '请求出错: ' + message,

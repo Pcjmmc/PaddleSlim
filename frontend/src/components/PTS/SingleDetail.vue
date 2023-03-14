@@ -46,8 +46,8 @@
           <span>
             <div>待测试项:</div>
             <Button
-              disabled
               :key="index"
+              disabled
               v-for="(item, index) in selectedItems"
               style="width:auto;margin-left:0.5%;margin-top:1%;"
             >
@@ -96,17 +96,17 @@ export default {
           type: 'expand',
           width: 50,
           render: (h, params) => {
-            if (params.row.step === "测试") {
+            if (params.row.step === '测试') {
               return h(childTable, {
                 props: {
                   tableData: this.datas
                 },
                 on: {
                   getDetails: () => {
-                    this.getDetails()
+                    this.getDetails();
                   }
                 }
-              })
+              });
             }
           }
         },
@@ -115,7 +115,7 @@ export default {
           key: 'step',
           align: 'center',
           render: (h, params) => {
-            if (params.row.step === "编译") {
+            if (params.row.step === '编译') {
               return h('div', [h('a', {
                 attrs: {
                   href: 'javascript:void(0)'
@@ -249,7 +249,6 @@ export default {
     }
   },
   components: {
-    childTable
   },
   methods: {
     async getInitData() {
@@ -362,7 +361,7 @@ export default {
           status: status2,
           _expanded: true
         }
-      ]
+      ];
       // if (status1 === 'running') {
       //   this.current = 0;
       // } else if (status1 === 'done') {

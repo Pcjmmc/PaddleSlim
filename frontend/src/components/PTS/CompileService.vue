@@ -158,55 +158,37 @@
             <span style="display:inline-block;width:100%;margin-right:1%;">
               <span style="float:left;"> {{ getDisplay(item.env) }}</span>
               <span style="float:right;">
-            <!--
-            <el-popconfirm title="确定取消？" v-if="item.status=='running'">
-              <el-button
-                slot="reference"
-                size="mini"
-                type="primary"
-                icon="el-icon-video-pause"
-                circle
-              ></el-button>
-            </el-popconfirm>
-             <el-popconfirm title="确定取消？" v-else>
-              <el-button
-                disabled
-                slot="reference"
-                size="mini"
-                type="primary"
-                icon="el-icon-video-pause"
-                circle
-              ></el-button>
-            </el-popconfirm>
-            <el-popconfirm title="确定重跑？" v-if="item.status !=='running'">
-              <el-button
-                slot="reference"
-                size="mini"
-                type="warning"
-                icon="el-icon-refresh-right"
-                circle
-              ></el-button>
-            </el-popconfirm>
-            <el-popconfirm title="确定重跑？" v-else>
-              <el-button
-                disabled
-                slot="reference"
-                size="mini"
-                type="warning"
-                icon="el-icon-refresh-right"
-                circle
-              ></el-button>
-            </el-popconfirm>
-            -->
-            <el-popconfirm title="确定删除？" @confirm="deleteJob(item, index)">
-              <el-button
-                slot="reference"
-                size="mini"
-                type="danger"
-                icon="el-icon-delete"
-                circle
-              ></el-button>
-            </el-popconfirm>
+              <!--
+                <el-popconfirm title="确定取消？">
+                  <el-button
+                    slot="reference"
+                    :disabled="item.status!=='running'"
+                    size="mini"
+                    type="primary"
+                    icon="el-icon-video-pause"
+                    circle
+                  ></el-button>
+                </el-popconfirm>
+                <el-popconfirm title="确定重跑？">
+                  <el-button
+                    slot="reference"
+                    :disabled="item.status ==='running'"
+                    size="mini"
+                    type="warning"
+                    icon="el-icon-refresh-right"
+                    circle
+                  ></el-button>
+                </el-popconfirm>
+              -->
+                <el-popconfirm title="确定删除？" @confirm="deleteJob(item, index)">
+                  <el-button
+                    slot="reference"
+                    size="mini"
+                    type="danger"
+                    icon="el-icon-delete"
+                    circle
+                  ></el-button>
+                </el-popconfirm>
               </span>
             </span>
           </Row>
