@@ -346,7 +346,7 @@ export default {
     },
     copyData() {
       let localHost = window.location.host;
-      let url = 'http://' + localHost + '#/paddle/test/SingleDetail/410';
+      let url = 'http://' + localHost + '#/paddle/test/SingleDetail/' + this.selectedRow.id;
       let clipboard = new Clipboard('.copyBtn', {
         text: function (trigger) {
           clipboard.destroy();
