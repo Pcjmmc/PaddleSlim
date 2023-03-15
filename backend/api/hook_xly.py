@@ -41,6 +41,9 @@ class HookxlyView(MABaseView):
         trigger_type = header.get("TRIGGER_TYPE", "")
         operation = header.get("OPERATION", "")
         status = header.get("BUILD_STATUS", "")
+        mark_job = header.get("MARKED_JOB", "false")
+        if mark_job == "true":
+            return None
         xly_basic = {}
         xly_build = {}
         if "STATUS" == trigger_type and "PENDING" == status:
@@ -55,9 +58,9 @@ class HookxlyView(MABaseView):
             xly_build['status'] = status
             begin_time = header.get("JOB_START_TIME", None)
             if begin_time:
-                begin_time = int(int(begin_time) / 1000)
+                begin_time = int(begin_time)
             else:
-                print("web hook header not have JOB_START_TIME")
+                print("generate begin time")
                 begin_time = int(time.time())
             xly_build['begin_time'] = begin_time
             print("xly build info is", xly_build)
@@ -68,7 +71,7 @@ class HookxlyView(MABaseView):
             #xly_build['job_id'] = kwargs.get("job_id")
             run_time = header.get("JOB_REAL_START_TIME", None)
             if run_time:
-                run_time = int(int(run_time) / 1000)
+                run_time = int(run_time)
             else:
                 print("web hook header not have JOB_REAL_START_TIME")
                 run_time = int(time.time())
@@ -78,11 +81,15 @@ class HookxlyView(MABaseView):
         if "STATUS" == trigger_type and status in ["FAIL", "SUCC", "CANCEL"]:
             job_id = kwargs.get("job_id")
             xly_build['status'] = status
-            xly_build["exit_code"] = header.get("JOB_EXIT_CODE", None)
+            exit_code = kwargs.get("exit_code", None)
+            if int(exit_code) == -1 and status == 'SUCC':
+                exit_code = 0
+            xly_build["exit_code"] = exit_code
             end_time = header.get("JOB_EXIT_TIME", None) 
             if end_time:
-                end_time = int(int(end_time) / 1000) 
+                end_time = int(end_time) 
             else:
+                print("generate end time")
                 end_time = int(time.time())
             xly_build["end_time"] = end_time
             print(status, "xly build info is", xly_build)
@@ -92,9 +99,12 @@ class HookxlyView(MABaseView):
             #TODO 修正xlywebhook中文编码异常，待讨论
             job_id = kwargs.get("job_id")
             print("job_id =", job_id)
-            fail_reason = header.get("CATEGORY_LIST")
-            print(fail_reason.encode("iso-8859-1").decode('utf-8'))  
-            xly_build["fail_reason"] = fail_reason
-            print("xly issue desc is", header.get("ISSUE_DESC"))
+            mark_info_str = kwargs.get("mark_data")
+            mark_info_json = json.loads(mark_info_str)
+            mark_info = mark_info_json.get("CATEGORY_LIST", [])
+            mark_info_str = ';'.join(mark_info)
+            print("xly issue mark info is", mark_info_str)
             print(trigger_type, "xly build info is", xly_build) 
+            xly_build["fail_reason"] = mark_info_str
+            print(status, "xly build info is", xly_build)
             await XlyBuild.aio_update(validated_data=xly_build, params_data={"job_id": job_id})

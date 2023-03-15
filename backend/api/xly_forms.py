@@ -13,10 +13,15 @@ class XlyForm(object):
         "status": [int, str],
         "exit_code": [int, str], 
         "workspace": [str],
-        "jobname": [str]
+        "jobname": [str],
+        "mark_data": [str],
+        "exit_code": [str, int],
+        "agent_name": [str],
+        "cluster_name": [str]
+        
     }
     #need_data_params = ["build_type_id", "build_id", "job_id"] 
-    need_data_params = ["conf_id", "build_id",] 
+    need_data_params = ["conf_id", "job_id",] 
 
     @classmethod
     def check_request_data(cls, **kwargs):
