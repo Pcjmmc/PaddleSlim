@@ -122,7 +122,7 @@
             <span style="display:inline-block;width:100%;margin-right:1%;">
               <span style="float:left;">
                 <a href="javascript:void(0)" @click="openXly(item.info)">
-                  状态：
+                  状态:<Icon type="md-open"></Icon>
                 </a>
                 <Button
                   type="error"

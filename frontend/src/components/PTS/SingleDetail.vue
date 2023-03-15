@@ -112,7 +112,15 @@ export default {
                     this.openXly(params.row.info);
                   }
                 }
-              }, params.row.step)
+              }, [
+                h('span', {
+                }, params.row.step),
+                h('Icon', {
+                  props: {
+                    type: 'md-open'
+                  }
+                })
+              ])
               ]);
             } else {
               return h('div', {

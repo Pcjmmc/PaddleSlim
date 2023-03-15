@@ -25,6 +25,7 @@
         <div slot-scope="scope" v-else>
           <a href="javascript:void(0)" @click="openXly(scope.row.info)">
             {{ scope.row.mission }}
+            <Icon type="md-open"></Icon>
           </a>
         </div>
       </el-table-column>
