@@ -14,11 +14,8 @@ class XlyForm(object):
         "exit_code": [int, str], 
         "workspace": [str],
         "jobname": [str],
-        "OPERATION_DATA": [str],
+        "mark_data": [str],
         "exit_code": [str, int],
-        "begin_time": [str, int],
-        "run_time": [str, int],
-        "end_time": [str, int],
         "agent_name": [str],
         "cluster_name": [str]
         
