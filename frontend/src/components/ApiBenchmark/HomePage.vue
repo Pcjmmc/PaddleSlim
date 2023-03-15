@@ -1,7 +1,7 @@
 <template>
     <div class="one-fifth-video-col">
         <div style="font-weight: bold; line-height:200%; margin-bottom: 1%">
-        <Divider orientation="left">例行任务及基线参数</Divider>
+        <Divider orientation="center">例行任务及基线参数</Divider>
             <Row>
                 <Col span="3"> 例行任务(Latest)</Col>
                 <Col span="4"> Place: {{ latest.place }}</Col>
@@ -12,7 +12,7 @@
                 <Col span="3"> 基线任务(Baseline)</Col>
                 <Col span="6"> Version: {{ baseline.version }}</Col>
             </Row>
-        <Divider orientation="left">API性能数据汇总</Divider>
+        <Divider orientation="center">API性能数据汇总</Divider>
         <Row>
             <Col span="3"></Col>
             <Col span="4">性能较好：{{ summary.good }}</Col>
@@ -24,7 +24,6 @@
         <div>
             <Table
                 border
-                height="800"
                 :loading="loading"
                 :columns="columns"
                 :data="result"
