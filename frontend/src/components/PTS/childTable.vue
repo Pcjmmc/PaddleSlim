@@ -92,10 +92,13 @@
                 slot="reference"
                 :disabled="scope.row.status!=='running'"
                 size="mini"
-                type="primary"
-                icon="el-icon-video-pause"
                 circle
-              ></el-button>
+                style="border-color:#559DCD;"
+              >
+                <i class="">
+                  <Icon type="md-square" color="#559DCD"></Icon>
+                </i>
+              </el-button>
             </el-popconfirm>
             <el-popconfirm
               title="确定重跑？"
@@ -304,3 +307,5 @@
     }
   };
 </script>
+<style scoped>
+</style>

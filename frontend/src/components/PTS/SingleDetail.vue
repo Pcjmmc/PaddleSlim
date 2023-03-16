@@ -342,7 +342,7 @@ export default {
           let temp = {
             mission: this.serverMap[key],
             status: dt[key].status,
-            result: dt[key].result ? dt[key].result : {},
+            result: dt[key].result ? dt[key].result : '',
             create_time: dt[key].create_time,
             bos_url: dt[key].bos_url,
             allure_report: dt[key].allure_report,

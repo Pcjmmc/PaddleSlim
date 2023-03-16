@@ -80,7 +80,7 @@
         </div>
       </div>
       <div style="margin-top: 1%;">
-        <div class="left">
+        <div class="left" style="cursor:pointer;">
           <Table
             :columns="columns"
             :data="content"
@@ -100,10 +100,9 @@
       </div>
     </div>
     <Drawer
-      :closable="true"
+      :closable="false"
       width="72%"
       scrollable
-      :mask-closable="false"
       v-model="showRightModa"
       v-if="selectedRow"
     >
