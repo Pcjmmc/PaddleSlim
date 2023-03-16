@@ -93,10 +93,10 @@
                 :disabled="scope.row.status!=='running'"
                 size="mini"
                 circle
-                style="border-color:#559DCD;"
+                type="primary"
               >
-                <i class="">
-                  <Icon type="md-square" color="#559DCD"></Icon>
+                <i>
+                  <Icon type="md-square" color="#DCDCDC"></Icon>
                 </i>
               </el-button>
             </el-popconfirm>
