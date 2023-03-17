@@ -27,6 +27,16 @@ class Job(BaseModel, BaseModelMixin):
     cuda = Column(VARCHAR(32), comment='cuda')
     cudnn = Column(VARCHAR(32), comment='cudnn')
     snapshot = Column(VARCHAR(1024), comment='snapshot')
+
+    uid = Column(Integer, comment='uid')
+    routine = Column(Integer, comment='routine, 0: False, 1: True')
+    comment = Column(VARCHAR(512), comment='comment')
+    enable_backward = Column(Integer, comment='routine, 0: False, 1: True')
+    python = Column(VARCHAR(255), comment='python')
+    yaml_info = Column(VARCHAR(64), comment='yaml_info')
+    wheel_link = Column(VARCHAR(1024), comment='paddle wheel link')
+
+    description = Column(VARCHAR(256), comment='description')
     create_time = Column(DateTime, comment="本记录创建的时间")
     update_time = Column(DateTime, comment="本记录更新的时间")
 
