@@ -37,6 +37,7 @@ class DeploymentType(object):
     """
     PRODUCTION = "PRODUCTION"
     DEV = "DEV"
+    GRAY = "GRAY"
 
 
 if 'DEPLOYMENT_TYPE' in os.environ:
@@ -48,6 +49,15 @@ if 'DEPLOYMENT_TYPE' in os.environ:
     UUAP_SECRET_KEY = '341cfaffceb646259b2999'
     BASE_URL = 'http://paddletest.baidu-int.com:8999'
     DEFAULT_URL = 'http://paddletest.baidu-int.com:8081'
+elif 'GRAY' in os.environ:
+    DEPLOYMENT = DeploymentType.PRODUCTION
+    DEBUG = True
+    PTOKEN = 'UUAP_P_TOKEN_OFFLINE'
+    EAC_HOST = 'https://itebeta.baidu.com'
+    APP_KEY = 'uuapclient-843431526317023232-lFc6i-beta'
+    UUAP_SECRET_KEY = '8c755701297b420a9b95c7'
+    BASE_URL = 'http://paddletestgray.baidu-int.com:8000'
+    DEFAULT_URL = 'http://paddletestgray.baidu-int.com:8081'
 else:
     DEPLOYMENT = DeploymentType.DEV
     DEBUG = True
