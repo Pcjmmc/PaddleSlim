@@ -47,9 +47,12 @@ DOCKER_IMAGE = {
 }
 
 # 测试选项
-framework_map = {'1': 'paddle', '0': 'torch'}
-enable_backward_map = {'1': 'True', '0': 'False'}
-place_map = {'1': 'False', '0': 'True'}
+framework_map = {'0': 'paddle', '1': 'torch'}
+enable_backward_map = {'0': 0, '1': 1}
+place_map = {'0': 'cpu', '1': 'gpu'}
+cuda_map = {'0': 'v11.2', '1': 'v11.6'}
+python_map = {'0': 'python3.7', '1': 'python3.8', '2': 'python3.9'}
+system_map = {'0': 'Linux', '1': 'Windows', '2': 'Darwin'}
 
 # TEST_OPTION = {
 #     'comment': None,
@@ -62,7 +65,7 @@ place_map = {'1': 'False', '0': 'True'}
 # }
 
 # 配置选取
-yaml_type_map = {'1': 'default', '0': 'diy'}
+yaml_type_map = {'0': 'default', '1': 'diy'}
 yaml_info_map = {'0': 'case_0', '1': 'case_1', '2': 'case_2', '3': 'all'}
 
 # YAML_CONFIG = {

@@ -16,12 +16,12 @@ import asyncio
 import json
 
 from views.base_view import MABaseView
-from models.api_benchmark import ApiBenchmarkMission
+from models.api_benchmark import Job
 from exception import HTTP400Error
 from datetime import datetime
 from api_benchmark.dispatcher import Dispatcher
-from api_benchmark.config.service_url import framework_map, enable_backward_map, place_map, yaml_type_map, yaml_info_map
-
+from api_benchmark.config.service_url import framework_map, enable_backward_map, place_map, cuda_map
+from api_benchmark.config.service_url import python_map, system_map, yaml_type_map, yaml_info_map
 
 class ApiBenchmarkInitView(MABaseView):
     """
@@ -35,12 +35,14 @@ class ApiBenchmarkInitView(MABaseView):
         """
         input_dict = {}
         input_dict['comment'] = kwargs.get('comment')
-        input_dict['with_gpu'] = place_map.get(kwargs.get('with_gpu'))
+        input_dict['place'] = place_map.get(kwargs.get('place'))
+        input_dict['routine'] = 0
         input_dict['enable_backward'] = enable_backward_map.get(kwargs.get('enable_backward'))
         input_dict['framework'] = framework_map.get(kwargs.get('framework'))
+        input_dict['cuda'] = cuda_map.get(kwargs.get('cuda'))
+        input_dict['cudnn'] = 'not_yet'
+        input_dict['python'] = python_map.get(kwargs.get('python'))
         input_dict['wheel_link'] = kwargs.get('wheel_link')
-        input_dict['cuda'] = kwargs.get('cuda')
-        input_dict['python'] = kwargs.get('python')
         if input_dict['wheel_link'].startswith('https://'):
             if input_dict['cuda'] in input_dict['wheel_link']:
                 pass
@@ -57,6 +59,8 @@ class ApiBenchmarkInitView(MABaseView):
                 pass
             else:
                 raise HTTP400Error("whl包python版本和已选择的python版本不匹配")
+        else:
+            raise HTTP400Error("请通过QA的编包服务获取正确的wheel包 https:// 链接")
 
         input_dict['yaml_type'] = yaml_type_map.get(kwargs.get('yaml_type'))
         if yaml_type_map.get(kwargs.get('yaml_type')) == 'default':
@@ -65,9 +69,6 @@ class ApiBenchmarkInitView(MABaseView):
             raise HTTP400Error("暂不支持diy模式配置yaml")  # 占位
         else:
             raise HTTP400Error("未知yaml配置模式")  # 占位
-
-        input_dict["create_time"] = datetime.now()
-        input_dict["update_time"] = datetime.now()
 
         return input_dict
 
@@ -81,27 +82,39 @@ class ApiBenchmarkInitView(MABaseView):
         1. 任务解析器
         2. 初始化快照信息入库
         """
+        # 入库参数
         params = dict()
-        params["status"] = "running"
+        params["uid"] = self._cookies.get("userid", 0)
+        # params["uid"] = 2333
+        params['system'] = system_map.get(kwargs.get('system'))
+        params['commit'] = 'not_yet'
+        params["status"] = "prepare"
+        params["create_time"] = datetime.now()
+        params["update_time"] = datetime.now()
 
         data = dict(params, **self.input_build(**kwargs))
-
-        retry_time = 5
-        res = await ApiBenchmarkMission.aio_insert(data)
+        # print('data is: ', data)
+        res = await Job.aio_insert(data)
 
         if res[0] == 0:
             raise HTTP400Error
         id = res[1]
 
+        # 效率云参数
+        xly_params = dict()
+        xly_params["id"] = id
+        xly_data = dict(xly_params, **self.input_build(**kwargs))
+
+        retry_time = 5
         retry = 0
         while (retry < retry_time):
-            res = Dispatcher.request_mission("api_benchmark", id, data)
+            res = Dispatcher.request_mission("api_benchmark", id, xly_data)
             if isinstance(res, dict):
                 # 初始化任务
-                await ApiBenchmarkMission.aio_update({"status": "running", "description": str(res)}, {"id": id})
+                await Job.aio_update({"status": "prepare", "description": str(res)}, {"id": id})
                 break
             else:
-                await ApiBenchmarkMission.aio_update({"status": "error", "description": res}, {"id": id})
+                await Job.aio_update({"status": "error", "description": res}, {"id": id})
                 retry += 1
 
         return {"id": id}
@@ -111,7 +124,7 @@ class ApiBenchmarkInitView(MABaseView):
 
     async def get_data(self, **kwargs):
         id = kwargs.get("id")
-        data = await ApiBenchmarkMission.aio_get_object(order_by=None, group_by=None, id=id)
+        data = await Job.aio_get_object(order_by=None, group_by=None, id=id)
         res_data = {
                 "id": data["id"],
                 "status": data["status"],
