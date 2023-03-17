@@ -38,7 +38,7 @@ class Dispatcher(object):
         params = {
             "id": str(id),
             "comment": data.get('comment'),
-            "with_gpu": data.get('with_gpu'),
+            "place": data.get('place'),
             "enable_backward": data.get('enable_backward'),
             "framework": data.get('framework'),
             "wheel_link": data.get('wheel_link'),
@@ -46,6 +46,7 @@ class Dispatcher(object):
             "docker_image": DOCKER_IMAGE.get(data.get('cuda')),
             "python": data.get('python'),
             "yaml_info": data.get('yaml_info'),
+            "routine": data.get('routine'),
         }
         total_param = dict(spec_param, **params)
         data = {
