@@ -45,10 +45,10 @@ if 'DEPLOYMENT_TYPE' in os.environ and os.environ['DEPLOYMENT_TYPE'].upper() == 
     DEBUG = True
     PTOKEN = 'UUAP_P_TOKEN_OFFLINE'
     EAC_HOST = 'https://itebeta.baidu.com'
-    APP_KEY = 'uuapclient-843431526317023232-lFc6i-beta'
-    UUAP_SECRET_KEY = '8c755701297b420a9b95c7'
-    BASE_URL = 'http://paddletestgray.baidu-int.com:8999'
-    DEFAULT_URL = 'http://paddletestgray.baidu-int.com:8081'
+    APP_KEY = 'uuapclient-843568519680147457-VJKy5-beta'
+    UUAP_SECRET_KEY = '05b1628dcef547579d30b8'
+    BASE_URL = 'http://paddleboard.baidu-int.com:8999'
+    DEFAULT_URL = 'http://paddleboard.baidu-int.com:8081'
 elif 'DEPLOYMENT_TYPE' in os.environ:
     DEPLOYMENT = os.environ['DEPLOYMENT_TYPE'].upper()
     DEBUG = False
