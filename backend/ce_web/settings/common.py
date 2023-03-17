@@ -56,7 +56,7 @@ elif 'GRAY' in os.environ:
     EAC_HOST = 'https://itebeta.baidu.com'
     APP_KEY = 'uuapclient-843431526317023232-lFc6i-beta'
     UUAP_SECRET_KEY = '8c755701297b420a9b95c7'
-    BASE_URL = 'http://paddletestgray.baidu-int.com:8000'
+    BASE_URL = 'http://paddletestgray.baidu-int.com:8999'
     DEFAULT_URL = 'http://paddletestgray.baidu-int.com:8081'
 else:
     DEPLOYMENT = DeploymentType.DEV
