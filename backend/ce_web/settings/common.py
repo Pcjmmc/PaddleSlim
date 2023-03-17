@@ -29,6 +29,7 @@ XLY_BASE_URL2 = """https://xly.bce.baidu.com/paddlepaddle/{workspace}/newipipe""
 
 
 PROXY = "http://172.19.57.45:3128"
+# PROXY = None
 
 # Development type setting
 class DeploymentType(object):
@@ -39,17 +40,7 @@ class DeploymentType(object):
     DEV = "DEV"
     GRAY = "GRAY"
 
-
-if 'DEPLOYMENT_TYPE' in os.environ:
-    DEPLOYMENT = os.environ['DEPLOYMENT_TYPE'].upper()
-    DEBUG = False
-    PTOKEN = 'UUAP_P_TOKEN'
-    EAC_HOST = 'https://uuap.baidu.com'
-    APP_KEY = 'uuapclient-791706269230583809-RjLwt-online'
-    UUAP_SECRET_KEY = '341cfaffceb646259b2999'
-    BASE_URL = 'http://paddletest.baidu-int.com:8999'
-    DEFAULT_URL = 'http://paddletest.baidu-int.com:8081'
-elif 'GRAY' in os.environ:
+if 'DEPLOYMENT_TYPE' in os.environ and os.environ['DEPLOYMENT_TYPE'].upper() == 'GRAY':
     DEPLOYMENT = DeploymentType.PRODUCTION
     DEBUG = True
     PTOKEN = 'UUAP_P_TOKEN_OFFLINE'
@@ -58,6 +49,15 @@ elif 'GRAY' in os.environ:
     UUAP_SECRET_KEY = '8c755701297b420a9b95c7'
     BASE_URL = 'http://paddletestgray.baidu-int.com:8999'
     DEFAULT_URL = 'http://paddletestgray.baidu-int.com:8081'
+elif 'DEPLOYMENT_TYPE' in os.environ:
+    DEPLOYMENT = os.environ['DEPLOYMENT_TYPE'].upper()
+    DEBUG = False
+    PTOKEN = 'UUAP_P_TOKEN'
+    EAC_HOST = 'https://uuap.baidu.com'
+    APP_KEY = 'uuapclient-791706269230583809-RjLwt-online'
+    UUAP_SECRET_KEY = '341cfaffceb646259b2999'
+    BASE_URL = 'http://paddletest.baidu-int.com:8999'
+    DEFAULT_URL = 'http://paddletest.baidu-int.com:8081'
 else:
     DEPLOYMENT = DeploymentType.DEV
     DEBUG = True
