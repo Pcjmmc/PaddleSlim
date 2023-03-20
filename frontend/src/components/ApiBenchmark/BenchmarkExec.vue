@@ -75,8 +75,8 @@
           <Col>
             <Input
               placeholder="请输入Paddle的whl包地址或版本号/Torch的版本号"
-              style="width:500px"
               clearable
+              style="width:200%"
               v-model="submitData.wheel_link"
             ></Input>
           </Col>
@@ -240,7 +240,7 @@ export default {
     data: function () {
       const validateWheelLink = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入Wheel包地址'));
+          callback(new Error('此项不能为空（暂不支持Torch）'));
         } else {
           callback();
         }
