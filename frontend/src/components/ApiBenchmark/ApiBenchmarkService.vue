@@ -5,10 +5,10 @@
       type="card"
       @tab-click="clickTab"
     >
-      <el-tab-pane label="主页面" name="home">
+      <el-tab-pane label="主页" name="home">
         <home-page></home-page>
       </el-tab-pane>
-      <el-tab-pane label="任务页面" name="task">
+      <el-tab-pane label="任务页" name="task">
         <task></task>
       </el-tab-pane>
     </el-tabs>

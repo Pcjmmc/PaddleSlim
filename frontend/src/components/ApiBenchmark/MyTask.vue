@@ -185,6 +185,21 @@ export default {
           minWidth: 100
         },
         {
+          title: '任务状态',
+          key: 'status',
+          align: 'center',
+          minWidth: 100,
+          render: (h, params) => {
+              return h('div', [
+                  h('p', {
+                    style: {
+                      color: this.setStatusColor(params.row.status)
+                    }
+                  }, params.row.status)
+              ]);
+          }
+        },
+        {
           title: 'Framework',
           key: 'framework',
           align: 'center',
@@ -242,7 +257,7 @@ export default {
           title: 'Wheel包',
           key: 'version',
           align: 'center',
-          minWidth: 60,
+          minWidth: 100,
           render: (h, params) => {
             if (params.row.wheel_link !== null) {
               return h('div', [
@@ -263,16 +278,10 @@ export default {
           }
         },
         {
-          title: '任务状态',
-          key: 'status',
-          align: 'center',
-          minWidth: 100
-        },
-        {
           title: '创建时间',
           key: 'create_time',
           align: 'center',
-          minWidth: 100
+          minWidth: 120
         },
         {
           title: '报告',
@@ -333,6 +342,13 @@ export default {
         page: 1,
         pagesize: 15
       };
+    },
+    setStatusColor(value) {
+      if (value === 'done') {
+        return 'green';
+      } else if (value === 'error') {
+        return 'red';
+      }
     },
     getBeginData() {
       // 在end_time的基础上+1， 因为end_time代表的今天0点0分0秒的时间
