@@ -35,6 +35,8 @@ class ApiBenchmarkInitView(MABaseView):
         """
         input_dict = {}
         input_dict['comment'] = kwargs.get('comment')
+        if ' ' in input_dict['comment']:
+            raise HTTP400Error("comment中不允许出现空格, 请输入有效的comment")
         input_dict['place'] = place_map.get(kwargs.get('place'))
         input_dict['routine'] = 0
         input_dict['enable_backward'] = enable_backward_map.get(kwargs.get('enable_backward'))
