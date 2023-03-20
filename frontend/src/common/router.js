@@ -21,6 +21,7 @@ import Demand from '../components/Requirement/Demand.vue';
 import ReqirementDetail from '../components/Requirement/ReqirementDetail.vue';
 import SummaryResult from '../components/NewConclusion/SummaryResult';
 import ApiBenchmarkService from '../components/ApiBenchmark/ApiBenchmarkService.vue';
+import ApiBenchmarkBaseReport from '../components/ApiBenchmark/Report.vue';
 
 // Vue.use(VueRouter);
 export const ROUTES = [
@@ -139,6 +140,11 @@ export const ROUTES = [
           path: '/paddle/benchmark/apiBenchmark',
           name: 'ApiBenchmarkService',
           component: ApiBenchmarkService
+        },
+        { // API 配置
+          path: '/paddle/benchmark/apiBenchmark/report/:id&:id1',
+          name: 'ApiBenchmarkBaseReport',
+          component: ApiBenchmarkBaseReport
         }
       ]
     }

@@ -5,8 +5,11 @@
       type="card"
       @tab-click="clickTab"
     >
-      <el-tab-pane label="主页面" name="personal">
+      <el-tab-pane label="主页面" name="home">
         <home-page></home-page>
+      </el-tab-pane>
+      <el-tab-pane label="任务页面" name="task">
+        <task></task>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -14,11 +17,11 @@
 
 <script>
 import HomePage from './HomePage.vue';
-
+import Task from './MyTask.vue';
 export default {
 data: function () {
     return {
-    tabName: 'personal'
+    tabName: 'home'
     };
 },
 watch: {
@@ -26,7 +29,8 @@ watch: {
 mounted: function () {
 },
 components: {
-    HomePage
+    HomePage,
+    Task
 },
 computed: {},
 methods: {

@@ -5,175 +5,228 @@
       :model="submitData"
       :rules="addRules"
     >
-      <Row>
-        <h3>Wheel包链接：</h3>
-        <Col span="10">
-          <FormItem prop="wheel_link" style="font-size: large">
-            <input
+      <FormItem prop="comment">
+        <Row
+          type="flex"
+          align="middle"
+          :gutter="8"
+        >
+          <Col span="6">
+            <label>
+              任务名:
+            </label>
+          </Col>
+          <Col>
+            <Input
+              placeholder="输入任务名(中间不要有空格)"
+              style="width:200px"
+              clearable
+              v-model="submitData.comment"
+            ></Input>
+          </Col>
+        </Row>
+      </FormItem>
+
+      <FormItem>
+        <Row
+        type="flex"
+        align="middle"
+        :gutter="8"
+      >
+          <Col span="6">
+            <label>
+              对比基线:
+            </label>
+          </Col>
+          <Col>
+            <label>
+              Develop
+            </label>
+          </Col>
+        </Row>
+      </FormItem>
+
+      <FormItem>
+        <Row
+          type="flex"
+          align="middle"
+          :gutter="8"
+        >
+          <Col span="6">
+            <label>
+              Framework:
+            </label>
+          </Col>
+          <Col>
+            <RadioGroup v-model="submitData.framework">
+               <Radio label="0">Paddle</Radio>
+               <Radio label="1" disabled>Torch</Radio>
+            </RadioGroup>
+          </Col>
+        </Row>
+      </FormItem>
+
+      <FormItem prop="wheel_link">
+        <Row
+          type="flex"
+          align="middle"
+          :gutter="8"
+        >
+          <Col>
+            <Input
+              placeholder="请输入Paddle的whl包地址或版本号/Torch的版本号"
+              style="width:500px"
+              clearable
               v-model="submitData.wheel_link"
-              placeholder="输入wheel包地址"
-              style="width: 500px; height: 40px; font-size: small"
+            ></Input>
+          </Col>
+        </Row>
+      </FormItem>
+
+      <FormItem>
+        <Row
+          type="flex"
+          align="middle"
+          :gutter="8"
+        >
+          <Col span="6">
+            <label>
+              Python:
+            </label>
+          </Col>
+          <Col>
+            <Select
+              v-model="submitData.python"
+              size="small"
             >
-          </FormItem>
-        </Col>
-      </Row>
-      <h3>配置选取：</h3>
-      <span
-        class="font-success"
-        style="font-size: medium"
-      >
-        (选择你想要测试的api-benchmark配置yaml)
-      </span>
-      <span
-        style="display: inline"
-      >
-        使用默认配置：
-      </span>
-      <input
-        type="radio"
-        v-model="submitData.yaml_type"
-        value="1"
-      >
-      <label>是</label>
-      <input
-        type="radio"
-        v-model="submitData.yaml_type"
-        value="0"
-      >
-      <label>否</label>
-      <span style="display: inline">默认配置体量：</span>
-      <Select
-        clearable
-        v-model="submitData.yaml_info"
-        style="margin-right: 15px; width: 150px; height: 40px"
-        :disabled="isDefault()"
-      >
-        <Option
-          :key="index"
-          :value="index"
-          v-for="(item, index) in defaultSize"
-          >
-          {{ item }}
-        </Option>
-      </Select>
+              <Option
+                :key="index"
+                :value="index"
+                v-for="(item, index) in PythonVersion"
+              >
+                {{ item }}
+              </Option>
+          </Select>
+          </Col>
+        </Row>
+      </FormItem>
 
-      <h3>自定义配置：</h3>
-      <Select
-        clearable
-        v-model="submitData.yamlChoose"
-        style="margin-right: 15px; width: 150px; height: 40px"
-        :disabled="!isDefault()"
-      >
-        <Option
-          :key="index"
-          :value="index"
-          v-for="(item, index) in Yamls"
+      <FormItem>
+        <Row
+          type="flex"
+          align="middle"
+          :gutter="8"
         >
-        {{ item }}
-      </Option>
-      </Select>
-      <br />
-      <textarea
-        v-model="submitData.yamlContent"
-        style="
-          margin-right: 15px;
-          width: 1000px;
-          height: 200px;
-          font-size: small;
-        "
-        placeholder="在此编辑测试用例"
-        :disabled="!isDefault()"
-      >
-      </textarea>
-      <br />
-      <br />
+          <Col span="6">
+            <label>
+              OS:
+            </label>
+          </Col>
+          <Col>
+            <label>
+              Linux
+            </label>
+          </Col>
+        </Row>
+      </FormItem>
 
-      <h3>测试选项：</h3>
-      <input
-        type="radio"
-        v-model="submitData.enable_backward"
-        value="1"
-        style="margin: 30px; margin-left: 15%"
-      >
-        <label>开启反向</label>
-      <input
-        type="radio"
-        v-model="submitData.with_gpu"
-        value="1"
-        style="margin: 30px"
-      >
-        <label>GPU</label>
-      <input
-        type="radio"
-        v-model="submitData.framework"
-        value="1"
-        style="margin: 30px"
-      >
-        <label>Paddle</label>
-      <input
-        type="radio"
-        v-model="submitData.enable_backward"
-        value="0"
-        style="margin: 30px; margin-left: 15%"
-      >
-        <label>关闭反向</label>
-      <input
-        type="radio"
-        v-model="submitData.with_gpu"
-        value="0"
-        style="margin: 30px"
-      >
-        <label>CPU</label>
-      <input
-        type="radio"
-        v-model="submitData.framework"
-        value="0"
-        style="margin: 30px"
-      >
-        <label>Torch</label>
 
-      <h3>cuda版本：</h3>
-      <Select
-        clearable
-        v-model="submitData.cuda"
-        style="margin-right: 15px; width: 150px; height: 40px"
-      >
-        <Option
-          :key="index"
-          :value="item"
-          v-for="(item, index) in CudaVersion"
+      <FormItem>
+        <Row
+          type="flex"
+          align="middle"
+          :gutter="8"
         >
-          {{ item }}
-        </Option>
-      </Select>
-      <h3>python版本：</h3>
-      <Select
-        clearable
-        v-model="submitData.python"
-        style="margin-right: 15px; width: 150px; height: 40px"
-      >
-        <Option
-          :key="index"
-          :value="item"
-          v-for="(item, index) in PythonVersion"
-        >
-          {{ item }}
-        </Option>
-      </Select>
+          <Col span="6">
+            <label>
+              Place:
+            </label>
+          </Col>
+          <Col>
+            <RadioGroup v-model="submitData.place">
+               <Radio label="0">CPU</Radio>
+               <Radio label="1">GPU</Radio>
+            </RadioGroup>
+          </Col>
+        </Row>
+      </FormItem>
 
-      <h3>备注Comment：</h3>
-      <input
-        v-model="submitData.comment"
-        placeholder="请输入备注"
-        style="margin-right: 15px; width: 1000px; font-size: small"
-      >
-      <Button
-        class="btn-success"
-        style="margin-left: 25%"
-        @click="handleSummit"
-      >
-        点击执行效率云任务
-      </Button>
+      <FormItem>
+        <Row
+          type="flex"
+          align="middle"
+          :gutter="8"
+        >
+          <Col span="6">
+            <label>
+              CUDA:
+            </label>
+          </Col>
+          <Col>
+            <Select
+              v-model="submitData.cuda"
+              size="small"
+            >
+              <Option
+                :key="index"
+                :value="index"
+                v-for="(item, index) in CudaVersion"
+              >
+                {{ item }}
+              </Option>
+          </Select>
+          </Col>
+        </Row>
+      </FormItem>
+
+
+      <FormItem>
+        <Row
+          type="flex"
+          align="middle"
+          :gutter="8"
+        >
+          <Col span="6">
+            <label>
+              开启反向:
+            </label>
+          </Col>
+          <Col>
+            <RadioGroup v-model="submitData.enable_backward">
+               <Radio label="0">是</Radio>
+               <Radio label="1">否</Radio>
+            </RadioGroup>
+          </Col>
+        </Row>
+      </FormItem>
+
+      <FormItem>
+        <Row
+          type="flex"
+          align="middle"
+          :gutter="8"
+        >
+          <Col span="6">
+            <label>
+              Kernel大小:
+            </label>
+          </Col>
+          <Col>
+            <Select
+              v-model="submitData.yaml_info"
+              size="small"
+            >
+              <Option
+                :key="index"
+                :value="index"
+                v-for="(item, index) in defaultSize"
+              >
+                {{ item }}
+              </Option>
+          </Select>
+          </Col>
+        </Row>
+      </FormItem>
     </Form>
   </div>
 </template>
@@ -183,98 +236,130 @@ import { BenchmarkExec } from '../../api/url.js';
 import api from '../../api/index';
 
 export default {
-  name: 'BenchmarkExec',
-  data: function () {
-    return {
-      joburl: '',
-      checkDefault: true,
-      show: false,
-      submitData: {
-        wheel_link: '',
-        yaml_type: '',
-        yaml_info: '',
-        enable_backward: '',
-        with_gpu: '',
-        framework: '',
-        yamlChoose: '',
-        yamlContent: '',
-        cuda: '',
-        python: '',
-        comment: '',
-      },
-      defaultSize: ['小kernel', '中kernel', '大kernel', '全部kernel'],
-      Yamls: ['在线读取yaml', '本地上传yaml', '在线编辑yaml'],
-      CudaVersion: ['v11.6', 'v11.2', 'v10.2'],
-      PythonVersion: ['3.10', '3.9', '3.8', '3,7', '3.6'],
-      addRules: {
-        wheel_link: [
-          { required: true, message: 'Wheel包链接不能为空', trigger: 'blur' },
-        ],
-      },
-    };
-  },
-  mounted: function () {
-    this.initData();
-  },
-  methods: {
-    isDefault() {
-      return this.submitData.yaml_type === 0;
-    },
-    handleSummit() {
-      this.$refs.submitData.validate((valid) => {
-        if (valid) {
-          this.createJob();
+    name: 'BenchmarkExec',
+    data: function () {
+      const validateWheelLink = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入Wheel包地址'));
         } else {
-          this.$Message.error('请完善信息');
+          callback();
         }
-      });
-    },
-    initData() {
-      this.submitData = {
-        wheel_link: '',
-        yaml_type: 1,
-        yaml_info: 0,
-        enable_backward: 1,
-        with_gpu: 1,
-        framework: 1,
-        yamlChoose: 1,
-        yamlContent: '',
-        cuda: 'v11.6',
-        python: '3.8',
-        comment: '',
       };
-      this.joburl = '';
-      this.show = false;
+      const validateComment = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入任务名'));
+        } else if (value.includes(' ')) {
+          callback(new Error('任务名中不能含有空格'));
+        } else {
+          callback();
+        }
+      };
+        return {
+            joburl: '',
+            checkDefault: true,
+            show: true,
+            submitData: {
+                wheel_link: '',
+                yaml_type: '0',
+                yaml_info: '',
+                enable_backward: '',
+                place: '',
+                framework: '',
+                cuda: '',
+                python: '',
+                comment: '',
+                system: '0'
+            },
+            framework_option: [
+                'paddle',
+                'torch'
+            ],
+            defaultSize: [
+                '小kernel',
+                '中kernel',
+                '大kernel',
+                '全部kernel'
+            ],
+            Yamls: [
+                '在线读取yaml',
+                '本地上传yaml',
+                '在线编辑yaml'
+            ],
+            CudaVersion: [
+                'v11.2',
+                'v11.6'
+            ],
+            PythonVersion: [
+                '3.7',
+                '3.8',
+                '3.9'
+            ],
+            addRules: {
+                wheel_link: [
+                    { validator: validateWheelLink, trigger: 'blur' }
+                ],
+                comment: [
+                    { validator: validateComment, trigger: 'blur' }
+                ]
+            }
+        };
     },
-    handleClose() {
-      this.initData();
+    mounted: function () {
+         this.initData();
     },
-    async createJob() {
-      const { code, data, message } = await api.post(
-        BenchmarkExec,
-        this.submitData
-      );
-      if (parseInt(code, 10) === 200) {
-        this.show = true;
-      } else {
-        this.$Message.error({
-          content: '请求出错: ' + message,
-          duration: 30,
-          closable: true,
-        });
-      }
-    },
-  },
+    methods: {
+        isDefault() {
+            return this.submitData.yaml_type === 0;
+        },
+        handleSummit() {
+            this.$refs.submitData.validate((valid) => {
+                if (valid) {
+                    this.createJob();
+                } else {
+                    this.$Message.error('请完善信息');
+                }
+            });
+        },
+        initData() {
+            this.submitData = {
+                comment: '',
+                framework: '0',
+                wheel_link: '',
+                python: 0,
+                system: '0',
+                place: '1',
+                cuda: 1,
+                yaml_type: '0',
+                yaml_info: 0,
+                enable_backward: '0'
+            };
+        },
+        handleClose() {
+            this.initData();
+        },
+        async createJob() {
+            const { code, _, message } = await api.post(BenchmarkExec, this.submitData);
+            if (parseInt(code, 10) === 200) {
+                this.show = false;
+            } else {
+                this.$Message.error({
+                    content: '请求出错: ' + message,
+                    duration: 30,
+                    closable: true
+                });
+            }
+        }
+    }
 };
 </script>
 
 <style scoped>
 .one-fifth-video-col {
   margin-right: 1%;
-  margin-left: 10%;
+  margin-left: 1%;
   margin-bottom: 1%;
   margin-top: 1%;
-  font-size: 20px;
+  font-size: 14px;
 }
 .btn-success {
   color: #fff;
@@ -285,4 +370,5 @@ export default {
 .font-success {
   color: #0c27ed;
 }
+
 </style>

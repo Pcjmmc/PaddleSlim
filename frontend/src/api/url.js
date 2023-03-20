@@ -51,3 +51,5 @@ export const SearchNewConclusionUrl = '/framework/reportview';
 export const SearchSummaryConclusionUrl = '/framework/reportsummary';
 export const BenchmarkExec = '/benchmark/api_benchmark/apibminitview';
 export const ApiCompare = '/benchmark/api_benchmark/maincompare';
+export const ApiBenchmarkTaskList = 'benchmark/api_benchmark/apibmlist/';
+export const ApiBenchmarkBaseCompare = 'benchmark/api_benchmark/basecompare';

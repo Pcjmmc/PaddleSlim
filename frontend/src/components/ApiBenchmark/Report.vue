@@ -1,18 +1,25 @@
 <template>
     <div class="one-fifth-video-col">
         <div style="font-weight: bold; line-height:200%; margin-bottom: 1%">
-        <Divider orientation="center">例行任务及基线参数</Divider>
-            <Row>
-                <Col span="4"> 例行任务(Latest)</Col>
-                <Col span="4"> Place: {{ latest.place }}</Col>
-                <Col span="6"> 执行时间：{{ latest.create_time }}</Col>
-                <Col span="10"> Commit: {{ latest.commit }}</Col>
+        <Divider orientation="left">我的任务</Divider>
+            <Row :gutter="16">
+                <Col span="2"> id: {{ $route.params.id }}</Col>
+                <Col span="8"> commt: {{ myself.commit }}</Col>
+                <Col span="3"> Place: {{ myself.place }}</Col>
+                <Col span="3"> Python: {{ myself.python }}</Col>
+                <Col span="3"> CUDA: {{ myself.cuda }}</Col>
+                <Col span="5"> 创建时间: {{ myself.create_time }}</Col>
             </Row>
-            <Row>
-                <Col span="4"> 基线任务(Baseline)</Col>
-                <Col span="6"> Version: {{ baseline.version }}</Col>
+        <Divider orientation="left">基线任务/对比任务</Divider>
+            <Row :gutter="16">
+                <Col span="2"> id: {{ getCompareId() }}</Col>
+                <Col span="8"> commt: {{ baseline.commit }}</Col>
+                <Col span="3"> Place: {{ baseline.place }}</Col>
+                <Col span="3"> Python: {{ baseline.python }}</Col>
+                <Col span="3"> CUDA: {{ baseline.cuda }}</Col>
+                <Col span="5"> 创建时间: {{ baseline.create_time }}</Col>
             </Row>
-        <Divider orientation="center">API性能数据汇总</Divider>
+        <Divider orientation="left">API性能数据汇总</Divider>
         <Row>
             <Col span="4"></Col>
             <Col span="4">性能较好：{{ summary.good }}</Col>
@@ -33,17 +40,34 @@
     </div>
 </template>
 
+
+
 <script>
 import api from '../../api/index';
-import { ApiCompare } from '../../api/url.js';
+import { ApiBenchmarkBaseCompare } from '../../api/url.js';
 export default {
-    name: 'HomePage',
+    name: 'ApiBenchmarkBaseReport',
+    props: {
+        id: {
+            type: [Number],
+            default: function () {
+                return null;
+            }
+        },
+        id1: {
+            type: [Number],
+            default: function () {
+                return null;
+            }
+        }
+    },
     data: function () {
         return {
+            jobIds: [],
             loading: true,
             result: [],
             baseline: {},
-            latest: {},
+            myself: {},
             summary: {},
             columns: [
                 {
@@ -66,13 +90,13 @@ export default {
                     align: 'center',
                     children: [
                         {
-                            title: 'Latest',
+                            title: '我的任务',
                             align: 'center',
                             width: 150,
                             className: 'demo-table-info-forward-column',
                             render: (h, params) => {
                                 return h('div', [
-                                    h('p', {}, parseFloat(params.row.latest.forward))
+                                    h('p', {}, parseFloat(params.row.my_job.forward))
                                 ]);
                             }
                         },
@@ -82,7 +106,7 @@ export default {
                             width: 150,
                             className: 'demo-table-info-forward-column',
                             render: (h, params) => {
-                                return h('div', [h('p', {}, params.row.baseline.forward)]);
+                                return h('div', [h('p', {}, params.row.latest.forward)]);
                             }
                         },
                         {
@@ -118,12 +142,12 @@ export default {
                     align: 'center',
                     children: [
                         {
-                            title: 'Latest',
+                            title: '我的任务',
                             align: 'center',
                             width: 150,
                             className: 'demo-table-info-backward-column',
                             render: (h, params) => {
-                                return h('div', [h('p', {}, params.row.latest.backward)]);
+                                return h('div', [h('p', {}, params.row.my_job.backward)]);
                             }
                         },
                         {
@@ -132,7 +156,7 @@ export default {
                             width: 150,
                             className: 'demo-table-info-backward-column',
                             render: (h, params) => {
-                                return h('div', [h('p', {}, params.row.baseline.backward)]);
+                                return h('div', [h('p', {}, params.row.latest.backward)]);
                             }
                         },
                         {
@@ -168,12 +192,12 @@ export default {
                     align: 'center',
                     children: [
                         {
-                            title: 'Latest',
+                            title: '我的任务',
                             align: 'center',
                             width: 150,
                             className: 'demo-table-info-total-column',
                             render: (h, params) => {
-                                return h('div', [h('p', {}, params.row.latest.total)]);
+                                return h('div', [h('p', {}, params.row.my_job.total)]);
                             }
                         },
                         {
@@ -182,7 +206,7 @@ export default {
                             width: 150,
                             className: 'demo-table-info-total-column',
                             render: (h, params) => {
-                                return h('div', [h('p', {}, params.row.baseline.total)]);
+                                return h('div', [h('p', {}, params.row.latest.total)]);
                             }
                         },
                         {
@@ -221,6 +245,13 @@ export default {
         this.getCompareData();
     },
     methods: {
+        getCompareId() {
+            if (this.$route.params.id1 === -1 || this.$route.params.id1 === '-1') {
+                return '基线无ID';
+            } else {
+                return this.$route.params.id1;
+            }
+        },
         round(value) {
             return value.toFixed(4).toString() + 'x';
         },
@@ -234,11 +265,16 @@ export default {
             }
         },
         async getCompareData() {
-            const { code, data, message } = await api.post(ApiCompare);
+            let params = {
+                id: this.$route.params.id || this.id,
+                id1: this.$route.params.id1 || this.id1
+            };
+            // console.log(params);
+            const { code, data, message } = await api.post(ApiBenchmarkBaseCompare, params);
             if (parseInt(code, 10) === 200) {
                 this.result = data[0].compare;
-                this.baseline = data[0].baseline;
-                this.latest = data[0].latest;
+                this.myself = data[0].my_job;
+                this.baseline = data[0].latest;
                 this.summary = data[0].summary;
                 this.loading = false;
             } else {

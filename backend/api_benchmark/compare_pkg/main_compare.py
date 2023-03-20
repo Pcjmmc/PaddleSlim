@@ -38,7 +38,11 @@ class MainCompare(MABaseView):
         # print(baseline)
         baseline_ver = baseline['version']
 
-        develop = await Job.aio_filter_details(limit=1, order_by='-create_time', routine=1)
+        query = {
+                'routine': 1,
+                'status': 'done'
+        }
+        develop = await Job.aio_filter_details(limit=1, order_by='-create_time', **query)
         latest_develop = develop[0]
         dev_id = latest_develop['id']
         latest_commit = latest_develop['commit']
