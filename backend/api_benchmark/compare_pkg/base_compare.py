@@ -40,20 +40,21 @@ class BaseCompare(MABaseView):
         my_python = my_job['python']
         my_create_time = my_job['create_time']
 
-        # 如果传入id1 则获取后一个版本 如果没有传入id1 则获取基线的任务
-        develop = ''
-        if (compare_id == "-1"):
-            # print('rotine')
-            query = {
-                'routine': 1,
-                'status': 'done'
-            }
-            develop = await Job.aio_filter_details(limit=1, order_by='-create_time', **query)
-            print(develop[0]['id'])
-        else:
-            # print('id')
-            develop = await Job.aio_filter_details(limit=1, id=compare_id)
-        
+        # # 如果传入id1 则获取后一个版本 如果没有传入id1 则获取基线的任务
+        # develop = ''
+        # if (compare_id == "-1"):
+        #     # print('rotine')
+        #     query = {
+        #         'routine': 1,
+        #         'status': 'done'
+        #     }
+        #     develop = await Job.aio_filter_details(limit=1, order_by='-create_time', **query)
+        #     print(develop[0]['id'])
+        # else:
+        #     # print('id')
+        #     develop = await Job.aio_filter_details(limit=1, id=compare_id)
+
+        develop = await Job.aio_filter_details(limit=1, id=compare_id)
         latest_develop = develop[0]
         dev_id = latest_develop['id']
         latest_commit = latest_develop['commit']

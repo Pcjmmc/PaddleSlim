@@ -67,10 +67,8 @@ class ApiBenchmarkList(MABaseView):
         # print(kwargs)
 
         query = dict({"order_by": "-id"}, **kwargs)
-        data = await Job.aio_filter_details(**kwargs)
-        count = await Job.aio_filter_count(**kwargs)
-        # print(data)
-        # print(count)
+        data = await Job.aio_filter_details(**query)
+        count = await Job.aio_filter_count(**query)
         for d in data:
             d["create_time"] = str(d.get("create_time"))
             d["update_time"] = str(d.get("update_time"))
