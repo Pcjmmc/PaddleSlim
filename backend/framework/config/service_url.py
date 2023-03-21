@@ -9,6 +9,7 @@
 
 
 ###  子服务部署方式有两种， localbuild  OR  xly
+import os
 import base64
 
 """
@@ -643,10 +644,24 @@ DOCKER_INFER_IMAGE = {
 
 COMPILE_SERVICE = "http://10.138.35.178:8082/compile"
 
-
-# ALLURE 相关 , 需提前准备环境
-REPORT_SOURCE_NAME = "pts_report.tar"
-WWW_DIR = "/ssd1/pts/report/"
-SOURCE_DIR = "/ssd1/pts/source/"
-ALLURE = "/ssd1/pts/tools/allure/bin/allure"
-REPORT_SERVER = "http://paddletest.baidu-int.com:8333/"
+if 'DEPLOYMENT_TYPE' in os.environ and os.environ['DEPLOYMENT_TYPE'].upper() == 'GRAY':
+    # ALLURE 相关 , 需提前准备环境
+    REPORT_SOURCE_NAME = "pts_report.tar"
+    WWW_DIR = "/home/work/afs/pts/report/"
+    SOURCE_DIR = "/home/work/afs/pts/source/"
+    ALLURE = "/home/work/afs/pts/tools/allure/bin/allure"
+    REPORT_SERVER = "http://paddleboard.baidu-int.com:8081/allure/"
+elif 'DEPLOYMENT_TYPE' in os.environ:
+    # ALLURE 相关 , 需提前准备环境
+    REPORT_SOURCE_NAME = "pts_report.tar"
+    WWW_DIR = "/home/work/afs/pts/report/"
+    SOURCE_DIR = "/home/work/afs/pts/source/"
+    ALLURE = "/home/work/afs/pts/tools/allure/bin/allure"
+    REPORT_SERVER = "http://paddletest.baidu-int.com:8081/allure/"
+else:
+    # ALLURE 相关 , 需提前准备环境
+    REPORT_SOURCE_NAME = "pts_report.tar"
+    WWW_DIR = "/ssd1/pts/report/"
+    SOURCE_DIR = "/ssd1/pts/source/"
+    ALLURE = "/ssd1/pts/tools/allure/bin/allure"
+    REPORT_SERVER = "http://paddletest.baidu-int.com:8333/"
