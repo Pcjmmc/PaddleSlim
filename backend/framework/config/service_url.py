@@ -646,7 +646,7 @@ COMPILE_SERVICE = "http://10.138.35.178:8082/compile"
 
 if 'DEPLOYMENT_TYPE' in os.environ and os.environ['DEPLOYMENT_TYPE'].upper() == 'GRAY':
     # ALLURE 相关 , 需提前准备环境
-    REPORT_SOURCE_NAME = "pts_report.tar"
+    REPORT_SOURCE_NAME = "/home/work/afs/pts/pts_report.tar"
     WWW_DIR = "/home/work/afs/pts/report/"
     SOURCE_DIR = "/home/work/afs/pts/source/"
     ALLURE = "/home/work/afs/pts/tools/allure/bin/allure"
