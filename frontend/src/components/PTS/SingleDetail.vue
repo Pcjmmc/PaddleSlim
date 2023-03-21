@@ -290,7 +290,7 @@ export default {
         // 塞到datas的detais 字段里面
         let status1 = data.compile.status;
         let status2 = data.status;
-        this.getStepStatus(status1, status2);
+        this.getStepStatus(status1, status2, data.compile);
         if (typeof data.compile === 'object') {
           let compile = data.compile;
           this.wheel = compile.wheel;
@@ -355,13 +355,14 @@ export default {
       }
       return tmpData;
     },
-    getStepStatus(status1, status2) {
+    getStepStatus(status1, status2, compile) {
       this.steps = [
         {
           step: '编译',
           status: status1,
           _disableExpand: true,
-          result: ''
+          result: compile.result,
+          info: compile.info
         },
         {
           step: '测试',
