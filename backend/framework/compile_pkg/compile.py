@@ -29,7 +29,6 @@ class CompileInit(MABaseView):
         data["version"] = kwargs.get("value")
         data["uid"] = self._cookies.get("userid", 0)
         data["status"] = "running"
-        data["description"] = kwargs.get("name")
         data["create_time"] = datetime.now()
         data["update_time"] = datetime.now()
         res = await Job.aio_insert(data)
@@ -131,10 +130,11 @@ class CompileInit(MABaseView):
                 data = dict()
                 data["status"] = "error"
                 data["update_time"] = datetime.now()
+                result_text = res.text
                 res = await Compile.aio_update(data, query)
                 if res == 0:
                     raise HTTP400Error("Compile 库更新结果失败")
-                res = await Job.aio_update({"status": "error"}, {"id": jid})
+                res = await Job.aio_update({"status": "error", "result": result_text}, {"id": jid})
                 if res == 0:
                     raise HTTP400Error("Job 库更新结果失败")
             else:

@@ -35,11 +35,13 @@ class CompileCallback(MABaseView):
             # 请求下游服务
             res = await Job.aio_get_object(order_by=None, group_by=None, id=jid)
             await Dispatcher.dispatch_missions(res)
-        else:
+        elif status == "error":
             await Compile.aio_update(kwargs, {"id": id})
             res = await Compile.aio_get_object(order_by=None, group_by=None, id=id)
             jid = res["jid"]
             await Job.aio_update({"status": "error", "update_time": datetime.now()}, {"id": jid})
+        else:
+            await Compile.aio_update(kwargs, {"id": id})
 
 
 
