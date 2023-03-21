@@ -38,6 +38,7 @@ class CompileSearch(MABaseView):
             del (query["end_time"])
         query["is_deleted"] = 0
         query["order_by"] = "-id"
+        # print(query)
         # 只返回查询列表
         data = await Compile.aio_filter_details(**query)
         total = await Compile.aio_filter_count(**query)

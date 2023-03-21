@@ -131,6 +131,7 @@ class CompileInit(MABaseView):
                 data = dict()
                 data["status"] = "error"
                 data["update_time"] = datetime.now()
+                # result_text = res.text
                 res = await Compile.aio_update(data, query)
                 if res == 0:
                     raise HTTP400Error("Compile 库更新结果失败")
