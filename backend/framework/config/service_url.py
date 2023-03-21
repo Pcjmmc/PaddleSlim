@@ -644,20 +644,34 @@ DOCKER_INFER_IMAGE = {
 
 COMPILE_SERVICE = "http://10.138.35.178:8082/compile"
 
+
+ALLUR_PATH = '/home/work/.local/bin/allure'
+
+def copy_allure():
+    """
+    # 写到这里判断下没有就考核下
+    """
+    import os
+    if not os.path.exists(ALLUR_PATH): 
+        run_cmd = "cp -r /home/work/afs/pts/tools/allure /home/work/.local/bin/allure"
+        os.system(run_cmd)
+
 if 'DEPLOYMENT_TYPE' in os.environ and os.environ['DEPLOYMENT_TYPE'].upper() == 'GRAY':
     # ALLURE 相关 , 需提前准备环境
     REPORT_SOURCE_NAME = "/home/work/afs/pts/pts_report.tar"
     WWW_DIR = "/home/work/afs/pts/report/"
     SOURCE_DIR = "/home/work/afs/pts/source/"
-    ALLURE = "/etc/allure/bin/allure"
+    ALLURE = ALLUR_PATH + "/bin/allure"
     REPORT_SERVER = "http://paddleboard.baidu-int.com:8081/allure/"
+    copy_allure()
 elif 'DEPLOYMENT_TYPE' in os.environ:
     # ALLURE 相关 , 需提前准备环境
     REPORT_SOURCE_NAME = "pts_report.tar"
     WWW_DIR = "/home/work/afs/pts/report/"
     SOURCE_DIR = "/home/work/afs/pts/source/"
-    ALLURE = "/etc/allure/bin/allure"
+    ALLURE = ALLUR_PATH + "/bin/allure"
     REPORT_SERVER = "http://paddletest.baidu-int.com:8081/allure/"
+    copy_allure()
 else:
     # ALLURE 相关 , 需提前准备环境
     REPORT_SOURCE_NAME = "pts_report.tar"
