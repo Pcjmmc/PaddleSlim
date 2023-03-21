@@ -45,6 +45,7 @@ class JobDetails(MABaseView):
                 "wheel": compile["wheel"],
                 "env": compile["env"],
                 "info": compile["info"],
+                "result": compile["result"],
                 "create_time": str(compile["create_time"]),
                 "update_time": str(compile["update_time"]),
             },
