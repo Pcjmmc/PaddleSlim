@@ -13,8 +13,12 @@ from api_benchmark.version import GetVersion
 from api_benchmark.apibm_view import ApiBenchmarkInitView
 from api_benchmark.apibm_list import ApiBenchmarkList
 from api_benchmark.apibm_details import ApiBenchmarkDetails
+
 from api_benchmark.compare_pkg.main_compare import MainCompare
 from api_benchmark.compare_pkg.base_compare import BaseCompare
+
+from api_benchmark.job_pkg.latest_routine_job import LatestRoutineJob
+
 from api_benchmark.apibm_pkg.apibm_rerun import ApiBenchmarkRerun
 from api_benchmark.apibm_pkg.apibm_callback import ApiBenchmarkCallback
 from urls import url
@@ -40,5 +44,8 @@ urlpatterns = [
     url(r'apibmcallback/?$', ApiBenchmarkCallback),
 
     # 首页对比
+    url(r'api_benchmark/latestroutinejob/?$', LatestRoutineJob),
+    
+    # Job提取
     url(r'api_benchmark/maincompare/?$', MainCompare),
 ]
