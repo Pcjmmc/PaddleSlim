@@ -648,8 +648,10 @@ COMPILE_SERVICE = "http://10.138.35.178:8082/compile"
 ALLUR_PATH = '/home/work/.local/bin/allure'
 
 def copy_allure():
-    import os
+    """
     # 写到这里判断下没有就考核下
+    """
+    import os
     if not os.path.exists(ALLUR_PATH): 
         run_cmd = "cp -r /home/work/afs/pts/tools/allure /home/work/.local/bin/allure"
         os.system(run_cmd)
