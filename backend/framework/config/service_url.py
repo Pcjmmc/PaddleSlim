@@ -649,14 +649,14 @@ if 'DEPLOYMENT_TYPE' in os.environ and os.environ['DEPLOYMENT_TYPE'].upper() == 
     REPORT_SOURCE_NAME = "/home/work/afs/pts/pts_report.tar"
     WWW_DIR = "/home/work/afs/pts/report/"
     SOURCE_DIR = "/home/work/afs/pts/source/"
-    ALLURE = "/home/work/afs/pts/tools/allure/bin/allure"
+    ALLURE = "/etc/allure/bin/allure"
     REPORT_SERVER = "http://paddleboard.baidu-int.com:8081/allure/"
 elif 'DEPLOYMENT_TYPE' in os.environ:
     # ALLURE 相关 , 需提前准备环境
     REPORT_SOURCE_NAME = "pts_report.tar"
     WWW_DIR = "/home/work/afs/pts/report/"
     SOURCE_DIR = "/home/work/afs/pts/source/"
-    ALLURE = "/home/work/afs/pts/tools/allure/bin/allure"
+    ALLURE = "/etc/allure/bin/allure"
     REPORT_SERVER = "http://paddletest.baidu-int.com:8081/allure/"
 else:
     # ALLURE 相关 , 需提前准备环境
