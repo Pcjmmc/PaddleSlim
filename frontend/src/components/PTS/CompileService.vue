@@ -145,7 +145,7 @@
                   @click="openXly(item.info)"
                 >{{ item.status }}
                 </Button>
-                <span v-if="item.status=='error'"><font color="red">{{ item.remark }}</font></span>
+                <span v-if="item.status=='error'"><font color="red">{{ item.result }}</font></span>
                 系统: {{ getValue(item.env, "os") }}
                 <span v-if="getValue(item.env, 'branch')">
                   | 分支: {{ getValue(item.env, "branch") }}
