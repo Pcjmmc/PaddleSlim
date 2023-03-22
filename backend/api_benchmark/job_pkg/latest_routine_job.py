@@ -37,4 +37,6 @@ class LatestRoutineJob(MABaseView):
         }
         latest_routine_list = await Job.aio_filter_details(limit=1, order_by='-create_time', **query)
         latest_routine_job = latest_routine_list[0]
+        latest_routine_job["create_time"] = str(latest_routine_job.get("create_time"))
+        latest_routine_job["update_time"] = str(latest_routine_job.get("update_time"))
         return 1, latest_routine_job

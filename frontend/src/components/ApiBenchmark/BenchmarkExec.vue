@@ -340,7 +340,9 @@ export default {
         async createJob() {
             const { code, _, message } = await api.post(BenchmarkExec, this.submitData);
             if (parseInt(code, 10) === 200) {
-                this.show = false;
+              this.$emit('closeModal', false);
+              this.$emit('searchByfilter');
+              this.initData();
             } else {
                 this.$Message.error({
                     content: '请求出错: ' + message,

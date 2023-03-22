@@ -84,6 +84,7 @@
     <div style="margin-top: 2%">
       <div class="left" style="margin-top: 2%">
         <Table
+        border
         :columns="columns"
         :data="content"
         v-on:on-select="selectTable"
@@ -96,6 +97,7 @@
           :page-size="parseInt(search.pagesize)"
           size="small"
           style="text-align: center"
+          v-on:on-change="pageChange"
         >
         </Page>
       </div>
@@ -105,7 +107,11 @@
       title="创建测试任务"
       width="30%"
     >
-      <benchmark-exec ref="child"> </benchmark-exec>
+      <benchmark-exec
+        ref="child"
+        @closeModal="closeModal"
+        @searchByfilter="searchByfilter"
+      > </benchmark-exec>
       <div slot="footer">
         <Button
           type="text"
@@ -115,7 +121,7 @@
         </Button>
         <Button
           type="primary"
-          @click="hanleSubmit"
+          @click="handleSubmit"
         >
           提交
         </Button>
@@ -125,7 +131,7 @@
 </template>
 
 <script>
-import { ApiBenchmarkTaskList } from '../../api/url';
+import { ApiBenchmarkTaskList, ApiBenchmarkRoutine } from '../../api/url';
 import api from '../../api/index';
 import { dateFmt } from '../../util/help.js';
 import BenchmarkExec from './BenchmarkExec.vue';
@@ -254,6 +260,12 @@ export default {
           }
         },
         {
+          title: '创建时间',
+          key: 'create_time',
+          align: 'center',
+          minWidth: 120
+        },
+        {
           title: 'Wheel包',
           key: 'version',
           align: 'center',
@@ -278,17 +290,11 @@ export default {
           }
         },
         {
-          title: '创建时间',
-          key: 'create_time',
-          align: 'center',
-          minWidth: 120
-        },
-        {
           title: '报告',
           key: 'detail',
           align: 'center',
           fixed: 'right',
-          minWidth: 100,
+          minWidth: 120,
           render: (h, params) => {
             return h('div', [
               h(
@@ -382,13 +388,23 @@ export default {
         return true;
       }
     },
-    getReport(row) {
-      let _params = {
-        id: row.id,
-        id1: -1
-      };
-      const { href } = this.$router.resolve({name: 'ApiBenchmarkBaseReport', params: _params});
-      window.open(href, '_blank');
+    async getReport(row) {
+      const {code, data, message, _} = await api.get(ApiBenchmarkRoutine);
+      if (parseInt(code, 10) === 200) {
+          let _params = {
+          id: row.id,
+          id1: data.id
+        };
+        const { href } = this.$router.resolve({name: 'ApiBenchmarkBaseReport', params: _params});
+        window.open(href, '_blank');
+      } else {
+        this.content = [];
+        this.$Message.error({
+          content: '未找到可以对比的基线 ' + message,
+          duration: 30,
+          closable: true
+        });
+      }
     },
     getComporeReport() {
       if (this.selection.length !== 2) {
@@ -431,11 +447,15 @@ export default {
     async handleReset() {
       await this.$refs.child.initData();
     },
-    async hanleSubmit() {
+    async handleSubmit() {
       await this.$refs.child.handleSummit();
-      if (this.$refs.child.show === false) {
-        this.showModa = false;
-      }
+    },
+    closeModal(params) {
+      this.showModa = params;
+    },
+    async pageChange(pageNum) {
+      this.search.page = pageNum;
+      await this.searchData();
     },
     async searchData() {
       // 根据条件查询
@@ -492,7 +512,6 @@ export default {
     },
     selectCancel(selection) {
       this.selection = selection;
-      // console.log(this.selection);
     }
   },
   components: { BenchmarkExec }
