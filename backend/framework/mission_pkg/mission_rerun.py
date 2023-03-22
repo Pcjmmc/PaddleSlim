@@ -55,7 +55,7 @@ class MissionRerun(MABaseView):
                 info = get_xly_mission_url(res.get("pipelineBuildId"))
                 print(info)
                 await Mission.aio_update({"status": "running", "description": res.get("pipelineBuildId"),
-                                          "info": info, "result": "", "allure_report":""}, {"id": mission_id})
+                                          "info": info, "result": "", "allure_report":"", "bos_url": ""}, {"id": mission_id})
                 await Job.aio_update({"status": "running"}, {"id": jid})
                 return "重新执行成功"
             else:
