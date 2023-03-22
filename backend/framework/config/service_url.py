@@ -658,12 +658,12 @@ elif 'DEPLOYMENT_TYPE' in os.environ:
     WWW_DIR = "/ssd1/pts/report/"
     SOURCE_DIR = "/ssd1/pts/source/"
     ALLURE = "/ssd1/pts/tools/allure/bin/allure"
-    REPORT_SERVER = "http://paddletest.baidu-int.com:8081/report/"
+    REPORT_SERVER = "http://10.144.31.29:8333/"
 else:
     # ALLURE 相关 , 需提前准备环境
     REPORT_SOURCE_NAME = "pts_report.tar"
     WWW_DIR = "/ssd1/pts/report/"
     SOURCE_DIR = "/ssd1/pts/source/"
     ALLURE = "/ssd1/pts/tools/allure/bin/allure"
-    REPORT_SERVER = "http://paddletest.baidu-int.com:8333/"
+    REPORT_SERVER = "http://10.144.31.29:8333/"
 
