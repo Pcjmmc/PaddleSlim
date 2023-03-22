@@ -1,7 +1,8 @@
+# !/usr/bin/env python3
+# encoding: utf-8
 """
 定义case执行的装饰器
 """
-# encoding: utf-8
 import time
 import asyncio
 import copy
@@ -19,6 +20,9 @@ logger = logging.getLogger("ce")
 def BaseLoggerInfo(func):
     @wraps(func)
     async def inner(*args, **kwargs):
+        """
+        封装日志记录的装饰器
+        """
         obj = args[0]
         headers = obj.headers
         fronted_url = headers.get("Originurl").split("#")[-1]

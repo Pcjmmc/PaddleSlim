@@ -42,7 +42,7 @@ class DeploymentType(object):
 
 if 'DEPLOYMENT_TYPE' in os.environ and os.environ['DEPLOYMENT_TYPE'].upper() == 'GRAY':
     DEPLOYMENT = DeploymentType.PRODUCTION
-    LOG_PATH = 'home/work/afs/gray_backend_access.log'
+    LOG_PATH = '/home/work/afs/gray_backend_access.log'
     DEBUG = True
     PTOKEN = 'UUAP_P_TOKEN_OFFLINE'
     EAC_HOST = 'https://itebeta.baidu.com'
