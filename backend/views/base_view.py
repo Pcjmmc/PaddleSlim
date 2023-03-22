@@ -8,9 +8,9 @@ import copy
 import json
 import urllib
 import tornado.web
-from exception import HTTP400Error, HTTP404Error, HTTPDetailError, HTTP401Error
+from exception import HTTP400Error, HTTP401Error, HTTP404Error, HTTPDetailError
 from https import response as resp
-
+from logger.decorator import BaseLoggerInfo
 
 class BaseView(tornado.web.RequestHandler):
     """
@@ -114,7 +114,7 @@ class MABaseView(BaseView):
         解析和处理request的参数
         """
         return self.request_data
-
+    @BaseLoggerInfo
     async def get(self):
         """
         重写get方法
@@ -142,10 +142,9 @@ class MABaseView(BaseView):
 
 
     async def post_data(self, **kwargs):
-        print("#####")
-        print("post data")
         return self.model_class.get_object(**kwargs)
     
+    @BaseLoggerInfo
     async def post(self, **kwargs):
         """
         父类post调用子类的post_data, 实现真正的逻辑
@@ -178,6 +177,7 @@ class MABaseView(BaseView):
     async def put_data(self, **kwargs):
         return self.model_class.get_object(**kwargs)
 
+    @BaseLoggerInfo
     async def put(self, **kwargs):
         # 在数据处理之前可以嵌入django form表单的参数校验
         try:
@@ -204,6 +204,7 @@ class MABaseView(BaseView):
     async def delete_data(self, **kwargs):
         return self.model_class.get_object(**kwargs)
 
+    @BaseLoggerInfo
     async def delete(self, **kwargs):
         try:
             if self.auth_class:

@@ -14,8 +14,9 @@ from tornado.options import define, options
 from ce_web.settings.common import DEPLOYMENT, WEB_SETTINGS
 from ce_web.urls import urlpatterns
 from libs.mysql.db import db_engines
+from logger.logging_config import InitLogger
 from urls import RegexURLPattern, RegexURLResolver
-
+InitLogger().start()
 
 def get_urlpatterns(urlpatterns):
     """
