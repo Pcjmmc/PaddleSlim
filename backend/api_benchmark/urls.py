@@ -50,7 +50,7 @@ urlpatterns = [
     # 首页对比
     url(r'api_benchmark/maincompare/?$', MainCompare),
     
-    # 执行页面对比
+    # 执行页面、查询页面 对比
     url(r'api_benchmark/basecompare/?$', BaseCompare),
     
     # 查询页面选项获取
