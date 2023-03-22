@@ -30,7 +30,7 @@ loggers:
     level: INFO
     handlers: [ce_console, file]
     propagate: false
-  prod:
+  production:
     level: INFO
     handlers: [ce_console, file]
     propagate: false
