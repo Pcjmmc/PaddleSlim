@@ -39,7 +39,7 @@ class CompileCallback(MABaseView):
             await Compile.aio_update(kwargs, {"id": id})
             res = await Compile.aio_get_object(order_by=None, group_by=None, id=id)
             jid = res["jid"]
-            await Job.aio_update({"status": "error", "update_time": datetime.now()}, {"id": jid})
+            await Job.aio_update({"status": "error", "update_time": datetime.now(), "result": kwargs.get("result")}, {"id": jid})
         else:
             await Compile.aio_update(kwargs, {"id": id})
 
