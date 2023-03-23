@@ -25,7 +25,10 @@ def BaseLoggerInfo(func):
         """
         obj = args[0]
         headers = obj.headers
-        fronted_url = headers.get("Originurl").split("#")[-1]
+        if headers.get("Originurl") and "#" in headers.get("Originurl"):
+            fronted_url = headers.get("Originurl").split("#")[-1]
+        else:
+            fronted_url = "api"
         begin_time = int(time.time())
         res = await func(*args, **kwargs)
         # 将结果返回给allure报告
