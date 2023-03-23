@@ -193,8 +193,8 @@
           </Col>
           <Col>
             <RadioGroup v-model="submitData.enable_backward">
-               <Radio label="0">是</Radio>
-               <Radio label="1">否</Radio>
+               <Radio label="1">是</Radio>
+               <Radio label="0">否</Radio>
             </RadioGroup>
           </Col>
         </Row>
