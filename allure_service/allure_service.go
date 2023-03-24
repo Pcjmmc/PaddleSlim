@@ -41,13 +41,10 @@ func main() {
         println("Report_url:", report.Report_url)
         if report.Report_url != nil {
         	response, err := http.Get(*report.Report_url)
-	        if err != nil {
-	            // 处理错误
-	            c.AbortWithStatus(http.StatusInternalServerError)
-	            return
-	        }
-	        defer response.Body.Close()
-	        if response.StatusCode == 404 {
+        	if err == nil {
+        		defer response.Body.Close()
+        	}
+	        if err != nil || (err == nil && response.StatusCode == 404) {
 	            // 页面不存在
 	            println("页面不存在")
 	            {}
@@ -55,6 +52,7 @@ func main() {
 	            c.JSON(http.StatusOK, gin.H{"allure_report": report.Report_url})
 	            return
 	        }
+
 	    }
 
 	    // 定义常量
