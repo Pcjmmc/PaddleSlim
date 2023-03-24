@@ -33,8 +33,8 @@ class BaselineSet(MABaseView):
 
     async def get_data(self, **kwargs):
         # 获取cookie信息
-        uid = self._cookies.get("userid", 0)
-        if uid in API_BENCHMARK_SUPERUSER:
+        username = self._cookies.get("userid", 0)
+        if username in API_BENCHMARK_SUPERUSER:
             id = kwargs.get('id')
             routine = kwargs.get('routine')
             if routine == "1":
