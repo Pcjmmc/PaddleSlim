@@ -13,6 +13,9 @@
   **************************************************************************/
 """
 
+# 超级用户
+RELEASE_DAILY_SUPERUSER = ["zhengtianyu", "liuhuanling", "zhangdeying", "weike"]
+
 CLOUD = "xly"
 
 PLACE = {
@@ -76,5 +79,4 @@ yaml_info_map = {'0': 'case_0', '1': 'case_1', '2': 'case_2', '3': 'all'}
 # 基线相关
 paddle_develop_version = '0.0.0'
 paddle_release_version = '2.4.2'
-
 torch_release_version = '1.13.1'

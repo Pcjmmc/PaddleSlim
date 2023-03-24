@@ -17,9 +17,10 @@ import asyncio
 import json
 import datetime
 
-
+from exception import HTTP400Error
 from views.base_view import MABaseView
 from models.api_benchmark import Job
+from api_benchmark.config.service_url import RELEASE_DAILY_SUPERUSER
 from utils.change_time import get_begin_and_time
 
 
@@ -31,11 +32,16 @@ class BaselineSet(MABaseView):
         return await super().get(**kwargs)
 
     async def get_data(self, **kwargs):
-        id = kwargs.get('id')
-        routine = kwargs.get('routine')
-        if routine == "1":
-            res = await Job.aio_update({"routine": 1}, {"id": id})
-        elif routine == "0":
-            res = await Job.aio_update({"routine": 0}, {"id": id})
-
-        return 1, res
+        # 获取cookie信息
+        uid = self._cookies.get("userid", 0)
+        if uid in RELEASE_DAILY_SUPERUSER:
+            id = kwargs.get('id')
+            routine = kwargs.get('routine')
+            if routine == "1":
+                res = await Job.aio_update({"routine": 1}, {"id": id})
+                return 1, res
+            elif routine == "0":
+                res = await Job.aio_update({"routine": 0}, {"id": id})
+                return 1, res
+        else:
+            raise HTTP400Error("该用户不是管理员，没有权限标记基线数据")
