@@ -72,3 +72,9 @@ yaml_info_map = {'0': 'case_0', '1': 'case_1', '2': 'case_2', '3': 'all'}
 #     'yaml_type': None,
 #     'test_index': None
 # }
+
+# 基线相关
+paddle_develop_version = '0.0.0'
+paddle_release_version = '2.4.2'
+
+torch_release_version = '1.13.1'

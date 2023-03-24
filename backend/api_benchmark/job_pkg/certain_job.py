@@ -21,6 +21,7 @@ from exception import HTTP400Error
 from datetime import datetime
 import requests
 
+
 class CertainJob(MABaseView):
     """
     查看version
@@ -57,12 +58,14 @@ class CertainJob(MABaseView):
             query["framework"] = kwargs.get("framework")
         if kwargs.get("cuda") != "all":
             query["cuda"] = kwargs.get("cuda")
-        if kwargs.get("os") != "all":
-            query["system"] = kwargs.get("os")
+        if kwargs.get("system") != "all":
+            query["system"] = kwargs.get("system")
         if kwargs.get("version") != "all":
             query["version"] = kwargs.get("version")
         if kwargs.get("place") != "all":
             query["place"] = kwargs.get("place")
+        if kwargs.get("python") != "all":
+            query["python"] = kwargs.get("python")
 
         return query
 

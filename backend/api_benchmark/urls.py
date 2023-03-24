@@ -20,6 +20,9 @@ from api_benchmark.compare_pkg.base_compare import BaseCompare
 
 from api_benchmark.job_pkg.latest_routine_job import LatestRoutineJob
 from api_benchmark.job_pkg.certain_job import CertainJob
+from api_benchmark.job_pkg.baseline_job import BaselineJob
+
+from api_benchmark.baseline_pkg.baseline_set import BaselineSet
 
 from api_benchmark.apibm_pkg.apibm_rerun import ApiBenchmarkRerun
 from api_benchmark.apibm_pkg.apibm_callback import ApiBenchmarkCallback
@@ -38,20 +41,24 @@ urlpatterns = [
     url(r'apibmrerun/?$', ApiBenchmarkRerun),
     url(r'apibmcallback/?$', ApiBenchmarkCallback),
     
-    # 触发效率云流水线
-    url(r'api_benchmark/apibminitview/?$', ApiBenchmarkInitView),
-    url(r'api_benchmark/apibmlist/?$', ApiBenchmarkList),
-    url(r'api_benchmark/apibmdetails/?$', ApiBenchmarkDetails),
-
-    # 任务获取
-    url(r'api_benchmark/latestroutinejob/?$', LatestRoutineJob),
-    url(r'api_benchmark/certainjob/?$', CertainJob),
-    
     # 首页对比
     url(r'api_benchmark/maincompare/?$', MainCompare),
     
+    # 执行页面
+    url(r'api_benchmark/apibminitview/?$', ApiBenchmarkInitView),
+    url(r'api_benchmark/apibmlist/?$', ApiBenchmarkList),
+    url(r'api_benchmark/apibmdetails/?$', ApiBenchmarkDetails),
+    
+    # 执行页面基线设定
+    url(r'api_benchmark/baselineset/?$', BaselineSet),
+    
     # 执行页面、查询页面 对比
     url(r'api_benchmark/basecompare/?$', BaseCompare),
+    
+    # 任务获取
+    url(r'api_benchmark/latestroutinejob/?$', LatestRoutineJob),
+    url(r'api_benchmark/certainjob/?$', CertainJob),
+    url(r'api_benchmark/baselinejob/?$', BaselineJob),
     
     # 查询页面选项获取
     url(r'api_benchmark/getsettings/?$', GetSettings),
