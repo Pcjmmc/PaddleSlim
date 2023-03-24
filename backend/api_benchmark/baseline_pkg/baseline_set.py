@@ -33,15 +33,23 @@ class BaselineSet(MABaseView):
 
     async def get_data(self, **kwargs):
         # 获取cookie信息
-        username = self._cookies.get("userid", 0)
-        if username in API_BENCHMARK_SUPERUSER:
-            id = kwargs.get('id')
-            routine = kwargs.get('routine')
-            if routine == "1":
-                res = await Job.aio_update({"routine": 1}, {"id": id})
-                return 1, res
-            elif routine == "0":
-                res = await Job.aio_update({"routine": 0}, {"id": id})
-                return 1, res
+        uid = self._cookies.get("userid", 0)
+        if uid == 0:
+            raise HTTP400Error("未登录用户, 没有权限标记基线数据")
         else:
-            raise HTTP400Error("该用户不是管理员，没有权限标记基线数据")
+            user = await User.aio_filter_details(id=uid)
+            username = user[0]["username"]
+            if len(user) == 0:
+                raise HTTP400Error("游客用户, 没有权限标记基线数据")
+            else:
+                if username in API_BENCHMARK_SUPERUSER:
+                    id = kwargs.get('id')
+                    routine = kwargs.get('routine')
+                    if routine == "1":
+                        res = await Job.aio_update({"routine": 1}, {"id": id})
+                        return 1, res
+                    elif routine == "0":
+                        res = await Job.aio_update({"routine": 0}, {"id": id})
+                        return 1, res
+                else:
+                    raise HTTP400Error("该用户不是管理员, 没有权限标记基线数据")
