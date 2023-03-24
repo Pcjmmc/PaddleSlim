@@ -14,7 +14,7 @@
 """
 
 # 超级用户
-RELEASE_DAILY_SUPERUSER = ["zhengtianyu", "liuhuanling", "zhangdeying", "weike"]
+API_BENCHMARK_SUPERUSER = ["zhengtianyu", "liuhuanling", "zhangdeying", "weike"]
 
 CLOUD = "xly"
 
