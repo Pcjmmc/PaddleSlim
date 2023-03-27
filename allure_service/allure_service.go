@@ -49,14 +49,12 @@ func main() {
 	            // 页面不存在
 	            println("页面不存在")
 		        fmt.Println("Error:", err)
-		        return
 	        } else if response.StatusCode == http.StatusOK || (response.StatusCode >= http.StatusMultipleChoices && response.StatusCode <= http.StatusPermanentRedirect) {
 	        	c.JSON(http.StatusOK, gin.H{"allure_report": *report.Report_url})
 	            return
 	        }  else {
 	        	println("页面访问失败,错误代码如下：")
 	        	println(response.StatusCode)
-	        	return
 	        }
 	    }
 	    // 定义常量
