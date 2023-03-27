@@ -40,7 +40,7 @@ func main() {
         println("Bos_url:", report.Bos_url)
         println("Report_url:", report.Report_url)
         if report.Bos_url == nil && report.Report_url != nil {
-        	c.JSON(http.StatusOK, gin.H{"allure_report": report.Report_url})
+        	c.JSON(http.StatusOK, gin.H{"allure_report": *report.Report_url})
             return
         }
         if report.Report_url != nil {
@@ -56,7 +56,7 @@ func main() {
 	        	println("页面访问失败,错误代码如下：")
 	        	println(response.StatusCode)
 	        }  else {
-	            c.JSON(http.StatusOK, gin.H{"allure_report": report.Report_url})
+	            c.JSON(http.StatusOK, gin.H{"allure_report": *report.Report_url})
 	            return
 	        }
 
