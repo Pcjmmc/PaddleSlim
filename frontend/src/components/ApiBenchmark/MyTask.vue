@@ -131,7 +131,7 @@
 </template>
 
 <script>
-import { ApiBenchmarkTaskList, ApiBenchmarkRoutine } from '../../api/url';
+import { ApiBenchmarkTaskList, ApiBenchmarkRoutine, ApiBenchmarkSetBaseline } from '../../api/url';
 import api from '../../api/index';
 import { dateFmt } from '../../util/help.js';
 import BenchmarkExec from './BenchmarkExec.vue';
@@ -260,13 +260,7 @@ export default {
           }
         },
         {
-          title: '创建时间',
-          key: 'create_time',
-          align: 'center',
-          minWidth: 120
-        },
-        {
-          title: 'Wheel包',
+          title: '版本信息',
           key: 'version',
           align: 'center',
           minWidth: 100,
@@ -290,18 +284,23 @@ export default {
           }
         },
         {
-          title: '报告',
+          title: '创建时间',
+          key: 'create_time',
+          align: 'center',
+          minWidth: 120
+        },
+        {
+          title: '操作',
           key: 'detail',
           align: 'center',
           fixed: 'right',
-          minWidth: 120,
+          minWidth: 160,
           render: (h, params) => {
             return h('div', [
               h(
                 'Button',
                 {
                   props: {
-                    type: 'info',
                     disabled: this.setDisabled(params.row)
                   },
                   on: {
@@ -311,6 +310,19 @@ export default {
                   }
                 },
                 '查看报告'
+              ),
+              h(
+                'Button',
+                {
+                  props: {
+                    icon: this.setBaselineIcon(params.row)
+                  },
+                  on: {
+                    click: () => {
+                      this.setBaseline(params.row);
+                    }
+                  }
+                }
               )
             ]);
           }
@@ -363,8 +375,8 @@ export default {
       begin_time = new Date(begin_time);
       return begin_time;
     },
-    setBackward(value) {
-      if (value === 0) {
+    setBackward(row) {
+      if (row.enable_backward === 0) {
         return '是';
       } else {
         return '否';
@@ -386,6 +398,46 @@ export default {
         return false;
       } else {
         return true;
+      }
+    },
+    async setBaseline(row) {
+      if (row.routine === 0) {
+        let params = {
+          id: row.id,
+          routine: 1
+        };
+        const {code, message, data} = await api.post(ApiBenchmarkSetBaseline, params);
+        if (parseInt(code, 10) === 200) {
+          this.searchData();
+        } else {
+          this.$Message.error({
+            content: '设置基线失败' + message,
+            duration: 1,
+            closable: true
+          });
+        }
+      } else {
+        let params = {
+          id: row.id,
+          routine: 0
+        };
+        const {code, message, data} = await api.post(ApiBenchmarkSetBaseline, params);
+        if (parseInt(code, 10) === 200) {
+          this.searchData();
+        } else {
+          this.$Message.error({
+            content: '取消基线失败' + message,
+            duration: 1,
+            closable: true
+          });
+        }
+      }
+    },
+    setBaselineIcon(row) {
+      if (row.routine === 0) {
+        return 'md-star-outline';
+      } else {
+        return 'md-star';
       }
     },
     async getReport(row) {

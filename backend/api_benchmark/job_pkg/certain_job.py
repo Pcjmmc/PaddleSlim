@@ -43,10 +43,7 @@ class CertainJob(MABaseView):
             # kwargs.pop('end_time')
             query["create_time__lt"] = kwargs.get("end_time")
         # job done
-        if kwargs.get("status") is None:
-            # kwargs['status__in'] = ['done']
-            # kwargs['status__in'] = ["running",'done',"error","prepare"]
-            query["status__in"] = ["done"]
+        query["status__in"] = ["done"]
         # comment like
         if kwargs.get("comment") is not None:
             # kwargs['comment__contains'] = "%" + kwargs.get('comment') + "%"
@@ -55,17 +52,17 @@ class CertainJob(MABaseView):
         if kwargs.get("commit") is not None:
             query["commit"] = kwargs.get("commit")
 
-        if "all" not in eval(kwargs.get("framework")):
+        if "all" not in eval(kwargs.get("framework")) and not eval(kwargs.get("framework")) == []:
             query["framework__in"] = eval(kwargs.get("framework"))
-        if "all" not in eval(kwargs.get("cuda")):
+        if "all" not in eval(kwargs.get("cuda")) and not eval(kwargs.get("cuda")) == []:
             query["cuda__in"] = eval(kwargs.get("cuda"))
-        if "all" not in eval(kwargs.get("system")):
+        if "all" not in eval(kwargs.get("system")) and not eval(kwargs.get("system")) == []:
             query["system__in"] = eval(kwargs.get("system"))
-        if "all" not in eval(kwargs.get("version")):
+        if "all" not in eval(kwargs.get("version")) and not eval(kwargs.get("version")) == []:
             query["version__in"] = eval(kwargs.get("version"))
-        if "all" not in eval(kwargs.get("place")):
+        if "all" not in eval(kwargs.get("place")) and not eval(kwargs.get("place")) == []:
             query["place__in"] = eval(kwargs.get("place"))
-        if "all" not in eval(kwargs.get("python")):
+        if "all" not in eval(kwargs.get("python")) and not eval(kwargs.get("python")) == []:
             query["python__in"] = eval(kwargs.get("python"))
 
         return query

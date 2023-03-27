@@ -27,7 +27,7 @@ class BaseCompare(MABaseView):
         """
         计算逻辑
         """
-        if kwargs.get('id') < 1 or kwargs.get('id1') < 1:
+        if int(kwargs.get('id')) < 1 or int(kwargs.get('id1')) < 1:
             raise HTTP400Error("对比任务id不可小于等于0")
         
         # print(kwargs)

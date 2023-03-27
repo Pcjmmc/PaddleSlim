@@ -54,3 +54,6 @@ export const ApiCompare = '/benchmark/api_benchmark/maincompare';
 export const ApiBenchmarkTaskList = '/benchmark/api_benchmark/apibmlist';
 export const ApiBenchmarkBaseCompare = '/benchmark/api_benchmark/basecompare';
 export const ApiBenchmarkRoutine = '/benchmark/api_benchmark/latestroutinejob';
+export const ApiBenchmarkSetting = '/benchmark/api_benchmark/getsettings';
+export const ApiBenchmarkJobs = '/benchmark/api_benchmark/certainjob';
+export const ApiBenchmarkSetBaseline = '/benchmark/api_benchmark/baselineset';
