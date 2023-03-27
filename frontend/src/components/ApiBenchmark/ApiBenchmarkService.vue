@@ -11,6 +11,9 @@
       <el-tab-pane label="任务页" name="task">
         <task></task>
       </el-tab-pane>
+      <el-tab-pane label="查询页" name="query">
+        <query-page></query-page>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -18,6 +21,8 @@
 <script>
 import HomePage from './HomePage.vue';
 import Task from './MyTask.vue';
+import QueryPage from './QueryPage.vue';
+
 export default {
 data: function () {
     return {
@@ -30,7 +35,8 @@ mounted: function () {
 },
 components: {
     HomePage,
-    Task
+    Task,
+    QueryPage
 },
 computed: {},
 methods: {
