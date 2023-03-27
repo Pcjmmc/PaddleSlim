@@ -131,7 +131,7 @@ func main() {
 	        c.AbortWithError(http.StatusInternalServerError, err)
 	        return
 	    }
-	    report_url := REPORT_SERVER + filename
+	    report_url := REPORT_SERVER + filename + "/"
         // 返回响应
         c.JSON(200, gin.H{"allure_report": report_url})
         return
