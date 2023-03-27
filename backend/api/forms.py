@@ -2,53 +2,22 @@
 """
 自定义api的参数检验逻辑，比较简单
 """
+from django import forms
 
-
-class AddCaseForm(object):
+class AddCaseForm(forms.Form):
     """
-    实现参数名和类型的检测
+    定义接口接受的参数信息
     """
-    post_data_params = {
-        "build_type_id": [int, str],
-        "build_id": [int, str],
-        "repo": [str],
-        "branch": [str],
-        "commit_id": [int, str],
-        "commit_time": [int, str],
-        "job_id": [int, str],
-        "status": [str],
-        "build_time": [int, str],
-        "left_time": [int, str],
-        "duration": [int, str],
-        "case_detail": [str],
-        "exit_code": [int, str],
-    }
-    need_data_params = ["build_type_id", "build_id", "repo", "branch", "commit_id", "commit_time", "status"] 
-
-    @classmethod
-    def check_request_data(cls, **kwargs):
-        """
-        参数和类型检测逻辑
-        """
-        invalid_params = []
-        type_error = []
-        for key, val in kwargs.items():
-            if key not in cls.post_data_params:
-                invalid_params.append(key)
-            elif type(val) not in cls.post_data_params[key]:
-                type_error.append(key)
-
-        if invalid_params or type_error:
-            msg = ''
-            if invalid_params:
-                par_msg = ",".join(invalid_params)
-                msg = "无效的参数{} ".format(par_msg)
-            if type_error:
-                type_msg = ",".join(type_error)
-                msg += "类型错误{}".format(type_msg)
-            return False, msg
-        for need_key in cls.need_data_params:
-            if need_key not in kwargs.keys():
-                msg ="缺少必要的参数{} ".format(need_key)
-                return False, msg
-        return True, None
+    build_type_id = forms.CharField(label='任务唯一id', required=True)
+    build_id = forms.CharField(label='任务的编译id', required=True)
+    repo = forms.CharField(label='仓库', required=True)
+    branch = forms.CharField(label='分支', required=True)
+    commit_id = forms.CharField(label='commit id', required=True)
+    commit_time = forms.CharField(label='commit time', required=True)
+    status = forms.CharField(label='状态', required=True)
+    job_id = forms.CharField(label='阶段的id', required=False)
+    build_time = forms.CharField(label='任务启动时间', required=False)
+    left_time = forms.CharField(label='任务剩余时间', required=False)
+    duration = forms.CharField(label='执行时长', required=False)
+    case_detail = forms.JSONField(label='case信息', required=False)
+    exit_code = forms.CharField(label='退出码', required=False)

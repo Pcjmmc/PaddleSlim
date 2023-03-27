@@ -4,6 +4,7 @@
 """
 import asyncio
 import datetime
+import django
 import os
 import sys
 import time
@@ -17,6 +18,8 @@ from libs.mysql.db import db_engines
 from logger.logging_config import InitLogger
 from urls import RegexURLPattern, RegexURLResolver
 InitLogger().start()
+from django.conf import settings
+from django.core.wsgi import get_wsgi_application
 
 def get_urlpatterns(urlpatterns):
     """
@@ -67,7 +70,11 @@ def define_application_config():
 
 
 if __name__ == "__main__":
+    # 简单的启动django
+    settings.configure(DEBUG=True)
+    application = get_wsgi_application()
     define_application_config()
+    
     tornado.options.parse_command_line()
 
     loop = asyncio.get_event_loop()

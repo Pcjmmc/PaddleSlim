@@ -45,6 +45,9 @@ class MABaseView(BaseView):
     auth_class = None
     model_class = None
     post_form_class = None
+    get_form_class = None
+    put_form_class = None
+    delete_form_class = None
 
     async def get_data(self, **kwargs):
         """
@@ -131,6 +134,10 @@ class MABaseView(BaseView):
                     username = sed_params.get("username")
                     self.set_cookie('username', username)
             kwargs = self.get_perfect_request_data()
+            if self.get_form_class:
+                form = self.get_form_class(kwargs)
+                if not form.is_valid():
+                    return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, form.errors)
             all_count, data = await self.get_data(**kwargs)
         except HTTP400Error as e:
             return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, e.error_message)
@@ -161,9 +168,9 @@ class MABaseView(BaseView):
                     self.set_cookie('username', username)
             kwargs = self.get_perfect_request_data()
             if self.post_form_class:
-                status, msg = self.post_form_class.check_request_data(**kwargs)
-            if self.post_form_class and not status:
-                return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, msg)
+                form = self.post_form_class(kwargs)
+                if not form.is_valid():
+                    return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, form.errors)
             data = await self.post_data(**kwargs)
         except HTTP400Error as e:
             return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, e.error_message)
@@ -191,6 +198,10 @@ class MABaseView(BaseView):
                     username = sed_params.get("username")
                     self.set_cookie('username', username)
             kwargs = self.get_perfect_request_data()
+            if self.put_form_class:
+                form = self.put_form_class(kwargs)
+                if not form.is_valid():
+                    return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, form.errors)
             data = await self.put_data(**kwargs)
         except HTTP400Error as e:
             return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, e.error_message)
@@ -217,6 +228,10 @@ class MABaseView(BaseView):
                     username = sed_params.get("username")
                     self.set_cookie('username', username)
             kwargs = self.get_perfect_request_data()
+            if self.delete_form_class:
+                form = self.delete_form_class(kwargs)
+                if not form.is_valid():
+                    return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, form.errors)
             data = await self.delete_data(**kwargs)
         except HTTP400Error as e:
             return resp.return_error_response(self, resp.HTTP_400_BAD_REQUEST, e.error_message)
