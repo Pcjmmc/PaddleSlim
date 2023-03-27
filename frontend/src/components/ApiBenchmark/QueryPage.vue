@@ -1,6 +1,6 @@
 <template>
     <div class="center-card-s">
-        <div style="margin-top: 2%">
+        <div style="margin-top: 1%">
             <Row>
                 <Col span="2">Framework:</Col>
                 <Col span="6">
@@ -17,7 +17,7 @@
                 </Col>
             </Row>
         </div>
-        <div style="margin-top: 2%">
+        <div style="margin-top: 1%">
             <Row>
                 <Col span="2">Python:</Col>
                 <Col>
@@ -32,7 +32,7 @@
                 </Col>
             </Row>
         </div>
-        <div style="margin-top: 2%">
+        <div style="margin-top: 1%">
             <Row>
                 <Col span="2">System:</Col>
                 <Col>
@@ -47,7 +47,7 @@
                 </Col>
             </Row>
         </div>
-        <div style="margin-top: 2%">
+        <div style="margin-top: 1%">
             <Row>
                 <Col span="2">Place:</Col>
                 <Col>
@@ -62,7 +62,7 @@
                 </Col>
             </Row>
         </div>
-        <div style="margin-top: 2%">
+        <div style="margin-top: 1%">
             <Row>
                 <Col span="2">CUDA:</Col>
                 <Col>
@@ -77,7 +77,7 @@
                 </Col>
             </Row>
         </div>
-        <div style="margin-top: 2%">
+        <div style="margin-top: 1%">
             <Row>
                 <Col span="2">Version:</Col>
                 <Col>
@@ -92,7 +92,7 @@
                 </Col>
             </Row>
         </div>
-        <div style="margin-top: 2%">
+        <div style="margin-top: 1%">
             <span>
               创建时间:
               <DatePicker
@@ -105,7 +105,7 @@
               ></DatePicker>
             </span>
         </div>
-        <div style="margin-top: 2%">
+        <div style="margin-top: 1%">
             <div>
               任务名:
               <Input
@@ -138,7 +138,7 @@
                 </Button>
              </div>
         </div>
-        <div style="margin-top: 2%">
+        <div style="margin-top: 1%">
             <div class="left" style="margin-top: 2%">
               <Table
               border
@@ -345,11 +345,9 @@ export default {
             const { code, data, message, all_count } = await api.get(ApiBenchmarkSetting);
             if (parseInt(code, 10) === 200) {
                 this.cuda = data.cuda;
-                // this.system = data.os;
-                // todo: data.system
+                this.system = data.system;
                 this.place = data.place;
-                // this.python = data.python;
-                // todo: data.python
+                this.python = data.python;
                 this.version = data.version;
             } else {
                 this.content = [];
