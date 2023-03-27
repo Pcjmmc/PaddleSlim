@@ -16,7 +16,7 @@ import (
 
 type Report struct {
     Id  string `json:"id"`
-    Bos_url string `json:"bos_url"`
+    Bos_url *string `json:"bos_url"`
     Report_url *string `json:"allure_report"`
 }
 
@@ -39,17 +39,24 @@ func main() {
         println("Id:", report.Id)
         println("Bos_url:", report.Bos_url)
         println("Report_url:", report.Report_url)
+        if report.Bos_url == nil && report.Report_url != nil {
+        	c.JSON(http.StatusOK, gin.H{"allure_report": *report.Report_url})
+            return
+        }
         if report.Report_url != nil {
         	response, err := http.Get(*report.Report_url)
         	if err == nil {
         		defer response.Body.Close()
         	}
-	        if err != nil || (err == nil && response.StatusCode == 404) {
+	        if err != nil {
 	            // 页面不存在
 	            println("页面不存在")
-	            {}
-	        } else {
-	            c.JSON(http.StatusOK, gin.H{"allure_report": report.Report_url})
+	            println(err)
+	        } else if response.StatusCode != 200 {
+	        	println("页面访问失败,错误代码如下：")
+	        	println(response.StatusCode)
+	        }  else {
+	            c.JSON(http.StatusOK, gin.H{"allure_report": *report.Report_url})
 	            return
 	        }
 
@@ -77,7 +84,7 @@ func main() {
     	}
 
         // 下载请求
-		response, err := http.Get(report.Bos_url)
+		response, err := http.Get(*report.Bos_url)
 
 	    if err != nil {
 	        fmt.Println("Failed to download file:", err)
