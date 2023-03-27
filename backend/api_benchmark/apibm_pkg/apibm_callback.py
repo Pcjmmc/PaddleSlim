@@ -14,7 +14,7 @@
 """
 
 from views.base_view import MABaseView
-from models.api_benchmark import ApiBenchmarkMission
+from models.api_benchmark import Job
 from exception import HTTP400Error
 from datetime import datetime
 
@@ -32,19 +32,15 @@ class ApiBenchmarkCallback(MABaseView):
         """
         id = kwargs.get("id")
         status = kwargs.get("status")
-        # result = kwargs.get("result")
-        # bos_url = kwargs.get("bos_url")
-        # allure_report = kwargs.get("report")
+        result = kwargs.get("result")
+        info = kwargs.get("info")
         data = {
             "id": id,
             "status": status,
-            # "result": result,
-            # "bos_url": bos_url,
-            # "allure_report": allure_report,
             "update_time": datetime.now()
         }
-        res = await ApiBenchmarkMission.aio_update(data, {"id": id})
+        res = await Job.aio_update(data, {"id": id})
         if res == 0:
-            raise HTTP400Error
+            raise HTTP400Error("回调数据有问题")
         # apibm_mission = await ApiBenchmarkMission.aio_get_object(id=id)
         return res
