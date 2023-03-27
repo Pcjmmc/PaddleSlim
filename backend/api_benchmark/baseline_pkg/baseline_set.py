@@ -29,10 +29,10 @@ class BaselineSet(MABaseView):
     """
     任务初始化
     """
-    async def get(self, **kwargs):
-        return await super().get(**kwargs)
+    async def post(self, **kwargs):
+        return await super().post(**kwargs)
 
-    async def get_data(self, **kwargs):
+    async def post_data(self, **kwargs):
         # 获取cookie信息
         uid = self._cookies.get("userid", 0)
         if uid == 0:
@@ -48,9 +48,9 @@ class BaselineSet(MABaseView):
                     routine = kwargs.get('routine')
                     if routine == "1":
                         res = await Job.aio_update({"routine": 1}, {"id": id})
-                        return 1, res
+                        return res
                     elif routine == "0":
                         res = await Job.aio_update({"routine": 0}, {"id": id})
-                        return 1, res
+                        return res
                 else:
                     raise HTTP400Error("该用户不是管理员, 没有权限标记基线数据")
