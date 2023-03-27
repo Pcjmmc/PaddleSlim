@@ -44,24 +44,21 @@ func main() {
             return
         }
         if report.Report_url != nil {
-        	response, err := http.Get(*report.Report_url)
-        	if err == nil {
-        		defer response.Body.Close()
-        	}
+        	response, err := http.Head(*report.Report_url)
 	        if err != nil {
 	            // 页面不存在
 	            println("页面不存在")
-	            println(err)
-	        } else if response.StatusCode != 200 {
+		        fmt.Println("Error:", err)
+		        return
+	        } else if response.StatusCode == http.StatusOK || (response.StatusCode >= http.StatusMultipleChoices && response.StatusCode <= http.StatusPermanentRedirect) {
+	        	c.JSON(http.StatusOK, gin.H{"allure_report": *report.Report_url})
+	            return
+	        }  else {
 	        	println("页面访问失败,错误代码如下：")
 	        	println(response.StatusCode)
-	        }  else {
-	            c.JSON(http.StatusOK, gin.H{"allure_report": *report.Report_url})
-	            return
+	        	return
 	        }
-
 	    }
-
 	    // 定义常量
         REPORT_SOURCE_NAME := "/home/work/pts/pts_report.tar"
         SOURCE := "/home/work/pts/source/"
@@ -70,13 +67,13 @@ func main() {
         // SOURCE := "/go/pts/source/"
         // REPORT := "/go/pts/report/"
         ALLURE := "/home/work/allure/bin/allure"
-        REPORT_SERVER := "http://yq01-qianmo-com-255-137-11.yq01.baidu.com:8666/"
+        REPORT_SERVER := "http://10.11.134.20:8020/"
 
 
         // 打印用户信息
         println("Id:", report.Id)
-        println("Bos_url:", report.Bos_url)
-        println("Report_url:", report.Report_url)
+        println("Bos_url:", *report.Bos_url)
+        println("Report_url:", *report.Report_url)
 
         // 判断文件是否存在 并删除
         if _, err := os.Stat(REPORT_SOURCE_NAME); err == nil {
