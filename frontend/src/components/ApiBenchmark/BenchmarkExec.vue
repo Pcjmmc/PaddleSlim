@@ -26,7 +26,6 @@
           </Col>
         </Row>
       </FormItem>
-
       <FormItem>
         <Row
         type="flex"
@@ -39,13 +38,12 @@
             </label>
           </Col>
           <Col>
-            <label>
-              Develop
-            </label>
+            <Select v-model="submitData.baseline_type" style="width:200px">
+              <Option v-for="item in baseline_type" :value="item.id" :key="item.id">{{ item.desc }}</Option>
+            </Select>
           </Col>
         </Row>
       </FormItem>
-
       <FormItem>
         <Row
           type="flex"
@@ -65,7 +63,6 @@
           </Col>
         </Row>
       </FormItem>
-
       <FormItem prop="wheel_link">
         <Row
           type="flex"
@@ -110,7 +107,6 @@
           </Col>
         </Row>
       </FormItem>
-
       <FormItem>
         <Row
           type="flex"
@@ -129,8 +125,6 @@
           </Col>
         </Row>
       </FormItem>
-
-
       <FormItem>
         <Row
           type="flex"
@@ -178,8 +172,6 @@
           </Col>
         </Row>
       </FormItem>
-
-
       <FormItem>
         <Row
           type="flex"
@@ -268,11 +260,26 @@ export default {
                 cuda: '',
                 python: '',
                 comment: '',
-                system: '0'
+                system: '0',
+                baseline_type: ''
             },
             framework_option: [
                 'paddle',
                 'torch'
+            ],
+            baseline_type: [
+              {
+                id: 'paddle_develop',
+                desc: 'Paddle Develop'
+              },
+              {
+                id: 'paddle_release',
+                desc: 'Paddle Release'
+              },
+              {
+                id: 'torch_release',
+                desc: 'Rorch Release'
+              }
             ],
             defaultSize: [
                 '小kernel',
@@ -331,7 +338,8 @@ export default {
                 cuda: 1,
                 yaml_type: '0',
                 yaml_info: 0,
-                enable_backward: '0'
+                enable_backward: '0',
+                baseline_type: 'paddle_develop'
             };
         },
         handleClose() {

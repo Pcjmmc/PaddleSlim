@@ -16,4 +16,5 @@ frontend/yarn-error.log*
 .DS_Store
 # pyenv
 .python-version
+.idea
 
