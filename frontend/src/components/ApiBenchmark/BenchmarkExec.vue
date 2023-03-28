@@ -39,7 +39,13 @@
           </Col>
           <Col>
             <Select v-model="submitData.baseline_type" style="width:200px">
-              <Option v-for="item in baseline_type" :value="item.id" :key="item.id">{{ item.desc }}</Option>
+              <Option 
+                v-for="item in baseline_type" 
+                :value="item.id" 
+                :key="item.id"
+              >
+                {{ item.desc }}
+              </Option>
             </Select>
           </Col>
         </Row>
