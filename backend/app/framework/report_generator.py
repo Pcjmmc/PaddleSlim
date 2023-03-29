@@ -50,12 +50,14 @@ class ReportGenerator(MABaseView):
 
         # 先请求是否有报告
         if report_url is not None:
-            response = requests.get(url)
-            if response.status_code == 404:
-                pass
-            else:
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+                print(f"{url} is accessible.")
                 return {"allure_report": report_url}
-
+            except requests.exceptions.RequestException as e:
+                print(f"{url} is not accessible: {e}")
+                pass
         if os.path.exists(REPORT_SOURCE_NAME):
             os.remove(REPORT_SOURCE_NAME)
         wget.download(url,out=REPORT_SOURCE_NAME)
