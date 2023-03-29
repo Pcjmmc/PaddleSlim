@@ -88,14 +88,14 @@ func main() {
 	        REPORT = "/home/work/pts/report/"
 	        ALLURE = "/home/work/allure/bin/allure"
 	        REPORT_SERVER = "http://10.11.134.20:8020/"
-	        MYSQL = "root:paddle@tcp(180.76.178.190:3306)/framework?charset=utf8mb4&parseTime=True&loc=Local"
+	        MYSQL = "paddle_test:paddle@test@tcp(180.76.178.190:3306)/framework?charset=utf8mb4&parseTime=True&loc=Local"
 	    } else if os.Getenv("Divano") == "production" {
 	    	REPORT_SOURCE_NAME = "/home/work/pts/pts_report.tar"
 	        SOURCE = "/home/work/pts/source/"
 	        REPORT = "/home/work/pts/report/"
 	        ALLURE = "/home/work/allure/bin/allure"
-	        REPORT_SERVER = "http://10.11.134.20:8020/"
-	        MYSQL = "root:paddle@tcp(180.76.178.190:3306)/framework?charset=utf8mb4&parseTime=True&loc=Local"
+	        REPORT_SERVER = "http://10.11.133.90:8200/"
+	        MYSQL = "paddle_test:paddle@test@tcp(180.76.178.190:3306)/framework?charset=utf8mb4&parseTime=True&loc=Local"
 	    } else {
 	    	REPORT_SOURCE_NAME = "./pts/pts_report.tar"
 	        SOURCE = "./pts/source/"
