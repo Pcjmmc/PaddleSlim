@@ -9,7 +9,6 @@ from views.base_view import MABaseView
 from models.framework import Job, Mission, Compile, FeedBack
 from exception import HTTP400Error
 from datetime import datetime
-from framework.dispatcher import Dispatcher
 import requests
 
 
