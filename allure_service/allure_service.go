@@ -12,12 +12,32 @@ import (
 	"time"
 	"os/exec"
 	"golang.org/x/sync/errgroup"
+	"gorm.io/driver/mysql"
+    "gorm.io/gorm"
+    "gorm.io/gorm/schema"
 )
 
 type Report struct {
     Id  string `json:"id"`
     Bos_url *string `json:"bos_url"`
     Report_url *string `json:"allure_report"`
+}
+
+
+// 定义Mission ORM
+type Mission struct {
+	Id int `gorm:"column:id;primary_key"`
+	Jid int `gorm:"column:jid"`
+	Status string `gorm:"column:status"`
+	Module string `gorm:"column:module"`
+	Result string `gorm:"column:result"`
+	Description string `gorm:"column:description"`
+	Bos_url string `gorm:"column:bos_url"`
+	Allure_report string `gorm:"column:allure_report"`
+	Info string `gorm:"column:info"`
+	Is_deleted int `gorm:"column:is_deleted"`
+	Create_time time.Time `gorm:"column:create_time;type:datetime"`
+	Update_time time.Time `gorm:"column:update_time;type:datetime"`
 }
 
 
@@ -57,15 +77,34 @@ func main() {
 	        	println(response.StatusCode)
 	        }
 	    }
+
 	    // 定义常量
-        REPORT_SOURCE_NAME := "/home/work/pts/pts_report.tar"
-        SOURCE := "/home/work/pts/source/"
-        REPORT := "/home/work/pts/report/"
-        // REPORT_SOURCE_NAME := "pts_report.tar"
-        // SOURCE := "/go/pts/source/"
-        // REPORT := "/go/pts/report/"
-        ALLURE := "/home/work/allure/bin/allure"
-        REPORT_SERVER := "http://10.11.134.20:8020/"
+	    fmt.Println("===== ENV =====")
+	    fmt.Println(os.Getenv("Divano"))
+	    var REPORT_SOURCE_NAME, SOURCE, REPORT, ALLURE, REPORT_SERVER, MYSQL string
+	    if os.Getenv("Divano") == "sandbox" {
+	    	REPORT_SOURCE_NAME = "/home/work/pts/pts_report.tar"
+	        SOURCE = "/home/work/pts/source/"
+	        REPORT = "/home/work/pts/report/"
+	        ALLURE = "/home/work/allure/bin/allure"
+	        REPORT_SERVER = "http://10.11.134.20:8020/"
+	        MYSQL = "root:paddle@tcp(180.76.178.190:3306)/framework?charset=utf8mb4&parseTime=True&loc=Local"
+	    } else if os.Getenv("Divano") == "production" {
+	    	REPORT_SOURCE_NAME = "/home/work/pts/pts_report.tar"
+	        SOURCE = "/home/work/pts/source/"
+	        REPORT = "/home/work/pts/report/"
+	        ALLURE = "/home/work/allure/bin/allure"
+	        REPORT_SERVER = "http://10.11.134.20:8020/"
+	        MYSQL = "root:paddle@tcp(180.76.178.190:3306)/framework?charset=utf8mb4&parseTime=True&loc=Local"
+	    } else {
+	    	REPORT_SOURCE_NAME = "./pts/pts_report.tar"
+	        SOURCE = "./pts/source/"
+	        REPORT = "./pts/report/"
+	        ALLURE = "/Users/zhengtianyu/work/paddle/allure-2.21.0/bin/allure"
+	        REPORT_SERVER = "http://127.0.0.1:8080/"
+	        MYSQL = "root:paddle@tcp(127.0.0.1:3306)/framework?charset=utf8mb4&parseTime=True&loc=Local"
+	    }
+        
 
 
         // 打印用户信息
@@ -132,6 +171,20 @@ func main() {
 	        return
 	    }
 	    report_url := REPORT_SERVER + filename + "/"
+	    // 缓存入库
+	    dsn := MYSQL
+	  	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		  		NamingStrategy: schema.NamingStrategy{
+					SingularTable: true, // 使用单数表名
+			},
+	  	})
+	  	if err != nil {
+	  		fmt.Println("mysql connect error:" + err.Error())
+	  	} else {
+	  		var mission Mission
+	  		res := db.Model(&mission).Where("id = ?", report.Id).Update("allure_report", report_url)
+	  		fmt.Println(res.RowsAffected)
+	  	}
         // 返回响应
         c.JSON(200, gin.H{"allure_report": report_url})
         return
