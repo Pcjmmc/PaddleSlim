@@ -15,6 +15,9 @@ from email.header import Header
 
 
 def email_send(receiver, subject, content):
+    """
+    send
+    """
     sender = "zhengtianyu@baidu.com"
     content = requests.get("http://paddletest.baidu-int.com:8081/#/paddle/integration/release%2F2.4")
     content.encoding = content.apparent_encoding
