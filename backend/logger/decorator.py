@@ -11,10 +11,6 @@ import logging
 import os
 from functools import wraps
 
-from logger.logging_config import InitLogger
-
-InitLogger().start()
-
 logger = logging.getLogger("ce")
 
 def BaseLoggerInfo(func):
