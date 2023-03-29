@@ -196,9 +196,7 @@
         }
       },
       async openReport(item) {
-        if (!item.allure_report) {
-          await this.generateReport(item);
-        }
+        await this.generateReport(item);
         if (item.allure_report) {
           window.open(item.allure_report, '_blank');
         }
@@ -215,28 +213,21 @@
         }
       },
       async generateReport(item) {
-      if (!item.bos_url) {
-        this.$Message.info({
-          content: '暂时没有报告可查看，可以刷新页面看下任务是否结束。',
-          duration: 5,
-          closable: true
-        });
-        return;
-      }
-      let params = {
-        bos_url: item.bos_url,
-        id: item.id
-      };
-      const {code, data, message} = await api.post(FrameReportUrl, params);
-      if (parseInt(code, 10) === 200) {
-        item.allure_report = data.allure_report;
-      } else {
-        this.$Message.error({
-          content: '请求出错: ' + message,
-          duration: 30,
-          closable: true
-        });
-      }
+        let params = {
+          bos_url: item.bos_url,
+          id: item.id,
+          allure_report: item.allure_report
+        };
+        const {code, data, message} = await api.post(FrameReportUrl, params);
+        if (parseInt(code, 10) === 200) {
+          item.allure_report = data.allure_report;
+        } else {
+          this.$Message.info({
+            content: '暂时没有报告可查看，可以刷新页面看下任务是否正常结束。',
+            duration: 5,
+            closable: true
+          });
+        }
     },
     async cancelJob(row, index) {
       let params = {
