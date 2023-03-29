@@ -2,12 +2,12 @@
 """
 URL 配置
 """
-from app.api_benchmark.job import GetJob
-from app.api_benchmark.compare import Compare
-from app.api_benchmark.cuda import GetCuda
-from app.api_benchmark.os import GetOs
-from app.api_benchmark.place import GetPlace
-from app.api_benchmark.version import GetVersion
+# from app.api_benchmark.compare_pkg.job import GetJob
+# from app.api_benchmark.compare_pkg.compare import Compare
+# from app.api_benchmark.compare_pkg.cuda import GetCuda
+# from app.api_benchmark.compare_pkg.os import GetOs
+# from app.api_benchmark.compare_pkg.place import GetPlace
+# from app.api_benchmark.compare_pkg.version import GetVersion
 
 from app.api_benchmark.settings import GetSettings
 
