@@ -140,12 +140,15 @@ class Dispatcher(object):
             while(retry < retry_time):
                 res = self.request_mission(k, id, env, wheel)
                 if isinstance(res, dict):
-                    # 初始化任务
-                    info = get_xly_mission_url(res.get("pipelineBuildId"))
-                    print(info)
-                    await Mission.aio_update({"status": "running", "description": res.get("pipelineBuildId"),
-                                              "info": info}, {"id":id})
-                    break
+                    # 初始化任务 获取效率云链接
+                    if PLACE.get(k) == CLOUD:
+                        info = get_xly_mission_url(res.get("pipelineBuildId"))
+                        print(info)
+                        await Mission.aio_update({"status": "running", "description": res.get("pipelineBuildId"),
+                                                  "info": info}, {"id":id})
+                        break
+                    else:
+                        await Mission.aio_update({"status": "running"}, {"id": id})
                 else:
                     await Mission.aio_update({"status": "error", "description": res}, {"id": id})
                     retry += 1
