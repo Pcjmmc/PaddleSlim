@@ -68,9 +68,10 @@ class Dispatcher(object):
         mission是 任务名字
         """
         # todo: 本地化执行
+        print("============ Local Build ===========")
         if isinstance(module, list):
             for m in module:
-                cls.local_run(CloudMission.ROUTER.get(m), id, env, wheel)
+                cls.local_run(LocalMission.ROUTER.get(m), id, env, wheel)
         else:
             # 为benchmark专门搞参数对应
             if "models_benchmark" in mission:
@@ -87,12 +88,14 @@ class Dispatcher(object):
                     "type_value": json.loads(env).get("value"),
                 }
                 total_param = dict(spec_param, **params)
-                res = requests.post(service_url, data=total_param)
-                if res.status_code != 200:
-                    return STATUS.ERROR_800
-                else:
+                try:
+                    res = requests.post(service_url, data=total_param)
                     print(res.json())
                     return res.json()
+                except Exception as e:
+                    print(e)
+                    return STATUS.ERROR_800
+
     @classmethod
     def request_mission(self, module, id, env, wheel):
         # todo: 请求任务 任务环境，编译内容，发送请求给效率云
@@ -137,6 +140,8 @@ class Dispatcher(object):
                 raise HTTP400Error
             id = res[1]
             mission[k] = id
+
+
             while(retry < retry_time):
                 res = self.request_mission(k, id, env, wheel)
                 if isinstance(res, dict):
@@ -155,5 +160,10 @@ class Dispatcher(object):
                 else:
                     await Mission.aio_update({"status": "error", "description": res}, {"id": id})
                     retry += 1
+            # 如果重试超时，定义主任务是异常状态
+            if retry == 5:
+                await Job.aio_update({"status": "error"}, {"id": job.get("id")})
         await Job.aio_update({"mission": str(json.dumps(mission))}, {"id":job.get("id")})
+
+
 
