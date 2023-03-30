@@ -2,6 +2,7 @@
 """
 日志初始化模块
 """
+import datetime
 import json
 import logging
 import os
@@ -23,9 +24,12 @@ class InitLogger(object):
     def __init__(self):
         self.loader = yaml.load(open(YAML_CFG_PATH, 'r'), Loader=yaml.FullLoader)
         # 对self.load值做替换
+        today = datetime.datetime.now()
+        today = datetime.datetime.strftime(today, "%Y_%m_%d_%H_%M")
+        log_pat = LOG_PATH.format(time=today) if os.environ.get('DEPLOYMENT_TYPE') else LOG_PATH
         var_name = 'LOG_PATH'
         content = json.dumps(self.loader)
-        content = content.replace("${{{0}}}".format(var_name), str(LOG_PATH))
+        content = content.replace("${{{0}}}".format(var_name), str(log_pat))
         self.loader=json.loads(content)
 
     def start(self):

@@ -218,9 +218,9 @@
           id: item.id,
           allure_report: item.allure_report
         };
-        const {code, data, message} = await api.post(FrameReportUrl, params);
-        if (parseInt(code, 10) === 200) {
-          item.allure_report = data.allure_report;
+        const {allure_report} = await api.post(FrameReportUrl, params);
+        if (allure_report) {
+          item.allure_report = allure_report;
         } else {
           this.$Message.info({
             content: '暂时没有报告可查看，可以刷新页面看下任务是否正常结束。',
