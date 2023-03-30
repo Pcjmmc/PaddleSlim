@@ -18,9 +18,9 @@ import (
 )
 
 type Report struct {
-    Id  string `json:"id"`
-    Bos_url *string `json:"bos_url"`
-    Report_url *string `json:"allure_report"`
+    Id  string `json:"id" form:"id"`
+    Bos_url *string `json:"bos_url"  form:"bos_url"`
+    Report_url *string `json:"allure_report"  form:"allure_report"`
 }
 
 
@@ -52,7 +52,7 @@ func main() {
     r.POST("/reportgenerator", func(c *gin.Context) {
         // 绑定 JSON 数据到 User 结构体
         var report Report
-        if err := c.BindJSON(&report); err != nil {
+        if err := c.Bind(&report); err != nil {
             c.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
             return
         }
