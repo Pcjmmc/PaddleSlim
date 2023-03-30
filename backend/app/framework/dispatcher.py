@@ -147,8 +147,11 @@ class Dispatcher(object):
                         await Mission.aio_update({"status": "running", "description": res.get("pipelineBuildId"),
                                                   "info": info}, {"id":id})
                         break
-                    else:
+                    elif PLACE.get(k) == LOCAL:
                         await Mission.aio_update({"status": "running"}, {"id": id})
+                        break
+                    else:
+                        return STATUS.ERROR_233
                 else:
                     await Mission.aio_update({"status": "error", "description": res}, {"id": id})
                     retry += 1
