@@ -329,7 +329,7 @@ export default {
           {
             mission: this.serverMap[key],
             status: 'error',
-            result: '编译触发失败',
+            result: '任务异常',
             create_time: '--',
             bos_url: '--',
             allure_report: '--',
