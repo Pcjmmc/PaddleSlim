@@ -84,7 +84,7 @@
           <Table
             :columns="columns"
             :data="content"
-            v-on:on-select="addSelected"
+            v-on:on-selection-change="addSelected"
             v-on:on-row-click="openDrawer"
           ></Table>
           <Page
@@ -447,9 +447,7 @@ export default {
     },
     addSelected(selection, row) {
       // 管理选中的选项
-      console.log('select row is', row);
       this.tableSelect = selection;
-      console.log('select selection is', selection);
     },
     cancelJob() {
       // 取消选中的任务
