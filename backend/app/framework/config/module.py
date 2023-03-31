@@ -16,6 +16,7 @@ module_mapping = {
     "trt_infer":"TensorRT推理",
     "mkldnn_infer":"MKLDNN推理",
     "models_benchmark_v100_single_dp":"V100_单机性能测试",
+    "models_benchmark_v100_single_dp_test":"V100_单机性能测试 (Demo)",
     "models_benchmark_v100_multi_dp":"V100_多机性能测试",
     "models_benchmark_v100_dist_collective":"V100_分布式性能测试",
     "distribution_v100_accuracy_collective":"V100_分布式精度测试",
@@ -629,6 +630,20 @@ module_list = [
                         "id":"5-2-2",
                         "label":"多机性能测试",
                         "key":"models_benchmark_a100_multi_dp"
+                    }
+                ]
+            },
+            {
+                "pid":"5",
+                "id":"5-3",
+                "label":"V100_Demo",
+                "key":"V100",
+                "children":[
+                    {
+                        "pid":"5-3",
+                        "id":"5-3-1",
+                        "label":"单机性能测试（Demo）",
+                        "key":"models_benchmark_v100_single_dp_test"
                     }
                 ]
             }

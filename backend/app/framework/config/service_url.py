@@ -115,6 +115,7 @@ PLACE = {
     
     # model benchmark
     "models_benchmark_v100_single_dp": LOCAL,
+    "models_benchmark_v100_single_dp_test": LOCAL,
     "models_benchmark_v100_multi_dp": LOCAL,
     "models_benchmark_v100_dist_collective": LOCAL,
     "models_benchmark_a100_single_dp": LOCAL,
@@ -483,32 +484,35 @@ class Local(object):
 
     # Benchmark 知识库 https://ku.baidu-int.com/knowledge/HFVrC7hq1Q/t7n0qKWNJW/QMxJ7wiFu-/WPNAbgcfv0R4MK?source=1
     # V100 单机性能测试（分布式策略：DP，默认模型优先级：S_P0）
-    MODELS_BENCHMARK_V100_SINGLE_DP = "http://10.21.226.183:8980/auto_test/", \
+    MODELS_BENCHMARK_V100_SINGLE_DP = "http://10.138.35.185:8989/auto_test/", \
                                       {"device_type": "V100", "cards_type_list": "N1C1,N1C8", "run_mode_list": "DP",
                                        "model_priority_list": "S_P0", "test_name": "V100单机性能测试"}
+    MODELS_BENCHMARK_V100_SINGLE_DP_TEST = "http://10.138.35.185:8989/auto_test/", \
+        {"device_type": "V100", "cards_type_list": "N1C1,N1C8", "run_mode_list": "DP",
+         "model_priority_list": "S_P0", "test_name": "V100单机性能测试（Demo）", "test_demo": True}
     # V100 多机性能测试（分布式策略：DP，默认模型优先级：M_P0）
-    MODELS_BENCHMARK_V100_MULTI_DP = "http://10.21.226.183:8980/auto_test/", \
+    MODELS_BENCHMARK_V100_MULTI_DP = "http://10.138.35.185:8989/auto_test/", \
                                      {"device_type": "V100", "cards_type_list": "N1C1,N1C8,N4C32",
                                       "run_mode_list": "DP", "model_priority_list": "M_P0",
                                       "test_name": "V100多机性能测试"}
     # V100 分布式Collective模式（分布式策略：Collective）（只看性能的模型）
-    MODELS_BENCHMARK_V100_DIST_COLLECTIVE = "http://10.21.226.183:8980/auto_test/", \
+    MODELS_BENCHMARK_V100_DIST_COLLECTIVE = "http://10.138.35.185:8989/auto_test/", \
                                             {"device_type": "V100", "cards_type_list": "N1C1,N1C8,N4C32",
                                              "run_mode_list": "Collective", "model_priority_list": "M_P5",
                                              "test_name": "V100分布式Collective模式（分布式策略：Collective）性能测试"}
     # A100 单机性能测试（分布式策略：DP，默认模型优先级：S_P0）
-    MODELS_BENCHMARK_A100_SINGLE_DP = "http://10.21.226.183:8980/auto_test/", \
+    MODELS_BENCHMARK_A100_SINGLE_DP = "http://10.138.35.185:8989/auto_test/", \
                                       {"device_type": "A100", "cards_type_list": "N1C1,N1C8",
                                        "run_mode_list": "DP", "model_priority_list": "S_P0",
                                        "test_name": "A100单机性能测试"
                                        }
     # A100 多机性能测试（分布式策略：DP，默认模型优先级：M_P0）
-    MODELS_BENCHMARK_A100_MULTI_DP = "http://10.21.226.183:8980/auto_test/", \
+    MODELS_BENCHMARK_A100_MULTI_DP = "http://10.138.35.185:8989/auto_test/", \
                                      {"device_type": "A100", "cards_type_list": "N1C1,N1C8,N4C32",
                                       "run_mode_list": "DP", "model_priority_list": "M_P0",
                                       "test_name": "A100多机性能测试"}
     # 分布式精度测试 V100 分布式Collective模式（分布式策略：Collective）
-    DISTRIBUTION_V100_ACCURACY_COLLECTIVE = "http://10.21.226.183:8980/auto_test/", \
+    DISTRIBUTION_V100_ACCURACY_COLLECTIVE = "http://10.138.35.185:8989/auto_test/", \
                                             {"device_type": "V100", "cards_type_list": "N1C1,N1C8,N4C32",
                                              "run_mode_list": "Collective", "model_priority_list": "D_P0",
                                              "email_index": "ips,convergence", "test_name": "V100分布式Collective精度测试"}
@@ -615,6 +619,7 @@ class LocalMission(object):
     ROUTER = {
         # benchmark
         "models_benchmark_v100_single_dp": Local.MODELS_BENCHMARK_V100_SINGLE_DP,
+        "models_benchmark_v100_single_dp_test": Local.MODELS_BENCHMARK_V100_SINGLE_DP_TEST,
         "models_benchmark_v100_multi_dp": Local.MODELS_BENCHMARK_V100_MULTI_DP,
         "models_benchmark_v100_dist_collective": Local.MODELS_BENCHMARK_V100_DIST_COLLECTIVE,
         "models_benchmark_a100_single_dp": Local.MODELS_BENCHMARK_A100_SINGLE_DP,
