@@ -64,7 +64,7 @@ class MissionRerun(MABaseView):
                 else:
                     return STATUS.ERROR_233
             else:
-                await Mission.aio_update({"status": "error", "description": res}, {"id": mission_id})
+                await Mission.aio_update({"status": "error", "result": res}, {"id": mission_id})
                 retry += 1
         # 如果重试超时，定义主任务是异常状态
         if retry == 5:
