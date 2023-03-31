@@ -60,7 +60,7 @@ class MissionRerun(MABaseView):
                     return "重新执行成功"
                 elif PLACE.get(mission_name) == LOCAL:
                     await Mission.aio_update({"status": "running"}, {"id": mission_id})
-                    break
+                    return "重新执行成功"
                 else:
                     return STATUS.ERROR_233
             else:
