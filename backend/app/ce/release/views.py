@@ -5,6 +5,7 @@ import datetime
 import json
 import time
 
+from app.ce.release.cache import ReleaseSummaryCase
 from ce_web.settings.scenes import ORDER, scenes_dict, system_list
 from libs.mongo.db import Mongo
 from models.details import CeCases
@@ -16,9 +17,8 @@ from services.summary import Summary
 from services.tasks import TaskBuildInfo, TasksInfo
 from utils.change_time import stmp_by_date
 
-from views.base_view import MABaseView
 from views.auth_view import AuthCheck
-
+from views.base_view import MABaseView
 
 class ReleaseVersionManage(MABaseView):
     
@@ -35,48 +35,94 @@ class ReleaseVersionManage(MABaseView):
         """
         open_cache: 是否从缓存获取，默认False
         """
-        open_cache = False
-        need_backup = False
         version = kwargs.get("version")
         appid = kwargs.get("appid", 1)
+        latest = False
         if version == "release/undefined":
             obj = await CeReleaseVersion().aio_get_object(
                 **{"activated": True}
             )
             version = obj.name if obj else None
-        
+            latest = True
         release_info = {
             "repo_info": {},
             "process_data": {},
-            "summary": []}
-        percent = 0
-        total = 0
+            "summary": []
+        }
         if not version:
             return 0, release_info
-        begin_time = int(time.time())
+        # 如果命中缓存则直接从缓存获取
+        with await ReleaseSummaryCase.get_pools() as redis_conn:
+            # 判断key是否存在;则命中缓存
+            key_format = ReleaseSummaryCase.key_format.format(version=version)
+            finded = await redis_conn.exists(key_format)
+            if finded:
+                result = await ReleaseSummaryCase.get_value(version)
+            else:
+                # 如果没命中缓存则从db中查，并将结果存到缓存中，并设置超时时间todo
+                result = await self.get_summary_data_from_db(version=version, appid=appid)
+                # 如果是已经发完的版本：则1周过期；如果是release则8小时更新一次
+                expired = 28800 if latest else 604800
+                await ReleaseSummaryCase.set_value(version, json.dumps(result), expired=expired)
+
+            return 1, result
+
+    async def get_summary_data_from_db(self, version, appid=1):
+        """
+        从db中查询并且实时计算返回结果
+        """
+        open_cache = False
+        need_backup = False
+        percent = 0
+        total = 0
+        release_info = {
+            "repo_info": {},
+            "process_data": {},
+            "summary": []
+        }
+        job_tasks = []
         res = await CeReleaseVersion().aio_get_object(**{"name": version})
-        end_time = int(time.time()) - begin_time
-        print("seach mysql get version info 1111", end_time, flush=True)
         if res:
-            if res.activated:
-                # 如果是编译的不走缓存
+            if not res.activated:
+                # 如果是已发版的，则直接从库里拿到封版的commit
+                latest_commit = res.end_commit
+                latest_commit_time = res.end_time
+                need_backup = True
+            else:
+                # relase 分支是有缓存的，但是编译接口没有支持写缓存，所以编译部分的任务不走缓存
                 open_cache = True
-                begin_time = int(time.time())
-                branch_info = await GetBranches().get_commit_info_by_branch(
-                    **{'branch': version}
+                job_tasks.append(
+                    GetBranches().get_commit_info_by_branch(
+                    **{'branch': version})
                 )
-                end_time = int(time.time()) - begin_time
-                print("seach git hub commit info 2222", end_time, flush=True)
+            all_release_task = await TasksInfo.get_all_task_info_by_filter(
+                step="release", appid=appid, backup=need_backup, version=version
+            )
+            total = len(all_release_task)
+            # 查询到来全量任务
+            tids = [item.get("id") for item in all_release_task]
+            # 获取任务的最新状态
+            # 如果是release的则走缓存,
+            print("是否开启缓存", open_cache, flush=True)
+            job_tasks.append(
+                TaskBuildInfo.get_task_latest_status_by_tids(
+                    tids, res.branch, 
+                    res.get("begin_time"), end_time=res.get("end_time"),
+                    open_cache=open_cache
+                )
+            )
+            all_results = await asyncio.gather(*job_tasks)
+            if len(all_results) == 2:
+                branch_info = all_results[0]
+                build_info = all_results[1]
                 latest_commit = branch_info.get("commit")
                 latest_commit_time = branch_info.get("time")
                 if latest_commit_time:
                     latest_commit_time = stmp_by_date(latest_commit_time, fmt="%Y-%m-%dT%H:%M:%SZ")
                     latest_commit_time = latest_commit_time + 28800
             else:
-                # 如果是已发版的，则直接从库里拿到封版的commit
-                latest_commit = res.end_commit
-                latest_commit_time = res.end_time
-                need_backup = True
+                build_info = all_results[0]
+
             release_info["repo_info"] = {
                 "name": res.name,
                 "version_id": res.id,
@@ -85,34 +131,6 @@ class ReleaseVersionManage(MABaseView):
                 "latest_commit_time": latest_commit_time,
                 "tag": res.tag
             }
-            version_id = res.get("id")
-            # 根据release 的细腻来查询,改接口是负责release的，故step=release
-            begin_time = int(time.time())
-            all_release_task = await TasksInfo.get_all_task_info_by_filter(
-                step="release", appid=appid, backup=need_backup, version=version
-            )
-            end_time = int(time.time()) - begin_time
-            print("get all release task 3333", end_time, flush=True)
-            total = len(all_release_task)
-            # 查询到来全量任务
-            tids = [item.get("id") for item in all_release_task]
-            # 获取任务的最新状态
-            begin_time = int(time.time())
-            # 如果是release的则走缓存,
-            print("是否开启缓存", open_cache, flush=True)
-            build_info = await TaskBuildInfo.get_task_latest_status_by_tids(
-                tids, res.get("branch"), 
-                res.get("begin_time"), end_time=res.get("end_time", None),
-                open_cache=open_cache
-            )
-            end_time = int(time.time()) - begin_time
-            print("get all release task build info 4444", end_time, flush=True)
-            # 获取豁免状态
-            begin_time = int(time.time())
-            exempt_info = {}
-            end_time = int(time.time()) - begin_time
-            print("get all release task exempt info build info 5555", end_time, flush=True)
-            begin_time = int(time.time())
             temp_data = [{
                 "tid": item["id"], 
                 "tname": item["tname"], 
@@ -129,9 +147,7 @@ class ReleaseVersionManage(MABaseView):
                     item["status"] = "undone"
                     item["total_case"] = 0
                     item["failed_case"] = 0
-                exempt_status = exempt_info.get(tid, {}).get("status", False)
-                item["exempt_status"] = True if exempt_status else False
-                if item["exempt_status"] or item["status"] == "Passed":
+                if item["status"] == "Passed":
                     # 如果成功或者豁免就记录进入进度
                     percent += 1
             # 封装process_data
@@ -141,10 +157,7 @@ class ReleaseVersionManage(MABaseView):
             )
             summary = Summary.get_summary(temp_data)
             release_info["summary"] = summary
-            end_time = int(time.time()) - begin_time
-            print("generate data 6666", end_time, flush=True)
-        return 0, release_info
-
+        return release_info
 
     async def post(self, **kwargs):
         """

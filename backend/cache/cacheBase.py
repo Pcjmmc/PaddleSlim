@@ -9,7 +9,7 @@ class CacheBase(object):
     """
     约定缓存的host、类型、keyname等信息
     """
-    host = ""
+    host = "paddle_quality"
     data_type = "string"
     key_format = ""
 

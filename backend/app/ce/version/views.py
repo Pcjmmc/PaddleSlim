@@ -6,12 +6,13 @@ import asyncio
 import time
 
 from exception import HTTP400Error
+from models.framework import ReleaseDailyContent, ReleaseDailySettings
 from models.release_version import CeReleaseVersion
 from models.tasks import CeTasks
-from models.framework import ReleaseDailySettings, ReleaseDailyContent
 from rpc.github import GetCommit
 from services.auto_create_table import create_task_backup
 from services.menu import update_menu
+from services.redis_delete import clear_redis_keys
 from utils.change_time import stmp_by_date
 
 from views.auth_view import AuthCheck
@@ -114,6 +115,8 @@ class CreateRVersion(MABaseView):
             }
             # 打完tag备份下当前的任务记录
             await self.backup_task(kwargs.get("tag"))
+            # 清理下release的缓存数据
+            await clear_redis_keys()
         else:
             validated_data = {
                 "begin_commit": commit,
@@ -154,6 +157,8 @@ class CreateRVersion(MABaseView):
         """
         await CeReleaseVersion.aio_delete(params_data=kwargs)
         await update_menu()
+        # 清理下缓存 todo
+        await clear_redis_keys()
 
     async def backup_task(self, version):
         """
