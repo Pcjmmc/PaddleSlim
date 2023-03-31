@@ -11,7 +11,7 @@ import traceback
 from logging import config
 
 import yaml
-from ce_web.settings.common import LOG_PATH
+from ce_web.settings.common import DEBUG, LOG_PATH
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 YAML_CFG_PATH = os.path.join(BASE_DIR, 'logging.yaml')
@@ -26,7 +26,7 @@ class InitLogger(object):
         # 对self.load值做替换
         today = datetime.datetime.now()
         today = datetime.datetime.strftime(today, "%Y_%m_%d_%H_%M")
-        log_pat = LOG_PATH.format(time=today) if os.environ.get('DEPLOYMENT_TYPE') else LOG_PATH
+        log_pat = LOG_PATH if DEBUG else LOG_PATH.format(time=today)
         var_name = 'LOG_PATH'
         content = json.dumps(self.loader)
         content = content.replace("${{{0}}}".format(var_name), str(log_pat))

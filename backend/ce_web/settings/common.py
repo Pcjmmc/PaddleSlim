@@ -42,8 +42,8 @@ class DeploymentType(object):
 
 if 'DEPLOYMENT_TYPE' in os.environ and os.environ['DEPLOYMENT_TYPE'].upper() == 'GRAY':
     DEPLOYMENT = DeploymentType.PRODUCTION
-    LOG_PATH = '/home/work/afs/gray_backend_access_{time}.log'
-    DEBUG = True
+    LOG_PATH = '/home/app/logs/gray_backend_access_{time}.log'
+    DEBUG = False
     PTOKEN = 'UUAP_P_TOKEN_OFFLINE'
     EAC_HOST = 'https://itebeta.baidu.com'
     APP_KEY = 'uuapclient-843568519680147457-VJKy5-beta'
@@ -52,7 +52,7 @@ if 'DEPLOYMENT_TYPE' in os.environ and os.environ['DEPLOYMENT_TYPE'].upper() == 
     DEFAULT_URL = 'http://paddleboard.baidu-int.com:8081'
 elif 'DEPLOYMENT_TYPE' in os.environ:
     DEPLOYMENT = os.environ['DEPLOYMENT_TYPE'].upper()
-    LOG_PATH = '/home/work/afs/prod_backend_access_{time}.log'
+    LOG_PATH = '/home/app/logs/prod_backend_access_{time}.log'
     DEBUG = False
     PTOKEN = 'UUAP_P_TOKEN'
     EAC_HOST = 'https://uuap.baidu.com'

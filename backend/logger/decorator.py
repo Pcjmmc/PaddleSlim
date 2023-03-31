@@ -3,13 +3,16 @@
 """
 定义case执行的装饰器
 """
-import time
 import asyncio
 import copy
 import json
 import logging
 import os
+import time
 from functools import wraps
+
+from ce_web.settings.common import DEBUG
+from models.access_records import AccessRecords
 
 logger = logging.getLogger("ce")
 
@@ -38,6 +41,9 @@ def BaseLoggerInfo(func):
             "response_time": end_time - begin_time
         }
         logger.info(logger_data)
+        # 本地调试就不写数据库了加个判断
+        if not DEBUG:
+            await AccessRecords.aio_insert(validated_data=logger_data)
     return inner
 
 
