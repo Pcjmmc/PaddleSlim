@@ -1,8 +1,8 @@
+# !/usr/bin/env python3
+# -*- coding:utf8 -*-
 """
 负责打Tag或者删除分支时进行redis key的清理
 """
-# !/usr/bin/env python3
-# -*- coding:utf8 -*-
 import asyncio
 import os
 import sys
@@ -16,6 +16,9 @@ from cache.cacheBase import CacheBase
 
 
 async def clear_redis_keys(prefix="release*"):
+    """
+    根据prefix清理下缓存数据
+    """
     # 只清理release开头的就行；已经发版的不会再变化
     with await CacheBase.get_pools() as redis_conn:
         pipe = redis_conn.pipeline()
