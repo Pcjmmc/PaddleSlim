@@ -17,6 +17,8 @@ import requests
 import requests
 import app.framework.config.status as STATUS
 from app.framework.utils.xly import get_xly_mission_url
+from app.framework.config.service_url import Local, LocalMission, Cloud, CloudMission, PLACE, CLOUD, LOCAL, DOCKER_IMAGE, DOCKER_INFER_IMAGE
+
 
 
 class MissionRerun(MABaseView):
@@ -47,16 +49,26 @@ class MissionRerun(MABaseView):
         while (retry < retry_time):
             res = Dispatcher.request_mission(mission_name, mission_id, env, wheel)
             if isinstance(res, dict):
-                # 初始化任务
-                info = get_xly_mission_url(res.get("pipelineBuildId"))
-                print(info)
-                await Mission.aio_update({"status": "running", "description": res.get("pipelineBuildId"),
-                                          "info": info, "result": "", "allure_report":"", "bos_url": ""}, {"id": mission_id})
-                await Job.aio_update({"status": "running"}, {"id": jid})
-                return "重新执行成功"
+                # 初始化任务 获取效率云链接
+                if PLACE.get(mission_name) == CLOUD:
+                    info = get_xly_mission_url(res.get("pipelineBuildId"))
+                    print(info)
+                    await Mission.aio_update({"status": "running", "description": res.get("pipelineBuildId"),
+                                              "info": info, "result": "", "allure_report":"", "bos_url": ""},
+                                             {"id":mission_id})
+                    await Job.aio_update({"status": "running"}, {"id": jid})
+                    return "重新执行成功"
+                elif PLACE.get(mission_name) == LOCAL:
+                    await Mission.aio_update({"status": "running"}, {"id": mission_id})
+                    return "重新执行成功"
+                else:
+                    return STATUS.ERROR_233
             else:
-                await Mission.aio_update({"status": "error", "description": res}, {"id": mission_id})
+                await Mission.aio_update({"status": "error", "result": res}, {"id": mission_id})
                 retry += 1
+        # 如果重试超时，定义主任务是异常状态
+        if retry == 5:
+            await Job.aio_update({"status": "error"}, {"id": jid})
         return "重新执行失败"
 
 
