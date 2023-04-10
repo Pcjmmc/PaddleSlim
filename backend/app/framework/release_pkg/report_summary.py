@@ -104,7 +104,7 @@ class ReportSummary(MABaseView):
                 else:
                     data["延期"] += 1
         data["总量"] = data["未解决"] + data["已解决"] + data["延期"]
-        data["修复率"] = format(100, '.2%') if data["总量"] == 0 else format(data["已解决"] / data["总量"], '.2%')
+        data["修复率"] = format(1, '.2%') if data["总量"] == 0 else format(data["已解决"] / data["总量"], '.2%')
         return data
 
     def regression(self, module, content):
