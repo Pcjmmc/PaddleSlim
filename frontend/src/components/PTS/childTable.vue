@@ -175,7 +175,7 @@
           case 'failed':
             return 'error';
           default:
-            return 'error';
+            return 'gray';
         }
       },
       getStatus(status) {

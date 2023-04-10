@@ -470,7 +470,6 @@ export default {
         this.os.push('Mac');
         this.python = data.compile_python;
         this.testType = data.compile_type;
-        this.testType.unshift('wheel');
       } else {
         this.branch = [];
         this.cuda = [];

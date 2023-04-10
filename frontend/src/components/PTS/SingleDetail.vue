@@ -328,8 +328,8 @@ export default {
         this.selectedItems.push(
           {
             mission: this.serverMap[key],
-            status: 'error',
-            result: '任务异常',
+            status: '--',
+            result: '--',
             create_time: '--',
             bos_url: '--',
             allure_report: '--',
