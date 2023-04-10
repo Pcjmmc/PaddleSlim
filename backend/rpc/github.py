@@ -67,7 +67,7 @@ class GetBranches(BaseRpc):
         self.process_api(**kwargs)
         result = await self.get_data()
         commit = result.get("commit") if result else {}
-        commit_id = commit.get("sha")
+        commit_id = commit.get("sha") if commit else ''
         commit = commit.get("commit") if commit else {}
         date = commit.get("committer", {}).get("date")
         return {"commit": commit_id , "time": date}
