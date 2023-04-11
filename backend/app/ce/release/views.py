@@ -239,6 +239,8 @@ class TaskManage(MABaseView):
             open_cache = True if task_type != "compile" else False
         else:
             res = await CeReleaseVersion().aio_get_object(**{"name": version})
+            if not res:
+                return 0, {}
             version_id = res.get("id")
             branch = res.get("branch")
             begin_time = res.get("begin_time")

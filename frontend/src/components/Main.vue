@@ -292,11 +292,19 @@ export default {
       this.$store.commit('changeUserName', this.username);
       this.$store.commit('changeAvater', this.avater);
     },
+    checkVersion(temp) {
+      for (let i = 0; i < this.verisonList.length; i++) {
+        if (this.verisonList[i].desc === temp) {
+          return temp;
+        }
+      }
+      return this.verisonList[1].desc;
+    },
     async getMenu() {
       // 根据appid实时获取menu菜单; 各自定义各自的菜单
       let params = {
-        appid: Cookies.get("appid"),
-        appname: Cookies.get("appname")
+        appid: Cookies.get('appid'),
+        appname: Cookies.get('appname')
       };
       const { code, data, message } = await api.get(MenuInfoUrl, params);
       if (parseInt(code, 10) === 200) {
@@ -304,12 +312,15 @@ export default {
         // 暂时定义menu
         this.verisonList = this.menuDesc.version;
         if (this.$route.params && this.$route.params.version) {
-          this.option = this.$route.params.version.replace('-', "/");
+          let temp = this.$route.params.version.replace('-', '/');
+          // 如果分支在menuDesc中则，选择，否则默认第一个
+          this.option = this.checkVersion(temp);
           Cookies.set('version', this.option);
           Cookies.set('ver', this.option);
           this.$store.commit('changeVersion', this.option);
         } else if (this.$store.state.version) {
-          this.option = this.$store.state.version;
+          let temp = this.$store.state.version;
+          this.option = this.checkVersion(temp);
           Cookies.set('version', this.option);
           Cookies.set('ver', this.option);
         } else {
