@@ -86,6 +86,10 @@ class ReportAdd(MABaseView):
                 for icafe in icafes:
                     icafe["ref"] = i
                     content["icafe"].append(icafe)
+        for k,v in regression.items():
+            if v is None:
+                regression[k] = 0
+
         # print(content)
         return str(json.dumps(content))
 
