@@ -135,24 +135,6 @@
                 <menu-nav :data="menuDesc" father-link="/paddle"></menu-nav>
               </div>
             </div>
-            <!--
-            <MenuItem name="1-2">
-              <el-dropdown v-if="appid==1">
-                <el-button>
-                  {{ option }}
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item
-                    :key="index"
-                    @click.native="handleClickTag(item)"
-                    v-for="(item, index) in verisonList"
-                  >
-                    {{ item.desc }}
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </MenuItem>
-            -->
           </Menu>
         </Sider>
         <Layout class="main-layout-content">
@@ -164,6 +146,20 @@
                 background: '#fff',
                 overflow: 'hidden'}"
             >
+                <el-drawer
+                  size="20%"
+                  :visible="openStatus"
+                  :close-on-press-escape="true"
+                  style="position: absolute;"
+                  direction="ltr"
+                  :before-close="handleClose"
+                >
+                  <menu-drawer
+                    :data="childMenu"
+                    :father-link="fatherLink"
+                    :openeds="getDefault()"
+                  ></menu-drawer>
+                </el-drawer>
               <!--渲染视图-->
               <router-view ref="" class="view"></router-view>
             </Content>
@@ -179,6 +175,7 @@ import { MenuInfoUrl, LogoutUrl } from '../api/url.js';
 import api from "../api/index";
 import MenuNav from './CommonUtil/MenuNav.vue';
 import MenuFold from './CommonUtil/MenuFold.vue';
+import MenuDrawer from './CommonUtil/MenuDrawer.vue';
 import Left from './BaseIcon/Left.vue';
 import Right from './BaseIcon/Right.vue';
 
@@ -231,17 +228,58 @@ export default {
       get() {
         return this.$store.state.version;
       }
+    },
+    openStatus: {
+      get() {
+        return this.$store.state.openstatus;
+      },
+      set() {
+      }
+    },
+    childMenu: {
+      get() {
+        let uri = this.$store.state.childmenu;
+        let arr = uri.split('/');
+        let res = [];
+        for (let idx in arr) {
+          if (arr[idx] !== '' && arr[idx] !== 'paddle') {
+            res.push(arr[idx]);
+          }
+        }
+        let childMenu = {};
+        for (let i in res) {
+          if (JSON.stringify(childMenu) === '{}') {
+            childMenu = this.menuDesc[res[i]].sub;
+          } else {
+            childMenu = childMenu[res[i]].sub;
+          }
+        }
+        return childMenu;
+      },
+      set() {
+      }
+    },
+    fatherLink: {
+      get() {
+        return this.$store.state.childmenu;
+      },
+      set() {
+      }
     }
   },
   components: {
     MenuNav,
     MenuFold,
     Left,
-    Right
+    Right,
+    MenuDrawer
   },
   watch: {
     versionName: function () {
       this.option = this.versionName;
+    },
+    fatherLink: function() {
+      return this.$store.state.childmenu;
     }
   },
   mounted: async function () {
@@ -259,6 +297,17 @@ export default {
     await this.getMenu();
   },
   methods: {
+    getDefault() {
+      let opends = [];
+      for (let key in this.childMenu) {
+        opends.push(key);
+      }
+      return opends;
+    },
+    handleClose() {
+      this.$store.commit('changeOpenStatus', false);
+      this.$store.commit('changeChildMenu', '');
+    },
     handleClickTag (item) {
       this.option = item.desc;
       this.$store.commit('changeVersion', this.option);
@@ -342,6 +391,15 @@ export default {
 }
 </script>
 <style scoped>
+  .el-drawer__body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    overflow: auto;
+    color: #fff;
+    border-left: darkgray;
+    border-left-width: 2px;
+  }
   .item-css-new {
     font-size: 14px;
     color: #303133;

@@ -8,8 +8,8 @@
                         v-model="search.framework"
                     >
                         <Checkbox
-                            v-for="item in framework"
-                            :key="item"
+                            v-for="(item, index) in framework"
+                            :key="index"
                             :label="item.desc"
                         >
                         </Checkbox>
@@ -23,8 +23,8 @@
                 <Col>
                     <CheckboxGroup v-model="search.python">
                         <Checkbox
-                            v-for="item in python"
-                            :key="item"
+                            v-for="(item, index) in python"
+                            :key="index"
                             :label="item"
                         >
                         </Checkbox>
@@ -38,8 +38,8 @@
                 <Col>
                     <CheckboxGroup v-model="search.system">
                         <Checkbox
-                            v-for="item in system"
-                            :key="item"
+                            v-for="(item, index) in system"
+                            :key="index"
                             :label="item"
                         >
                         </Checkbox>
@@ -53,8 +53,8 @@
                 <Col>
                     <CheckboxGroup v-model="search.place">
                         <Checkbox
-                            v-for="item in place"
-                            :key="item"
+                            v-for="(item, index) in place"
+                            :key="index"
                             :label="item"
                         >
                         </Checkbox>
@@ -68,8 +68,8 @@
                 <Col>
                     <CheckboxGroup v-model="search.cuda">
                         <Checkbox
-                            v-for="item in cuda"
-                            :key="item"
+                            v-for="(item, index) in cuda"
+                            :key="index"
                             :label="item"
                         >
                         </Checkbox>
@@ -83,8 +83,8 @@
                 <Col>
                     <CheckboxGroup v-model="search.version">
                         <Checkbox
-                            v-for="item in version"
-                            :key="item"
+                            v-for="(item, index) in version"
+                            :key="index"
                             :label="item"
                         >
                         </Checkbox>

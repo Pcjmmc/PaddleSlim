@@ -2,10 +2,27 @@
   <div style="display: inline">
     <template v-for="(value, key, index) in data">
       <template v-if="!value.notMenu">
-        <template v-if="value.sub && value.sub.length !== 0">
+        <template v-if="value.sub && value.sub.length !== 0 && value.multiLayer">
+            <menuItem :name="computeName(index)">
+              <span @click="openNewPage(key)">
+                <el-tooltip
+                  effect="dark"
+                  placement="top"
+                  :content="value.desc"
+                >
+                  <Icon
+                    size="18"
+                    v-if="value.icon"
+                    :type="value.icon"
+                  ></Icon>
+                </el-tooltip>
+              </span>
+            </menuItem>
+          </template>
+        <template v-else-if="value.sub && value.sub.length !== 0">
             <Submenu
-                :key="index"
-                :name="computeName(key)"
+              :key="index"
+              :name="computeName(key)"
             >
                 <template slot="title">
                   <el-tooltip
@@ -73,6 +90,8 @@ export default {
       default: ''
     }
   },
+  components: {
+  },
   methods: {
     computeName: function (index) {
       if (this.fatherName) {
@@ -93,6 +112,12 @@ export default {
       } else {
         return `/${key}`;
       }
+    },
+    openNewPage(value) {
+      // 指定选择展开的数据
+      let uri = this.computeLink(value);
+      this.$store.commit('changeChildMenu', uri);
+      this.$store.commit('changeOpenStatus', true);
     }
   }
 };

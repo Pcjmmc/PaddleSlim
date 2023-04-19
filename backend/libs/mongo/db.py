@@ -151,7 +151,39 @@ if __name__ == "__main__":
             "sub": {
                 "apiBenchmark": {
                     "icon": 'md-stats',
-                    "desc": 'Api Benchmark'
+                    "desc": 'Api'
+                },
+                "modelBenchmark": {
+                    "icon": 'md-pie',
+                    "desc": '训练',
+                    "multiLayer": True,
+                    "sub": {
+                        "homepage": {
+                            "desc": '首页'
+                        },
+                        "data-manage": {
+                            "desc": '数据管理',
+                            "sub": {
+                                "compare": {
+                                    "desc": "数据对比",
+                                    "sub": {
+                                        "competing": {
+                                            "desc": '与竞品比'
+                                        }, 
+                                        "paddle": {
+                                            "desc": '与Paddle比'
+                                        }, 
+                                    }
+                                },
+                                "history": {
+                                   "desc": '历史数据' 
+                                },
+                                "analysis": {
+                                    "desc": '数据分析'
+                                }
+                            }
+                        },
+                    }
                 }
             }
         },

@@ -30,6 +30,10 @@ function checkStatus(response) {
   if (response && (response.status === 200 || response.status === 304)) {
     LoadingBar.finish();
     return response.data;
+  } else if (response && (response.status === 301)) {
+    // 请求重定向到请求todo
+    console.log('发生了重定向');
+    console.log(response.headers.Location);
   } else {
     LoadingBar.error();
     return {

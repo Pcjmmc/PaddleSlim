@@ -11,7 +11,9 @@ const store = new Vuex.Store({
     'appid': Cookies.get('appid', 1),
     'appname': Cookies.get('appname', '飞桨核心框架'),
     'username': Cookies.get('username'),
-    'avater': Cookies.get('avater')
+    'avater': Cookies.get('avater'),
+    'openstatus': false,
+    'childmenu': ''
   },
   mutations: {
     changeVersion(state, version) {
@@ -32,6 +34,12 @@ const store = new Vuex.Store({
     removeCurrentApp(state) {
       state.appname = '';
       state.appid = '';
+    },
+    changeOpenStatus(state, status) {
+      state.openstatus = status;
+    },
+    changeChildMenu(state, data) {
+      state.childmenu = data;
     }
   }
 })

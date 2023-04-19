@@ -2,25 +2,42 @@
     <div style="display: inline;">
         <template v-for="(value, key, index) in data">
             <template v-if="!value.notMenu">
-                <template v-if="value.sub && value.sub.length !== 0">
-                    <Submenu
-                        :key="index"
-                        :name="computeName(key)"
-                    >
-                        <template slot="title">
-                          <Icon
-                            size="18"
-                            :type="value.icon"
-                            v-if="value.icon"
-                          ></Icon>
-                          {{ value.desc }}
-                        </template>
-                        <menu-nav
-                            :data="value.sub"
-                            :father-name="computeName(index)"
-                            :father-link="computeLink(key)"
-                        ></menu-nav>
-                    </Submenu>
+                <template v-if="value.sub && value.sub.length !== 0 && value.multiLayer">
+                  <menuItem :name="computeName(index)">
+                    <span @click="openNewPage(key)">
+                      <Icon
+                        size="18"
+                        v-if="value.icon"
+                        :type="value.icon"
+                      ></Icon>
+                      {{ value.desc }}
+                      <Icon
+                        size="18"
+                        type="md-arrow-dropright"
+                        slot="reference"
+                      />
+                    </span>
+                  </menuItem>
+                </template>
+                <template v-else-if="value.sub && value.sub.length !== 0">
+                  <Submenu
+                    :key="index"
+                    :name="computeName(key)"
+                  >
+                      <template slot="title">
+                        <Icon
+                          size="18"
+                          :type="value.icon"
+                          v-if="value.icon"
+                        ></Icon>
+                        {{ value.desc }}
+                      </template>
+                      <menu-nav
+                          :data="value.sub"
+                          :father-name="computeName(index)"
+                          :father-link="computeLink(key)"
+                      ></menu-nav>
+                  </Submenu>
                 </template>
                 <router-link
                     v-else
@@ -58,6 +75,12 @@ export default {
       default: ''
     }
   },
+  data: function() {
+    return {
+    }
+  },
+  components: {
+  },
   methods: {
     computeName: function (index) {
       if (this.fatherName) {
@@ -78,6 +101,11 @@ export default {
       } else {
         return `/${key}`;
       }
+    },
+    openNewPage(value) {
+      let uri = this.computeLink(value);
+      this.$store.commit('changeChildMenu', uri);
+      this.$store.commit('changeOpenStatus', true);
     }
   }
 };
