@@ -37,7 +37,6 @@ class ReleaseVersionManage(MABaseView):
         """
         version = kwargs.get("version")
         appid = kwargs.get("appid", 1)
-        latest = False
         if version == "release/undefined":
             obj = await CeReleaseVersion().aio_get_object(
                 **{"activated": True}
@@ -51,6 +50,7 @@ class ReleaseVersionManage(MABaseView):
         }
         if not version:
             return 0, release_info
+        latest = True if version.startswith('release') else False
         # 如果命中缓存则直接从缓存获取
         with await ReleaseSummaryCase.get_pools() as redis_conn:
             # 判断key是否存在;则命中缓存
