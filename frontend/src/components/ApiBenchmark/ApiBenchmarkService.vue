@@ -32,6 +32,7 @@ data: function () {
 watch: {
 },
 mounted: function () {
+  this.setTabName();
 },
 components: {
     HomePage,
@@ -41,6 +42,10 @@ components: {
 computed: {},
 methods: {
     clickTab(tag, event) {
+      sessionStorage.setItem('current_tab', tag.name);
+    },
+    setTabName() {
+      this.tabName = sessionStorage.getItem('current_tab');
     }
   }
 };

@@ -141,11 +141,13 @@
         <div style="margin-top: 1%">
             <div class="left" style="margin-top: 2%">
               <Table
-              border
-              :columns="columns"
-              :data="content"
-              v-on:on-select="selectTable"
-              v-on:on-select-cancel="selectCancel"
+                ref="tableSelection"
+                border
+                :columns="columns"
+                :data="content"
+                v-on:on-select="selectTable"
+                v-on:on-select-cancel="selectCancel"
+                v-on:on-select-all="handeleSelectAll(false)"
               >
             </Table>
               <Page
@@ -299,34 +301,41 @@ export default {
                 }
                 },
                 {
-                title: 'Wheel包',
-                key: 'version',
-                align: 'center',
-                minWidth: 100,
-                render: (h, params) => {
-                    if (params.row.wheel_link !== null) {
-                    return h('div', [
-                            h('Button', {
-                            props: {
-                                to: params.row.wheel_link,
-                                target: '_blank',
-                                icon: 'ios-download-outline'
-                            }
-                            })
-                        ]);
-                    } else {
-                    return h('div', [
-                            h('p', {
-                            }, params.row)
-                        ]);
-                    }
-                }
+                    title: '创建时间',
+                    key: 'create_time',
+                    align: 'center',
+                    minWidth: 120
                 },
                 {
-                title: '创建时间',
-                key: 'create_time',
-                align: 'center',
-                minWidth: 120
+                    title: '操作',
+                    key: 'version',
+                    align: 'center',
+                    minWidth: 50,
+                    fixed: 'right',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Tooltip',
+                                {
+                                    props: {
+                                        placement: 'top',
+                                        transfer: true,
+                                        content: '点击下载Wheel包'
+                                    }
+                                },
+                                [
+                                    h('Button',
+                                        {
+                                            props: {
+                                               to: params.row.wheel_link,
+                                               target: '_blank',
+                                               icon: 'md-download'
+                                            }
+                                        }
+                                    )
+                                ]
+                            )
+                        ]);
+                    }
                 }
             ],
             total: 0,
@@ -426,8 +435,8 @@ export default {
             });
         } else {
             let _params = {
-            id: this.selection[0].id,
-            id1: this.selection[1].id
+            id: this.selection[0],
+            id1: this.selection[1]
             };
             const { href } = this.$router.resolve({name: 'ApiBenchmarkBaseReport', params: _params});
             window.open(href, '_blank');
@@ -485,18 +494,23 @@ export default {
         }
         },
         addSpecialProp() {
-        for (let i in this.content) {
-            let row = this.content[i];
-            if (row.status === 'done') {
-            this.content[i]._disabled = false;
-            } else {
-            this.content[i]._disabled = true;
+            for (let i in this.content.length) {
+                let row = this.content[i];
+                if (row.status === 'done') {
+                this.content[i]._disabled = false;
+                } else {
+                this.content[i]._disabled = true;
+                }
+                if (this.selection.includes(row.id)) {
+                this.content[i]._checked = true;
+                } else {
+                this.content[i]._checked = false;
+                }
             }
-        }
         },
-        selectTable(selection) {
-        this.selection = selection;
-        if (selection.length > 2) {
+        selectTable(selection, row) {
+        this.selection.push(row.id);
+        if (this.selection.length > 2) {
             this.$Message.error({
             content: '只能选择两个版本进行对比',
             duration: 1,
@@ -504,8 +518,17 @@ export default {
             });
         }
         },
-        selectCancel(selection) {
-            this.selection = selection;
+        selectCancel(selection, row) {
+        for (let i = 0; i < this.selection.length; i++) {
+            let item = this.selection[i];
+            if (item === row.id) {
+            this.selection.splice(i, 1);
+            break;
+            }
+        }
+        },
+        handeleSelectAll(status) {
+        this.$refs.tableSelection.selectAll(status);
         }
     }
 };

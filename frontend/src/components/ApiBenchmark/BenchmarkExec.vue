@@ -28,30 +28,6 @@
       </FormItem>
       <FormItem>
         <Row
-        type="flex"
-        align="middle"
-        :gutter="8"
-      >
-          <Col span="6">
-            <label>
-              对比基线:
-            </label>
-          </Col>
-          <Col>
-            <Select v-model="submitData.baseline_type" style="width:200px">
-              <Option
-                v-for="item in baseline_type"
-                :key="item.id"
-                :value="item.id"
-              >
-                {{ item.desc }}
-              </Option>
-            </Select>
-          </Col>
-        </Row>
-      </FormItem>
-      <FormItem>
-        <Row
           type="flex"
           align="middle"
           :gutter="8"
