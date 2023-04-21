@@ -46,6 +46,9 @@ methods: {
     },
     setTabName() {
       this.tabName = sessionStorage.getItem('current_tab');
+      if (this.tabName === null || this.tabName.length === 0) {
+        this.tabName = 'home';
+      }
     }
   }
 };

@@ -310,7 +310,7 @@ export default {
                     title: '操作',
                     key: 'version',
                     align: 'center',
-                    minWidth: 50,
+                    minWidth: 100,
                     fixed: 'right',
                     render: (h, params) => {
                         return h('div', [
