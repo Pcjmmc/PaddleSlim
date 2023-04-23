@@ -1,6 +1,11 @@
 <template>
   <div>
-    <Menu ref="myMenu" style="height:100%;" :open-names="openeds">
+    <Menu
+      ref="myMenu"
+      style="height:100%;"
+      :open-names="openeds"
+      v-on:on-select="closeChildMenu"
+      >
       <span v-for="(value, key, index) in data">
         <template v-if="value.sub && value.sub.length !== 0">
           <Submenu :index="key" :name="key">
@@ -70,6 +75,10 @@ export default {
   components: {
   },
   methods: {
+    closeChildMenu() {
+      this.$store.commit('changeOpenStatus', false);
+      this.$store.commit('changeChildMenu', '');
+    },
     computeName: function (index) {
       if (this.fatherName) {
         return `${this.fatherName}-${index + 1}`;
