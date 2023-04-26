@@ -42,7 +42,7 @@ import Cookies from 'js-cookie';
 import api from '../api/index';
 import { ReleaseVersionUrl, DevelopVersionUrl } from '../api/url.js';
 import BaseInfo from './BaseInfo.vue';
-import { dateFmt } from '../util/help.js';
+import { CheckVersion } from '../util/help.js';
 import Intergration from './Intergration.vue';
 import Regression from './Regression.vue';
 
@@ -94,7 +94,8 @@ export default {
     },
     $route() {
       if (this.$route.params.version) {
-        let _version = this.$route.params.version.replace('-', '/');
+        let rs = CheckVersion(this.$route.params.version);
+        let _version = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
         Cookies.set('version', _version);
         Cookies.set('ver', _version);
         this.$store.commit('changeVersion', _version);
@@ -115,7 +116,9 @@ export default {
   },
   methods: {
     SyncSelected() {
-      let _version = this.$route.params.version ? this.$route.params.version.replace('-', '/') : this.$store.state.version;
+      let rs = CheckVersion(this.$route.params.version);
+      let tmpVer = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
+      let _version = this.$route.params.version ? tmpVer : this.$store.state.version;
       let data = {
         name: 'ContentVersion',
         params: {

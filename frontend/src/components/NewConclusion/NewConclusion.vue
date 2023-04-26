@@ -80,7 +80,7 @@
 
 import BaseResult from './BaseResult.vue';
 import api from '../../api/index';
-import { dateFmt } from '../../util/help.js';
+import { dateFmt, CheckVersion } from '../../util/help.js';
 import { SearchNewConclusionUrl } from '../../api/url.js';
 
 export default {
@@ -151,7 +151,9 @@ export default {
     versionName: {
       get() {
         if (this.$store.state.version || this.$route.params.version) {
-          return this.$store.state.version ? this.$store.state.version : this.$route.params.version.replace('-', '/');
+          let rs = CheckVersion(this.$route.params.version);
+          let tmpVer = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
+          return this.$store.state.version ? this.$store.state.version : tmpVer;
         }
       }
     },

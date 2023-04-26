@@ -84,6 +84,7 @@
 <script>
 import Cookies from 'js-cookie';
 import api from '../api/index';
+import { CheckVersion } from '../util/help.js';
 import { ScenesUrl, ReleaseJobUrl } from '../api/url.js';
 import IntegrationTest from './IntegrationTest.vue';
 import BugFix from './BugFix.vue';
@@ -260,7 +261,9 @@ export default {
   computed: {
     version: {
       get() {
-        return this.$route.params.version ? this.$route.params.version.replace('-', '/') : this.$store.state.version;
+        let rs = CheckVersion(this.$route.params.version);
+        let tmpVer = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
+        return this.$route.params.version ? tmpVer : this.$store.state.version;
       }
     },
     tabName: {

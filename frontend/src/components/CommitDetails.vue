@@ -57,6 +57,7 @@
 <script>
 import Cookies from 'js-cookie';
 import api from '../api/index';
+import { CheckVersion } from '../util/help.js';
 import {CommitsUrl, CommitDetailUrl} from '../api/url.js';
 import IntegrationTest from './IntegrationTest.vue';
 export default {
@@ -124,7 +125,8 @@ export default {
       this.getData();
     },
     $route() {
-      let _version = this.$route.params.version.replace('-', '/');
+      let rs = CheckVersion(this.$route.params.version);
+      let _version = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
       Cookies.set('version', _version);
       Cookies.set('ver', _version);
       this.$store.commit('changeVersion', _version);

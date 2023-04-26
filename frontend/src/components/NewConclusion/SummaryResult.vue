@@ -126,6 +126,7 @@
 import Cookies from 'js-cookie';
 import { SearchSummaryConclusionUrl } from '../../api/url.js';
 import api from '../../api/index';
+import { CheckVersion } from '../../util/help.js';
 import SummaryBase from './SummaryBase.vue';
 import ProgressBase from './ProgressBase.vue';
 import CardBase from './CardBase.vue';
@@ -187,7 +188,8 @@ export default {
       await this.getData();
     },
     $route() {
-      let _version = this.$route.params.version.replace('-', '/');
+      let rs = CheckVersion(this.$route.params.version);
+      let _version = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
       Cookies.set('version', _version);
       Cookies.set('ver', _version);
       this.$store.commit('changeVersion', _version);
@@ -202,7 +204,9 @@ export default {
   computed: {
     versionName: {
       get() {
-        return this.$store.state.version ? this.$store.state.version : this.$route.params.version.replace('-', '/');
+        let rs = CheckVersion(this.$route.params.version);
+        let tmpVer = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
+        return this.$store.state.version ? this.$store.state.version : tmpVer;
       }
     }
   },

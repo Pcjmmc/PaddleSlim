@@ -38,6 +38,11 @@ export function trimStr(str) {
   return str.replace(/(^\s*)|(\s*$)/g, '');
 }
 
+// version是分支还是tag
+export function CheckVersion(str) {
+  return str.startsWith('release');
+}
+
 // 格式化日期(date: new Date() fmt: yyyy-MM-dd hh:mm:ss.S)
 export function dateFmt(date, fmt) {
   if (!date) {

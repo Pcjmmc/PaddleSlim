@@ -48,6 +48,7 @@
 <script>
 import Cookies from 'js-cookie';
 import api from '../../api/index';
+import { CheckVersion } from '../../util/help.js';
 import { ScenesUrl, PublishJobUrl, PublishProcessUrl } from '../../api/url.js';
 import CaseBase from '../CommonUtil/CaseBase.vue';
 import publishTest from './publishTest.vue';
@@ -113,7 +114,8 @@ export default {
       this.getSummary();
     },
     $route() {
-      let _version = this.$route.params.version.replace('-', '/');
+      let rs = CheckVersion(this.$route.params.version);
+      let _version = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
       Cookies.set('version', _version);
       Cookies.set('ver', _version);
       this.$store.commit('changeVersion', _version);
@@ -156,7 +158,9 @@ export default {
   },
   methods: {
     SyncSelected() {
-      let _version = this.$route.params.version ? this.$route.params.version.replace('-', '/') : this.$store.state.version;
+      let rs = CheckVersion(this.$route.params.version);
+      let tmpVer = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
+      let _version = this.$route.params.version ? tmpVer : this.$store.state.version;
       this.$store.commit('changeVersion', _version);
       Cookies.set('version', _version);
       Cookies.set('ver', _version);

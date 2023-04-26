@@ -173,6 +173,7 @@
 import Cookies from 'js-cookie';
 import { MenuInfoUrl, LogoutUrl } from '../api/url.js';
 import api from "../api/index";
+import { CheckVersion } from '../util/help.js';
 import MenuNav from './CommonUtil/MenuNav.vue';
 import MenuFold from './CommonUtil/MenuFold.vue';
 import MenuDrawer from './CommonUtil/MenuDrawer.vue';
@@ -361,7 +362,8 @@ export default {
         // 暂时定义menu
         this.verisonList = this.menuDesc.version;
         if (this.$route.params && this.$route.params.version) {
-          let temp = this.$route.params.version.replace('-', '/');
+          let rs = CheckVersion(this.$route.params.version);
+          let temp = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
           // 如果分支在menuDesc中则，选择，否则默认第一个
           this.option = this.checkVersion(temp);
           Cookies.set('version', this.option);

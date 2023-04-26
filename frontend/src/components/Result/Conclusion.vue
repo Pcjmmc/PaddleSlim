@@ -87,6 +87,7 @@
 // import html2pdf from 'html2pdf.js';
 import Cookies from 'js-cookie';
 import api from '../../api/index';
+import { CheckVersion } from '../../util/help.js';
 import { TestConclusionUrl, BugUrl } from '../../api/url.js';
 import icafeBase from '../Base/icafeBase.vue';
 
@@ -171,7 +172,10 @@ export default {
   computed: {
     versionName: {
       get() {
-        return this.$store.state.version ? this.$store.state.version : this.$route.params.version.replace('-', '/');
+        // 只有release的需要替换回去，其他的保留
+        let rs = CheckVersion(this.$route.params.version);
+        let tmpVer = rs ? this.$route.params.version.replace('-', '/') : this.$route.params.version;
+        return this.$store.state.version ? this.$store.state.version : tmpVer;
       }
     }
   },

@@ -116,7 +116,7 @@ class CreateRVersion(MABaseView):
             # 打完tag备份下当前的任务记录
             await self.backup_task(kwargs.get("tag"))
             # 清理下release的缓存数据
-            await clear_redis_keys()
+            # await clear_redis_keys()
         else:
             validated_data = {
                 "begin_commit": commit,
@@ -158,7 +158,7 @@ class CreateRVersion(MABaseView):
         await CeReleaseVersion.aio_delete(params_data=kwargs)
         await update_menu()
         # 清理下缓存 todo
-        await clear_redis_keys()
+        # await clear_redis_keys()
 
     async def backup_task(self, version):
         """
