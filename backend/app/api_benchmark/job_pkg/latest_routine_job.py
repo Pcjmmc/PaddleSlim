@@ -32,6 +32,7 @@ class LatestRoutineJob(MABaseView):
 
     async def get_data(self, **kwargs):
         query = {
+            'comment': 'ce_paddle_dev_cpu_daily',
             'routine': 1,
             'status': 'done'
         }
