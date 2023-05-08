@@ -37,6 +37,9 @@ class Job(BaseModel, BaseModelMixin):
     wheel_link = Column(VARCHAR(1024), comment='paddle wheel link')
 
     description = Column(VARCHAR(256), comment='description')
+
+    ci = Column(Integer, comment='routine, 0: False, 1: True')
+    md5_id = Column(VARCHAR(100), comment='机器唯一标识码')
     create_time = Column(DateTime, comment="本记录创建的时间")
     update_time = Column(DateTime, comment="本记录更新的时间")
 
