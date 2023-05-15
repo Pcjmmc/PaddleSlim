@@ -4,6 +4,7 @@ URL 配置
 """
 from api.cache_views import BuildCacheView
 from api.publish_views import PublishCacheView, UploadResultManage
+from api.publish_binary import PublishBinaryInfo
 from api.views import CaseDetailView
 from api.hook_xly import HookxlyView
 from urls import url
@@ -15,4 +16,5 @@ urlpatterns = [
     url(r'cache/build/?$', BuildCacheView),
     url(r'publish/result/?$', UploadResultManage),
     url(r'publish/?$', PublishCacheView),
+    url(r'publish/binary/?$', PublishBinaryInfo)
 ]
