@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'/ce/', include('app.ce.urls')),
     url(r'/api', include('api.urls')),
     url(r'/framework', include('app.framework.urls')),
-    url(r'/benchmark', include('app.api_benchmark.urls'))
+    url(r'/benchmark', include('app.api_benchmark.urls')),
+    # url(r'/benchmark', include('app.fd_benchmark.urls'))
 ]

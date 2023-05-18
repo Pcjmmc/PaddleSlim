@@ -20,6 +20,12 @@ PRODUCTION:
       db_name: "api_benchmark"
       user: "paddle_test"
       password: "paddle@test"
+    fd_benchmark:
+      host: "180.76.178.190"
+      port: 3306
+      db_name: "api_benchmark"
+      user: "paddle_test"
+      password: "paddle@test"
     framework:
       host: "180.76.178.190"
       port: 3306
@@ -62,6 +68,12 @@ DEV:
       host: "127.0.0.1"
       port: 3306
       db_name: "api_benchmark"
+      user: "root"
+      password: "paddle"
+    fd_benchmark:
+      host: "127.0.0.1"
+      port: 3306
+      db_name: "fd_benchmark"
       user: "root"
       password: "paddle"
   redis:
