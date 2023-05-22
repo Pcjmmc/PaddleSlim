@@ -23,6 +23,7 @@ import SummaryResult from '../components/NewConclusion/SummaryResult';
 import ApiBenchmarkService from '../components/ApiBenchmark/ApiBenchmarkService.vue';
 import ApiBenchmarkBaseReport from '../components/ApiBenchmark/Report.vue';
 import ModelBenchmarkHomePage from '../components/ModelBenchmark/homePage.vue';
+import CompetitiveProductComparison from '../components/Benchmark/CompetitiveProductComparison.vue';
 
 // Vue.use(VueRouter);
 export const ROUTES = [
@@ -151,6 +152,11 @@ export const ROUTES = [
           path: '/paddle/benchmark/modelBenchmark/homepage',
           name: 'homePage',
           component: ModelBenchmarkHomePage
+        },
+        {
+          path: '/paddle/benchmark/compare/torch',
+          name: 'CompetitiveProductComparison',
+          component: CompetitiveProductComparison
         }
       ]
     }

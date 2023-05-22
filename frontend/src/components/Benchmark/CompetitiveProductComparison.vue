@@ -1,34 +1,285 @@
 <template>
     <div class="center-card-s">
         <div style="margin-top: 2%">
-            <Select>
-                任务名：
-
-            </Select>
-
-            <Select>
-                Paddle版本：
-            </Select>
+            <Row
+                type="flex"
+                align="middle"
+                :gutter="8"
+            >
+                <Col span="2">
+                    <h4>
+                    任务名
+                    </h4>
+                </Col>
+                <Col span="6">
+                    <el-select
+                        v-model="searchData.task_name"
+                        size="small"
+                        style="width:200%"
+                        @change="setVersionList"
+                    >
+                        <el-option
+                            :key="index"
+                            :value="item"
+                            :label="item"
+                            v-for="(item, index) in taskNameList"
+                        >
+                            {{ item }}
+                        </el-option>
+                    </el-select>
+                </Col>
+            </Row>
+            <Row
+                type="flex"
+                align="middle"
+                :gutter="8"
+                style="margin-top:1%"
+            >
+                <Col span="2">
+                    <h4>
+                    Paddle版本
+                    </h4>
+                </Col>
+                <Col span="6">
+                    <el-select
+                        v-model="versionIndex"
+                        size="small"
+                        style="width:100%"
+                        @change="setTaskDate"
+                    >
+                        <el-option
+                         v-for="(item, index) in versionList"
+                            :value="index"
+                            :key="index"
+                            :label="item"
+                        >
+                            {{ item }}
+                        </el-option>
+                    </el-select>
+                </Col>
+            </Row>
+        </div>
+        <div
+            style="text-align:right;margin-right:3%"
+        >
+            <el-button
+                type="primary"
+                size="small"
+                @click="callChildMethod"
+            >
+                查询
+            </el-button>
+            <el-button
+                type="primary"
+                size="small"
+            >
+                下载
+            </el-button>
+        </div>
+        <div style="text-align:right;margin-top:1%">
+            <p style="display: inline;">数据补全：</p>
+            <i-Switch
+                v-model="searchData.is_Fill"
+                style="margin-right:9%"
+                >
+                <template #open>
+                <span>开</span>
+                </template>
+                <template #close>
+                <span>关</span>
+                </template>
+            </i-Switch>
+            <el-radio-group
+                v-model="searchData.metric"
+                border
+                size="small"
+                @input="callChildMethod"
+            >
+                <span
+                    :key="index"
+                    :value="item.id"
+                    v-for="(item, index) in tags"
+                >
+                    <el-radio-button v-bind:label="item.id"></el-radio-button>
+                </span>
+            </el-radio-group>
         </div>
         <div>
-            <Button style="text-align:right">
-                查询
-            </Button>
-            <Button style="text-align:right">
-                下载
-            </Button>
+            <el-tabs
+                v-model="tabName"
+                @tab-click="handleTabClick"
+            >
+                <el-tab-pane
+                    label="汇总数据"
+                    name="summaryData"
+                >
+                    <summary-data
+                        ref="summaryData"
+                    >
+                    </summary-data>
+                </el-tab-pane>
+                <el-tab-pane
+                    label="对比数据"
+                    name="comparativeData"
+                >
+                    <comparative-data
+                        ref="comparative"
+                    >
+                    </comparative-data>
+                </el-tab-pane>
+            </el-tabs>
         </div>
     </div>
 </template>
 
 <script>
+import {BenchmarkCheckTaskList} from '../../api/url';
+import api from '../../api/index';
+import ComparativeData from './ComparativeData.vue';
+import SummaryData from './SummaryData.vue';
 
 export default {
     name: 'CompetitiveProductComparison',
     data: function () {
         return {
-            task: []
+            tabName: 'summaryData',
+            task: {},
+            taskNameList: [],
+            versionList: [],
+            versionIndex: '',
+            taskDateList: [],
+            searchData: {
+                task_name: '',
+                task_date: '',
+                is_Fill: '',
+                metric: ''
+            },
+            tags: [
+                {
+                    id: 'ips',
+                    checked: true
+                },
+                {
+                    id: 'gpu_mem',
+                    checked: false
+                },
+                {
+                    id: 'cpu_use',
+                    checked: false
+                },
+                {
+                    id: 'gpu_use',
+                    checked: false
+                },
+                {
+                    id: 'accuracy',
+                    checked: false
+                }
+            ]
         };
+    },
+    mounted: function () {
+        this.getTaskList();
+        this.setTabName();
+        this.initData();
+        this.callChildMethod();
+        this.callSummaryChildMethod();
+    },
+    methods: {
+        initData() {
+            console.log('taskNameList', this.taskNameList);
+            this.versionIndex = 0;
+            this.searchData.is_Fill = Boolean(false);
+            this.searchData.metric = this.tags[0].id;
+            this.$set(this.searchData, 'task_name', this.taskNameList[0]);
+            this.$set(this.searchData, 'task_date', this.taskDateList[0]);
+        },
+        handleTabClick(tag) {
+            sessionStorage.setItem('current_tab', tag.name);
+        },
+        setTabName() {
+            this.tabName = sessionStorage.getItem('current_tab');
+            if (this.tabName === null || this.tabName.length === 0) {
+                this.tabName = 'summaryData';
+            }
+        },
+        setVersionList(name) {
+            var versionData = this.task[name];
+            if (versionData === null || versionData === undefined) {
+                this.$Message.error(
+                    {
+                        content: '抱歉当前的任务没有可以选择的版本，请重新选择',
+                        duration: 1,
+                        closable: true
+                    }
+                );
+            }
+            let versionList = [];
+            let taskDateList = [];
+            let index = 0;
+            for (let key in versionData) {
+                if (versionData.hasOwnProperty(key)) {
+                    var value = versionData[key];
+                    let version = value.paddle_version;
+                    let task_date = value.task_date;
+                    versionList.push(version);
+                    taskDateList.push(task_date);
+                    if (index === 0) {
+                        this.$set(this, 'versionIndex', 0);
+                        this.$set(this.searchData, 'task_date', taskDateList[0]);
+                    }
+                }
+            }
+            this.$set(this, 'versionList', versionList);
+            this.$set(this, 'taskDateList', taskDateList);
+        },
+        dealWithTaskData(data) {
+            if (data === null || data.length === 0) {
+                this.$Message.error({
+                    content: '抱歉当前没有可以选择的任务',
+                    duration: 1,
+                    closable: true
+                });
+            }
+            var i = 0;
+            for (let key in data) {
+                if (data.hasOwnProperty(key)) {
+                    this.taskNameList.push(key);
+                    if (i === 0) {
+                        this.$set(this.searchData, 'task_name', key);
+                        this.setVersionList(key);
+                    }
+                    i++;
+                }
+            }
+        },
+        setTaskDate() {
+            this.$set(this.searchData, 'task_date', this.taskDateList[this.versionIndex]);
+        },
+        async getTaskList() {
+            this.task = [];
+            const {code, message, data} = await api.get(BenchmarkCheckTaskList);
+            if (parseInt(code, 10) === 200) {
+                this.task = data;
+                this.dealWithTaskData(this.task);
+            } else {
+                this.$Message.error({
+                    content: '请求出错:' + message,
+                    duration: 30,
+                    closable: true
+                });
+            }
+        },
+        callChildMethod() {
+            this.$refs.comparative.$emit('acceptFatherData', this.searchData);
+        },
+        callSummaryChildMethod() {
+            this.$refs.summaryData.$emit('acceptFatherData', this.searchData);
+        }
+    },
+    components: {
+        ComparativeData,
+        SummaryData
     }
 };
 </script>
@@ -36,9 +287,12 @@ export default {
 <style scoped>
 .btn-success {
   color: #fff;
-  background-color: #67c23a;
-  border-color: #67c23a;
+  width: 10%;
+  background-color: #1d98e4cb;
+  border-color: #1d98e4cb;
+  margin-right: 1%;
 }
+
 .center-card-s {
   margin-left: 1%;
   margin-right: 1%;
