@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card style="width: 100%;height: 400px;">
+    <Card style="width: 100%;height: 450px;">
       <span style="float:left;width:50%;">
         <frame-pie
           title="模型库覆盖情况"

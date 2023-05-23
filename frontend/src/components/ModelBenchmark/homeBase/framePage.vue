@@ -12,7 +12,7 @@
       </el-tab-pane>
       <el-tab-pane
         label="竞品模型数"
-        name="other"
+        name="pytorch"
       >
       </el-tab-pane>
       <frame-statistics :datas="datas"></frame-statistics>
@@ -22,6 +22,8 @@
 <script>
 
 import frameStatistics from './frameStatistics.vue';
+import api from '../../../api/index';
+import { ModelsBenchmarkHomeDraw } from '../../../api/url.js';
 
 export default {
   name: 'framePage',
@@ -52,60 +54,55 @@ export default {
   methods: {
     clickTab(name) {
       this.tabName = name.name;
-      console.log('this.tabName', this.tabName);
       this.datas = {
         pie: {
-          option: ['Clas', 'NLP', 'Seg', 'Speech', 'Video', 'OCR', 'Detection'],
-          datas: [
-            {value: 107, name: 'Clas'},
-            {value: 10, name: 'NLP'},
-            {value: 22, name: 'Speech'},
-            {value: 30, name: 'Video'},
-            {value: 5, name: 'OCR'},
-            {value: 25, name: 'Detection'}
-          ]
+          option: [],
+          datas: []
         },
         colum: {
-          option: ['Clas', 'NLP', 'Seg', 'Speech', 'Video', 'OCR', 'Detection'],
-          datas: {
-            Clas: {FP32: 2, FP16: 1},
-            NLP: {FP32: 10, FP16: 3},
-            Seg: {FP32: 5, FP16: 6},
-            Speech: {FP32: 6, FP16: 10},
-            Video: {FP32: 9, FP16: 11},
-            Detection: {FP32: 8, FP16: 12},
-            OCR: {FP32: 7, FP16: 10}
-          }
+          option: [],
+          datas: {}
         }
       };
-      console.log('this new datas', this.datas);
+      this.getDatas();
     },
     async getDatas() {
-      this.datas = {
-        pie: {
-          option: ['Clas', 'NLP', 'Seg', 'Speech', 'Video', 'OCR', 'Detection'],
-          datas: [
-            {value: 100, name: 'Clas'},
-            {value: 10, name: 'NLP'},
-            {value: 20, name: 'Speech'},
-            {value: 30, name: 'Video'},
-            {value: 15, name: 'OCR'},
-            {value: 25, name: 'Detection'}
-          ]
-        },
-        colum: {
-          option: ['Clas', 'NLP', 'Seg', 'Speech', 'Video', 'OCR', 'Detection'],
-          datas: {
-            Clas: {FP32: 20, FP16: 1},
-            NLP: {FP32: 10, FP16: 3},
-            Seg: {FP32: 5, FP16: 6},
-            Speech: {FP32: 6, FP16: 10},
-            Video: {FP32: 9, FP16: 21},
-            Detection: {FP32: 8, FP16: 13},
-            OCR: {FP32: 7, FP16: 11}
+      let params = {
+        frame: this.tabName
+      };
+      const { code, data, message } = await api.post(ModelsBenchmarkHomeDraw, params);
+      if (parseInt(code, 10) === 200) {
+        this.prepareDatas(data);
+      } else {
+        this.$Message.error({
+            content: '请求出错: ' + message,
+            duration: 30,
+            closable: true
+        });
+      }
+    },
+    prepareDatas(data) {
+      let temp = data[this.tabName];
+      let pie_datas = [];
+      let colum_datas = {};
+      let opt = [];
+      for (let i = 0; i < temp.length; i++) {
+        for (let key in temp[i]) {
+          if (temp[i].hasOwnProperty(key)) {
+            opt.push(key);
+            let tmp = {
+              value: temp[i][key].total_num,
+              name: key
+            };
+            pie_datas.push(tmp);
+            colum_datas[key] = temp[i][key];
           }
         }
-      };
+      }
+      this.datas.pie.datas = pie_datas;
+      this.datas.pie.option = opt;
+      this.datas.colum.datas = colum_datas;
+      this.datas.colum.option = opt;
     }
   }
 };

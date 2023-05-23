@@ -72,7 +72,7 @@ export default {
     return axios({
       method: 'post',
       url: BASEURL + url,
-      data: qs.stringify(data),
+      data: url.startsWith('/models_benchmark') ? JSON.stringify(data) : qs.stringify(data),
       timeout: 30000,
       headers: {
         'X-Requested-With': 'XMLHttpRequest',

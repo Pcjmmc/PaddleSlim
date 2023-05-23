@@ -1,6 +1,6 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
-  <div id="main1" style="height: 350px;"></div>
+  <div id="main1" style="height: 400px;"></div>
 </template>
 <script>
 import echarts from 'echarts';
@@ -75,11 +75,12 @@ export default {
           {
             type: 'pie',
             label: {
-                normal: {
-                  show: true,
-                  formatter: '{b}: {c}'
-                }
+              normal: {
+                show: true,
+                formatter: '{b}: {c}'
+              }
             },
+            radius: '55%',
             center: ['50%', '50%'],
             labelLine: {
               show: true

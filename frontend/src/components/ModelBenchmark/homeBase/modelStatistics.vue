@@ -1,17 +1,17 @@
 <template>
   <div>
     <span>
-      <span style="float:left;width:70%">
+      <span style="float:left;width:90%">
         <Card style="width: 100%;">
           <font style="font-size: 12px;">
             数据汇总(模型数/配置数)
           </font>
           <div style="text-align:center; margin-top:2%;">
-            <Row>
+            <Row v-for="(data, index) in datas">
               <Col
                 :key="index"
-                v-for="(item, index) in datas"
-                span="5"
+                v-for="(item, index) in data"
+                span="4"
               >
                 <div style="margin-bottom: 5%;">
                   <p style="font-size: 16px;">

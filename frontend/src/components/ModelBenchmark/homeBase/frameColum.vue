@@ -1,6 +1,6 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
-  <div id="main2" style="height: 350px;"></div>
+  <div id="main2" style="height: 400px;"></div>
 </template>
 <script>
 import echarts from 'echarts';

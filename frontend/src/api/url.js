@@ -59,3 +59,5 @@ export const ApiBenchmarkJobs = '/benchmark/api_benchmark/certainjob';
 export const ApiBenchmarkSetBaseline = '/benchmark/api_benchmark/baselineset';
 export const BenchmarkCheckTaskList = '/model_benchmark/CheckTaskList/';
 export const BenchmarkPaddleVsOtherData = '/model_benchmark/PaddleVsOtherData/';
+export const ModelsBenchmarkHomeStatistics = '/models_benchmark/statistics_data';
+export const ModelsBenchmarkHomeDraw = '/models_benchmark/draw_data';

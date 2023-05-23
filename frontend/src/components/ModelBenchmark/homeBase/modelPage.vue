@@ -12,7 +12,7 @@
       </el-tab-pane>
       <el-tab-pane
         label="多机模型统计"
-        name="multi"
+        name="muti"
       >
       </el-tab-pane>
       <el-tab-pane
@@ -27,6 +27,8 @@
 <script>
 
 import modelStatistics from './modelStatistics.vue';
+import api from '../../../api/index';
+import { ModelsBenchmarkHomeStatistics } from '../../../api/url.js';
 
 export default {
   name: 'modelPage',
@@ -48,61 +50,44 @@ export default {
   methods: {
     async clickTab(name) {
       this.tabName = name.name;
+      this.datas = [];
       await this.getData();
     },
     async getData() {
       // 根据参数获取单机/多机/分布式的数据
       let params = {
-        mode: this.tabName
+        field: this.tabName
       };
-      console.log('request params is', params);
-      this.datas = [
-        {
-          repo_name: 'paddle-class',
-          config_num: '150',
-          model_num: '120'
-        },
-        {
-          repo_name: 'paddle-nlp',
-          config_num: '150',
-          model_num: '120'
-        },
-        {
-          repo_name: 'paddle-nlp',
-          config_num: '150',
-          model_num: '120'
-        },
-        {
-          repo_name: 'paddle-nlp',
-          config_num: '150',
-          model_num: '120'
-        },
-        {
-          repo_name: 'paddle-nlp',
-          config_num: '150',
-          model_num: '120'
-        },
-        {
-          repo_name: 'paddle-nlp',
-          config_num: '150',
-          model_num: '120'
-        },
-         {
-          repo_name: 'paddle-nlp',
-          config_num: '150',
-          model_num: '120'
-        },
-         {
-          repo_name: 'paddle-nlp',
-          config_num: '150',
-          model_num: '120'
-        },
-        {
-          repo_name: 'paddle-nlp',
-          config_num: '150',
-          model_num: '120'
+      const { code, data, message } = await api.post(ModelsBenchmarkHomeStatistics, params);
+      if (parseInt(code, 10) === 200) {
+         let paddle_res = this.changeData('paddle', data);
+         let torch_res = this.changeData('pytorch', data);
+         this.datas.push(paddle_res);
+         this.datas.push(torch_res);
+      } else {
+        this.$Message.error({
+            content: '请求出错: ' + message,
+            duration: 30,
+            closable: true
+        });
+      }
+    },
+    changeData(type, data) {
+      let result = [];
+      let temp = [];
+      temp = data[type] ? data[type] : [];
+      for (var i = 0; i < temp.length; i++) {
+        let repo_name = type;
+        let tp_dt = {};
+        for (let key in temp[i]) {
+          if (temp[i].hasOwnProperty(key)) {
+            tp_dt = temp[i][key];
+            tp_dt.repo_name = repo_name + '_' + key;
+          }
         }
-      ];
+        result.push(tp_dt);
+      }
+      return result;
     }
   }
 };
