@@ -36,7 +36,12 @@ class CompileCallback(MABaseView):
             res = await Job.aio_get_object(order_by=None, group_by=None, id=jid)
             await Dispatcher.dispatch_missions(res)
         elif status == "error":
-            await Compile.aio_update(kwargs, {"id": id})
+            res_data = {
+                "id": id,
+                "status": status,
+                "result": kwargs.get("failed_reason")
+            }
+            await Compile.aio_update(res_data, {"id": id})
             res = await Compile.aio_get_object(order_by=None, group_by=None, id=id)
             jid = res["jid"]
             await Job.aio_update({"status": "error", "update_time": datetime.now()}, {"id": jid})
