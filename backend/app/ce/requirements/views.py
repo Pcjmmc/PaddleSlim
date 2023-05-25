@@ -60,7 +60,7 @@ class ManageIcafe(MABaseView):
         if need_status:
         # 待提测
             #保留Task和bug
-            iql = "流程状态 in ({}) AND 类型 in (Task) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(need_status, begin_time, end_time)
+            iql = "流程状态 in ({}) AND 类型 in (Task,Story) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(need_status, begin_time, end_time)
         else:
             iql = "类型 in (Task) AND 最后修改时间 > {} AND 最后修改时间 < {}".format(begin_time, end_time)
         if rd:
