@@ -68,5 +68,5 @@ class UserIdentifyCheck(MABaseView):
         res = await User().aio_get_object(**{"username": username})
         # 拼接出用户信息
         if res:
-            identifyQA = res.departmentName == 'TPG质量效能部'
+            identifyQA = res.departmentName == 'AI业务测试组'
         return 1, {'identifyQA': identifyQA}
