@@ -22,7 +22,7 @@ from app.ce.tools.views import AutoBinarySearchManage, BinarySearchManage
 from app.ce.user.views import UserIdentifyCheck
 from app.ce.ValidateToken.views import CheckManage, LogoutManage, ValidateManage
 from app.ce.version.views import CreateRVersion
-
+from app.ce.publish.publish_binary import PublishBinary
 from urls import url
 
 urlpatterns = [
@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'publish/result/?$', PublishResultManage),
     url(r'publish/?$', PublishSummaryManage),
     url(r'publish_task/?$', PublishTaskManage),
+    url(r'publish/binary/?$', PublishBinary),
     url(r'task/?$', TaskManage),
     url(r'job/?$', JobManage),
     url(r'config/scenes', ScenesManage),

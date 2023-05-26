@@ -22,6 +22,12 @@ export default {
       default: function () {
         return [];
       }
+    },
+    'failState': {
+      type: [Object],
+      default: function () {
+        return {};
+      }
     }
   },
   data: function () {
@@ -42,15 +48,80 @@ export default {
           title: '状态',
           key: 'kpi_status',
           align: 'center',
+          minWidth: 120,
           render: (h, params) => {
             const { kpi_status } = params.row;
-            return h('div', [
+            let ret = [];
+            ret.push(
               h('Tag', {
                 props: {
                   color: kpi_status.toLowerCase() === 'passed' ? 'success' : 'error'
                 }
               }, kpi_status)
-            ]);
+            );
+            if (kpi_status.toLowerCase() === 'failed') {
+              ret.push(
+                h('Button', {
+                props: {
+                  size: 'small',
+                  type: 'primary'
+                },
+                on: {
+                  click: () => {
+                    this.autoBinarySearch(params.row);
+                  }
+                }
+              }, '自动定位'));
+              if (this.failState === undefined) {
+                ret.push(
+                  h('div', {
+                  }, [
+                    h('p', {
+                      style: {
+                        display: 'inline-block'
+                      }
+                    }, '加载中')
+                  ])
+                );
+              } else {
+                ret.push(
+                h('div', {
+                }, [
+                  h('p', {
+                    style: {
+                      display: 'inline-block'
+                    }
+                  }, '任务链接：'),
+                  h('a', {
+                    style: {
+                      dispaly: 'block'
+                    },
+                    attrs: {
+                      href: this.getXlyLink(params.row),
+                      target: '_blank'
+                    }
+                  }, '点击跳转'),
+                  h('p', {
+                  style: {
+                    display: 'block'
+                  }
+                }, '当前状态: ' + this.getStatus(params.row))
+                ])
+              );
+              }
+            }
+            return h(
+              'div',
+              {
+                style: {
+                  display: 'block',
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }
+              },
+              ret
+            );
           }
         },
         {
@@ -62,6 +133,7 @@ export default {
           title: '当前值',
           key: 'kpi_value',
           align: 'center',
+          minWidth: 120,
           render: (h, params) => {
             // console.log('params.row', params.row);
             const { kpi_status, kpi_value } = params.row;
@@ -119,10 +191,11 @@ export default {
     };
   },
   mounted: function () {
-    // console.log('this params', this.model_name, this.kpis);
+    // console.log('failState', this.failState);
   },
   components: {
   },
+  inject: ['fatherMethod'],
   methods: {
     caculateKpiName(row) {
       let name = [];
@@ -134,6 +207,48 @@ export default {
       }
       name.push(row.kpi_name);
       return name.join('_');
+    },
+    autoBinarySearch(row) {
+      let params = {
+        model_name: row.model_name,
+        tag_name: row.tag,
+        step_name: row.step_name
+      };
+      // console.log(params);
+      this.fatherMethod(params);
+    },
+    getXlyLink(row) {
+      let innerValue = this.failState[row.tag];
+      if (innerValue) {
+        return innerValue.xly_link;
+      } else {
+        return '';
+      }
+    },
+    getStatus(row) {
+      if (row.tag in this.failState) {
+        let status = this.failState[row.tag].status;
+        // console.log(status);
+        switch (status) {
+          case 'quening':
+            return '排队中';
+          case 'preparing':
+            return '测试准备';
+          case 'release':
+            return '框架release测试';
+          case 'locationing':
+            return '定位问题PR';
+          case 'finished':
+            return '定位结束';
+          case 'canceled':
+            return '任务取消';
+          case 'failed':
+            return '任务失败';
+          default:
+            // console.log(this.statusStored[row.step_name]);
+            return '任务过期请重新定位';
+        }
+      }
     }
   }
 };

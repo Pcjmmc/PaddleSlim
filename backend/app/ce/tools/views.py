@@ -16,6 +16,8 @@ import rsa
 from exception import HTTPDetailError
 
 from views.base_view import MABaseView
+from models.binary_search_status import BinarySearchStatus
+
 
 
 class BinarySearchManage(MABaseView):
@@ -110,14 +112,33 @@ class AutoBinarySearchManage(MABaseView):
             content = json.loads(res.text)
             url = "https://xly.bce.baidu.com/paddlepaddle/PR-Location/newipipe/detail/{buildId}"
             url = url.format(buildId=content.get("pipelineBuildId"))
-            data = {"url": url}
+            # 任务触发的时候效率云不能更新排队状态，这里手动插入一条排队的状态
+            xly_id = content.get("pipelineBuildId")
+            xly_link = url
+            # 处理insert数据库参数
+            kwargs = self.constructBinarySearchStatus(kwargs, xly_link)
+            # binary task入库逻辑
+            await BinarySearchStatus.create_or_update_build(
+                xly_id, **kwargs)
+            # print('xly', res)
+            data = {}
+            data['url'] =  url
+            data['status'] = 'quening'
         else:
             raise HTTPDetailError(
                 error_message="xly service error",
                 error_detail={"code": 500, "message": "xly service error"}
             )
-        return data     
+        return data
 
+    def constructBinarySearchStatus(self, kwargs, xly_link):
+        kwargs['xly_link'] = xly_link
+        kwargs['status'] = 'quening'
+        kwargs['tag_name'] = kwargs['tag']
+        kwargs.pop('tag')
+        kwargs['email'] = kwargs['email_add']
+        kwargs.pop('email_add')
+        return kwargs
 def encrypt(pub, original_text):  # 用公钥加密
     """
     encrypt
