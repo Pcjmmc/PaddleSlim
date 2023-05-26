@@ -65,13 +65,14 @@
             <el-button
                 type="primary"
                 size="small"
-                @click="callChildMethod"
+                @click="callAllChildMethods"
             >
                 查询
             </el-button>
             <el-button
                 type="primary"
                 size="small"
+                @click="callDownload"
             >
                 下载
             </el-button>
@@ -124,6 +125,7 @@
                 >
                     <comparative-data
                         ref="comparative"
+                        @change-model-name="handleSearchModelNameChange"
                     >
                     </comparative-data>
                 </el-tab-pane>
@@ -133,7 +135,7 @@
 </template>
 
 <script>
-import {BenchmarkCheckTaskList} from '../../api/url';
+import {BenchmarkCheckTaskList, PaddleVsOtherDataDownload} from '../../api/url';
 import api from '../../api/index';
 import ComparativeData from './ComparativeData.vue';
 import SummaryData from './SummaryData.vue';
@@ -143,6 +145,7 @@ export default {
     data: function () {
         return {
             tabName: 'summaryData',
+            searchModelName: '',
             task: {},
             taskNameList: [],
             versionList: [],
@@ -182,12 +185,10 @@ export default {
         this.getTaskList();
         this.setTabName();
         this.initData();
-        this.callChildMethod();
-        this.callSummaryChildMethod();
+        this.callAllChildMethods();
     },
     methods: {
         initData() {
-            console.log('taskNameList', this.taskNameList);
             this.versionIndex = 0;
             this.searchData.is_Fill = Boolean(false);
             this.searchData.metric = this.tags[0].id;
@@ -270,11 +271,46 @@ export default {
                 });
             }
         },
+        async callDownload() {
+            let params = {
+                task_name: this.searchData.task_name,
+                task_date: this.searchData.task_date,
+                metric_list: [this.searchData.metric],
+                is_Fill: this.searchData.is_Fill,
+                get_mode: 'download',
+                search_model_item: this.searchModelName
+            };
+            const {code, message, data} = await api.post(PaddleVsOtherDataDownload, params);
+            if (parseInt(code, 10) === 200) {
+                const excelData = data;
+                let blob = new Blob([excelData],
+                { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                let url = URL.createObjectURL(blob);
+                let link = document.createElement('a');
+                link.href = url;
+                link.download = 'your-file-name.xlsx';
+                document.body.appendChild(link);
+                link.click();
+            } else {
+                this.$Message.error({
+                    content: '请求出错:' + message,
+                    duration: 30,
+                    closable: true
+                });
+            }
+        },
+        callAllChildMethods() {
+            this.callChildMethod();
+            this.callSummaryChildMethod();
+        },
         callChildMethod() {
             this.$refs.comparative.$emit('acceptFatherData', this.searchData);
         },
         callSummaryChildMethod() {
             this.$refs.summaryData.$emit('acceptFatherData', this.searchData);
+        },
+        handleSearchModelNameChange(modelName) {
+            this.searchModelName = modelName;
         }
     },
     components: {

@@ -101,12 +101,14 @@
 
 <script>
 import api from '../../api/index';
-import {BenchmarkPaddleVsOtherData} from '../../api/url';
+import {ModelsBenchmarkEnvInfo, ModelsBenchmarkSummaryTorch, ModelsBenchmarkSummaryPaddle,
+    ModelsBenchmarkSummaryModel, ModelsBenchmarkSummaryDynamic, ModelsBenchmarkSummaryFP32} from '../../api/url';
 
 export default {
     name: 'SummaryData',
     data: function () {
         return {
+            env: {},
             panelNames: [],
             everPaneNames: [],
             fatherData: {},
@@ -246,16 +248,185 @@ export default {
             columnsCompareSummary: [],
             dataCompareSummary: [],
             columnsFpCompare: [],
-            dataFpCompare: []
+            dataFpCompare: [],
+            torchCompare: {
+    'PaddleClas': {
+        'static': {
+            'N1C8': {
+                'fp32': {
+                    'vs_pytorch': {
+                        'model_level': {
+                            'pytorch_up_num': 0,
+                            'pytorch_same_num': 0,
+                            'pytorch_down_num': 0,
+                            'pytorch_pf_num': 0,
+                            'pytorch_tf_num': 0,
+                            'pytorch_no_num': 0
+                        },
+                        'config_level': {
+                            'pytorch_up_num': 0,
+                            'pytorch_same_num': 0,
+                            'pytorch_down_num': 0,
+                            'pytorch_pf_num': 0,
+                            'pytorch_tf_num': 0,
+                            'pytorch_no_num': 0
+                        }
+                    }
+                },
+                'amp_fp16': {
+                    'vs_pytorch': {
+                        'model_level': {
+                        },
+                        'config_level': {
+                        }
+                    }
+                },
+                'pure_fp16': {
+                    'vs_pytorch': {
+                        'model_level': {
+                        },
+                        'config_level': {
+                        }
+                    }
+                }
+            }
+        },
+        'total': {
+            'N1C8': {
+                'fp32': {
+                    'vs_pytorch': {
+                        'model_level': {
+                            'pytorch_up_num': 0,
+                            'pytorch_same_num': 0,
+                            'pytorch_down_num': 0,
+                            'pytorch_pf_num': 0,
+                            'pytorch_tf_num': 0,
+                            'pytorch_no_num': 0
+                        },
+                        'config_level': {
+                            'pytorch_up_num': 0,
+                            'pytorch_same_num': 0,
+                            'pytorch_down_num': 0,
+                            'pytorch_pf_num': 0,
+                            'pytorch_tf_num': 0,
+                            'pytorch_no_num': 0
+                        }
+                    }
+                },
+                'amp_fp16': {
+                    'vs_pytorch': {
+                        'model_level': {
+                        },
+                        'config_level': {
+                        }
+                    }
+                },
+                'pure_fp16': {
+                    'vs_pytorch': {
+                        'model_level': {
+                        },
+                        'config_level': {
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'all': {
+        'static': {
+            'N1C8': {
+                'fp32': {
+                    'vs_pytorch': {
+                        'model_level': {
+                            'pytorch_up_num': 0,
+                            'pytorch_same_num': 0,
+                            'pytorch_down_num': 0,
+                            'pytorch_pf_num': 0,
+                            'pytorch_tf_num': 0,
+                            'pytorch_no_num': 0
+                        },
+                        'config_level': {
+                            'pytorch_up_num': 0,
+                            'pytorch_same_num': 0,
+                            'pytorch_down_num': 0,
+                            'pytorch_pf_num': 0,
+                            'pytorch_tf_num': 0,
+                            'pytorch_no_num': 0
+                        }
+                    }
+                },
+                'amp_fp16': {
+                    'vs_pytorch': {
+                        'model_level': {
+                        },
+                        'config_level': {
+                        }
+                    }
+                },
+                'pure_fp16': {
+                    'vs_pytorch': {
+                        'model_level': {
+                        },
+                        'config_level': {
+                        }
+                    }
+                }
+            }
+        },
+        'total': {
+            'N1C8': {
+                'fp32': {
+                    'vs_pytorch': {
+                        'model_level': {
+                            'pytorch_up_num': 0,
+                            'pytorch_same_num': 0,
+                            'pytorch_down_num': 0,
+                            'pytorch_pf_num': 0,
+                            'pytorch_tf_num': 0,
+                            'pytorch_no_num': 0
+                        },
+                        'config_level': {
+                            'pytorch_up_num': 0,
+                            'pytorch_same_num': 0,
+                            'pytorch_down_num': 0,
+                            'pytorch_pf_num': 0,
+                            'pytorch_tf_num': 0,
+                            'pytorch_no_num': 0
+                        }
+                    }
+                },
+                'amp_fp16': {
+                    'vs_pytorch': {
+                        'model_level': {
+                        },
+                        'config_level': {
+                        }
+                    }
+                },
+                'pure_fp16': {
+                    'vs_pytorch': {
+                        'model_level': {
+                        },
+                        'config_level': {
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
         };
     },
-    monitoring() {
-        this.$on('acceptFatherData', (res) => {
-            this.fatherData = res;
-            this.updateSelectedPanels();
-        });
+    mounted() {
+        this.monitoring();
     },
     methods: {
+        monitoring() {
+        this.$on('acceptFatherData', (res) => {
+            this.fatherData = res;
+            // this.updateSelectedPanels();
+        });
+        },
         updateSelectedPanels() {
             for (let i = 0; i < this.panelNames.length; i++) {
                 let panelName = this.panelNames[i];
@@ -289,6 +460,8 @@ export default {
             this.everPaneNames = this.panelNames;
         },
         onPanelChange() {
+            console.log(this.panelNames);
+            console.log(this.everPaneNames);
             for (let i = 0; i < this.panelNames.length; i++) {
                 let name = this.panelNames[i];
                 if (!this.everPaneNames.includes(name)) {
@@ -318,17 +491,19 @@ export default {
                             this.getFpCompare();
                             break;
                         }
+                        default: {
+                            console.log('case 不匹配', name);
+                        }
                     }
                 }
             }
         },
         async getEnviromentsInfo() {
             let task_date = this.fatherData.task_date;
-            console.log(task_date);
             let params = {
                 taskDate: task_date
             };
-            const {code, message, data} = await api.post(BenchmarkPaddleVsOtherData, params);
+            const {code, message, data} = await api.post(ModelsBenchmarkEnvInfo, params);
             if (parseInt(code, 10) === 200) {
                 this.env = data;
             } else {
@@ -340,23 +515,23 @@ export default {
             }
         },
         async getTorchCompare() {
-            this.dealWithTorchCompareData();
-            // let params = {
-            //     task_date: this.fatherData['task_date'],
-            //     zhibiao_list: JSON.stringify([this.fatherData.metric]),
-            //     complete: this.fatherData.is_Fill
-            // };
-            // const {code, message, data} = await api.post(BenchmarkPaddleVsOtherData, params);
-            // if (parseInt(code, 10) === 200) {
-            //     this.torchCompare = data;
-            //     this.dealWithTorchCompareData();
-            // } else {
-            //     this.$Message.error({
-            //         content: '请求出错:' + message,
-            //         duration: 30,
-            //         closable: true
-            //     });
-            // }
+            // this.dealWithTorchCompareData();
+            let params = {
+                task_date: this.fatherData.task_date,
+                zhibiao_list: JSON.stringify([this.fatherData.metric]),
+                complete: this.fatherData.is_Fill
+            };
+            const {code, message, data} = await api.post(ModelsBenchmarkSummaryTorch, params);
+            if (parseInt(code, 10) === 200) {
+                this.torchCompare = data;
+                this.dealWithTorchCompareData();
+            } else {
+                this.$Message.error({
+                    content: '请求出错:' + message,
+                    duration: 30,
+                    closable: true
+                });
+            }
         },
         dealWithBlankData(value, key) {
             if (value === null || value === '') {
@@ -368,20 +543,41 @@ export default {
                 return value[key];
             }
         },
-        // handleSpanMethod ({ row, column, rowIndex, columnIndex }) {
-        //     if (columnIndex < 2) {
-        //         let rowCount = 1;
-        //         for (let i = rowIndex + 1; i < this.dataTorchShow.length; i++) {
-        //             if (this.dataTorchShow[i][column.key] === row[column.key] &&
-        //             this.dataTorchShow[i]['model_type'] === row['model_type']) {
-        //                 rowCount++;
-        //             } else {
-        //                 break;
-        //             }
-        //         }
-        //         return [rowCount, 1];
-        //     }
-        // },
+        handleSpanMethod({ row, column, rowIndex, columnIndex }) {
+            if (columnIndex === 0) {
+                let rowCount = 1;
+                for (let i = rowIndex + 1; i < this.dataTorchShow.length; i++) {
+                    if (this.dataTorchShow[i][column.key] === row[column.key] &&
+                    this.dataTorchShow[i].model_type === row.model_type) {
+                        rowCount++;
+                    } else {
+                        break;
+                    }
+                }
+                if (row.model_type_index === 0) {
+                    return [rowCount, 1];
+                } else {
+                    return [0, 0];
+                }
+            } else if (columnIndex === 1) {
+                let rowCount = 1;
+                for (let i = rowIndex + 1; i < this.dataTorchShow.length; i++) {
+                    if (this.dataTorchShow[i][column.key] === row[column.key] &&
+                    this.dataTorchShow[i].model_type === row.model_type) {
+                        rowCount++;
+                    } else {
+                        break;
+                    }
+                }
+                if (row.run_config_index === 0) {
+                    return [rowCount, 1];
+                } else {
+                    return [0, 0];
+                }
+            } else {
+                return [1, 1];
+            }
+        },
         dealWithTorchCompareData() {
             this.tags = [];
             this.dataTorch = {};
@@ -389,11 +585,11 @@ export default {
                 this.tags.push(key);
                 let singleApp = [];
                 let value = this.torchCompare[key];
-                let model_type_index = 0;
                 for (let model_type in value) {
+                    let model_type_index = 0;
                     let model_type_value  =  value[model_type];
-                    let run_config_index = 0;
                     for (let run_config in model_type_value) {
+                        let run_config_index = 0;
                         let run_config_value = model_type_value[run_config];
                         for (let fpconfig in run_config_value) {
                             let json = {};
@@ -425,7 +621,6 @@ export default {
                 }
                 this.dataTorch[key] = singleApp;
             }
-            console.log(this.dataTorch);
             this.tagSelected = this.tags[0];
             this.dataTorchShow = this.dataTorch[this.tagSelected];
         },
@@ -433,23 +628,23 @@ export default {
             this.dataTorchShow = this.dataTorch[this.tagSelected];
         },
         async getConfigData() {
-            this.dealWithConfigData(this.dataConfigBak);
-            // let params = {
-            //     task_date: this.fatherData['task_date'],
-            //     zhibiao_list: JSON.stringify([this.fatherData.metric]),
-            //     complete: this.fatherData.is_Fill,
-            //     summary_type: 1
-            // };
-            // const {code, message, data} = await api.post(BenchmarkPaddleVsOtherData, params);
-            // if (parseInt(code, 10) === 200) {
-            //     this.dealWithTorchCompareData(data);
-            // } else {
-            //     this.$Message.error({
-            //         content: '请求出错:' + message,
-            //         duration: 30,
-            //         closable: true
-            //     });
-            // }
+            // this.dealWithConfigData(this.dataConfigBak);
+            let params = {
+                task_date: this.fatherData.task_date,
+                zhibiao_list: JSON.stringify([this.fatherData.metric]),
+                complete: this.fatherData.is_Fill,
+                summary_type: 1
+            };
+            const {code, message, data} = await api.post(ModelsBenchmarkSummaryPaddle, params);
+            if (parseInt(code, 10) === 200) {
+                this.dealWithTorchCompareData(data);
+            } else {
+                this.$Message.error({
+                    content: '请求出错:' + message,
+                    duration: 30,
+                    closable: true
+                });
+            }
         },
         dealWithConfigData(data) {
             this.dataConfig = [];
@@ -496,25 +691,24 @@ export default {
             json.down_med = totalValue.mean_down_num;
             json.up_med = totalValue.mean_up_num;
             this.dataConfig.push(json);
-            console.log(this.dataConfig);
         },
         async getModelData() {
-            this.dealWithModelData(this.dataModelBak);
-            // let params = {
-            //     task_date: this.fatherData['task_date'],
-            //     zhibiao_list: JSON.stringify([this.fatherData.metric]),
-            //     complete: this.fatherData.is_Fill
-            // };
-            // const {code, message, data} = await api.post(BenchmarkPaddleVsOtherData, params);
-            // if (parseInt(code, 10) === 200) {
-            //     this.dealWithModelData(data);
-            // } else {
-            //     this.$Message.error({
-            //         content: '请求出错:' + message,
-            //         duration: 30,
-            //         closable: true
-            //     });
-            // }
+            // this.dealWithModelData(this.dataModelBak);
+            let params = {
+                task_date: this.fatherData.task_date,
+                zhibiao_list: JSON.stringify([this.fatherData.metric]),
+                complete: this.fatherData.is_Fill
+            };
+            const {code, message, data} = await api.post(ModelsBenchmarkSummaryModel, params);
+            if (parseInt(code, 10) === 200) {
+                this.dealWithModelData(data);
+            } else {
+                this.$Message.error({
+                    content: '请求出错:' + message,
+                    duration: 30,
+                    closable: true
+                });
+            }
         },
         dealWithModelData(data) {
             // 有些字段没对齐 需要再对齐一下
@@ -539,25 +733,25 @@ export default {
             }
         },
         async getCompareSummery() {
-            this.contentCompareSummary(this.dataCompareSummaryBak);
-            this.dealWithCompareSummary(this.dataCompareSummaryBak);
-            // let params = {
-            //     task_date: this.fatherData['task_date'],
-            //     zhibiao_list: JSON.stringify([this.fatherData.metric]),
-            //     complete: this.fatherData.is_Fill,
-            //     summary_type: 1
-            // };
-            // const {code, message, data} = await api.post(BenchmarkPaddleVsOtherData, params);
-            // if (parseInt(code, 10) === 200) {
-            //     this.contentCompareSummary(data);
-            //     this.dealWithCompareSummary(data);
-            // } else {
-            //     this.$Message.error({
-            //         content: '请求出错:' + message,
-            //         duration: 30,
-            //         closable: true
-            //     });
-            // }
+            // this.contentCompareSummary(this.dataCompareSummaryBak);
+            // this.dealWithCompareSummary(this.dataCompareSummaryBak);
+            let params = {
+                task_date: this.fatherData.task_date,
+                zhibiao_list: JSON.stringify([this.fatherData.metric]),
+                complete: this.fatherData.is_Fill,
+                summary_type: 1
+            };
+            const {code, message, data} = await api.post(ModelsBenchmarkSummaryDynamic, params);
+            if (parseInt(code, 10) === 200) {
+                this.contentCompareSummary(data);
+                this.dealWithCompareSummary(data);
+            } else {
+                this.$Message.error({
+                    content: '请求出错:' + message,
+                    duration: 30,
+                    closable: true
+                });
+            }
         },
         contentCompareSummary(data) {
             this.columnsCompareSummary = [];
@@ -588,7 +782,6 @@ export default {
                     });
                 }
             }
-            console.log(this.columnsCompareSummary);
         },
         dealWithCompareSummary(data) {
             this.dataCompareSummary = [];
@@ -611,28 +804,27 @@ export default {
                     this.dataCompareSummary.push(json);
                 }
             }
-            console.log(this.dataCompareSummary);
         },
         async getFpCompare() {
-            this.columnFpCompare(this.dataFpCompareBak);
-            this.dealWithFpCompare(this.dataFpCompareBak);
-            // let params = {
-            //     task_date: this.fatherData['task_date'],
-            //     zhibiao_list: JSON.stringify([this.fatherData.metric]),
-            //     complete: this.fatherData.is_Fill,
-            //     summary_type: 1
-            // };
-            // const {code, message, data} = await api.post(BenchmarkPaddleVsOtherData, params);
-            // if (parseInt(code, 10) === 200) {
-            //     this.columnFpCompare(data);
-            //     this.dealWithFpCompare(data);
-            // } else {
-            //     this.$Message.error({
-            //         content: '请求出错:' + message,
-            //         duration: 30,
-            //         closable: true
-            //     });
-            // }
+        //     this.columnFpCompare(this.dataFpCompareBak);
+            // this.dealWithFpCompare(this.dataFpCompareBak);
+            let params = {
+                task_date: this.fatherData.task_date,
+                zhibiao_list: JSON.stringify([this.fatherData.metric]),
+                complete: this.fatherData.is_Fill,
+                summary_type: 1
+            };
+            const {code, message, data} = await api.post(ModelsBenchmarkSummaryFP32, params);
+            if (parseInt(code, 10) === 200) {
+                this.columnFpCompare(data);
+                this.dealWithFpCompare(data);
+            } else {
+                this.$Message.error({
+                    content: '请求出错:' + message,
+                    duration: 30,
+                    closable: true
+                });
+            }
         },
         columnFpCompare(data) {
             this.columnsFpCompare = [];
@@ -663,7 +855,6 @@ export default {
                     });
                 }
             }
-            console.log(this.columnsFpCompare);
         },
         dealWithFpCompare(data) {
             this.dataFpCompare = [];
@@ -686,7 +877,6 @@ export default {
                     this.dataFpCompare.push(json);
                 }
             }
-            console.log(this.dataFpCompare);
         }
     }
 };

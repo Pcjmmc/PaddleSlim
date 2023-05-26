@@ -6,6 +6,7 @@
                 placeholder="搜索模型名"
                 style="width: 30%;"
                 size="small"
+                @change="changeSearchModelName"
             >
             </el-input>
             <el-button
@@ -132,18 +133,18 @@ export default {
         monitoring() {
             this.$on('acceptFatherData', (res) => {
                 this.fatherData = res;
-                console.log('fatherData', this.fatherData);
                 this.getData();
             });
         },
         getDeviceList(data) {
-            return data.device_num_list.split(',');
+            return data.split(',');
         },
-        dealWithContent(data) {
+        dealWithContent(device_num_list) {
             this.content = [];
             this.contentBak = [];
             this.contentKeys = [];
-            let deviceNumList = this.getDeviceList(data);
+            let deviceNumList = this.getDeviceList(device_num_list);
+            console.log(deviceNumList);
             this.contentBak.push(
                 {title: '序号',
                 key: 'index',
@@ -213,7 +214,7 @@ export default {
                 });
                 this.contentBak.push({
                     title: 'diff_' + deviceNum + '(paddle-pytorch)',
-                    key: 'diff_' + deviceNum,
+                    key: 'paddle_vs_other_' + deviceNum,
                     minwidth: 150,
                     resizable: true,
                     sortable: true,
@@ -240,9 +241,9 @@ export default {
                         return h('div', [
                             h('p', {
                                 style: {
-                                color: this.setDiffStatusColor(params.row, 'diff_' + deviceNum)
+                                color: this.setDiffStatusColor(params.row, 'paddle_vs_other_' + deviceNum)
                                 }
-                            }, this.getDiffValueRender(params.row, 'diff_' + deviceNum))
+                            }, this.getDiffValueRender(params.row, 'paddle_vs_other_' + deviceNum))
                         ]);
                     }
                 });
@@ -253,16 +254,15 @@ export default {
                 this.contentKeyChecked.push(item.title);
             });
         },
-        dealWithTableData(data) {
+        dealWithTableData(device_num_list, paddle_vs_other_data) {
             this.data = [];
             // 获取具体数据
-            let paddle_vs_other_data = data.paddle_vs_other_data;
             // framework类型
             let frameworkList = ['paddle', 'pytorch'];
             // 当前存在数据的设备类型
-            let deviceNumList = this.getDeviceList(data);
+            let deviceNumList = this.getDeviceList(device_num_list);
             // 获取当前数据的序号
-            let index = 1;
+            let index = 1 + (this.pagenum - 1) * this.pagesize;
             // 以下的循环是用来获取Paddle Pytorch中的具体数值
             for (let config in paddle_vs_other_data) {
                 // 每一个Config 变成一列
@@ -312,7 +312,7 @@ export default {
                 let diffValueList = outValue.paddle_vs_other;
                 // 将对应的diff数据列表存入data中
                 deviceNumList.forEach(deviceNum => {
-                    json['diff_' + deviceNum] = diffValueList[deviceNum];
+                    json['paddle_vs_other_' + deviceNum] = diffValueList[deviceNum];
                 });
                 this.data.push(json);
                 // 每个config是一个循环 在循环的末尾增加序号
@@ -320,11 +320,10 @@ export default {
             }
         },
         async getData() {
-            console.log('father data get', this.fatherData);
             let params = {
                 task_name: this.fatherData.task_name,
                 task_date: this.fatherData.task_date,
-                metric_list: JSON.stringify([this.fatherData.metric]),
+                metric_list: [this.fatherData.metric],
                 is_Fill: this.fatherData.is_Fill,
                 pagenum: this.pagenum,
                 pagesize: this.pagesize
@@ -335,11 +334,12 @@ export default {
             } else {
                 params.search_model_item = '';
             }
-            const {code, message, data, all_count} = await api.post(BenchmarkPaddleVsOtherData, params);
+            const {code, message, device_num_list,
+                paddle_vs_other_data, total_num} = await api.post(BenchmarkPaddleVsOtherData, params);
             if (parseInt(code, 10) === 200) {
-                this.total = all_count;
-                this.dealWithContent(data);
-                this.dealWithTableData(data);
+                this.total = total_num;
+                this.dealWithContent(device_num_list);
+                this.dealWithTableData(device_num_list, paddle_vs_other_data);
             } else {
                 this.$Message.error(
                     {
@@ -356,6 +356,7 @@ export default {
         },
         async changePageSize(pageSize) {
             this.pagesize = pageSize;
+            this.pagenum = 1;
             await this.getData();
         },
         setPaddleValueColor(row, key) {
@@ -407,6 +408,9 @@ export default {
             this.content = this.contentBak.filter(col => {
                 return this.contentKeyChecked.includes(col.title);
             });
+        },
+        changeSearchModelName() {
+            this.$emit('change-model-name', this.search_model_item);
         }
     }
 };
