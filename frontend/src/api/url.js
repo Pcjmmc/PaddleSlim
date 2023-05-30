@@ -69,3 +69,4 @@ export const ModelsBenchmarkSummaryModel = '/models_benchmark/compare/summary_mo
 export const ModelsBenchmarkSummaryDynamic = '/models_benchmark/compare/summary_vs_dynamic/';
 export const ModelsBenchmarkSummaryFP32 = '/models_benchmark/compare/summary_vs_fp32/';
 export const PaddleVsOtherDataDownload = '/models_benchmark/PaddleVsOtherDataDownload/';
+export const PaddleVsOtherReadLog = '/models_benchmark/read_log/';

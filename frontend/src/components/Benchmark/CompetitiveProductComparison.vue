@@ -280,24 +280,15 @@ export default {
                 get_mode: 'download',
                 search_model_item: this.searchModelName
             };
-            const {code, message, data} = await api.post(PaddleVsOtherDataDownload, params);
-            if (parseInt(code, 10) === 200) {
-                const excelData = data;
-                let blob = new Blob([excelData],
-                { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                let url = URL.createObjectURL(blob);
-                let link = document.createElement('a');
-                link.href = url;
-                link.download = 'your-file-name.xlsx';
-                document.body.appendChild(link);
-                link.click();
-            } else {
-                this.$Message.error({
-                    content: '请求出错:' + message,
-                    duration: 30,
-                    closable: true
-                });
-            }
+            let response = await api.postExcel(PaddleVsOtherDataDownload, params);
+            console.log('res', response);
+            const url = URL.createObjectURL(new Blob([response], {type: 'application/octet-stream'}));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'test');
+            document.body.appendChild(link);
+            link.click();
+            URL.revokeObjectURL(url);
         },
         callAllChildMethods() {
             this.callChildMethod();

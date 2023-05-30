@@ -501,7 +501,8 @@ export default {
         async getEnviromentsInfo() {
             let task_date = this.fatherData.task_date;
             let params = {
-                taskDate: task_date
+                // task_date: task_date
+                task_date: '2023-05-19 07:16:22.958348'
             };
             const {code, message, data} = await api.post(ModelsBenchmarkEnvInfo, params);
             if (parseInt(code, 10) === 200) {
@@ -517,9 +518,10 @@ export default {
         async getTorchCompare() {
             // this.dealWithTorchCompareData();
             let params = {
-                task_date: this.fatherData.task_date,
-                zhibiao_list: JSON.stringify([this.fatherData.metric]),
-                complete: this.fatherData.is_Fill
+                // task_date: this.fatherData.task_date,
+                task_date: '2023-05-19 07:16:22.958348',
+                zhibiao_list: [this.fatherData.metric],
+                complete: this.fatherData.is_Fill ? 1 : 0
             };
             const {code, message, data} = await api.post(ModelsBenchmarkSummaryTorch, params);
             if (parseInt(code, 10) === 200) {
@@ -630,14 +632,15 @@ export default {
         async getConfigData() {
             // this.dealWithConfigData(this.dataConfigBak);
             let params = {
-                task_date: this.fatherData.task_date,
-                zhibiao_list: JSON.stringify([this.fatherData.metric]),
-                complete: this.fatherData.is_Fill,
+                task_date: '2023-05-19 07:16:22.958348',
+                // task_date: this.fatherData.task_date,
+                zhibiao_list: [this.fatherData.metric],
+                complete: this.fatherData.is_Fill ? 1 : 0,
                 summary_type: 1
             };
             const {code, message, data} = await api.post(ModelsBenchmarkSummaryPaddle, params);
             if (parseInt(code, 10) === 200) {
-                this.dealWithTorchCompareData(data);
+                this.dealWithConfigData(data);
             } else {
                 this.$Message.error({
                     content: '请求出错:' + message,
@@ -648,9 +651,11 @@ export default {
         },
         dealWithConfigData(data) {
             this.dataConfig = [];
+            console.log(data);
             for (let model_type in data) {
+                console.log(model_type);
                 if (model_type === 'total') {
-                    break;
+                    continue;
                 }
                 let model_type_layer = data[model_type];
                 for (let run_config in model_type_layer) {
@@ -661,16 +666,16 @@ export default {
                         json.model_type = model_type;
                         json.run_config = run_config;
                         json.fpconfig = fpconfig;
-                        let success = fpconfig_layer.success_num;
-                        let fail = fpconfig_layer.fail_num;
+                        let success = fpconfig_layer.success_num ? fpconfig_layer.success_num : 0;
+                        let fail = fpconfig_layer.fail_num ? fpconfig_layer.fail_num : 0;
                         let total = success + fail;
                         json.success_config = success + '/' + total;
-                        json.down_standard = fpconfig.base_down_num;
-                        json.up_standard = fpconfig.base_up_num;
-                        json.down_stable = fpconfig.stable_down_num;
-                        json.up_stable = fpconfig.stable_up_num;
-                        json.down_med = fpconfig.mean_down_num;
-                        json.up_med = fpconfig.mean_up_num;
+                        json.down_standard = fpconfig_layer.base_down_num;
+                        json.up_standard = fpconfig_layer.base_up_num;
+                        json.down_stable = fpconfig_layer.stable_down_num;
+                        json.up_stable = fpconfig_layer.stable_up_num;
+                        json.down_med = fpconfig_layer.mean_down_num;
+                        json.up_med = fpconfig_layer.mean_up_num;
                         this.dataConfig.push(json);
                     }
                 }
@@ -680,8 +685,8 @@ export default {
             json.model_type = '汇总';
             json.run_config = '-';
             json.fpconfig = '-';
-            let success = totalValue.success_num;
-            let fail = totalValue.fail_num;
+            let success = totalValue.success_num ? totalValue.success_num : 0;
+            let fail = totalValue.fail_num ? totalValue.success_num : 0;
             let total = success + fail;
             json.success_config = success + '/' + total;
             json.down_standard = totalValue.base_down_num;
@@ -691,13 +696,15 @@ export default {
             json.down_med = totalValue.mean_down_num;
             json.up_med = totalValue.mean_up_num;
             this.dataConfig.push(json);
+            console.log(this.dataConfig);
         },
         async getModelData() {
             // this.dealWithModelData(this.dataModelBak);
             let params = {
-                task_date: this.fatherData.task_date,
-                zhibiao_list: JSON.stringify([this.fatherData.metric]),
-                complete: this.fatherData.is_Fill
+                // task_date: this.fatherData.task_date,
+                task_date: '2023-05-19 07:16:22.958348',
+                zhibiao_list: [this.fatherData.metric],
+                complete: this.fatherData.is_Fill ? 1 : 0
             };
             const {code, message, data} = await api.post(ModelsBenchmarkSummaryModel, params);
             if (parseInt(code, 10) === 200) {
@@ -736,9 +743,10 @@ export default {
             // this.contentCompareSummary(this.dataCompareSummaryBak);
             // this.dealWithCompareSummary(this.dataCompareSummaryBak);
             let params = {
-                task_date: this.fatherData.task_date,
-                zhibiao_list: JSON.stringify([this.fatherData.metric]),
-                complete: this.fatherData.is_Fill,
+                // task_date: this.fatherData.task_date,
+                task_date: '2023-05-19 07:16:22.958348',
+                zhibiao_list: [this.fatherData.metric],
+                complete: this.fatherData.is_Fill ? 1 : 0,
                 summary_type: 1
             };
             const {code, message, data} = await api.post(ModelsBenchmarkSummaryDynamic, params);
@@ -809,9 +817,10 @@ export default {
         //     this.columnFpCompare(this.dataFpCompareBak);
             // this.dealWithFpCompare(this.dataFpCompareBak);
             let params = {
-                task_date: this.fatherData.task_date,
-                zhibiao_list: JSON.stringify([this.fatherData.metric]),
-                complete: this.fatherData.is_Fill,
+                // task_date: this.fatherData.task_date,
+                task_date: '2023-05-19 07:16:22.958348',
+                zhibiao_list: [this.fatherData.metric],
+                complete: this.fatherData.is_Fill ? 1 : 0,
                 summary_type: 1
             };
             const {code, message, data} = await api.post(ModelsBenchmarkSummaryFP32, params);

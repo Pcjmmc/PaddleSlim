@@ -78,7 +78,7 @@
                         <a
                             style="word-wrap: break-word;"
                             href="#"
-                            v-on:click="openModal('run_model_sh_url'); return false;"
+                            v-on:click="getData('run_model_sh_url'); return false;"
                         >
                         : {{ dealWithBlank('run_model_sh_url') }}
                         </a>
@@ -102,7 +102,13 @@
                         <p>训练日志链接</p>
                     </Col>
                     <Col>
+                        <a
+                            style="word-wrap: break-word;"
+                            href="#"
+                            v-on:click="getData('train_log_url'); return false;"
+                        >
                         : {{ dealWithBlank('train_log_url') }}
+                        </a>
                     </Col>
                 </Row>
                 <Row>
@@ -110,7 +116,13 @@
                         <p>结果日志链接</p>
                     </Col>
                     <Col>
+                        <a
+                            style="word-wrap: break-word;"
+                            href="#"
+                            v-on:click="getData('index_log_url'); return false;"
+                        >
                         : {{ dealWithBlank('index_log_url') }}
+                        </a>
                     </Col>
                 </Row>
                 <Row>
@@ -118,8 +130,12 @@
                         <p>profiler日志链接</p>
                     </Col>
                     <Col>
-                        <a>
-                            : {{ dealWithBlank('profiler_log_url') }}
+                        <a
+                            style="word-wrap: break-word;"
+                            href="#"
+                            v-on:click="getData('profiler_log_url'); return false;"
+                        >
+                        : {{ dealWithBlank('profiler_log_url') }}
                         </a>
                     </Col>
                 </Row>
@@ -139,12 +155,14 @@
             :scrollable="true"
             :footer-hide="true"
             >
-            <p style="word-wrap: break-word;">{{ modalContent }}</p>
+            <pre style="word-wrap: break-word;">{{ modalContent }}</pre>
         </Modal>
     </Poptip>
 </template>
 
 <script>
+import api from '../../api';
+import {PaddleVsOtherReadLog} from '../../api/url';
 
 export default {
     name: 'Detail',
@@ -181,15 +199,19 @@ export default {
     },
     methods: {
         setModalWidth() {
-            this.modalWidth = window.innerWidth * 0.8;
+            this.modalWidth = window.innerWidth * 0.5;
         },
         initData() {
         },
-        getData(key) {
-            this.modalContent = this.info[key];
-        },
-        openModal(key) {
-            this.getData(key);
+        async getData(key) {
+            let params = {
+                log_url: this.info[key].split(':')[1]
+            };
+            if (params.log_url === undefined || params.log_url === '') {
+                return;
+            }
+            const data = await api.get(PaddleVsOtherReadLog, params);
+            this.modalContent = JSON.stringify(data, null, 2);
             this.$refs.poptip.visible = false;
             this.modal = true;
         },

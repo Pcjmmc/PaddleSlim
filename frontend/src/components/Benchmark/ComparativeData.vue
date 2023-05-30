@@ -155,7 +155,7 @@ export default {
             this.contentBak.push({
                 title: '配置名',
                 key: 'config_name',
-                width: 200,
+                width: 300,
                 resizable: true
             });
             deviceNumList.forEach(deviceNum => {
@@ -215,7 +215,7 @@ export default {
                 this.contentBak.push({
                     title: 'diff_' + deviceNum + '(paddle-pytorch)',
                     key: 'paddle_vs_other_' + deviceNum,
-                    minwidth: 150,
+                    minwidth: 100,
                     resizable: true,
                     sortable: true,
                     sortMethod: function (a, b, type) {
@@ -253,6 +253,7 @@ export default {
                 this.contentKeys.push(item.title);
                 this.contentKeyChecked.push(item.title);
             });
+            console.log('content', this.content);
         },
         dealWithTableData(device_num_list, paddle_vs_other_data) {
             this.data = [];
@@ -310,6 +311,7 @@ export default {
                 });
                 //  获取diff数据列表
                 let diffValueList = outValue.paddle_vs_other;
+                console.log('diffList', diffValueList);
                 // 将对应的diff数据列表存入data中
                 deviceNumList.forEach(deviceNum => {
                     json['paddle_vs_other_' + deviceNum] = diffValueList[deviceNum];
@@ -318,6 +320,7 @@ export default {
                 // 每个config是一个循环 在循环的末尾增加序号
                 index += 1;
             }
+            console.log('data', this.data);
         },
         async getData() {
             let params = {
@@ -365,12 +368,9 @@ export default {
             if (str === undefined) {
                 return;
             }
-            let valueList = str.split('%');
-            if (valueList.length > 0) {
-                let value = valueList[0];
-                if (value > 5) {
-                    return 'red';
-                }
+            let value = parseFloat(str, 10);
+            if (value > 5) {
+                return 'red';
             }
         },
         getPaddleValueRender(row, key) {
@@ -382,19 +382,16 @@ export default {
         },
         setDiffStatusColor(row, key) {
             let str = row[key];
-            let valueList = str.split('%');
-            if (valueList.length > 0) {
-                let value = valueList[0];
-                if (value > 5) {
+            let value =  parseFloat(str, 10);
+            if (value > 5) {
                 return 'green';
-                } else if (value < -5) {
-                    return 'red';
-                }
+            } else if (value < -5) {
+                return 'red';
             }
         },
         getDiffValueRender(row, key) {
             let value = row[key];
-            return value;
+            return value + '%';
         },
         handleCheckAllChange(val) {
             this.contentKeyChecked = val ? this.contentKeys : [];

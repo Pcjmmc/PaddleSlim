@@ -132,5 +132,18 @@ export default {
         'originUrl': window.location.href
       }
     }).then(checkStatus).then(checkDataStatus);
+  },
+  postExcel(url, data) {
+    return axios({
+      method: 'post',
+      url: BASEURL + url,
+      data: url.startsWith('/models_benchmark') ? JSON.stringify(data) : qs.stringify(data),
+      timeout: 30000,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/octet-stream',
+        'responseType': 'blob'
+      }
+    }).then(checkStatus).then(checkDataStatus);
   }
 };
