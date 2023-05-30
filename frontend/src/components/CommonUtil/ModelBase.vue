@@ -13,14 +13,6 @@
           color="error"
           v-else
         >模型状态: {{ status }} </Tag>
-        <Button
-          v-if="status.toLowerCase()=='failed'"
-          type="primary"
-          size="small"
-          @click="updateStatus"
-        >
-          更新自动定位结果
-        </Button>
         <Table
           border
           size="small"
