@@ -72,18 +72,7 @@ export default {
                   }
                 }
               }, '自动定位'));
-              if (this.failState === undefined) {
-                ret.push(
-                  h('div', {
-                  }, [
-                    h('p', {
-                      style: {
-                        display: 'inline-block'
-                      }
-                    }, '加载中')
-                  ])
-                );
-              } else {
+              if (params.row.tag in this.failState) {
                 ret.push(
                 h('div', {
                 }, [
@@ -107,7 +96,7 @@ export default {
                   }
                 }, '当前状态: ' + this.getStatus(params.row))
                 ])
-              );
+               );
               }
             }
             return h(

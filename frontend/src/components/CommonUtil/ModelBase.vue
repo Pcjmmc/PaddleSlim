@@ -62,8 +62,7 @@ export default {
   },
   provide() {
     return {
-      fatherMethod: this.autoBinarySearch,
-      statuses: this.getStatuses
+      fatherMethod: this.autoBinarySearch
     };
   },
   data: function () {
@@ -205,8 +204,7 @@ export default {
         let res = {};
         res.xly_link = data.url;
         res.status = data.status;
-        this.statusStored[params.step_name][params.tag] = res;
-        // console.log(this.statusStored);
+        this.updateStatus();
       } else {
         this.$Message.error({
           content: '请求出错: ' + message,
