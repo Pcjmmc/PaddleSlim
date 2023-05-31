@@ -32,8 +32,8 @@ class Cloud(object):
     for xly , value is "pipeline conf id", parameters.
     """
     ##########  LINUX  ##########
-    gpu = "25303"
-    x86 = "25303"
+    gpu = "25813"
+    x86 = "25819"
 
 
 class CloudMission(object):

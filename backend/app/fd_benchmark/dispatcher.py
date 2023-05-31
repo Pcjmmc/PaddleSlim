@@ -29,29 +29,40 @@ class Dispatcher(object):
     """
     调度器
     """
+    # def cloud_run(cls, module, id, fork, branch, compile_dict, bos_path):
     @classmethod
-    def cloud_run(cls, module, id, fork, branch, compile_dict, bos_path):
+    def cloud_run(cls, hardware, comment, routine, uid, job_id, mission_id, fork, branch, compile_dict):
         """
         触发效率云
         """
         xly_agent = XlyOpenApiRequest()
-        pipelineid = CloudMission.ROUTER.get(module)
+        pipelineid = CloudMission.ROUTER.get(hardware)
         url_param = "pipelineId={}".format(pipelineid)
         # 构建效率云参数
-        if module == 'gpu' or module == 'x86':
+        if hardware == 'gpu' or hardware == 'x86':
             params = {
-                "id": str(id),
+                "comment": comment,
+                "routine": str(routine),
+                "uid": str(uid),
+                "job_id": str(job_id),
+                "mission_id": str(mission_id),
                 "fork": fork,
                 "branch": branch,
-                "bos_path": bos_path,
+                # "bos_path": bos_path,
                 "docker_image": DOCKER_IMAGE.get('v11.2'),
+                "hardware": hardware,
             }
         else:
             params = {
-                "id": str(id),
+                "comment": comment,
+                "routine": str(routine),
+                "uid": str(uid),
+                "job_id": str(job_id),
+                "mission_id": str(mission_id),
                 "fork": fork,
                 "branch": branch,
-                "bos_path": bos_path,
+                # "bos_path": bos_path,
+                "hardware": hardware,
             }
         total_param = dict(params, **compile_dict)
         data = {
@@ -71,13 +82,15 @@ class Dispatcher(object):
             return res.json()
 
     @classmethod
-    def request_mission(self, module, id, fork, branch, compile_dict, bos_path):
+    def request_mission(self, hardware, comment, routine, uid, job_id, mission_id, fork, branch, compile_dict):
+    # def request_mission(self, module, id, fork, branch, compile_dict, bos_path):
     # def request_mission(self, module, id, env, wheel):
         # todo: 请求任务 任务环境，编译内容，发送请求给效率云
-        if PLACE.get(module) is not None:
-            if PLACE.get(module) == CLOUD:
+        if PLACE.get(hardware) is not None:
+            if PLACE.get(hardware) == CLOUD:
                 # todo: 效率云的请求发送
-                return self.cloud_run(module, id, fork, branch, compile_dict, bos_path)
+                # return self.cloud_run(module, id, fork, branch, compile_dict, bos_path)
+                return self.cloud_run(hardware, comment, routine, uid, job_id, mission_id, fork, branch, compile_dict)
             else:
                 return STATUS.ERROR_233
         else:
@@ -98,7 +111,7 @@ class Dispatcher(object):
         # env = res["env"]
         fork = job.get("fork")
         branch = job.get("branch")
-        bos_path = job.get("bos_path")
+        # bos_path = job.get("bos_path")
         retry_time = 5
         for k, v in mission.items():
             # 如果任务有id，不继续触发。
@@ -107,10 +120,11 @@ class Dispatcher(object):
             retry = 0
             compile_dict = CompileParams.ROUTER.get(k)
             data = {"jid": job.get("id"),
+                    "uid": job.get("uid"),
                     "status": "init",
-                    "module": k,
+                    "hardware": k,
                     "compile": str(compile_dict),
-                    "bos_path": bos_path + '/' + k + 'xls',
+                    # "bos_path": bos_path + '/' + k + 'xls',
                     "create_time": datetime.now(),
                     "update_time": datetime.now()},
             res = await Mission.aio_insert(data)
@@ -119,11 +133,11 @@ class Dispatcher(object):
             id = res[1]
             mission[k] = id
 
-
             while(retry < retry_time):
                 # res = self.request_mission(k, id, env, wheel)
                 # 输入示例 k='gpu', id='3', compile_dict={...}
-                res = self.request_mission(k, id, fork, branch, compile_dict, bos_path)
+                # res = self.request_mission(k, id, fork, branch, compile_dict, bos_path)
+                res = self.request_mission(k, job.get("comment"), job.get("routine"), job.get("uid"), job.get("id"), id, fork, branch, compile_dict)
                 if isinstance(res, dict):
                     # 初始化任务 获取效率云链接
                     if PLACE.get(k) == CLOUD:
