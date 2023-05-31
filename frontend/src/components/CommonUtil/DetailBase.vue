@@ -72,7 +72,7 @@ export default {
                   }
                 }
               }, '自动定位'));
-              if (params.row.tag in this.failState) {
+              if (this.dealWithTag(params.row) in this.failState) {
                 ret.push(
                 h('div', {
                 }, [
@@ -197,17 +197,22 @@ export default {
       name.push(row.kpi_name);
       return name.join('_');
     },
+    dealWithTag(row) {
+      return row.tag.split('_')[1];
+    },
     autoBinarySearch(row) {
+      let tag =  this.dealWithTag(row);
       let params = {
         model_name: row.model_name,
-        tag_name: row.tag,
+        tag_name: tag,
         step_name: row.step_name
       };
       // console.log(params);
       this.fatherMethod(params);
     },
     getXlyLink(row) {
-      let innerValue = this.failState[row.tag];
+      let tag =  this.dealWithTag(row);
+      let innerValue = this.failState[tag];
       if (innerValue) {
         return innerValue.xly_link;
       } else {
@@ -215,8 +220,9 @@ export default {
       }
     },
     getStatus(row) {
-      if (row.tag in this.failState) {
-        let status = this.failState[row.tag].status;
+      let tag =  this.dealWithTag(row);
+      if (tag in this.failState) {
+        let status = this.failState[tag].status;
         // console.log(status);
         switch (status) {
           case 'quening':

@@ -268,9 +268,6 @@ export default {
             return '未知状态';
         }
       }
-    },
-    getStatuses(step_name) {
-      return this.statusStored.step_name;
     }
   }
 };
