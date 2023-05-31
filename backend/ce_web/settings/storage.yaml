@@ -36,10 +36,10 @@ PRODUCTION:
     paddle_quality:
       host: "10.11.37.64"
       port: 9000
-  #  redis:
-  #    paddle_quality:
-  #      host: "127.0.0.1"
-  #      port: 6379
+  # redis:
+  #   paddle_quality:
+  #     host: "127.0.0.1"
+  #     port: 6379
 
 
 DEV:
