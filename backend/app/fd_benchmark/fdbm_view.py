@@ -62,11 +62,14 @@ class FDBenchmarkInitView(MABaseView):
         # data["uid"] = self._cookies.get("userid", 0)
         # #data["description"] = kwargs.get("name")
         # #data["version"] = kwargs.get("value")
+        data["uid"] = self._cookies.get("userid", 0)
+        data["routine"] = 0
         data["status"] = "running"
+        data["comment"] = kwargs.get("comment")
         data["fork"] = kwargs.get("fork")
         data["branch"] = kwargs.get("branch")
         data["mission"] = self.mission_analyse(mission)
-        data["bos_path"] = kwargs.get("bos_path")
+        # data["bos_path"] = kwargs.get("bos_path")
         data["create_time"] = datetime.now()
         data["update_time"] = datetime.now()
 
