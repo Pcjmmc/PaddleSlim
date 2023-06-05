@@ -34,6 +34,8 @@ class Cloud(object):
     ##########  LINUX  ##########
     gpu = "25813"
     x86 = "25819"
+    arm = "25840"
+    xpu = "25846"
 
 
 class CloudMission(object):
@@ -43,6 +45,8 @@ class CloudMission(object):
     ROUTER = {
         "gpu": Cloud.gpu,
         "x86": Cloud.x86,
+        "arm": Cloud.arm,
+        "xpu": Cloud.xpu,
     }
 
 
