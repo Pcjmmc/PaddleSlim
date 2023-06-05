@@ -393,31 +393,29 @@ export default {
         },
         handleSpanMethod(row, column, rowIndex, columnIndex, data) {
             if (columnIndex === 0) {
-                let rowCount = 1;
-                for (let i = rowIndex + 1; i < data.length; i++) {
-                    if (data[i][column.key] === row[column.key] &&
-                    data[i].model_type === row.model_type) {
-                        rowCount++;
-                    } else {
-                        break;
-                    }
-                }
                 if (row.model_type_index === 0) {
+                    let rowCount = 1;
+                    for (let i = rowIndex + 1; i < data.length; i++) {
+                        if (data[i].model_type_index !== 0) {
+                            rowCount++;
+                        } else {
+                            break;
+                        }
+                    }
                     return [rowCount, 1];
                 } else {
                     return [0, 0];
                 }
             } else if (columnIndex === 1) {
-                let rowCount = 1;
-                for (let i = rowIndex + 1; i < data.length; i++) {
-                    if (data[i][column.key] === row[column.key] &&
-                    data[i].model_type === row.model_type) {
-                        rowCount++;
-                    } else {
-                        break;
-                    }
-                }
                 if (row.run_config_index === 0) {
+                    let rowCount = 1;
+                    for (let i = rowIndex + 1; i < data.length; i++) {
+                        if (data[i].run_config_index !== 0) {
+                            rowCount++;
+                        } else {
+                            break;
+                        }
+                    }
                     return [rowCount, 1];
                 } else {
                     return [0, 0];
@@ -755,6 +753,7 @@ export default {
                     model_type_index++;
                     config_type_index++;
                     this.dataFpCompare.push(json);
+                    console.log(this.dataFpCompare);
                 }
             }
         },

@@ -19,7 +19,7 @@
                 style="text-align:left; color:black"
              >
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>模型库分支:</p>
                     </Col>
                     <Col>
@@ -27,7 +27,7 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>模型库commit号:</p>
                     </Col>
                     <Col>
@@ -35,7 +35,7 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>框架分支:</p>
                     </Col>
                     <Col>
@@ -43,7 +43,7 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>框架commit号:</p>
                     </Col>
                     <Col>
@@ -51,7 +51,7 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>批次号:</p>
                     </Col>
                     <Col>
@@ -59,10 +59,10 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>模型链接:</p>
                     </Col>
-                    <Col span="4">
+                    <Col span="5">
                         <a
                         :href="info['script_url']"
                         target="_blank"
@@ -72,7 +72,7 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>执行脚本:</p>
                     </Col>
                     <Col>
@@ -86,10 +86,10 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>paddlecloud-job号:</p>
                     </Col>
-                    <Col span="4">
+                    <Col span="5">
                         <a
                         :href="info['pdc_job_id']"
                         target="_blank"
@@ -99,7 +99,7 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>训练日志链接:</p>
                     </Col>
                     <Col>
@@ -113,7 +113,7 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>结果日志链接:</p>
                     </Col>
                     <Col>
@@ -127,7 +127,7 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>profiler日志链接:</p>
                     </Col>
                     <Col>
@@ -141,7 +141,7 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="4">
+                    <Col span="5">
                         <p>下降原因:</p>
                     </Col>
                     <Col>

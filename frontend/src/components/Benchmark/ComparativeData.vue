@@ -72,7 +72,7 @@
             <Table
                 :data="data"
                 :columns="content"
-                :no-data-text="'暂无数据, 点击查询试试看吧'"
+                :no-data-text="'暂无数据, 加载中；若持续无响应，请点击查询'"
                 border
             >
             </Table>
@@ -174,7 +174,7 @@ export default {
             this.contentBak.push({
                 title: '配置名',
                 key: 'config_name',
-                width: 300,
+                minWidth: 100,
                 resizable: true
             });
             deviceNumList.forEach(deviceNum => {
@@ -234,7 +234,7 @@ export default {
                 this.contentBak.push({
                     title: 'diff_' + deviceNum + '(paddle-pytorch)',
                     key: 'paddle_vs_other_' + deviceNum,
-                    minwidth: 100,
+                    width: 100,
                     resizable: true,
                     sortable: true,
                     sortMethod: function (a, b, type) {
@@ -339,6 +339,8 @@ export default {
             }
         },
         async getData() {
+            this.data = [];
+            this.contentBak = [];
             let params = {
                 task_name: this.fatherData.task_name,
                 task_date: this.fatherData.task_date,
