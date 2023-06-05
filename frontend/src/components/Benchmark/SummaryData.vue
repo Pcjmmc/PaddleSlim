@@ -1,4 +1,4 @@
-<template>
+`<template>
     <div class="center-card-s">
         <Collapse
             v-model="panelNames"
@@ -45,7 +45,7 @@
                     <Table
                         :data="dataTorchShow"
                         :columns="columnsTorch"
-                        :span-method="handleSpanMethod"
+                        :span-method="handleSpanMethodFirst"
                         border
                     >
                     </Table>
@@ -57,6 +57,7 @@
                     <Table
                         :data="dataConfig"
                         :columns="columnsConfig"
+                        :span-method="handleSpanMethodSecond"
                         border
                     >
                     </Table>
@@ -79,6 +80,7 @@
                     <Table
                         :data="dataCompareSummary"
                         :columns="columnsCompareSummary"
+                        :span-method="handleSpanMethodThird"
                         border
                     >
                     </Table>
@@ -90,6 +92,7 @@
                     <Table
                     :data="dataFpCompare"
                     :columns="columnsFpCompare"
+                    :span-method="handleSpanMethodFour"
                     border
                     >
                     </Table>
@@ -106,12 +109,19 @@ import {ModelsBenchmarkEnvInfo, ModelsBenchmarkSummaryTorch, ModelsBenchmarkSumm
 
 export default {
     name: 'SummaryData',
+    props: {
+        fatherData: {
+            type: [Object],
+            default: function () {
+                return null;
+            }
+        }
+    },
     data: function () {
         return {
             env: {},
             panelNames: [],
             everPaneNames: [],
-            fatherData: {},
             tags: [],
             tagSelected: '',
             dataTorch: {},
@@ -249,182 +259,17 @@ export default {
             dataCompareSummary: [],
             columnsFpCompare: [],
             dataFpCompare: [],
-            torchCompare: {
-    'PaddleClas': {
-        'static': {
-            'N1C8': {
-                'fp32': {
-                    'vs_pytorch': {
-                        'model_level': {
-                            'pytorch_up_num': 0,
-                            'pytorch_same_num': 0,
-                            'pytorch_down_num': 0,
-                            'pytorch_pf_num': 0,
-                            'pytorch_tf_num': 0,
-                            'pytorch_no_num': 0
-                        },
-                        'config_level': {
-                            'pytorch_up_num': 0,
-                            'pytorch_same_num': 0,
-                            'pytorch_down_num': 0,
-                            'pytorch_pf_num': 0,
-                            'pytorch_tf_num': 0,
-                            'pytorch_no_num': 0
-                        }
-                    }
-                },
-                'amp_fp16': {
-                    'vs_pytorch': {
-                        'model_level': {
-                        },
-                        'config_level': {
-                        }
-                    }
-                },
-                'pure_fp16': {
-                    'vs_pytorch': {
-                        'model_level': {
-                        },
-                        'config_level': {
-                        }
-                    }
-                }
-            }
-        },
-        'total': {
-            'N1C8': {
-                'fp32': {
-                    'vs_pytorch': {
-                        'model_level': {
-                            'pytorch_up_num': 0,
-                            'pytorch_same_num': 0,
-                            'pytorch_down_num': 0,
-                            'pytorch_pf_num': 0,
-                            'pytorch_tf_num': 0,
-                            'pytorch_no_num': 0
-                        },
-                        'config_level': {
-                            'pytorch_up_num': 0,
-                            'pytorch_same_num': 0,
-                            'pytorch_down_num': 0,
-                            'pytorch_pf_num': 0,
-                            'pytorch_tf_num': 0,
-                            'pytorch_no_num': 0
-                        }
-                    }
-                },
-                'amp_fp16': {
-                    'vs_pytorch': {
-                        'model_level': {
-                        },
-                        'config_level': {
-                        }
-                    }
-                },
-                'pure_fp16': {
-                    'vs_pytorch': {
-                        'model_level': {
-                        },
-                        'config_level': {
-                        }
-                    }
-                }
-            }
-        }
-    },
-    'all': {
-        'static': {
-            'N1C8': {
-                'fp32': {
-                    'vs_pytorch': {
-                        'model_level': {
-                            'pytorch_up_num': 0,
-                            'pytorch_same_num': 0,
-                            'pytorch_down_num': 0,
-                            'pytorch_pf_num': 0,
-                            'pytorch_tf_num': 0,
-                            'pytorch_no_num': 0
-                        },
-                        'config_level': {
-                            'pytorch_up_num': 0,
-                            'pytorch_same_num': 0,
-                            'pytorch_down_num': 0,
-                            'pytorch_pf_num': 0,
-                            'pytorch_tf_num': 0,
-                            'pytorch_no_num': 0
-                        }
-                    }
-                },
-                'amp_fp16': {
-                    'vs_pytorch': {
-                        'model_level': {
-                        },
-                        'config_level': {
-                        }
-                    }
-                },
-                'pure_fp16': {
-                    'vs_pytorch': {
-                        'model_level': {
-                        },
-                        'config_level': {
-                        }
-                    }
-                }
-            }
-        },
-        'total': {
-            'N1C8': {
-                'fp32': {
-                    'vs_pytorch': {
-                        'model_level': {
-                            'pytorch_up_num': 0,
-                            'pytorch_same_num': 0,
-                            'pytorch_down_num': 0,
-                            'pytorch_pf_num': 0,
-                            'pytorch_tf_num': 0,
-                            'pytorch_no_num': 0
-                        },
-                        'config_level': {
-                            'pytorch_up_num': 0,
-                            'pytorch_same_num': 0,
-                            'pytorch_down_num': 0,
-                            'pytorch_pf_num': 0,
-                            'pytorch_tf_num': 0,
-                            'pytorch_no_num': 0
-                        }
-                    }
-                },
-                'amp_fp16': {
-                    'vs_pytorch': {
-                        'model_level': {
-                        },
-                        'config_level': {
-                        }
-                    }
-                },
-                'pure_fp16': {
-                    'vs_pytorch': {
-                        'model_level': {
-                        },
-                        'config_level': {
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+            torchCompare: {}
         };
     },
-    mounted() {
+    created() {
         this.monitoring();
     },
     methods: {
         monitoring() {
         this.$on('acceptFatherData', (res) => {
-            this.fatherData = res;
-            // this.updateSelectedPanels();
+            console.log('fatherData', this.fatherData);
+            this.updateSelectedPanels();
         });
         },
         updateSelectedPanels() {
@@ -457,15 +302,11 @@ export default {
                     }
                 }
             }
-            this.everPaneNames = this.panelNames;
         },
         onPanelChange() {
-            console.log(this.panelNames);
-            console.log(this.everPaneNames);
             for (let i = 0; i < this.panelNames.length; i++) {
                 let name = this.panelNames[i];
                 if (!this.everPaneNames.includes(name)) {
-                    this.everPaneNames.push(name);
                     switch (name) {
                         case '1': {
                             this.getEnviromentsInfo();
@@ -501,12 +342,13 @@ export default {
         async getEnviromentsInfo() {
             let task_date = this.fatherData.task_date;
             let params = {
-                // task_date: task_date
-                task_date: '2023-05-19 07:16:22.958348'
+                task_date: task_date
+                // task_date: '2023-05-19 07:16:22.958348'
             };
             const {code, message, data} = await api.post(ModelsBenchmarkEnvInfo, params);
             if (parseInt(code, 10) === 200) {
                 this.env = data;
+                this.everPaneNames.push('1');
             } else {
                 this.$Message.error({
                     content: '请求出错:' + message,
@@ -516,10 +358,9 @@ export default {
             }
         },
         async getTorchCompare() {
-            // this.dealWithTorchCompareData();
             let params = {
-                // task_date: this.fatherData.task_date,
-                task_date: '2023-05-19 07:16:22.958348',
+                task_date: this.fatherData.task_date,
+                // task_date: '2023-05-19 07:16:22.958348',
                 zhibiao_list: [this.fatherData.metric],
                 complete: this.fatherData.is_Fill ? 1 : 0
             };
@@ -527,6 +368,7 @@ export default {
             if (parseInt(code, 10) === 200) {
                 this.torchCompare = data;
                 this.dealWithTorchCompareData();
+                this.everPaneNames.push('2');
             } else {
                 this.$Message.error({
                     content: '请求出错:' + message,
@@ -545,12 +387,16 @@ export default {
                 return value[key];
             }
         },
-        handleSpanMethod({ row, column, rowIndex, columnIndex }) {
+        handleSpanMethodFirst({ row, column, rowIndex, columnIndex }) {
+            let data = this.dataTorchShow;
+            return this.handleSpanMethod(row, column, rowIndex, columnIndex, data);
+        },
+        handleSpanMethod(row, column, rowIndex, columnIndex, data) {
             if (columnIndex === 0) {
                 let rowCount = 1;
-                for (let i = rowIndex + 1; i < this.dataTorchShow.length; i++) {
-                    if (this.dataTorchShow[i][column.key] === row[column.key] &&
-                    this.dataTorchShow[i].model_type === row.model_type) {
+                for (let i = rowIndex + 1; i < data.length; i++) {
+                    if (data[i][column.key] === row[column.key] &&
+                    data[i].model_type === row.model_type) {
                         rowCount++;
                     } else {
                         break;
@@ -563,9 +409,9 @@ export default {
                 }
             } else if (columnIndex === 1) {
                 let rowCount = 1;
-                for (let i = rowIndex + 1; i < this.dataTorchShow.length; i++) {
-                    if (this.dataTorchShow[i][column.key] === row[column.key] &&
-                    this.dataTorchShow[i].model_type === row.model_type) {
+                for (let i = rowIndex + 1; i < data.length; i++) {
+                    if (data[i][column.key] === row[column.key] &&
+                    data[i].model_type === row.model_type) {
                         rowCount++;
                     } else {
                         break;
@@ -632,8 +478,8 @@ export default {
         async getConfigData() {
             // this.dealWithConfigData(this.dataConfigBak);
             let params = {
-                task_date: '2023-05-19 07:16:22.958348',
-                // task_date: this.fatherData.task_date,
+                // task_date: '2023-05-19 07:16:22.958348',
+                task_date: this.fatherData.task_date,
                 zhibiao_list: [this.fatherData.metric],
                 complete: this.fatherData.is_Fill ? 1 : 0,
                 summary_type: 1
@@ -641,6 +487,7 @@ export default {
             const {code, message, data} = await api.post(ModelsBenchmarkSummaryPaddle, params);
             if (parseInt(code, 10) === 200) {
                 this.dealWithConfigData(data);
+                this.everPaneNames.push('3');
             } else {
                 this.$Message.error({
                     content: '请求出错:' + message,
@@ -651,15 +498,15 @@ export default {
         },
         dealWithConfigData(data) {
             this.dataConfig = [];
-            console.log(data);
             for (let model_type in data) {
-                console.log(model_type);
                 if (model_type === 'total') {
                     continue;
                 }
                 let model_type_layer = data[model_type];
+                let model_type_index = 0;
                 for (let run_config in model_type_layer) {
                     let run_config_layer = model_type_layer[run_config];
+                    let run_config_index = 0;
                     for (let fpconfig in run_config_layer) {
                         let fpconfig_layer = run_config_layer[fpconfig];
                         let json = {};
@@ -676,6 +523,10 @@ export default {
                         json.up_stable = fpconfig_layer.stable_up_num;
                         json.down_med = fpconfig_layer.mean_down_num;
                         json.up_med = fpconfig_layer.mean_up_num;
+                        json.model_type_index = model_type_index;
+                        json.run_config_index = run_config_index;
+                        model_type_index++;
+                        run_config_index++;
                         this.dataConfig.push(json);
                     }
                 }
@@ -686,7 +537,7 @@ export default {
             json.run_config = '-';
             json.fpconfig = '-';
             let success = totalValue.success_num ? totalValue.success_num : 0;
-            let fail = totalValue.fail_num ? totalValue.success_num : 0;
+            let fail = totalValue.fail_num ? totalValue.fail_num : 0;
             let total = success + fail;
             json.success_config = success + '/' + total;
             json.down_standard = totalValue.base_down_num;
@@ -695,20 +546,26 @@ export default {
             json.up_stable = totalValue.stable_up_num;
             json.down_med = totalValue.mean_down_num;
             json.up_med = totalValue.mean_up_num;
+            json.model_type_index = 0;
+            json.run_config_index = 0;
             this.dataConfig.push(json);
-            console.log(this.dataConfig);
+        },
+        handleSpanMethodSecond({ row, column, rowIndex, columnIndex }) {
+            let data = this.dataConfig;
+            return this.handleSpanMethod(row, column, rowIndex, columnIndex, data);
         },
         async getModelData() {
             // this.dealWithModelData(this.dataModelBak);
             let params = {
-                // task_date: this.fatherData.task_date,
-                task_date: '2023-05-19 07:16:22.958348',
+                task_date: this.fatherData.task_date,
+                // task_date: '2023-05-19 07:16:22.958348',
                 zhibiao_list: [this.fatherData.metric],
                 complete: this.fatherData.is_Fill ? 1 : 0
             };
             const {code, message, data} = await api.post(ModelsBenchmarkSummaryModel, params);
             if (parseInt(code, 10) === 200) {
                 this.dealWithModelData(data);
+                this.everPaneNames.push('4');
             } else {
                 this.$Message.error({
                     content: '请求出错:' + message,
@@ -727,10 +584,12 @@ export default {
                 for (let key in model_layer) {
                     let value = model_layer[key];
                     if (key === 'gather_num') {
-                        json.total_num = value.total_num;
+                        json.total_num = value.success_num + '/' + value.total_num;
                         json.paddle_good_num = value.stable_num;
                     } else if (key === 'model_type') {
-                        json.static = value.static;
+                        json.dynamic_model_num = value.dynamic;
+                        json.static_model_num = value.static;
+                        json.transfer_model_num = value.dynamicTostatic;
                     } else if (key === 'fp_mode') {
                         json.FP32_num = value.fp32;
                         json.FP16_num = value.fp16;
@@ -740,11 +599,9 @@ export default {
             }
         },
         async getCompareSummery() {
-            // this.contentCompareSummary(this.dataCompareSummaryBak);
-            // this.dealWithCompareSummary(this.dataCompareSummaryBak);
             let params = {
-                // task_date: this.fatherData.task_date,
-                task_date: '2023-05-19 07:16:22.958348',
+                task_date: this.fatherData.task_date,
+                // task_date: '2023-05-19 07:16:22.958348',
                 zhibiao_list: [this.fatherData.metric],
                 complete: this.fatherData.is_Fill ? 1 : 0,
                 summary_type: 1
@@ -753,6 +610,7 @@ export default {
             if (parseInt(code, 10) === 200) {
                 this.contentCompareSummary(data);
                 this.dealWithCompareSummary(data);
+                this.everPaneNames.push('5');
             } else {
                 this.$Message.error({
                     content: '请求出错:' + message,
@@ -777,25 +635,26 @@ export default {
                     width: 100,
                     resizable: true
                 });
-            for (let config in data) {
-                let value = data[config];
-                let firstKey = Object.keys(value)[0];
-                let innerValue = value[firstKey];
-                for (let column in innerValue) {
+            let firstConfigKey = Object.keys(data)[0];
+            let firstConfig = data[firstConfigKey];
+            let firstKey = Object.keys(firstConfig)[0];
+            let innerValue = firstConfig[firstKey];
+            for (let column in innerValue) {
                     this.columnsCompareSummary.push({
                         title: column,
                         key: column,
                         minWidth: 100,
                         resizable: true
                     });
-                }
             }
         },
         dealWithCompareSummary(data) {
             this.dataCompareSummary = [];
             for (let config in data) {
+                let model_type_index = 0;
                 let value = data[config];
                 for (let fpconfig in value) {
+                    let config_type_index = 0;
                     let innerValue = value[fpconfig];
                     let json = {};
                     json.config = config;
@@ -809,16 +668,22 @@ export default {
                         str = str.slice(0, -1);
                         json[column] = str;
                     }
+                    json.model_type_index =  model_type_index;
+                    json.run_config_index = config_type_index;
+                    model_type_index++;
+                    config_type_index++;
                     this.dataCompareSummary.push(json);
                 }
             }
         },
+        handleSpanMethodThird({ row, column, rowIndex, columnIndex }) {
+            let data = this.dataCompareSummary;
+            return this.handleSpanMethod(row, column, rowIndex, columnIndex, data);
+        },
         async getFpCompare() {
-        //     this.columnFpCompare(this.dataFpCompareBak);
-            // this.dealWithFpCompare(this.dataFpCompareBak);
             let params = {
-                // task_date: this.fatherData.task_date,
-                task_date: '2023-05-19 07:16:22.958348',
+                task_date: this.fatherData.task_date,
+                // task_date: '2023-05-19 07:16:22.958348',
                 zhibiao_list: [this.fatherData.metric],
                 complete: this.fatherData.is_Fill ? 1 : 0,
                 summary_type: 1
@@ -827,6 +692,7 @@ export default {
             if (parseInt(code, 10) === 200) {
                 this.columnFpCompare(data);
                 this.dealWithFpCompare(data);
+                this.everPaneNames.push('6');
             } else {
                 this.$Message.error({
                     content: '请求出错:' + message,
@@ -851,25 +717,26 @@ export default {
                     width: 100,
                     resizable: true
             });
-            for (let config in data) {
-                let value = data[config];
-                let firstKey = Object.keys(value)[0];
-                let innerValue = value[firstKey];
-                for (let column in innerValue) {
+            let firstConfigKey = Object.keys(data)[0];
+            let firstConfig = data[firstConfigKey];
+            let firstKey = Object.keys(firstConfig)[0];
+            let innerValue = firstConfig[firstKey];
+            for (let column in innerValue) {
                     this.columnsFpCompare.push({
                         title: column,
                         key: column,
                         minWidth: 100,
                         resizable: true
                     });
-                }
             }
         },
         dealWithFpCompare(data) {
             this.dataFpCompare = [];
             for (let config in data) {
                 let value = data[config];
+                let model_type_index = 0;
                 for (let fpconfig in value) {
+                    let config_type_index = 0;
                     let innerValue = value[fpconfig];
                     let json = {};
                     json.isStatic = config;
@@ -883,9 +750,17 @@ export default {
                         str = str.slice(0, -1);
                         json[column] = str;
                     }
+                    json.model_type_index =  model_type_index;
+                    json.run_config_index = config_type_index;
+                    model_type_index++;
+                    config_type_index++;
                     this.dataFpCompare.push(json);
                 }
             }
+        },
+        handleSpanMethodFour({ row, column, rowIndex, columnIndex }) {
+            let data = this.dataFpCompare;
+            return this.handleSpanMethod(row, column, rowIndex, columnIndex, data);
         }
     }
 };

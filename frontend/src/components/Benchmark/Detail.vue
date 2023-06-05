@@ -2,6 +2,7 @@
     <Poptip
         ref="poptip"
         placement="bottom-start"
+        trigger="hover"
         transfer
         max-width="300px"
     >
@@ -18,61 +19,61 @@
                 style="text-align:left; color:black"
              >
                 <Row>
-                    <Col span="3">
-                        <p>模型库分支</p>
+                    <Col span="4">
+                        <p>模型库分支:</p>
                     </Col>
                     <Col>
-                        : {{ dealWithBlank('model_branch') }}
+                        {{ dealWithBlank('model_branch') }}
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>模型库commit号</p>
+                    <Col span="4">
+                        <p>模型库commit号:</p>
                     </Col>
                     <Col>
-                        : {{ dealWithBlank('model_commit') }}
+                        {{ dealWithBlank('model_commit') }}
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>框架分支</p>
+                    <Col span="4">
+                        <p>框架分支:</p>
                     </Col>
                     <Col>
-                        : {{ dealWithBlank('frame') }}
+                        {{ dealWithBlank('frame') }}
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>框架commit号</p>
+                    <Col span="4">
+                        <p>框架commit号:</p>
                     </Col>
                     <Col>
-                        : {{ dealWithBlank('frame_commit') }}
+                        {{ dealWithBlank('frame_commit') }}
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>批次号</p>
+                    <Col span="4">
+                        <p>批次号:</p>
                     </Col>
                     <Col>
-                        : {{ dealWithBlank('task_date') }}
+                        {{ dealWithBlank('task_date') }}
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>模型链接</p>
+                    <Col span="4">
+                        <p>模型链接:</p>
                     </Col>
-                    <Col span="3">
+                    <Col span="4">
                         <a
                         :href="info['script_url']"
                         target="_blank"
                         >
-                        : {{ dealWithBlank('script_url') }}
+                        {{ dealWithBlank('script_url') }}
                         </a>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>执行脚本</p>
+                    <Col span="4">
+                        <p>执行脚本:</p>
                     </Col>
                     <Col>
                         <a
@@ -80,26 +81,26 @@
                             href="#"
                             v-on:click="getData('run_model_sh_url'); return false;"
                         >
-                        : {{ dealWithBlank('run_model_sh_url') }}
+                        {{ getPartUrl('run_model_sh_url') }}
                         </a>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>paddlecloud-job号</p>
+                    <Col span="4">
+                        <p>paddlecloud-job号:</p>
                     </Col>
-                    <Col span="3">
+                    <Col span="4">
                         <a
                         :href="info['pdc_job_id']"
                         target="_blank"
                         >
-                        : {{ dealWithBlank('pdc_job_id') }}
+                        {{ dealWithBlank('pdc_job_id') }}
                         </a>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>训练日志链接</p>
+                    <Col span="4">
+                        <p>训练日志链接:</p>
                     </Col>
                     <Col>
                         <a
@@ -107,13 +108,13 @@
                             href="#"
                             v-on:click="getData('train_log_url'); return false;"
                         >
-                        : {{ dealWithBlank('train_log_url') }}
+                        {{ getPartUrl('train_log_url') }}
                         </a>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>结果日志链接</p>
+                    <Col span="4">
+                        <p>结果日志链接:</p>
                     </Col>
                     <Col>
                         <a
@@ -121,13 +122,13 @@
                             href="#"
                             v-on:click="getData('index_log_url'); return false;"
                         >
-                        : {{ dealWithBlank('index_log_url') }}
+                        {{ getPartUrl('index_log_url') }}
                         </a>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>profiler日志链接</p>
+                    <Col span="4">
+                        <p>profiler日志链接:</p>
                     </Col>
                     <Col>
                         <a
@@ -135,16 +136,16 @@
                             href="#"
                             v-on:click="getData('profiler_log_url'); return false;"
                         >
-                        : {{ dealWithBlank('profiler_log_url') }}
+                        {{ getPartUrl('profiler_log_url') }}
                         </a>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="3">
-                        <p>下降原因</p>
+                    <Col span="4">
+                        <p>下降原因:</p>
                     </Col>
                     <Col>
-                        : {{ dealWithBlank('down_reason') }}
+                        {{ dealWithBlank('down_reason') }}
                     </Col>
                 </Row>
              </div>
@@ -194,14 +195,26 @@ export default {
         };
     },
     mounted: function () {
-        this.initData();
         this.setModalWidth();
     },
     methods: {
         setModalWidth() {
             this.modalWidth = window.innerWidth * 0.5;
         },
-        initData() {
+        getPartUrl(key) {
+            let url = this.info[key];
+            let urlArray =  url.split('/');
+            let cleanUrl = '';
+            if (urlArray.length > 0) {
+                cleanUrl = urlArray[urlArray.length - 1];
+            } else {
+                cleanUrl = this.dealWithBlank(url);
+            }
+            if (cleanUrl === '') {
+                return '暂无数据';
+            } else {
+                return cleanUrl;
+            }
         },
         async getData(key) {
             let params = {
