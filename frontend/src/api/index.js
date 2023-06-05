@@ -139,11 +139,29 @@ export default {
       url: BASEURL + url,
       data: url.startsWith('/models_benchmark') ? JSON.stringify(data) : qs.stringify(data),
       timeout: 30000,
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/octet-stream',
-        'responseType': 'blob'
+      responseType: 'arraybuffer'
+    }).then(response => {
+      if (response && (response.status === 200 || response.status === 304)) {
+        LoadingBar.finish();
+        return {
+          data: response,
+          status: response.status
+        };
+      } else if (response && (response.status === 301)) {
+        // 请求重定向到请求todo
+        console.log('发生了重定向');
+        console.log(response.headers.Location);
+      } else {
+        LoadingBar.error();
+        return {
+          data: {
+            status: 404,
+            msg: response.statusText,
+            data: response.statusText
+          }
+        };
       }
-    }).then(checkStatus).then(checkDataStatus);
+    }
+    );
   }
 };

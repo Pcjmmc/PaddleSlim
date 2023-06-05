@@ -72,6 +72,7 @@
             <Table
                 :data="data"
                 :columns="content"
+                :no-data-text="'暂无数据, 点击查询试试看吧'"
                 border
             >
             </Table>
@@ -96,9 +97,16 @@ import {BenchmarkPaddleVsOtherData} from '../../api/url';
 import detailinfo from '../Benchmark/Detail.vue';
 export default {
     name: 'ComparativeData',
+    props: {
+        fatherData: {
+            type: [Object],
+            default: function () {
+                return null;
+            }
+        }
+    },
     data: function () {
         return {
-            fatherData: {},
             search_model_item: '',
             pagesize: '',
             pagenum: 1,
@@ -119,11 +127,21 @@ export default {
             isIndeterminate: true,
             checkAll: false,
             paddleDetail: {},
-            paddleDetailInfo: {}
+            paddleDetailInfo: {},
+            isWatch: true
         };
     },
-    mounted() {
+    created() {
         this.monitoring();
+        const unwatch = this.$watch('fatherData.task_date', (newValue) => {
+            if (newValue && this.isWatch) {
+                this.getData();
+                this.isWatch = false;
+                unwatch();
+            }
+        });
+    },
+    mounted() {
         this.initData();
     },
     methods: {
@@ -132,8 +150,10 @@ export default {
         },
         monitoring() {
             this.$on('acceptFatherData', (res) => {
-                this.fatherData = res;
-                this.getData();
+                console.log('fatherData', this.fatherData);
+                if (this.fatherData.task_date) {
+                    this.getData();
+                }
             });
         },
         getDeviceList(data) {
@@ -144,7 +164,6 @@ export default {
             this.contentBak = [];
             this.contentKeys = [];
             let deviceNumList = this.getDeviceList(device_num_list);
-            console.log(deviceNumList);
             this.contentBak.push(
                 {title: '序号',
                 key: 'index',
@@ -253,7 +272,6 @@ export default {
                 this.contentKeys.push(item.title);
                 this.contentKeyChecked.push(item.title);
             });
-            console.log('content', this.content);
         },
         dealWithTableData(device_num_list, paddle_vs_other_data) {
             this.data = [];
@@ -311,7 +329,6 @@ export default {
                 });
                 //  获取diff数据列表
                 let diffValueList = outValue.paddle_vs_other;
-                console.log('diffList', diffValueList);
                 // 将对应的diff数据列表存入data中
                 deviceNumList.forEach(deviceNum => {
                     json['paddle_vs_other_' + deviceNum] = diffValueList[deviceNum];
@@ -320,7 +337,6 @@ export default {
                 // 每个config是一个循环 在循环的末尾增加序号
                 index += 1;
             }
-            console.log('data', this.data);
         },
         async getData() {
             let params = {
@@ -331,7 +347,6 @@ export default {
                 pagenum: this.pagenum,
                 pagesize: this.pagesize
             };
-            console.log('params', params);
             if (this.search_model_item !== null && this.search_model_item.length > 0) {
                 params.search_model_item = this.search_model_item;
             } else {
@@ -391,7 +406,11 @@ export default {
         },
         getDiffValueRender(row, key) {
             let value = row[key];
-            return value + '%';
+            if (value === '-') {
+                return value;
+            } else {
+                return value + '%';
+            }
         },
         handleCheckAllChange(val) {
             this.contentKeyChecked = val ? this.contentKeys : [];

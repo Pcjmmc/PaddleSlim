@@ -81,6 +81,7 @@
             <p style="display: inline;">数据补全：</p>
             <i-Switch
                 v-model="searchData.is_Fill"
+                @on-change="callAllChildMethods"
                 style="margin-right:9%"
                 >
                 <template #open>
@@ -94,7 +95,7 @@
                 v-model="searchData.metric"
                 border
                 size="small"
-                @input="callChildMethod"
+                @input="callAllChildMethods"
             >
                 <span
                     :key="index"
@@ -116,6 +117,7 @@
                 >
                     <summary-data
                         ref="summaryData"
+                        v-if="hasData" :father-data="searchData"
                     >
                     </summary-data>
                 </el-tab-pane>
@@ -125,6 +127,7 @@
                 >
                     <comparative-data
                         ref="comparative"
+                        v-if="hasData" :father-data="searchData"
                         @change-model-name="handleSearchModelNameChange"
                     >
                     </comparative-data>
@@ -183,11 +186,17 @@ export default {
     },
     mounted: function () {
         this.getTaskList();
-        this.setTabName();
         this.initData();
+        this.setTabName();
         this.callAllChildMethods();
     },
     methods: {
+        hasData() {
+            if (this.searchData.task_date && this.searchData.task_name) {
+                return true;
+            }
+            return false;
+        },
         initData() {
             this.versionIndex = 0;
             this.searchData.is_Fill = Boolean(false);
@@ -196,10 +205,10 @@ export default {
             this.$set(this.searchData, 'task_date', this.taskDateList[0]);
         },
         handleTabClick(tag) {
-            sessionStorage.setItem('current_tab', tag.name);
+            sessionStorage.setItem('benchmark_compare_tab', tag.name);
         },
         setTabName() {
-            this.tabName = sessionStorage.getItem('current_tab');
+            this.tabName = sessionStorage.getItem('benchmark_compare_tab');
             if (this.tabName === null || this.tabName.length === 0) {
                 this.tabName = 'summaryData';
             }
@@ -280,15 +289,41 @@ export default {
                 get_mode: 'download',
                 search_model_item: this.searchModelName
             };
-            let response = await api.postExcel(PaddleVsOtherDataDownload, params);
-            console.log('res', response);
-            const url = URL.createObjectURL(new Blob([response], {type: 'application/octet-stream'}));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', 'test');
-            document.body.appendChild(link);
-            link.click();
-            URL.revokeObjectURL(url);
+            let {data, status} = await api.postExcel(PaddleVsOtherDataDownload, params);
+            if (status === 404) {
+                this.$Message.error({
+                    content: '请求出错: 下载失败',
+                    duration: 30,
+                    closable: true
+                });
+            } else {
+                // 获取内容并创建链接
+                const content = Buffer.from(data.data);
+                const blob = new Blob([content], {type: 'application/octet-stream'});
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                // 获取文件名称
+                let filename = 'download.xlsx';
+                const contentDisposition = data.headers['content-disposition'];
+                if (contentDisposition) {
+                    let base64part = contentDisposition.replace(/\?=+\s*$/, ''); // 删除末尾可能附加的等号和空格
+                    base64part = base64part.replace(/^=\?utf-8\?b\?/, ''); // 删除编码前缀
+                    if (base64part) {
+                        let filenameDecode = atob(base64part);
+                        const match = filenameDecode.match(/filename[^;=\n]*=[\"']?([^\;\"']*)/i);
+                        if (match && match[1]) {
+                            let decoder = new TextDecoder('utf-8');
+                            filename = decoder.decode(new Uint8Array([...match[1]].map(x => x.charCodeAt(0))));
+                        }
+                    }
+                }
+                link.href = url;
+                link.type = 'application/octet-stream';
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+            }
         },
         callAllChildMethods() {
             this.callChildMethod();
