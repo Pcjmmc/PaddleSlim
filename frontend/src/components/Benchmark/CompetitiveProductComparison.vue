@@ -195,7 +195,7 @@ export default {
         this.getTaskList();
         this.initData();
         this.setTabName();
-        // this.callAllChildMethods();
+        this.callAllChildMethods();
     },
     methods: {
         hasData() {
