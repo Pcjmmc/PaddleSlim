@@ -45,7 +45,6 @@
                     <p
                     style="margin-top: 20px; text-algin: left;"
                     >
-                    下列指标分别为：
                     </p>
                     <Table
                         :data="dataTorchShow"
