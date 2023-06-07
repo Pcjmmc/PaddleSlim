@@ -181,14 +181,21 @@ export default {
                     id: 'accuracy',
                     checked: false
                 }
-            ]
+            ],
+            nameValues: {
+                '例行': 2,
+                '测试': 1,
+                '单机': 3,
+                '多机': 2,
+                '分布式': 1
+            }
         };
     },
     mounted: function () {
         this.getTaskList();
         this.initData();
         this.setTabName();
-        this.callAllChildMethods();
+        // this.callAllChildMethods();
     },
     methods: {
         hasData() {
@@ -251,16 +258,54 @@ export default {
                     closable: true
                 });
             }
-            var i = 0;
-            for (let key in data) {
-                if (data.hasOwnProperty(key)) {
-                    this.taskNameList.push(key);
-                    if (i === 0) {
-                        this.$set(this.searchData, 'task_name', key);
-                        this.setVersionList(key);
-                    }
-                    i++;
+            const myArray = Object.entries(data).sort((a, b) => this.sortTaskName(a[0], b[0]) ? 1 : -1);
+            for (let i = 0; i < myArray.length; i++) {
+                let key = myArray[i][0];
+                this.taskNameList.push(key);
+                if (i === 0) {
+                    this.$set(this.searchData, 'task_name', key);
+                    this.setVersionList(key);
                 }
+            }
+        },
+        sortTaskName(a, b) {
+            let aValue = 0;
+            let bValue = 0;
+            if (a.includes('例行')) {
+                aValue += this.nameValues['例行'];
+            } else {
+                aValue += this.nameValues['测试'];
+            }
+            if (b.includes('例行')) {
+                bValue += this.nameValues['例行'];
+            } else {
+                bValue += this.nameValues['测试'];
+            }
+            if (aValue > bValue) {
+                return false;
+            } else if (aValue < bValue) {
+                return true;
+            }
+            aValue = 0;
+            bValue = 0;
+            if (a.includes('单机')) {
+                aValue += this.nameValues['单机'];
+            } else if (a.includes('多机')) {
+                aValue += this.nameValues['多机'];
+            } else {
+                aValue += this.nameValues['分布式'];
+            }
+            if (b.includes('单机')) {
+                bValue += this.nameValues['单机'];
+            } else if (a.includes('多机')) {
+                bValue += this.nameValues['多机'];
+            } else {
+                bValue += this.nameValues['分布式'];
+            }
+            if (aValue >= bValue) {
+                return false;
+            } else {
+                return true;
             }
         },
         setTaskDate() {
