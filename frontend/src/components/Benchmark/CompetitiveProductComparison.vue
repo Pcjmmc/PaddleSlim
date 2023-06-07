@@ -258,7 +258,13 @@ export default {
                     closable: true
                 });
             }
-            const myArray = Object.entries(data).sort((a, b) => this.sortTaskName(a[0], b[0]) ? 1 : -1);
+            const myArray = Object.entries(data).sort((a, b) => {
+                if (this.sortTaskName(a[0], b[0])) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
             for (let i = 0; i < myArray.length; i++) {
                 let key = myArray[i][0];
                 this.taskNameList.push(key);
