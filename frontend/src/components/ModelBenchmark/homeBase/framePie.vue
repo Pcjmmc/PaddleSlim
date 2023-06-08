@@ -68,7 +68,11 @@ export default {
           orient: 'horizontal',
           bottom: 'bottom',
           left: '10',
-          data: this.option
+          data: this.option,
+          padding: [10, 0],
+          type: 'scroll',
+          itemWidth: 15,
+          itemHeight: 15
         },
         series: [
           {
@@ -79,7 +83,7 @@ export default {
                 formatter: '{b}: {c}'
               }
             },
-            radius: '55%',
+            radius: '60%',
             center: ['50%', '50%'],
             labelLine: {
               show: true
