@@ -1,4 +1,4 @@
-`<template>
+<template>
     <div class="center-card-s">
         <Collapse
             v-model="panelNames"
@@ -42,10 +42,16 @@
                             <el-radio-button v-bind:label="item"></el-radio-button>
                         </span>
                     </el-radio-group>
+                    <p
+                    style="margin-top: 20px; text-algin: left;"
+                    >
+                    </p>
                     <Table
                         :data="dataTorchShow"
                         :columns="columnsTorch"
                         :span-method="handleSpanMethodFirst"
+                        :loading="torchLoading"
+                        style="margin-top: 10px"
                         border
                     >
                     </Table>
@@ -58,6 +64,7 @@
                         :data="dataConfig"
                         :columns="columnsConfig"
                         :span-method="handleSpanMethodSecond"
+                        :loading="baseLoading"
                         border
                     >
                     </Table>
@@ -69,6 +76,7 @@
                     <Table
                         :data="dataModel"
                         :columns="columnsModel"
+                        :loading="modelLoading"
                         border
                     >
                     </Table>
@@ -80,6 +88,7 @@
                     <Table
                         :data="dataCompareSummary"
                         :columns="columnsCompareSummary"
+                        :loading="compareSummaryLoading"
                         :span-method="handleSpanMethodThird"
                         border
                     >
@@ -92,6 +101,7 @@
                     <Table
                     :data="dataFpCompare"
                     :columns="columnsFpCompare"
+                    :loading="fpCompareLoading"
                     :span-method="handleSpanMethodFour"
                     border
                     >
@@ -147,12 +157,12 @@ export default {
                     minWidth: 100
                 },
                 {
-                    title: '版本1_VS_BASE版本(GSB模型级别)',
+                    title: 'Paddle_VS_Torch(GSB模型级别)',
                     key: 'GSB_model',
                     minWidth: 100
                 },
                 {
-                    title: '版本1_VS_BASE版本(配置级别)',
+                    title: 'Paddle_VS_Torch(配置级别)',
                     key: 'GSB_config',
                     minWidth: 100
                 }
@@ -259,7 +269,12 @@ export default {
             dataCompareSummary: [],
             columnsFpCompare: [],
             dataFpCompare: [],
-            torchCompare: {}
+            torchCompare: {},
+            torchLoading: true,
+            baseLoading: true,
+            modelLoading: true,
+            compareSummaryLoading: true,
+            fpCompareLoading: true
         };
     },
     created() {
@@ -268,11 +283,11 @@ export default {
     methods: {
         monitoring() {
         this.$on('acceptFatherData', (res) => {
-            console.log('fatherData', this.fatherData);
             this.updateSelectedPanels();
         });
         },
         updateSelectedPanels() {
+            this.everPaneNames = [];
             for (let i = 0; i < this.panelNames.length; i++) {
                 let panelName = this.panelNames[i];
                 switch (panelName) {
@@ -340,10 +355,11 @@ export default {
             }
         },
         async getEnviromentsInfo() {
+            // 发出新的请求前把之前的数据清空
+            this.env = {};
             let task_date = this.fatherData.task_date;
             let params = {
                 task_date: task_date
-                // task_date: '2023-05-19 07:16:22.958348'
             };
             const {code, message, data} = await api.post(ModelsBenchmarkEnvInfo, params);
             if (parseInt(code, 10) === 200) {
@@ -358,9 +374,10 @@ export default {
             }
         },
         async getTorchCompare() {
+            // 发出新的请求前把之前的数据清空
+            this.torchLoading = true;
             let params = {
                 task_date: this.fatherData.task_date,
-                // task_date: '2023-05-19 07:16:22.958348',
                 zhibiao_list: [this.fatherData.metric],
                 complete: this.fatherData.is_Fill ? 1 : 0
             };
@@ -368,6 +385,7 @@ export default {
             if (parseInt(code, 10) === 200) {
                 this.torchCompare = data;
                 this.dealWithTorchCompareData();
+                this.torchLoading = false;
                 this.everPaneNames.push('2');
             } else {
                 this.$Message.error({
@@ -474,9 +492,8 @@ export default {
             this.dataTorchShow = this.dataTorch[this.tagSelected];
         },
         async getConfigData() {
-            // this.dealWithConfigData(this.dataConfigBak);
+            this.baseLoading = true;
             let params = {
-                // task_date: '2023-05-19 07:16:22.958348',
                 task_date: this.fatherData.task_date,
                 zhibiao_list: [this.fatherData.metric],
                 complete: this.fatherData.is_Fill ? 1 : 0,
@@ -485,6 +502,7 @@ export default {
             const {code, message, data} = await api.post(ModelsBenchmarkSummaryPaddle, params);
             if (parseInt(code, 10) === 200) {
                 this.dealWithConfigData(data);
+                this.baseLoading = false;
                 this.everPaneNames.push('3');
             } else {
                 this.$Message.error({
@@ -553,16 +571,16 @@ export default {
             return this.handleSpanMethod(row, column, rowIndex, columnIndex, data);
         },
         async getModelData() {
-            // this.dealWithModelData(this.dataModelBak);
+            this.modelLoading = true;
             let params = {
                 task_date: this.fatherData.task_date,
-                // task_date: '2023-05-19 07:16:22.958348',
                 zhibiao_list: [this.fatherData.metric],
                 complete: this.fatherData.is_Fill ? 1 : 0
             };
             const {code, message, data} = await api.post(ModelsBenchmarkSummaryModel, params);
             if (parseInt(code, 10) === 200) {
                 this.dealWithModelData(data);
+                this.modelLoading = false;
                 this.everPaneNames.push('4');
             } else {
                 this.$Message.error({
@@ -597,9 +615,9 @@ export default {
             }
         },
         async getCompareSummery() {
+            this.compareSummaryLoading = true;
             let params = {
                 task_date: this.fatherData.task_date,
-                // task_date: '2023-05-19 07:16:22.958348',
                 zhibiao_list: [this.fatherData.metric],
                 complete: this.fatherData.is_Fill ? 1 : 0,
                 summary_type: 1
@@ -608,6 +626,7 @@ export default {
             if (parseInt(code, 10) === 200) {
                 this.contentCompareSummary(data);
                 this.dealWithCompareSummary(data);
+                this.compareSummaryLoading = false;
                 this.everPaneNames.push('5');
             } else {
                 this.$Message.error({
@@ -618,6 +637,7 @@ export default {
             }
         },
         contentCompareSummary(data) {
+            this.dataCompareSummary = {};
             this.columnsCompareSummary = [];
             this.columnsCompareSummary.push(
                 {
@@ -679,9 +699,9 @@ export default {
             return this.handleSpanMethod(row, column, rowIndex, columnIndex, data);
         },
         async getFpCompare() {
+            this.fpCompareLoading = true;
             let params = {
                 task_date: this.fatherData.task_date,
-                // task_date: '2023-05-19 07:16:22.958348',
                 zhibiao_list: [this.fatherData.metric],
                 complete: this.fatherData.is_Fill ? 1 : 0,
                 summary_type: 1
@@ -690,6 +710,7 @@ export default {
             if (parseInt(code, 10) === 200) {
                 this.columnFpCompare(data);
                 this.dealWithFpCompare(data);
+                this.fpCompareLoading = false;
                 this.everPaneNames.push('6');
             } else {
                 this.$Message.error({
@@ -712,7 +733,7 @@ export default {
             this.columnsFpCompare.push({
                     title: '模型库',
                     key: 'config',
-                    width: 100,
+                    minWidth: 100,
                     resizable: true
             });
             let firstConfigKey = Object.keys(data)[0];
@@ -723,7 +744,7 @@ export default {
                     this.columnsFpCompare.push({
                         title: column,
                         key: column,
-                        minWidth: 100,
+                        width: 100,
                         resizable: true
                     });
             }
@@ -753,7 +774,6 @@ export default {
                     model_type_index++;
                     config_type_index++;
                     this.dataFpCompare.push(json);
-                    console.log(this.dataFpCompare);
                 }
             }
         },

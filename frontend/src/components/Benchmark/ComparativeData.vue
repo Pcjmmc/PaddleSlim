@@ -72,7 +72,8 @@
             <Table
                 :data="data"
                 :columns="content"
-                :no-data-text="'暂无数据, 加载中；若持续无响应，请点击查询'"
+                :loading="loading"
+                :no-data-text="'暂无数据, 加载中；若持续无响应，请点击查询。'"
                 border
             >
             </Table>
@@ -128,7 +129,9 @@ export default {
             checkAll: false,
             paddleDetail: {},
             paddleDetailInfo: {},
-            isWatch: true
+            isWatch: true,
+            loading: true,
+            sessionCheckedName: 'paddleComparativeRemeber'
         };
     },
     created() {
@@ -150,8 +153,8 @@ export default {
         },
         monitoring() {
             this.$on('acceptFatherData', (res) => {
-                console.log('fatherData', this.fatherData);
                 if (this.fatherData.task_date) {
+                    this.pagenum = 1;
                     this.getData();
                 }
             });
@@ -166,10 +169,12 @@ export default {
             let deviceNumList = this.getDeviceList(device_num_list);
             this.contentBak.push(
                 {title: '序号',
-                key: 'index',
-                width: 100,
+                type: 'index',
+                width: 80,
                 fixed: 'left',
-                resizable: true
+                indexMethod: (row, index) => {
+                    return this.pagesize * (this.pagenum - 1) + index + 1;
+                }
             });
             this.contentBak.push({
                 title: '配置名',
@@ -187,11 +192,11 @@ export default {
                     sortMethod: function (a, b, type) {
                         if (type === 'asc') {
                             if (a === '-') {
-                                return -1;
-                            } else if (b === '-') {
                                 return 1;
+                            } else if (b === '-') {
+                                return -1;
                             } else {
-                                return a.forward > b.forward ? 1 : -1;
+                                return a > b ? 1 : -1;
                             }
                         } else {
                             if (a === '-') {
@@ -199,20 +204,21 @@ export default {
                             } else if (b === '-') {
                                 return 1;
                             } else {
-                            return a.forward > b.forward ? -1 : 1;
+                            return a > b ? -1 : 1;
                             }
                         }
                     },
                     render: (h, params) => {
-                        let value = params.row['paddle_' + deviceNum];
-                        if (value === '-') {
+                        let initValue = params.row['paddle_' + deviceNum];
+                        if (initValue === '-') {
                             return h('div', [
                                 h('p', {
                                 },
-                                value
+                                '-'
                                 )
                             ]);
                         } else {
+                            let value = parseFloat(initValue, 10).toFixed(3);
                             let color = this.setPaddleValueColor(params.row, 'paddle_' + deviceNum);
                             let info = this.constructPaddleDetail(params.row, 'paddle_' + deviceNum);
                             return h(detailinfo, {
@@ -229,7 +235,29 @@ export default {
                     title: 'Pytorch_' + deviceNum,
                     key: 'pytorch_' + deviceNum,
                     width: 100,
-                    resizable: true
+                    resizable: true,
+                    render: (h, params) => {
+                        let initValue = params.row['pytorch_' + deviceNum];
+                        if (initValue === '-') {
+                            return h('div', [
+                                h('p', {
+                                },
+                                '-'
+                                )
+                            ]);
+                        } else {
+                            let value = parseFloat(initValue, 10).toFixed(3);
+                            let color = this.setPaddleValueColor(params.row, 'pytorch_' + deviceNum);
+                            let info = this.constructPaddleDetail(params.row, 'pytorch_' + deviceNum);
+                            return h(detailinfo, {
+                                props: {
+                                    color: color,
+                                    num: value,
+                                    info: info
+                                }
+                            });
+                        }
+                    }
                 });
                 this.contentBak.push({
                     title: 'diff_' + deviceNum + '(paddle-pytorch)',
@@ -240,29 +268,36 @@ export default {
                     sortMethod: function (a, b, type) {
                         if (type === 'asc') {
                             if (a === '-') {
-                                return -1;
-                            } else if (b === '-') {
                                 return 1;
+                            } else if (b === '-') {
+                                return -1;
                             } else {
-                                return a.forward > b.forward ? 1 : -1;
+                                return a > b ? 1 : -1;
                             }
                         } else {
                             if (a === '-') {
-                                return -1;
-                            } else if (b === '-') {
                                 return 1;
+                            } else if (b === '-') {
+                                return -1;
                             } else {
-                            return a.forward > b.forward ? -1 : 1;
+                            return a > b ? -1 : 1;
                             }
                         }
                     },
                     render: (h, params) => {
+                        let initValue = params.row['paddle_vs_other_' + deviceNum];
+                        let value = '';
+                        if (initValue === '-') {
+                            value = '-';
+                        } else {
+                            value = parseFloat(initValue, 10).toFixed(3) + '%';
+                        }
                         return h('div', [
                             h('p', {
                                 style: {
                                 color: this.setDiffStatusColor(params.row, 'paddle_vs_other_' + deviceNum)
                                 }
-                            }, this.getDiffValueRender(params.row, 'paddle_vs_other_' + deviceNum))
+                            }, value)
                         ]);
                     }
                 });
@@ -272,6 +307,15 @@ export default {
                 this.contentKeys.push(item.title);
                 this.contentKeyChecked.push(item.title);
             });
+            if (sessionStorage.hasOwnProperty(this.sessionCheckedName)) {
+                let sessionChecked = JSON.parse(sessionStorage.getItem(this.sessionCheckedName));
+                if (sessionChecked && sessionChecked[this.fatherData.task_date]) {
+                    this.contentKeyChecked = sessionChecked[this.fatherData.task_date];
+                    this.content = this.contentBak.filter(col => {
+                        return this.contentKeyChecked.includes(col.title);
+                    });
+                }
+            }
         },
         dealWithTableData(device_num_list, paddle_vs_other_data) {
             this.data = [];
@@ -280,13 +324,10 @@ export default {
             let frameworkList = ['paddle', 'pytorch'];
             // 当前存在数据的设备类型
             let deviceNumList = this.getDeviceList(device_num_list);
-            // 获取当前数据的序号
-            let index = 1 + (this.pagenum - 1) * this.pagesize;
             // 以下的循环是用来获取Paddle Pytorch中的具体数值
             for (let config in paddle_vs_other_data) {
                 // 每一个Config 变成一列
                 let json = {};
-                json.index = index;
                 let outValue = paddle_vs_other_data[config];
                 json.config_name = config;
                 frameworkList.forEach(framework => {
@@ -334,13 +375,10 @@ export default {
                     json['paddle_vs_other_' + deviceNum] = diffValueList[deviceNum];
                 });
                 this.data.push(json);
-                // 每个config是一个循环 在循环的末尾增加序号
-                index += 1;
             }
         },
         async getData() {
-            this.data = [];
-            this.contentBak = [];
+            this.loading = true; // loading
             let params = {
                 task_name: this.fatherData.task_name,
                 task_date: this.fatherData.task_date,
@@ -360,6 +398,7 @@ export default {
                 this.total = total_num;
                 this.dealWithContent(device_num_list);
                 this.dealWithTableData(device_num_list, paddle_vs_other_data);
+                this.loading = false;
             } else {
                 this.$Message.error(
                     {
@@ -390,9 +429,6 @@ export default {
                 return 'red';
             }
         },
-        getPaddleValueRender(row, key) {
-            return row[key];
-        },
         constructPaddleDetail(row, key) {
             let detailName = row.config_name + '_' + key;
             return this.paddleDetail[detailName];
@@ -406,26 +442,30 @@ export default {
                 return 'red';
             }
         },
-        getDiffValueRender(row, key) {
-            let value = row[key];
-            if (value === '-') {
-                return value;
-            } else {
-                return value + '%';
-            }
-        },
         handleCheckAllChange(val) {
             this.contentKeyChecked = val ? this.contentKeys : [];
             this.indeterminate = false;
             this.content = val ? this.contentBak : [];
+            let sessionRecord = {};
+            if (sessionStorage.hasOwnProperty(this.sessionCheckedName)) {
+                sessionRecord = JSON.parse(sessionStorage.getItem(this.sessionCheckedName));
+            }
+            sessionRecord[this.fatherData.task_date] = val ? this.contentKeys : [];
+            sessionStorage.setItem(this.sessionCheckedName, JSON.stringify(sessionRecord));
         },
         filterColumns() {
             let count = this.contentKeyChecked.length;
             this.checkAll = count === this.contentKeys.length;
-            this.isIndeterminate = count === this.contentKeys.length;
+            this.isIndeterminate = count > 0 && count < this.contentKeys.length;
             this.content = this.contentBak.filter(col => {
                 return this.contentKeyChecked.includes(col.title);
             });
+            let sessionRecord = {};
+            if (sessionStorage.hasOwnProperty(this.sessionCheckedName)) {
+                sessionRecord = JSON.parse(sessionStorage.getItem(this.sessionCheckedName));
+            }
+            sessionRecord[this.fatherData.task_date] = this.contentKeyChecked;
+            sessionStorage.setItem(this.sessionCheckedName, JSON.stringify(sessionRecord));
         },
         changeSearchModelName() {
             this.$emit('change-model-name', this.search_model_item);

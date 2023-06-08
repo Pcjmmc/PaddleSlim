@@ -18,64 +18,64 @@
              <div
                 style="text-align:left; color:black"
              >
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>模型库分支:</p>
                     </Col>
-                    <Col>
+                    <Col span="18">
                         {{ dealWithBlank('model_branch') }}
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>模型库commit号:</p>
                     </Col>
-                    <Col>
+                    <Col span="18">
                         {{ dealWithBlank('model_commit') }}
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>框架分支:</p>
                     </Col>
-                    <Col>
+                    <Col span="18">
                         {{ dealWithBlank('frame') }}
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>框架commit号:</p>
                     </Col>
-                    <Col>
+                    <Col span="18">
                         {{ dealWithBlank('frame_commit') }}
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>批次号:</p>
                     </Col>
-                    <Col>
+                    <Col span="18">
                         {{ dealWithBlank('task_date') }}
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>模型链接:</p>
                     </Col>
-                    <Col span="5">
+                    <Col span="6">
                         <a
-                        :href="info['script_url']"
+                        :href="dealWithBlank('script_url')"
                         target="_blank"
                         >
                         {{ dealWithBlank('script_url') }}
                         </a>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>执行脚本:</p>
                     </Col>
-                    <Col>
+                    <Col span="18">
                         <a
                             style="word-wrap: break-word;"
                             href="#"
@@ -85,24 +85,24 @@
                         </a>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>paddlecloud-job号:</p>
                     </Col>
-                    <Col span="5">
+                    <Col span="6">
                         <a
-                        :href="info['pdc_job_id']"
+                        :href="dealWithBlank('pdc_job_id')"
                         target="_blank"
                         >
                         {{ dealWithBlank('pdc_job_id') }}
                         </a>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>训练日志链接:</p>
                     </Col>
-                    <Col>
+                    <Col span="18">
                         <a
                             style="word-wrap: break-word;"
                             href="#"
@@ -112,11 +112,11 @@
                         </a>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>结果日志链接:</p>
                     </Col>
-                    <Col>
+                    <Col span="18">
                         <a
                             style="word-wrap: break-word;"
                             href="#"
@@ -126,11 +126,11 @@
                         </a>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>profiler日志链接:</p>
                     </Col>
-                    <Col>
+                    <Col span="18">
                         <a
                             style="word-wrap: break-word;"
                             href="#"
@@ -140,12 +140,20 @@
                         </a>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span="5">
+                <Row :gutter="24">
+                    <Col span="6">
                         <p>下降原因:</p>
                     </Col>
-                    <Col>
+                    <Col span="18">
                         {{ dealWithBlank('down_reason') }}
+                    </Col>
+                </Row>
+                <Row :gutter="24">
+                    <Col span="6">
+                        <p>波动值:</p>
+                    </Col>
+                    <Col span="18">
+                        {{ dealWithBlank('wave_diff') }}
                     </Col>
                 </Row>
              </div>
@@ -175,7 +183,7 @@ export default {
             }
         },
         num: {
-            type: [Number],
+            type: [String],
             default: function () {
                 return null;
             }
@@ -202,6 +210,9 @@ export default {
             this.modalWidth = window.innerWidth * 0.5;
         },
         getPartUrl(key) {
+            if (this.info === null || this.info === undefined || !(key in this.info)) {
+                return '整体无数据，请重新选择';
+            }
             let url = this.info[key];
             let urlArray =  url.split('/');
             let cleanUrl = '';
@@ -217,6 +228,9 @@ export default {
             }
         },
         async getData(key) {
+            if (this.info === null || this.info === undefined || !(key in this.info)) {
+                return '暂无数据';
+            }
             let params = {
                 log_url: this.info[key].split(':')[1]
             };
@@ -224,11 +238,14 @@ export default {
                 return;
             }
             const data = await api.get(PaddleVsOtherReadLog, params);
-            this.modalContent = JSON.stringify(data, null, 2);
+            this.modalContent = data;
             this.$refs.poptip.visible = false;
             this.modal = true;
         },
         dealWithBlank(key) {
+            if (this.info === null || this.info === undefined || !(key in this.info)) {
+                return '暂无数据';
+            }
             if (this.info[key] === undefined || this.info[key] === '') {
                 return '暂无数据';
             } else {

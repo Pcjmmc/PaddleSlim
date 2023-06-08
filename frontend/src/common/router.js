@@ -154,7 +154,7 @@ export const ROUTES = [
           component: ModelBenchmarkHomePage
         },
         {
-          path: '/paddle/benchmark/compare/torch',
+          path: '/paddle/benchmark/modelBenchmark/data-manage/compare/competing',
           name: 'CompetitiveProductComparison',
           component: CompetitiveProductComparison
         }
