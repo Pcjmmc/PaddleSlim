@@ -40,17 +40,17 @@
                   </Submenu>
                 </template>
                 <router-link
-                    v-else
-                    :key="index"
-                    :to="computeLink(key)"
+                  :key="index"
+                  :to="computeLink(key)"
+                  v-else
                 >
                     <menuItem :name="computeName(index)">
-                        <Icon
-                          size="18"
-                          v-if="value.icon"
-                          :type="value.icon"
-                        ></Icon>
-                        {{ value.desc }}
+                      <Icon
+                        size="18"
+                        v-if="value.icon"
+                        :type="value.icon"
+                      ></Icon>
+                      {{ value.desc }}
                     </menuItem>
                 </router-link>
             </template>

@@ -34,7 +34,6 @@ export default {
   watch: {
     // 观察option的变化
     optionData: function () {
-      console.log('change main1');
       this.$nextTick(function () {
         this.drawPie('main1');
       });

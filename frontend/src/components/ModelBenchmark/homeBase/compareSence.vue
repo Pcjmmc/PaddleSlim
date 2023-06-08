@@ -7,7 +7,7 @@
     >
         <el-tab-pane
         label="动转静与动态图GSB"
-        name="dySt"
+        name="dy2s"
         >
         </el-tab-pane>
         <el-tab-pane
@@ -27,6 +27,9 @@
 <script>
 
 import compareLine from './compareLine.vue';
+import api from '../../../api/index';
+import { dateFmt } from '../../../util/help.js';
+import { ModelsBenchmarkHomeGBS } from '../../../api/url.js';
 
 export default {
   name: 'compareSence',
@@ -40,7 +43,7 @@ export default {
   },
   data: function () {
     return {
-      tabName: 'dySt',
+      tabName: 'dy2s',
       datas: {},
       option: [],
       title: '',
@@ -62,19 +65,44 @@ export default {
       await this.getDatas();
     },
     async getDatas() {
-      console.log('this.search', this.search);
-      console.log(this.tabName);
-      // 根据参数获取单机/多机/分布式的数据
-      this.legend = ['G', 'S', 'B'];
-      this.option = ['2022.02.02', '2022.02.03', '2022.02.04', '2022.02.05', '2022.02.06'];
-      this.title = this.tabName;
-      this.datas = {
-        '2022.02.02': {'G': 10, 'S': 6, 'B': 4},
-        '2022.02.03': {'G': 12, 'S': 8, 'B': 3},
-        '2022.02.04': {'G': 5, 'S': 8, 'B': 9},
-        '2022.02.05': {'G': 17, 'S': 21, 'B': 28},
-        '2022.02.06': {'G': 13, 'S': 7, 'B': 16}
+      let end_time = new Date(this.search.dt[1]);
+      end_time = end_time.setDate(end_time.getDate() + 1);
+      end_time = new Date(end_time);
+      let params = {
+        task_name: this.search.task_name,
+        config_name: this.search.config_name,
+        index_name: this.search.index_name,
+        summary_type: this.search.summary_type,
+        start_time: dateFmt(this.search.dt[0], 'yyyy-MM-dd'),
+        end_time: dateFmt(end_time, 'yyyy-MM-dd'),
+        tab_postion: 'down',
+        vs_name: this.tabName
       };
+      console.log('send params', params);
+      const { code, data, message } = await api.post(ModelsBenchmarkHomeGBS, params);
+      if (parseInt(code, 10) === 200) {
+        this.parseData(data);
+      } else {
+        this.$Message.error({
+            content: '请求出错: ' + message,
+            duration: 30,
+            closable: true
+        });
+      }
+    },
+    parseData(data) {
+      let tmp_data = {};
+      let tmp_option = [];
+      // 根据参数获取单机/多机/分布式的数据
+      for (let i = 0; i < data.length; i++) {
+        let date = data[i].date;
+        tmp_option.push(date);
+        tmp_data[date] = data[i];
+      }
+      this.legend = ['G', 'S', 'B'];
+      this.title = this.tabName;
+      this.option = tmp_option;
+      this.datas = tmp_data;
     }
   }
 };

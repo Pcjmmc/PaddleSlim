@@ -9,10 +9,11 @@
         >
           <Row>
             <Col span="5">
-              <FormItem label="任务名:" prop="name">
+              <FormItem label="任务名:" prop="task_name">
                 <Select
                   clearable
-                  v-model="search.name"
+                  filterable
+                  v-model="search.task_name"
                   :transfer="true"
                   :popper-append-to-body="false"
                   v-on:on-change="upDateChildDatas"
@@ -26,10 +27,10 @@
               </FormItem>
             </Col>
             <Col span="4">
-              <FormItem label="配置:" prop="dt">
+              <FormItem label="配置:" prop="config_name">
                 <Select
                   clearable
-                  v-model="search.conf"
+                  v-model="search.config_name"
                   :transfer="true"
                   :popper-append-to-body="false"
                   v-on:on-change="upDateChildDatas"
@@ -43,10 +44,10 @@
               </FormItem>
             </Col>
             <Col span="4">
-              <FormItem label="指标:" prop="dt">
+              <FormItem label="指标:" prop="index_name">
                 <Select
                   clearable
-                  v-model="search.indicator"
+                  v-model="search.index_name"
                   :transfer="true"
                   :popper-append-to-body="false"
                   v-on:on-change="upDateChildDatas"
@@ -60,19 +61,19 @@
               </FormItem>
             </Col>
             <Col span="4">
-              <FormItem label="类型:" prop="dt">
+              <FormItem label="类型:" prop="summary_type">
                 <Select
                   clearable
-                  v-model="search.type"
+                  v-model="search.summary_type"
                   :transfer="true"
                   :popper-append-to-body="false"
                   v-on:on-change="upDateChildDatas"
                 >
                   <Option
                     :key="index"
-                    :value="item"
+                    :value="item.type_id"
                     v-for="(item, index) in allTypes"
-                  >{{ item }}</Option>
+                  >{{ item.type_name }}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -101,43 +102,34 @@
 
 import compareProd from './compareProd.vue';
 import compareSence from './compareSence.vue';
+import api from '../../../api/index';
+import { ModelsBenchmarkHomeSettings } from '../../../api/url.js';
 
 export default {
   name: 'comparePage',
   data: function () {
     return {
       allTasks: [
-        '单机11.2_8.1_V100全量例行',
-        '多机11.8_8.6.1_V100全量例行',
-        '单机11.8_8.6.1_V100全量例行',
-        '单机11.2_8.1_RTX3090_S_P0例行'
       ],
       allTypes: [
-        '模型级别',
-        '配置级别'
       ],
       allIndicators: [
-        'ips',
-        'gpu_mem',
-        'gpu_use',
-        'cpu_use',
-        'accuracy'
       ],
       allConfs: [
-        'N1C1',
-        'N1C8'
       ],
       search: {
-        dt: '',
-        name: '',
-        indicator: '',
-        conf: ''
+        dt: [this.getBeginData(), new Date()],
+        task_name: '',
+        index_name: '',
+        config_name: '',
+        summary_type: ''
       }
     };
   },
   watch: {
   },
   mounted: async function () {
+    this.initData();
     await this.getSettings();
     await this.upDateChildDatas();
   },
@@ -147,13 +139,39 @@ export default {
   },
   computed: {},
   methods: {
+    getBeginData() {
+      // 在end_time的基础上+1， 因为end_time代表的今天0点0分0秒的时间
+      let begin_time = new Date();
+      begin_time = begin_time.setDate(begin_time.getDate() - 7);
+      begin_time = new Date(begin_time);
+      return begin_time;
+    },
+    initData() {
+      this.allTasks = [];
+      this.allTypes = [];
+      this.allIndicators = [];
+      this.allConfs = [];
+    },
     clickTab(tag, event) {
     },
     async getSettings() {
-      // this.allTasks = [];
-      // this.allTypes = [];
-      // this.allIndicators = [];
-      // this.allConfs = [];
+      const { code, data, message } = await api.get(ModelsBenchmarkHomeSettings);
+      if (parseInt(code, 10) === 200) {
+        this.allTasks = data.task_name_list;
+        this.allTypes = data.summary_type_list;
+        this.allIndicators = data.index_list;
+        this.allConfs = data.config_list;
+        this.search.task_name = data.task_name_list[0];
+        this.search.index_name = data.index_list[0];
+        this.search.summary_type = data.summary_type_list[0].type_id;
+        this.search.config_name = data.config_list[0];
+      } else {
+        this.$Message.error({
+            content: '请求出错: ' + message,
+            duration: 30,
+            closable: true
+        });
+      }
     },
     async upDateChildDatas() {
       // 调用两个子组件
