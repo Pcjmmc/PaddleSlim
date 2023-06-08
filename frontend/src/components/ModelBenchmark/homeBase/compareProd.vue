@@ -54,7 +54,7 @@ export default {
   watch: {
   },
   mounted: function () {
-    this.getDatas();
+    // this.getDatas();
   },
   components: {
     compareLine
