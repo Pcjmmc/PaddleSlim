@@ -43,8 +43,9 @@
                         </span>
                     </el-radio-group>
                     <p
-                    style="margin-top: 20px; text-algin: left;"
+                    style="margin-top: 10px; text-algin: left;"
                     >
+                    表格中的指标为：优：平：劣：Paddle失败：竞品失败：无竞品
                     </p>
                     <Table
                         :data="dataTorchShow"
@@ -71,7 +72,7 @@
                 </template>
             </Panel>
             <Panel name="4">
-                覆盖模型信息统计(配置级别)
+                覆盖模型信息统计
                 <template #content>
                     <Table
                         :data="dataModel"
@@ -85,6 +86,11 @@
             <Panel name="5">
                 动转静与动态图对比汇总(配置级别)
                 <template #content>
+                    <p
+                    style="margin-bottom: 10px; text-algin: left;"
+                    >
+                    表格中的指标为：动转静优于动态图的个数：动转静平于动态图的个数：动转静差于动态图的个数
+                    </p>
                     <Table
                         :data="dataCompareSummary"
                         :columns="columnsCompareSummary"
@@ -98,6 +104,11 @@
             <Panel name="6">
                 FP16与FP32对比汇总
                 <template #content>
+                    <p
+                    style="margin-bottom: 10px; text-algin: left;"
+                    >
+                    表格中的指标为：fp16优于fp32的个数：fp16平于fp32的个数：fp16差于fp32的个数
+                    </p>
                     <Table
                     :data="dataFpCompare"
                     :columns="columnsFpCompare"
@@ -661,7 +672,7 @@ export default {
                     this.columnsCompareSummary.push({
                         title: column,
                         key: column,
-                        minWidth: 100,
+                        minWidth: 150,
                         resizable: true
                     });
             }
@@ -744,7 +755,7 @@ export default {
                     this.columnsFpCompare.push({
                         title: column,
                         key: column,
-                        width: 100,
+                        width: 150,
                         resizable: true
                     });
             }

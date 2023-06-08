@@ -164,7 +164,7 @@
             :scrollable="true"
             :footer-hide="true"
             >
-            <pre style="word-wrap: break-word;">{{ modalContent }}</pre>
+            <pre style="word-wrap: break-word;overflow-y: auto;">{{ modalContent }}</pre>
         </Modal>
     </Poptip>
 </template>
@@ -207,7 +207,7 @@ export default {
     },
     methods: {
         setModalWidth() {
-            this.modalWidth = window.innerWidth * 0.5;
+            this.modalWidth = window.innerWidth * 0.65;
         },
         getPartUrl(key) {
             if (this.info === null || this.info === undefined || !(key in this.info)) {

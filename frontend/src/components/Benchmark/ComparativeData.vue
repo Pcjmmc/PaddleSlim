@@ -73,7 +73,7 @@
                 :data="data"
                 :columns="content"
                 :loading="loading"
-                :no-data-text="'暂无数据, 加载中；若持续无响应，请点击查询。'"
+                :no-data-text="'暂无数据'"
                 border
             >
             </Table>
@@ -186,7 +186,7 @@ export default {
                 this.contentBak.push({
                     title: 'Paddle_' + deviceNum,
                     key: 'paddle_' + deviceNum,
-                    width: 100,
+                    width: 150,
                     resizable: true,
                     sortable: true,
                     sortMethod: function (a, b, type) {
@@ -234,7 +234,7 @@ export default {
                 this.contentBak.push({
                     title: 'Pytorch_' + deviceNum,
                     key: 'pytorch_' + deviceNum,
-                    width: 100,
+                    width: 150,
                     resizable: true,
                     render: (h, params) => {
                         let initValue = params.row['pytorch_' + deviceNum];
@@ -262,7 +262,7 @@ export default {
                 this.contentBak.push({
                     title: 'diff_' + deviceNum + '(paddle-pytorch)',
                     key: 'paddle_vs_other_' + deviceNum,
-                    width: 100,
+                    width: 120,
                     resizable: true,
                     sortable: true,
                     sortMethod: function (a, b, type) {
