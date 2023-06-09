@@ -18,51 +18,51 @@
              <div
                 style="text-align:left; color:black"
              >
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>模型库分支:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         {{ dealWithBlank('model_branch') }}
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>模型库commit号:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         {{ dealWithBlank('model_commit') }}
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>框架分支:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         {{ dealWithBlank('frame') }}
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>框架commit号:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         {{ dealWithBlank('frame_commit') }}
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>批次号:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         {{ dealWithBlank('task_date') }}
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>模型链接:</p>
                     </Col>
-                    <Col span="6">
+                    <Col span="5">
                         <a
                         :href="dealWithBlank('script_url')"
                         target="_blank"
@@ -71,11 +71,11 @@
                         </a>
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>执行脚本:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         <a
                             style="word-wrap: break-word;"
                             href="#"
@@ -85,11 +85,11 @@
                         </a>
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>paddlecloud-job号:</p>
                     </Col>
-                    <Col span="6">
+                    <Col span="5">
                         <a
                         :href="dealWithBlank('pdc_job_id')"
                         target="_blank"
@@ -98,11 +98,11 @@
                         </a>
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>训练日志链接:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         <a
                             style="word-wrap: break-word;"
                             href="#"
@@ -112,11 +112,11 @@
                         </a>
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>结果日志链接:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         <a
                             style="word-wrap: break-word;"
                             href="#"
@@ -126,11 +126,11 @@
                         </a>
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>profiler日志链接:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         <a
                             style="word-wrap: break-word;"
                             href="#"
@@ -140,19 +140,19 @@
                         </a>
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>下降原因:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         {{ dealWithBlank('down_reason') }}
                     </Col>
                 </Row>
-                <Row :gutter="24">
-                    <Col span="6">
+                <Row :gutter="16">
+                    <Col span="5">
                         <p>波动值:</p>
                     </Col>
-                    <Col span="18">
+                    <Col span="19">
                         {{ dealWithBlank('wave_diff') }}
                     </Col>
                 </Row>
@@ -249,6 +249,12 @@ export default {
             if (this.info[key] === undefined || this.info[key] === '') {
                 return '暂无数据';
             } else {
+                if (key === 'wave_diff') {
+                    if (this.info[key] === '-') {
+                        return '-';
+                    }
+                    return this.info[key] * 100;
+                }
                 return this.info[key];
             }
         }

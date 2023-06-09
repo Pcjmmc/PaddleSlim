@@ -153,6 +153,7 @@ export default {
         },
         monitoring() {
             this.$on('acceptFatherData', (res) => {
+                // console.log(this.fatherData);
                 if (this.fatherData.task_date) {
                     this.pagenum = 1;
                     this.getData();
@@ -190,6 +191,10 @@ export default {
                     resizable: true,
                     sortable: true,
                     sortMethod: function (a, b, type) {
+                        if (a.toString().includes(',')) {
+                            a = parseFloat(a.toString().split(',')[0]);
+                            b = parseFloat(b.toString().split(',')[0]);
+                        }
                         if (type === 'asc') {
                             if (a === '-') {
                                 return 1;
@@ -218,7 +223,12 @@ export default {
                                 )
                             ]);
                         } else {
-                            let value = parseFloat(initValue, 10).toFixed(3);
+                            let value = '';
+                            if (this.fatherData.metric === 'gpu_mem') {
+                                value = initValue.toString();
+                            } else {
+                                value = parseFloat(initValue, 10).toFixed(3);
+                            }
                             let color = this.setPaddleValueColor(params.row, 'paddle_' + deviceNum);
                             let info = this.constructPaddleDetail(params.row, 'paddle_' + deviceNum);
                             return h(detailinfo, {
@@ -246,7 +256,12 @@ export default {
                                 )
                             ]);
                         } else {
-                            let value = parseFloat(initValue, 10).toFixed(3);
+                            let value = '';
+                            if (this.fatherData.metric === 'gpu_mem') {
+                                value = initValue;
+                            } else {
+                                value = parseFloat(initValue, 10).toFixed(3);
+                            }
                             let color = this.setPaddleValueColor(params.row, 'pytorch_' + deviceNum);
                             let info = this.constructPaddleDetail(params.row, 'pytorch_' + deviceNum);
                             return h(detailinfo, {
@@ -266,6 +281,10 @@ export default {
                     resizable: true,
                     sortable: true,
                     sortMethod: function (a, b, type) {
+                        if (a.toString().includes(',')) {
+                            a = parseFloat(a.toString().split(',')[0]);
+                            b = parseFloat(b.toString().split(',')[0]);
+                        }
                         if (type === 'asc') {
                             if (a === '-') {
                                 return 1;
@@ -290,7 +309,11 @@ export default {
                         if (initValue === '-') {
                             value = '-';
                         } else {
-                            value = parseFloat(initValue, 10).toFixed(3) + '%';
+                            if (this.fatherData.metric === 'gpu_mem') {
+                                value = initValue;
+                            } else {
+                                value = (parseFloat(initValue, 10) * 100).toFixed(3) + '%';
+                            }
                         }
                         return h('div', [
                             h('p', {
@@ -353,6 +376,7 @@ export default {
                             detail.index_log_url = innerValue.index_log_url;
                             detail.profiler_log_url = innerValue.profiler_log_url;
                             detail.down_reason = innerValue.down_reason;
+                            detail.wave_diff = innerValue.wave_diff;
                             this.paddleDetail[config + '_' + framework + '_' + deviceNum] = detail;
                         }
                         // get true value to show
@@ -379,6 +403,7 @@ export default {
         },
         async getData() {
             this.loading = true; // loading
+            this.data = [];
             let params = {
                 task_name: this.fatherData.task_name,
                 task_date: this.fatherData.task_date,
@@ -425,7 +450,7 @@ export default {
                 return;
             }
             let value = parseFloat(str, 10);
-            if (value > 5) {
+            if (value > 0.05) {
                 return 'red';
             }
         },
@@ -436,9 +461,9 @@ export default {
         setDiffStatusColor(row, key) {
             let str = row[key];
             let value =  parseFloat(str, 10);
-            if (value > 5) {
+            if (value > 0.05) {
                 return 'green';
-            } else if (value < -5) {
+            } else if (value < -0.05) {
                 return 'red';
             }
         },

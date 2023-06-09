@@ -155,27 +155,38 @@ export default {
                     key: 'model_type',
                     align: 'center',
                     fixed: 'left',
-                    minWidth: 100
+                    width: 100
                 },
                 {
                     title: '运行配置',
                     key: 'run_config',
-                    minWidth: 100
+                    width: 100
                 },
                 {
                     title: 'FP配置',
                     key: 'fpconfig',
-                    minWidth: 100
+                    width: 100
                 },
                 {
                     title: 'Paddle_VS_Torch(GSB模型级别)',
                     key: 'GSB_model',
-                    minWidth: 100
+                    minWidth: 150,
+                    renderHeader: function (h, params) {
+                        return h('div', {
+                        }, [
+                            h('p', {}, 'Paddle_VS_Torch(GSB模型级别)'),
+                            h('p', {
+                                style: {
+                                    fontSize: '10px'
+                                }
+                            }, '(优：平：劣：Paddle失败：竞品失败：无竞品)')
+                        ]);
+                    }
                 },
                 {
                     title: 'Paddle_VS_Torch(配置级别)',
                     key: 'GSB_config',
-                    minWidth: 100
+                    minWidth: 150
                 }
             ],
             columnsConfig: [
