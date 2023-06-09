@@ -117,7 +117,7 @@
                 >
                     <summary-data
                         ref="summaryData"
-                        v-if="hasData" :father-data="searchData"
+                        :father-data="searchData"
                     >
                     </summary-data>
                 </el-tab-pane>
@@ -127,7 +127,7 @@
                 >
                     <comparative-data
                         ref="comparative"
-                        v-if="hasData" :father-data="searchData"
+                        :father-data="searchData"
                         @change-model-name="handleSearchModelNameChange"
                     >
                     </comparative-data>
@@ -381,10 +381,10 @@ export default {
             this.callSummaryChildMethod();
         },
         callChildMethod() {
-            this.$refs.comparative.$emit('acceptFatherData', this.searchData);
+            this.$refs.comparative.$emit('acceptFatherData');
         },
         callSummaryChildMethod() {
-            this.$refs.summaryData.$emit('acceptFatherData', this.searchData);
+            this.$refs.summaryData.$emit('acceptFatherData');
         },
         handleSearchModelNameChange(modelName) {
             this.searchModelName = modelName;
