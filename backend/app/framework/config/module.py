@@ -52,6 +52,16 @@ module_mapping = {
     "paddlenlp_p0_precision": "PaddleNLP P0级小数据集精度",
     "paddleslim_p0_precision": "PaddleSlim P0级小数据集精度",
     "paddlerec_p0_precision": "PaddleRec P0级小数据集精度",
+    "paddleclas_all_train": "PaddleClas ALL级模型单多卡动静训练",
+    "paddlegan_all_train": "PaddleGAN ALL级模型单多卡动静训练",
+    "paddleocr_all_train": "PaddleOCR ALL级模型单多卡动静训练",
+    "paddle3d_all_train": "Paddle3D ALL级模型单多卡动静训练",
+    "paddlespeech_all_train": "PaddleSpeech ALL级模型单多卡动静训练",
+    "paddledetection_all_train": "PaddleDetection ALL级模型单多卡动静训练",
+    "paddleseg_all_train": "PaddleSeg ALL级模型单多卡动静训练",
+    "paddlenlp_all_train": "PaddleNLP ALL级模型单多卡动静训练",
+    "paddleslim_all_train": "PaddleSlim ALL级模型单多卡动静训练",
+    "paddlerec_all_train": "PaddleRec ALL级模型单多卡动静训练",
     "paddleclas_all_function": "PaddleClas ALL级功能性",
     "paddlegan_all_function": "PaddleGAN ALL级功能性",
     "paddleocr_all_function": "PaddleOCR ALL级功能性",
@@ -571,6 +581,75 @@ module_list = [
                         "id":"4-6-10",
                         "label":"PaddleRec ALL级小数据集精度",
                         "key":"paddlerec_all_precision"
+                    }
+                ]
+            },
+            {
+                "pid":"4",
+                "id":"4-7",
+                "label":"全量模型 训练功能",
+                "key":"all_function_train",
+                "desc":"执行ALL优先级模型, 阶段包括小数据集训练单卡、训练多卡、静态图、动态图、fp32、fp16训练功能性测试, 具体执行模型列表见报告",
+                "children":[
+                    {
+                        "pid":"4-7",
+                        "id":"4-7-1",
+                        "label":"PaddleClas ALL级模型单多卡动静训练",
+                        "key":"paddleclas_all_train"
+                    },
+                    {
+                        "pid":"4-7",
+                        "id":"4-7-2",
+                        "label":"PaddleGAN ALL级模型单多卡动静训练",
+                        "key":"paddlegan_all_train"
+                    },
+                    {
+                        "pid":"4-7",
+                        "id":"4-7-3",
+                        "label":"PaddleOCR ALL级模型单多卡动静训练",
+                        "key":"paddleocr_all_train"
+                    },
+                    {
+                        "pid":"4-7",
+                        "id":"4-7-4",
+                        "label":"Paddle3D ALL级模型单多卡动静训练",
+                        "key":"paddle3d_all_train"
+                    },
+                    {
+                        "pid":"4-7",
+                        "id":"4-7-5",
+                        "label":"PaddleSpeech ALL级模型单多卡动静训练",
+                        "key":"paddlespeech_all_train"
+                    },
+                    {
+                        "pid":"4-7",
+                        "id":"4-7-6",
+                        "label":"PaddleDetection ALL级模型单多卡动静训练",
+                        "key":"paddledetection_all_train"
+                    },
+                    {
+                        "pid":"4-7",
+                        "id":"4-7-7",
+                        "label":"PaddleSeg ALL级模型单多卡动静训练",
+                        "key":"paddleseg_all_train"
+                    },
+                    {
+                        "pid":"4-7",
+                        "id":"4-7-8",
+                        "label":"PaddleNLP ALL级模型单多卡动静训练",
+                        "key":"paddlenlp_all_train"
+                    },
+                    {
+                        "pid":"4-7",
+                        "id":"4-7-9",
+                        "label":"PaddleSlim ALL级模型单多卡动静训练",
+                        "key":"paddleslim_all_train"
+                    },
+                    {
+                        "pid":"4-7",
+                        "id":"4-7-10",
+                        "label":"PaddleRec ALL级模型单多卡动静训练",
+                        "key":"paddlerec_all_train"
                     }
                 ]
             }
