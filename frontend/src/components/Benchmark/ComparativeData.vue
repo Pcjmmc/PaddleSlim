@@ -16,26 +16,20 @@
                 @click="getData()"
             >
             </el-button>
-            <pre style="display:inline">                                               </pre>
-            <span style="display:inline;">Show</span>
-            <el-select
-                v-model="pagesize"
-                size="small"
-                style="width:6%"
-                @change="changePageSize(pagesize)"
+            <el-button
+                @click="callDownload"
+                icon="el-icon-download"
+                circle
+                autofocus
+                size="mini"
+                style="margin-left:40%"
+                :loading="downLoadLoading"
             >
-                <el-option
-                    :key="item"
-                    :label="item"
-                    :value="item"
-                    v-for="item in this.pageSizeList"
-                >
-                </el-option>
-            </el-select>
-            <p style="display:inline">entries</p>
+            </el-button>
             <el-popover
                 width="300"
                 trigger="click"
+                style="margin-left:10px"
             >
                 <el-button
                     slot="reference"
@@ -67,6 +61,22 @@
                     </el-checkbox>
                 </el-checkbox-group>
             </el-popover>
+            <span style="margin-left:10px">Show</span>
+            <el-select
+                v-model="pagesize"
+                size="small"
+                style="width:6%"
+                @change="changePageSize(pagesize)"
+            >
+                <el-option
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                    v-for="item in this.pageSizeList"
+                >
+                </el-option>
+            </el-select>
+            <p style="display:inline">entries</p>
         </div>
         <div style="margin-top: 1%;">
             <Table
@@ -94,7 +104,7 @@
 
 <script>
 import api from '../../api/index';
-import {BenchmarkPaddleVsOtherData} from '../../api/url';
+import {BenchmarkPaddleVsOtherData, PaddleVsOtherDataDownload} from '../../api/url';
 import detailinfo from '../Benchmark/Detail.vue';
 export default {
     name: 'ComparativeData',
@@ -131,7 +141,8 @@ export default {
             paddleDetailInfo: {},
             isWatch: true,
             loading: true,
-            sessionCheckedName: 'paddleComparativeRemeber'
+            sessionCheckedName: 'paddleComparativeRemeber',
+            downLoadLoading: false
         };
     },
     created() {
@@ -494,6 +505,53 @@ export default {
         },
         changeSearchModelName() {
             this.$emit('change-model-name', this.search_model_item);
+        },
+        async callDownload() {
+            this.downLoadLoading = true;
+            let params = {
+                task_name: this.fatherData.task_name,
+                task_date: this.fatherData.task_date,
+                metric_list: [this.fatherData.metric],
+                is_Fill: this.fatherData.is_Fill,
+                get_mode: 'download',
+                search_model_item: this.search_model_item
+            };
+            let {data, status} = await api.postExcel(PaddleVsOtherDataDownload, params);
+            if (status === 404) {
+                this.$Message.error({
+                    content: '请求出错: 下载失败',
+                    duration: 30,
+                    closable: true
+                });
+            } else {
+                // 获取内容并创建链接
+                const content = Buffer.from(data.data);
+                const blob = new Blob([content], {type: 'application/octet-stream'});
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                // 获取文件名称
+                let filename = 'download.xlsx';
+                const contentDisposition = data.headers['content-disposition'];
+                if (contentDisposition) {
+                    let base64part = contentDisposition.replace(/\?=+\s*$/, ''); // 删除末尾可能附加的等号和空格
+                    base64part = base64part.replace(/^=\?utf-8\?b\?/, ''); // 删除编码前缀
+                    if (base64part) {
+                        let filenameDecode = atob(base64part);
+                        const match = filenameDecode.match(/filename[^;=\n]*=[\"']?([^\;\"']*)/i);
+                        if (match && match[1]) {
+                            let decoder = new TextDecoder('utf-8');
+                            filename = decoder.decode(new Uint8Array([...match[1]].map(x => x.charCodeAt(0))));
+                        }
+                    }
+                }
+                link.href = url;
+                link.type = 'application/octet-stream';
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+            this.downLoadLoading = false;
         }
     }
 };

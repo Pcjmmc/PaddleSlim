@@ -45,7 +45,6 @@
                     <p
                     style="margin-top: 10px; text-algin: left;"
                     >
-                    表格中的指标为：优：平：劣：Paddle失败：竞品失败：无竞品
                     </p>
                     <Table
                         :data="dataTorchShow"
@@ -154,22 +153,24 @@ export default {
                     title: '模型类型',
                     key: 'model_type',
                     align: 'center',
-                    fixed: 'left',
                     width: 100
                 },
                 {
                     title: '运行配置',
                     key: 'run_config',
+                    align: 'center',
                     width: 100
                 },
                 {
                     title: 'FP配置',
                     key: 'fpconfig',
+                    align: 'center',
                     width: 100
                 },
                 {
                     title: 'Paddle_VS_Torch(GSB模型级别)',
                     key: 'GSB_model',
+                    align: 'center',
                     minWidth: 150,
                     renderHeader: function (h, params) {
                         return h('div', {
@@ -186,7 +187,19 @@ export default {
                 {
                     title: 'Paddle_VS_Torch(配置级别)',
                     key: 'GSB_config',
-                    minWidth: 150
+                    align: 'center',
+                    minWidth: 150,
+                    renderHeader: function (h, params) {
+                        return h('div', {
+                        }, [
+                            h('p', {}, 'Paddle_VS_Torch(GSB模型级别)'),
+                            h('p', {
+                                style: {
+                                    fontSize: '10px'
+                                }
+                            }, '(优：平：劣：Paddle失败：竞品失败：无竞品)')
+                        ]);
+                    }
                 }
             ],
             columnsConfig: [
@@ -194,52 +207,60 @@ export default {
                     title: '模型类型',
                     key: 'model_type',
                     align: 'center',
-                    fixed: 'left',
                     minWidth: 100
                 },
                 {
                     title: '运行配置',
                     key: 'run_config',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: 'FP配置',
                     key: 'fpconfig',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: 'paddle(成功配置数/总配置数)',
                     key: 'success_config',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: '相对标准值下降5%以上个数',
                     key: 'down_standard',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: '相对标准值上升5%以上个数',
                     key: 'up_standard',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: '相对稳定版下降5%以上个数',
                     key: 'down_stable',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: '相对稳定版上升5%以上个数',
                     key: 'up_stable',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: '相对前五次均值下降5%以上个数',
                     key: 'down_med',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: '相对前五次均值上升5%以上个数',
                     key: 'up_med',
+                    align: 'center',
                     minWidth: 100
                 }
             ],
@@ -254,36 +275,43 @@ export default {
                 {
                     title: '动态图模型数',
                     key: 'dynamic_model_num',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: '静态图模型数',
                     key: 'static_model_num',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: '动转静模型数',
                     key: 'transfer_model_num',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: 'Paddle模型总数/总配置数',
                     key: 'total_num',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: 'Paddle FP32模型数',
                     key: 'FP32_num',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: 'Paddle FP16模型数',
                     key: 'FP16_num',
+                    align: 'center',
                     minWidth: 100
                 },
                 {
                     title: 'Paddle 波动<5%模型数',
                     key: 'paddle_good_num',
+                    align: 'center',
                     minWidth: 100
                 }
             ],
@@ -667,12 +695,15 @@ export default {
                     key: 'config',
                     width: 100,
                     fixed: 'left',
+                    align: 'center',
                     resizable: true
                 });
             this.columnsCompareSummary.push({
                     title: 'FP配置',
                     key: 'fpconfig',
+                    fixed: 'left',
                     width: 100,
+                    align: 'center',
                     resizable: true
                 });
             let firstConfigKey = Object.keys(data)[0];
@@ -684,6 +715,7 @@ export default {
                         title: column,
                         key: column,
                         minWidth: 150,
+                        align: 'center',
                         resizable: true
                     });
             }
@@ -748,6 +780,7 @@ export default {
                 {
                     title: '动/静态',
                     key: 'isStatic',
+                    align: 'center',
                     width: 100,
                     fixed: 'left',
                     resizable: true
@@ -755,6 +788,8 @@ export default {
             this.columnsFpCompare.push({
                     title: '模型库',
                     key: 'config',
+                    align: 'center',
+                    fixed: 'left',
                     minWidth: 100,
                     resizable: true
             });
@@ -767,6 +802,7 @@ export default {
                         title: column,
                         key: column,
                         width: 150,
+                        align: 'center',
                         resizable: true
                     });
             }

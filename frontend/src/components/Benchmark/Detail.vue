@@ -164,6 +164,15 @@
             :scrollable="true"
             :footer-hide="true"
             >
+            <el-button
+                @click="callDownload"
+                icon="el-icon-download"
+                autofocus
+                size="mini"
+                style="margin-right: 5px"
+                :loading="downLoadLoading"
+            >
+            </el-button>
             <pre style="word-wrap: break-word;overflow-y: auto;">{{ modalContent }}</pre>
         </Modal>
     </Poptip>
@@ -199,7 +208,9 @@ export default {
         return {
             modalWidth: 0,
             modal: false,
-            modalContent: ''
+            modalContent: '',
+            downLoadLoading: false,
+            downloadKey: ''
         };
     },
     mounted: function () {
@@ -241,6 +252,7 @@ export default {
             this.modalContent = data;
             this.$refs.poptip.visible = false;
             this.modal = true;
+            this.downloadKey = params.log_url;
         },
         dealWithBlank(key) {
             if (this.info === null || this.info === undefined || !(key in this.info)) {
@@ -253,10 +265,40 @@ export default {
                     if (this.info[key] === '-') {
                         return '-';
                     }
-                    return this.info[key] * 100;
+                    let value = (this.info[key] * 100).toFixed(3);
+                    return value + '%';
                 }
                 return this.info[key];
             }
+        },
+        async callDownload(key) {
+            this.downLoadLoading = true;
+            let params = {
+                log_url: key
+            };
+            let {data, status} = await api.getLog(PaddleVsOtherReadLog, params);
+            if (status === 404 || status === 500) {
+                this.$Message.error({
+                    content: '请求出错: 下载失败',
+                    duration: 30,
+                    closable: true
+                });
+            } else {
+                // 获取内容并创建链接
+                const content = Buffer.from(data.data);
+                const blob = new Blob([content], {type: 'application/octet-stream'});
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                // 获取文件名称
+                let filename = key;
+                link.href = url;
+                link.type = 'application/octet-stream';
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+            this.downLoadLoading = false;
         }
     }
 };
