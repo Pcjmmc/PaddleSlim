@@ -77,6 +77,18 @@ PLACE = {
     "paddleslim_p0_precision": CLOUD,
     "paddlerec_p0_precision": CLOUD,
 
+    #全量模型训练功能
+    "paddleclas_all_train": CLOUD,
+    "paddlegan_all_train": CLOUD,
+    "paddleocr_all_train": CLOUD,
+    "paddle3d_all_train": CLOUD,
+    "paddlespeech_all_train": CLOUD,
+    "paddledetection_all_train": CLOUD,
+    "paddleseg_all_train": CLOUD,
+    "paddlenlp_all_train": CLOUD,
+    "paddleslim_all_train": CLOUD,
+    "paddlerec_all_train": CLOUD,
+    
     #全量模型功能性
     "paddleclas_all_function": CLOUD,
     "paddlegan_all_function": CLOUD,
@@ -336,6 +348,70 @@ class Cloud(object):
         "system": "linux", 
         "binary_search_flag": "True", 
         "step": "train:all+eval:all+infer:all+export:all+predict:all"}
+
+    #全量模型训练功能性
+    PaddleClas_ALL_Train = "25246", {"reponame": "PaddleClas", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "binary_search_flag": "True", 
+        "step": "train:al"}
+    PaddleGAN_ALL_Train = "25246", {"reponame": "PaddleGAN", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "binary_search_flag": "True", 
+        "step": "train:al"}
+    PaddleOCR_ALL_Train = "25246", {"reponame": "PaddleOCR", 
+        "models_branch": "dygraph", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "binary_search_flag": "True", 
+        "step": "train:al"}
+    Paddle3D_ALL_Train = "25246", {"reponame": "Paddle3D", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "binary_search_flag": "True", 
+        "step": "train:al"}
+    PaddleSpeech_ALL_Train = "25246", {"reponame": "PaddleSpeech", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "binary_search_flag": "True", 
+        "step": "train:al"}
+    PaddleDetection_ALL_Train = "25246", {"reponame": "PaddleDetection", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "binary_search_flag": "True", 
+        "step": "train:al"}
+    PaddleSeg_ALL_Train = "25246", {"reponame": "PaddleSeg", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "binary_search_flag": "True", 
+        "step": "train:al"}
+    PaddleNLP_ALL_Train = "25246", {"reponame": "PaddleNLP", 
+        "priority": "ALL", 
+        "mode": "function", 
+        "system": "linux", 
+        "binary_search_flag": "True", 
+        "step": "train:al"}
+    PaddleSlim_ALL_Train = "25246", {"reponame": "PaddleSlim", 
+        "priority": "ALLPrecision", 
+        "mode": "function", 
+        "system": "linux", 
+        "binary_search_flag": "True", 
+        "step": "train:al"}
+    PaddleRec_ALL_Train = "25246", {"reponame": "PaddleRec", 
+        "models_branch": "master", 
+        "priority": "ALLPrecision", 
+        "mode": "function", 
+        "system": "linux", 
+        "binary_search_flag": "True", 
+        "step": "train:al"}
 
     #全量模型功能性
     PaddleClas_ALL_Function = "25246", {"reponame": "PaddleClas", 
@@ -634,6 +710,18 @@ class CloudMission(object):
         "paddleslim_p0_precision": Cloud.PaddleSlim_P0_Precision,
         "paddlerec_p0_precision": Cloud.PaddleRec_P0_Precision,
 
+        #全量模型训练
+        "paddleclas_all_train": Cloud.PaddleClas_ALL_Train,
+        "paddlegan_all_train": Cloud.PaddleGAN_ALL_Train,
+        "paddleocr_all_train": Cloud.PaddleOCR_ALL_Train,
+        "paddle3d_all_train": Cloud.Paddle3D_ALL_Train,
+        "paddlespeech_all_train": Cloud.PaddleSpeech_ALL_Train,
+        "paddledetection_all_train": Cloud.PaddleDetection_ALL_Train,
+        "paddleseg_all_train": Cloud.PaddleSeg_ALL_Train,
+        "paddlenlp_all_train": Cloud.PaddleNLP_ALL_Train,
+        "paddleslim_all_train": Cloud.PaddleSlim_ALL_Train,
+        "paddlerec_all_train": Cloud.PaddleRec_ALL_Train,
+        
         #全量模型功能性
         "paddleclas_all_function": Cloud.PaddleClas_ALL_Function,
         "paddlegan_all_function": Cloud.PaddleGAN_ALL_Function,
