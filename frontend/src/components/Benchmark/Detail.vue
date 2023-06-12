@@ -271,13 +271,13 @@ export default {
                 return this.info[key];
             }
         },
-        async callDownload(key) {
+        async callDownload() {
             this.downLoadLoading = true;
             let params = {
-                log_url: key
+                log_url: this.downloadKey
             };
-            let {data, status} = await api.getLog(PaddleVsOtherReadLog, params);
-            if (status === 404 || status === 500) {
+            let {data} = await api.getLog(PaddleVsOtherReadLog, params);
+            if (data.status === 404) {
                 this.$Message.error({
                     content: '请求出错: 下载失败',
                     duration: 30,
@@ -290,7 +290,7 @@ export default {
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 // 获取文件名称
-                let filename = key;
+                let filename = this.downloadKey + '.txt';
                 link.href = url;
                 link.type = 'application/octet-stream';
                 link.setAttribute('download', filename);
