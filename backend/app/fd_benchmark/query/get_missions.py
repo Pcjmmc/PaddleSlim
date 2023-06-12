@@ -29,5 +29,5 @@ class JobGetMission(MABaseView):
         for d in data:
             d["create_time"] = str(d.get("create_time"))
             d["update_time"] = str(d.get("update_time"))
-        print('data', data)
+        # print('data', data)
         return count, data
