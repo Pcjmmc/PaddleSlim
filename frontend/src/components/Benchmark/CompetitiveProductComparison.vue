@@ -16,7 +16,7 @@
                         v-model="searchData.task_name"
                         size="small"
                         style="width:200%"
-                        @change="setVersionList"
+                        @change="setVersionListNotFirst"
                     >
                         <el-option
                             :key="index"
@@ -58,24 +58,6 @@
                     </el-select>
                 </Col>
             </Row>
-        </div>
-        <div
-            style="text-align:right;margin-right:3%"
-        >
-            <el-button
-                type="primary"
-                size="small"
-                @click="callAllChildMethods"
-            >
-                查询
-            </el-button>
-            <el-button
-                type="primary"
-                size="small"
-                @click="callDownload"
-            >
-                下载
-            </el-button>
         </div>
         <div style="text-align:right;margin-top:1%">
             <p style="display: inline;">数据补全：</p>
@@ -138,7 +120,7 @@
 </template>
 
 <script>
-import {BenchmarkCheckTaskList, PaddleVsOtherDataDownload} from '../../api/url';
+import {BenchmarkCheckTaskList} from '../../api/url';
 import api from '../../api/index';
 import ComparativeData from './ComparativeData.vue';
 import SummaryData from './SummaryData.vue';
@@ -219,6 +201,32 @@ export default {
             if (this.tabName === null || this.tabName.length === 0) {
                 this.tabName = 'summaryData';
             }
+        },
+        setVersionListNotFirst(name) {
+            var versionData = this.task[name];
+            if (versionData === null || versionData === undefined) {
+                this.$Message.error(
+                    {
+                        content: '抱歉当前的任务没有可以选择的版本，请重新选择',
+                        duration: 1,
+                        closable: true
+                    }
+                );
+            }
+            let versionList = [];
+            let taskDateList = [];
+            for (let key in versionData) {
+                if (versionData.hasOwnProperty(key)) {
+                    var value = versionData[key];
+                    let version = value.paddle_version;
+                    let task_date = value.task_date;
+                    versionList.push(version);
+                    taskDateList.push(task_date);
+                }
+            }
+            this.$set(this, 'versionList', versionList);
+            this.$set(this, 'taskDateList', taskDateList);
+            this.versionIndex = undefined;
         },
         setVersionList(name) {
             var versionData = this.task[name];
@@ -316,6 +324,7 @@ export default {
         },
         setTaskDate() {
             this.$set(this.searchData, 'task_date', this.taskDateList[this.versionIndex]);
+            this.callAllChildMethods();
         },
         async getTaskList() {
             this.task = [];
@@ -329,51 +338,6 @@ export default {
                     duration: 30,
                     closable: true
                 });
-            }
-        },
-        async callDownload() {
-            let params = {
-                task_name: this.searchData.task_name,
-                task_date: this.searchData.task_date,
-                metric_list: [this.searchData.metric],
-                is_Fill: this.searchData.is_Fill,
-                get_mode: 'download',
-                search_model_item: this.searchModelName
-            };
-            let {data, status} = await api.postExcel(PaddleVsOtherDataDownload, params);
-            if (status === 404) {
-                this.$Message.error({
-                    content: '请求出错: 下载失败',
-                    duration: 30,
-                    closable: true
-                });
-            } else {
-                // 获取内容并创建链接
-                const content = Buffer.from(data.data);
-                const blob = new Blob([content], {type: 'application/octet-stream'});
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                // 获取文件名称
-                let filename = 'download.xlsx';
-                const contentDisposition = data.headers['content-disposition'];
-                if (contentDisposition) {
-                    let base64part = contentDisposition.replace(/\?=+\s*$/, ''); // 删除末尾可能附加的等号和空格
-                    base64part = base64part.replace(/^=\?utf-8\?b\?/, ''); // 删除编码前缀
-                    if (base64part) {
-                        let filenameDecode = atob(base64part);
-                        const match = filenameDecode.match(/filename[^;=\n]*=[\"']?([^\;\"']*)/i);
-                        if (match && match[1]) {
-                            let decoder = new TextDecoder('utf-8');
-                            filename = decoder.decode(new Uint8Array([...match[1]].map(x => x.charCodeAt(0))));
-                        }
-                    }
-                }
-                link.href = url;
-                link.type = 'application/octet-stream';
-                link.setAttribute('download', filename);
-                document.body.appendChild(link);
-                link.click();
-                URL.revokeObjectURL(url);
             }
         },
         callAllChildMethods() {
