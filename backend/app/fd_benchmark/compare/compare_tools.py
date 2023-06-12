@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-首页性能对比
+性能对比工具
 """
 
 import asyncio
@@ -53,4 +53,3 @@ def case_compare(latest_res, baseline_res):
             compare_return[index] = 0
 
     return latest_return, baseline_return, compare_return
-
