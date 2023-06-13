@@ -141,7 +141,7 @@ export default {
       timeout: 30000,
       responseType: 'arraybuffer'
     }).then(response => {
-      console.log(response);
+      // console.log(response);
       if (response && (response.status === 200 || response.status === 304)) {
         LoadingBar.finish();
         return {

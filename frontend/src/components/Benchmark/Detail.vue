@@ -274,7 +274,7 @@ export default {
         async callDownload() {
             // todo: delete console log
             this.downLoadLoading = true;
-            console.log(this.downloadKey);
+            // console.log(this.downloadKey);
             let params = {
                 log_url: this.downloadKey
             };
