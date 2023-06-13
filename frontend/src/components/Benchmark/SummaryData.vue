@@ -842,3 +842,13 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.center-card-s {
+  margin-left: 1%;
+  margin-right: 1%;
+  font-size: 14px;
+  color: lightslategrey;
+}
+
+</style>

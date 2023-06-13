@@ -243,7 +243,7 @@ export default {
                 return '暂无数据';
             }
             let params = {
-                log_url: this.info[key].split(':')[1]
+                log_url: this.info[key]
             };
             if (params.log_url === undefined || params.log_url === '') {
                 return;
@@ -272,7 +272,9 @@ export default {
             }
         },
         async callDownload() {
+            // todo: delete console log
             this.downLoadLoading = true;
+            console.log(this.downloadKey);
             let params = {
                 log_url: this.downloadKey
             };
