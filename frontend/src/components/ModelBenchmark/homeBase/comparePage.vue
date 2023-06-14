@@ -16,7 +16,7 @@
                   v-model="search.task_name"
                   :transfer="true"
                   :popper-append-to-body="false"
-                  v-on:on-change="upDateChildDatas"
+                  v-on:on-change="updateTaskName"
                 >
                   <Option
                     :key="index"
@@ -162,6 +162,7 @@ export default {
       this.allSettings = {};
       this.allTypes = [];
       this.allIndicators = [];
+      this.allConfs = [];
     },
     clickTab(tag, event) {
     },
@@ -181,10 +182,13 @@ export default {
         });
       }
     },
-    async upDateChildDatas() {
-      // 修改配置
+    // 只要task_name; 将配置更新下，再默认选择第一个
+    async updateTaskName() {
       this.allConfs = this.allSettings[this.search.task_name];
-      this.search.config_name = this.search.config_name ? this.search.config_name : this.allConfs[0];
+      this.search.config_name = this.allConfs[0];
+      await this.upDateChildDatas();
+    },
+    async upDateChildDatas() {
       // 调用两个子组件
       this.$refs.child1.getDatas();
       this.$refs.child2.getDatas();
