@@ -147,6 +147,8 @@ export default {
       }
       // 设置一个默认值
       this.search.task_name = tmp[0];
+      this.allConfs = this.allSettings[this.search.task_name];
+      this.search.config_name = this.allConfs[0];
       return tmp;
     }
   },
