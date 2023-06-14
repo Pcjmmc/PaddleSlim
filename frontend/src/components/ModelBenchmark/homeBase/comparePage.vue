@@ -109,8 +109,8 @@ export default {
   name: 'comparePage',
   data: function () {
     return {
-      allTasks: [
-      ],
+      allSettings: {
+      },
       allTypes: [
       ],
       allIndicators: [
@@ -137,7 +137,17 @@ export default {
     compareProd,
     compareSence
   },
-  computed: {},
+  computed: {
+    allTasks: function() {
+      let tmp = [];
+      for (let key in this.allSettings) {
+        tmp.push(key);
+      }
+      // 设置一个默认值
+      this.search.task_name = tmp[0];
+      return tmp;
+    }
+  },
   methods: {
     getBeginData() {
       // 在end_time的基础上+1， 因为end_time代表的今天0点0分0秒的时间
@@ -147,24 +157,20 @@ export default {
       return begin_time;
     },
     initData() {
-      this.allTasks = [];
+      this.allSettings = {};
       this.allTypes = [];
       this.allIndicators = [];
-      this.allConfs = [];
     },
     clickTab(tag, event) {
     },
     async getSettings() {
       const { code, data, message } = await api.get(ModelsBenchmarkHomeSettings);
       if (parseInt(code, 10) === 200) {
-        this.allTasks = data.task_name_list;
+        this.allSettings = data.task_list;
         this.allTypes = data.summary_type_list;
         this.allIndicators = data.index_list;
-        this.allConfs = data.config_list;
-        this.search.task_name = data.task_name_list[0];
         this.search.index_name = data.index_list[0];
         this.search.summary_type = data.summary_type_list[0].type_id;
-        this.search.config_name = data.config_list[0];
       } else {
         this.$Message.error({
             content: '请求出错: ' + message,
@@ -174,6 +180,9 @@ export default {
       }
     },
     async upDateChildDatas() {
+      // 修改配置
+      this.allConfs = this.allSettings[this.search.task_name];
+      this.search.config_name = this.search.config_name ? this.search.config_name : this.allConfs[0];
       // 调用两个子组件
       this.$refs.child1.getDatas();
       this.$refs.child2.getDatas();

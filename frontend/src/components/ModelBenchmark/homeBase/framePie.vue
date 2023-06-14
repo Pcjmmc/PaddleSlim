@@ -83,7 +83,7 @@ export default {
                 formatter: '{b}: {c}'
               }
             },
-            radius: '60%',
+            radius: '55%',
             center: ['50%', '50%'],
             labelLine: {
               show: true
