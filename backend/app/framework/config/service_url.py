@@ -355,63 +355,63 @@ class Cloud(object):
         "mode": "function", 
         "system": "linux", 
         "binary_search_flag": "True", 
-        "step": "train:al"}
+        "step": "train:all"}
     PaddleGAN_ALL_Train = "25246", {"reponame": "PaddleGAN", 
         "priority": "ALL", 
         "mode": "function", 
         "system": "linux", 
         "binary_search_flag": "True", 
-        "step": "train:al"}
+        "step": "train:all"}
     PaddleOCR_ALL_Train = "25246", {"reponame": "PaddleOCR", 
         "models_branch": "dygraph", 
         "priority": "ALL", 
         "mode": "function", 
         "system": "linux", 
         "binary_search_flag": "True", 
-        "step": "train:al"}
+        "step": "train:all"}
     Paddle3D_ALL_Train = "25246", {"reponame": "Paddle3D", 
         "priority": "ALL", 
         "mode": "function", 
         "system": "linux", 
         "binary_search_flag": "True", 
-        "step": "train:al"}
+        "step": "train:all"}
     PaddleSpeech_ALL_Train = "25246", {"reponame": "PaddleSpeech", 
         "priority": "ALL", 
         "mode": "function", 
         "system": "linux", 
         "binary_search_flag": "True", 
-        "step": "train:al"}
+        "step": "train:all"}
     PaddleDetection_ALL_Train = "25246", {"reponame": "PaddleDetection", 
         "priority": "ALL", 
         "mode": "function", 
         "system": "linux", 
         "binary_search_flag": "True", 
-        "step": "train:al"}
+        "step": "train:all"}
     PaddleSeg_ALL_Train = "25246", {"reponame": "PaddleSeg", 
         "priority": "ALL", 
         "mode": "function", 
         "system": "linux", 
         "binary_search_flag": "True", 
-        "step": "train:al"}
+        "step": "train:all"}
     PaddleNLP_ALL_Train = "25246", {"reponame": "PaddleNLP", 
         "priority": "ALL", 
         "mode": "function", 
         "system": "linux", 
         "binary_search_flag": "True", 
-        "step": "train:al"}
+        "step": "train:all"}
     PaddleSlim_ALL_Train = "25246", {"reponame": "PaddleSlim", 
         "priority": "ALLPrecision", 
         "mode": "function", 
         "system": "linux", 
         "binary_search_flag": "True", 
-        "step": "train:al"}
+        "step": "train:all"}
     PaddleRec_ALL_Train = "25246", {"reponame": "PaddleRec", 
         "models_branch": "master", 
         "priority": "ALLPrecision", 
         "mode": "function", 
         "system": "linux", 
         "binary_search_flag": "True", 
-        "step": "train:al"}
+        "step": "train:all"}
 
     #全量模型功能性
     PaddleClas_ALL_Function = "25246", {"reponame": "PaddleClas", 
