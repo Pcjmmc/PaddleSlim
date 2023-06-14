@@ -138,10 +138,12 @@ export default {
     compareSence
   },
   computed: {
-    allTasks: function() {
+    allTasks: function () {
       let tmp = [];
       for (let key in this.allSettings) {
-        tmp.push(key);
+        if (this.allSettings.hasOwnProperty(key)) {
+          tmp.push(key);
+        }
       }
       // 设置一个默认值
       this.search.task_name = tmp[0];
