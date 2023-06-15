@@ -121,9 +121,9 @@ export default {
       ],
       search: {
         dt: [this.getBeginData(), new Date()],
-        task_name: '',
-        index_name: '',
-        config_name: '',
+        task_name: '例行_单机_11.2_8.1_V100_全量',
+        index_name: 'ips',
+        config_name: 'N1C1',
         summary_type: ''
       }
     };
@@ -140,9 +140,7 @@ export default {
       // 设置一个默认值
       this.allTasks = tmp;
       if (this.allTasks.length > 0) {
-        this.search.task_name = tmp[0];
         this.allConfs = this.allSettings[this.search.task_name];
-        this.search.config_name = this.allConfs[0];
       }
     }
   },
@@ -161,7 +159,7 @@ export default {
     getBeginData() {
       // 在end_time的基础上+1， 因为end_time代表的今天0点0分0秒的时间
       let begin_time = new Date();
-      begin_time = begin_time.setDate(begin_time.getDate() - 7);
+      begin_time = begin_time.setDate(begin_time.getDate() - 30);
       begin_time = new Date(begin_time);
       return begin_time;
     },
@@ -180,8 +178,7 @@ export default {
         this.allSettings = data.task_list;
         this.allTypes = data.summary_type_list;
         this.allIndicators = data.index_list;
-        this.search.index_name = data.index_list[0];
-        this.search.summary_type = data.summary_type_list[0].type_id;
+        this.search.summary_type = data.summary_type_list[1].type_id;
       } else {
         this.$Message.error({
             content: '请求出错: ' + message,

@@ -5,16 +5,16 @@
       type="card"
       @tab-click="clickTab"
     >
-        <el-tab-pane
-        label="与pytorchGSB"
-        name="other"
-        >
-        </el-tab-pane>
-        <el-tab-pane
+      <el-tab-pane
         label="与稳定版GSB"
         name="stable"
-        >
-        </el-tab-pane>
+      >
+      </el-tab-pane>
+      <el-tab-pane
+        label="与pytorchGSB"
+        name="other"
+      >
+      </el-tab-pane>
        <compare-line
         id="main3"
         :option="option"
@@ -43,7 +43,7 @@ export default {
   },
   data: function () {
     return {
-      tabName: 'other',
+      tabName: 'stable',
       datas: {
       },
       option: [],
