@@ -168,14 +168,14 @@ export default {
                     width: 100
                 },
                 {
-                    title: 'Paddle_VS_Torch(GSB模型级别)',
+                    title: 'Paddle_VS_PyTorch(GSB模型级别)',
                     key: 'GSB_model',
                     align: 'center',
                     minWidth: 150,
                     renderHeader: function (h, params) {
                         return h('div', {
                         }, [
-                            h('p', {}, 'Paddle_VS_Torch(GSB模型级别)'),
+                            h('p', {}, 'Paddle_VS_PyTorch(GSB模型级别)'),
                             h('p', {
                                 style: {
                                     fontSize: '10px'
@@ -192,7 +192,7 @@ export default {
                     renderHeader: function (h, params) {
                         return h('div', {
                         }, [
-                            h('p', {}, 'Paddle_VS_Torch(GSB模型级别)'),
+                            h('p', {}, 'Paddle_VS_PyTorch(配置级别)'),
                             h('p', {
                                 style: {
                                     fontSize: '10px'

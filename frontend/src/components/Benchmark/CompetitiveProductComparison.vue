@@ -311,7 +311,7 @@ export default {
             }
             if (b.includes('单机')) {
                 bValue += this.nameValues['单机'];
-            } else if (a.includes('多机')) {
+            } else if (b.includes('多机')) {
                 bValue += this.nameValues['多机'];
             } else {
                 bValue += this.nameValues['分布式'];
