@@ -78,7 +78,6 @@ export default {
         tab_postion: 'down',
         vs_name: this.tabName
       };
-      console.log('send params', params);
       const { code, data, message } = await api.post(ModelsBenchmarkHomeGBS, params);
       if (parseInt(code, 10) === 200) {
         this.parseData(data);

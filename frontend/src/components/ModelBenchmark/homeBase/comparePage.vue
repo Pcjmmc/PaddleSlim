@@ -111,6 +111,8 @@ export default {
     return {
       allSettings: {
       },
+      allTasks: [
+      ],
       allTypes: [
       ],
       allIndicators: [
@@ -127,6 +129,22 @@ export default {
     };
   },
   watch: {
+    allSettings: function () {
+      let tmp = [];
+      let tmp_conf = [];
+      for (let key in this.allSettings) {
+        if (this.allSettings.hasOwnProperty(key)) {
+          tmp.push(key);
+        }
+      }
+      // 设置一个默认值
+      this.allTasks = tmp;
+      if (this.allTasks.length > 0) {
+        this.search.task_name = tmp[0];
+        this.allConfs = this.allSettings[this.search.task_name];
+        this.search.config_name = this.allConfs[0];
+      }
+    }
   },
   mounted: async function () {
     this.initData();
@@ -138,19 +156,6 @@ export default {
     compareSence
   },
   computed: {
-    allTasks: function () {
-      let tmp = [];
-      for (let key in this.allSettings) {
-        if (this.allSettings.hasOwnProperty(key)) {
-          tmp.push(key);
-        }
-      }
-      // 设置一个默认值
-      this.search.task_name = tmp[0];
-      this.allConfs = this.allSettings[this.search.task_name];
-      this.search.config_name = this.allConfs[0];
-      return tmp;
-    }
   },
   methods: {
     getBeginData() {
@@ -165,6 +170,7 @@ export default {
       this.allTypes = [];
       this.allIndicators = [];
       this.allConfs = [];
+      this.allTasks = [];
     },
     clickTab(tag, event) {
     },
