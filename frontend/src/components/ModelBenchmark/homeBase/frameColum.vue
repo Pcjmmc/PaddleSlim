@@ -59,7 +59,10 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: this.option
+          data: this.option,
+          axisLabel: {
+            interval: 0
+          }
         },
         legend: {
           left: 'center',
